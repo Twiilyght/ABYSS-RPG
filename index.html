@@ -354,16 +354,12 @@
 </div>
 
 <div class="container">
-    <div style="text-align: right; margin-bottom: -20px;">
-       <div class="container">
     <div style="text-align: right; margin-bottom: 10px;">
         <input type="text" id="user-nickname" placeholder="Nickname" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: var(--text-gold); text-align: right; outline: none; font-family: 'Cinzel';">
     </div>
     <h1 class="title" style="margin-bottom: 10px;">Abyss RPG</h1>
 
-    <!-- NOVAS BARRAS DE RECURSOS -->
     <div class="header-status-container">
-        <!-- Vida (PV) -->
         <div class="status-row">
             <span class="status-label">[PV]</span>
             <div class="status-bar-bg"><div id="bar-pv" class="status-fill bg-red" style="width: 100%;"></div></div>
@@ -376,7 +372,6 @@
             </div>
         </div>
 
-        <!-- Arcanismo (PA) -->
         <div class="status-row">
             <span class="status-label">[PA]</span>
             <div class="status-bar-bg"><div id="bar-pa" class="status-fill bg-gold" style="width: 100%;"></div></div>
@@ -389,7 +384,6 @@
             </div>
         </div>
 
-        <!-- Sanidade (PS) -->
         <div class="status-row">
             <span class="status-label">[PS]</span>
             <div class="status-bar-bg"><div id="bar-ps" class="status-fill bg-cyan" style="width: 100%;"></div></div>
@@ -403,15 +397,19 @@
         </div>
         
         <div class="mini-stats-overlay">
-        <div class="mini-stat-item">
-            <span class="mini-stat-label">DEFESA</span>
-            <input type="number" id="val-defesa" class="mini-stat-input" value="10">
+            <div class="mini-stat-item">
+                <span class="mini-stat-label">DEFESA</span>
+                <input type="number" id="val-defesa" class="mini-stat-input" value="10">
+            </div>
+            <div class="mini-stat-item">
+                <span class="mini-stat-label">RD</span>
+                <input type="number" id="val-rd" class="mini-stat-input" value="0">
+            </div>
+            <div class="mini-stat-item">
+                <span class="mini-stat-label">DESLOC</span>
+                <input type="number" id="val-desloc" class="mini-stat-input" value="9">
+            </div>
         </div>
-        <div class="mini-stat-item">
-            <span class="mini-stat-label">RD</span>
-            <input type="number" id="val-rd" class="mini-stat-input" value="0">
-          </div>
-       </div>
     </div>
 
     <div id="area-ficha" class="page-area active">
@@ -451,9 +449,8 @@
             <div id="feiticos-lista" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;"></div>
         </section>
     </div>
-</div>
 
-<div id="area-inventario" class="page-area">
+    <div id="area-inventario" class="page-area">
         <section class="section-box">
             <div class="section-title">Inventário</div>
             
@@ -504,6 +501,7 @@
 
         </section>
     </div>
+</div>
 
 <div id="central-popup">
     <div class="ornament tl"></div><div class="ornament tr"></div>
@@ -606,27 +604,21 @@
     }
 
     function realizarRolagem(attrNome, bonusManual, nomeDisplay, isPericia = false, periciaNome = "") {
-        let attrValor = sheet.atributos[attrNome];
-        let bonusTotal = bonusManual;
+        let attrValor = parseInt(sheet.atributos[attrNome]) || 0;
+        let bonusTotal = bonusManual + attrValor; // O valor do atributo agora entra como bônus numérico direto
 
         if(isPericia) {
             let p = sheet.pericias.find(x => x.n === periciaNome);
-            if(p) bonusTotal = parseInt(p.t) + parseInt(p.m);
+            if(p) bonusTotal += parseInt(p.t) + parseInt(p.m); // Adiciona os bônus da perícia ao total
         }
 
-        let rolagens = [];
-        let final;
-        if(attrValor <= 0) {
-            rolagens = [Math.floor(Math.random()*20)+1, Math.floor(Math.random()*20)+1];
-            final = Math.min(...rolagens);
-        } else {
-            for(let i=0; i<attrValor; i++) rolagens.push(Math.floor(Math.random()*20)+1);
-            final = Math.max(...rolagens);
-        }
+        // Agora rola apenas 1 dado (1d20)
+        let rolagens = [Math.floor(Math.random() * 20) + 1];
+        let final = rolagens[0];
         
         const total = final + bonusTotal;
         const res = getNivelSucesso(final, total);
-        spawnPopup(nomeDisplay.toUpperCase(), `Dados: [${rolagens.join(', ')}]`, total, res.cor, res.txt, `Soma: ${final} + ${bonusTotal}`);
+        spawnPopup(nomeDisplay.toUpperCase(), `Dado: [${final}]`, total, res.cor, res.txt, `Soma: ${final} + ${bonusTotal}`);
     }
 
     function rolarDados(formula) {
@@ -799,10 +791,15 @@ function salvarNoNavegador() {
         ps: { curr: document.getElementById('curr-ps').value, max: document.getElementById('max-ps').value }
     };
 
+    // Resgata os valores de forma segura (previne falhas se o elemento não existir)
+    const defesaElement = document.getElementById('val-defesa');
+    const rdElement = document.getElementById('val-rd');
+    const deslocElement = document.getElementById('val-desloc');
+
     const estatisticas = {
-        defesa: document.getElementById('val-defesa').value,
-        rd: document.getElementById('val-rd').value,
-        desloc: document.getElementById('val-desloc').value
+        defesa: defesaElement ? defesaElement.value : "10",
+        rd: rdElement ? rdElement.value : "0",
+        desloc: deslocElement ? deslocElement.value : "9"
     };
 
     // Coleta o valor de TODOS os slots do inventário na ordem em que aparecem
@@ -811,6 +808,7 @@ function salvarNoNavegador() {
     const dadosParaSalvar = {
         nickname: document.getElementById('user-nickname').value,
         atributos: sheet.atributos,
+        pericias: sheet.pericias, // ADICIONADO: Agora salva as modificações das perícias
         habilidades: sheet.habilidades,
         recursos: recursos,
         estatisticas: estatisticas,
@@ -843,11 +841,10 @@ function carregarDoNavegador() {
         sheet.habilidades = dados.habilidades || [];
         sheet.dificuldade = dados.dificuldade || 'normal';
         
-        // Aqui garante que perícias existam, carregando do localStorage ou usando a base inicial
+        // Carrega as perícias salvas ou inicializa com as básicas
         if(dados.pericias && Array.isArray(dados.pericias)) {
             sheet.pericias = dados.pericias;
         } else {
-            // Caso não tenha no storage, inicializa com as perícias padrão
             sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
         }
         
@@ -873,7 +870,6 @@ function carregarDoNavegador() {
         console.log("Ficha carregada do armazenamento local.");
     }
 }
-
 
 </script>
 </body>
