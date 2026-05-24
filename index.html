@@ -428,24 +428,6 @@
             <div class="section-title">Perícias</div>
             <div id="skills-container" class="skills-list"></div>
         </section>
-
-        <section class="section-box">
-            <div class="section-title">Atributos Especiais</div>
-            <div class="skills-list">
-                <div class="skill-item" onclick="rolarSorte()" style="border-left-color: #ffca28;">
-                    <div><span class="skill-name" style="color: #ffca28;">Sorte</span></div>
-                    <span style="color: #aaa; font-size: 0.8rem;">(Sorte - Azar)</span>
-                </div>
-                <div class="skill-item" onclick="rolarSentidos()" style="border-left-color: #00e5ff;">
-                    <div><span class="skill-name" style="color: #00e5ff;">Sentidos</span></div>
-                    <span style="color: #aaa; font-size: 0.8rem;">Percepção + POD</span>
-                </div>
-                <div class="skill-item" style="cursor: default; border-left-color: #ff1744;">
-                    <div><span class="skill-name" style="color: #ff1744;">Velocidade</span></div>
-                    <span id="display-velocidade" style="color: #ddd; font-weight: bold; font-size: 0.9rem;"></span>
-                </div>
-            </div>
-        </section>
     </div>
 
     <div id="area-combate" class="page-area">
@@ -632,13 +614,14 @@
 
     function realizarRolagem(attrNome, bonusManual, nomeDisplay, isPericia = false, periciaNome = "") {
         let attrValor = parseInt(sheet.atributos[attrNome]) || 0;
-        let bonusTotal = bonusManual + attrValor;
+        let bonusTotal = bonusManual + attrValor; // O valor do atributo agora entra como bônus numérico direto
 
         if(isPericia) {
             let p = sheet.pericias.find(x => x.n === periciaNome);
-            if(p) bonusTotal += parseInt(p.t) + parseInt(p.m);
+            if(p) bonusTotal += parseInt(p.t) + parseInt(p.m); // Adiciona os bônus da perícia ao total
         }
 
+        // Agora rola apenas 1 dado (1d20)
         let rolagens = [Math.floor(Math.random() * 20) + 1];
         let final = rolagens[0];
         
@@ -646,50 +629,6 @@
         const res = getNivelSucesso(final, total);
         spawnPopup(nomeDisplay.toUpperCase(), `Dado: [${final}]`, total, res.cor, res.txt, `Soma: ${final} + ${bonusTotal}`);
     }
-
-    // --- NOVAS FUNÇÕES DE ATRIBUTOS ESPECIAIS ---
-
-    function rolarSorte() {
-        let sorte = Math.floor(Math.random() * 6) + 1;
-        let azar = Math.floor(Math.random() * 6) + 1;
-        let total = sorte - azar;
-        
-        let cor = total > 0 ? "#00ff88" : (total < 0 ? "#ff4444" : "#ffca28");
-        let txt = total > 0 ? "BOM" : (total < 0 ? "RUIM" : "NEUTRO");
-        
-        spawnPopup("SORTE", `Dado Sorte [${sorte}] - Dado Azar [${azar}]`, total, cor, txt, `Resultado: ${total}`);
-    }
-
-    function rolarSentidos() {
-        let pod = parseInt(sheet.atributos['POD']) || 0;
-        let p = sheet.pericias.find(x => x.n === "Percepção");
-        let perMod = p ? (parseInt(p.t) + parseInt(p.m)) : 0;
-        let bonus = pod + perMod;
-
-        let dado = Math.floor(Math.random() * 20) + 1;
-        let total = dado + bonus;
-        const res = getNivelSucesso(dado, total);
-        
-        spawnPopup("SENTIDOS", `Dado: [${dado}]`, total, res.cor, res.txt, `Soma: ${dado} + ${bonus} (Per+Pod)`);
-    }
-
-    function calcularVelocidade() {
-        let agi = parseInt(sheet.atributos['AGI']) || 0;
-        let vel = 6;
-        if (agi >= 1) {
-            vel = 6 + ((agi - 1) * 2);
-        } else {
-            vel = 6 + (agi - 1); // Ex: Agi 0 = 5
-        }
-        
-        let display = document.getElementById('display-velocidade');
-        if (display) display.innerText = vel + "q";
-        
-        let inputDesloc = document.getElementById('val-desloc');
-        if (inputDesloc) inputDesloc.value = vel;
-    }
-
-    // --------------------------------------------
 
     function rolarDados(formula) {
         try {
@@ -714,112 +653,126 @@
     }
     
     function exportarFicha() {
-        const nickname = document.getElementById('user-nickname').value || "";
-        const pvC = document.getElementById('curr-pv').value || 0;
-        const pvM = document.getElementById('max-pv').value || 1;
-        const paC = document.getElementById('curr-pa').value || 0;
-        const paM = document.getElementById('max-pa').value || 1;
-        const psC = document.getElementById('curr-ps').value || 0;
-        const psM = document.getElementById('max-ps').value || 1;
-        const def = document.getElementById('val-defesa').value || 10;
-        const rd = document.getElementById('val-rd').value || 0;
-        const desl = document.getElementById('val-desloc').value || 9;
-        const inv = Array.from(document.querySelectorAll('.inv-slot')).map(s => s.value);
+    // 1. Coleta os dados em tempo real da interface
+    const nickname = document.getElementById('user-nickname').value || "";
+    const pvC = document.getElementById('curr-pv').value || 0;
+    const pvM = document.getElementById('max-pv').value || 1;
+    const paC = document.getElementById('curr-pa').value || 0;
+    const paM = document.getElementById('max-pa').value || 1;
+    const psC = document.getElementById('curr-ps').value || 0;
+    const psM = document.getElementById('max-ps').value || 1;
+    const def = document.getElementById('val-defesa').value || 10;
+    const rd = document.getElementById('val-rd').value || 0;
+    const desl = document.getElementById('val-desloc').value || 9;
+    const inv = Array.from(document.querySelectorAll('.inv-slot')).map(s => s.value);
 
-        const comp = [
-            nickname,
-            Object.values(sheet.atributos), 
-            sheet.pericias.map(p => [p.t, p.m]), 
-            sheet.habilidades.map(h => [h.tipo, h.nome, h.dano, h.desc, h.img, h.extras]),
-            [pvC, pvM, paC, paM, psC, psM],
-            [def, rd, desl],
-            sheet.dificuldade,
-            inv
-        ];
+    // 2. Transforma tudo em um Array Posicional Compacto
+    // Para as perícias, salvamos APENAS os modificadores (t e m), pois a ordem e os nomes são fixos
+    const comp = [
+        nickname,
+        Object.values(sheet.atributos), 
+        sheet.pericias.map(p => [p.t, p.m]), 
+        sheet.habilidades.map(h => [h.tipo, h.nome, h.dano, h.desc, h.img, h.extras]),
+        [pvC, pvM, paC, paM, psC, psM],
+        [def, rd, desl],
+        sheet.dificuldade,
+        inv
+    ];
 
-        const stringJson = JSON.stringify(comp);
-        const codigo = btoa(unescape(encodeURIComponent(stringJson)));
+    // 3. Converte para JSON string e encoda em Base64 para ficar copíavel
+    const stringJson = JSON.stringify(comp);
+    const codigo = btoa(unescape(encodeURIComponent(stringJson)));
 
-        const textarea = document.getElementById('codigo-export');
-        textarea.value = codigo;
-        textarea.select();
-        try {
-            document.execCommand('copy');
-            spawnPopup('EXPORTAÇÃO', 'Código Copiado', 'SUCESSO', 'var(--text-gold)', 'COPIADO', `${codigo.length} caracteres`);
-        } catch(e) {
-            alert("Código gerado na caixa de texto! Copie-o manualmente.");
-        }
+    // 4. Joga na caixa de texto e tenta copiar para a área de transferência
+    const textarea = document.getElementById('codigo-export');
+    textarea.value = codigo;
+    textarea.select();
+    try {
+        document.execCommand('copy');
+        spawnPopup('EXPORTAÇÃO', 'Código Copiado', 'SUCESSO', 'var(--text-gold)', 'COPIADO', `${codigo.length} caracteres`);
+    } catch(e) {
+        alert("Código gerado na caixa de texto! Copie-o manualmente.");
+    }
+}
+
+function importarFicha() {
+    const textarea = document.getElementById('codigo-export');
+    const codigo = textarea.value.trim();
+
+    if (!codigo) {
+        alert("Cole o código na caixa de texto primeiro!");
+        return;
     }
 
-    function importarFicha() {
-        const textarea = document.getElementById('codigo-export');
-        const codigo = textarea.value.trim();
+    try {
+        // 1. Desfaz o Base64 e o JSON
+        const stringJson = decodeURIComponent(escape(atob(codigo)));
+        const comp = JSON.parse(stringJson);
 
-        if (!codigo) {
-            alert("Cole o código na caixa de texto primeiro!");
-            return;
+        // 2. Reconstrói os dados
+        document.getElementById('user-nickname').value = comp[0];
+
+        // Atributos
+        const chavesAtr = ["FOR", "AGI", "INT", "CON", "POD"];
+        if (comp[1]) comp[1].forEach((v, i) => sheet.atributos[chavesAtr[i]] = v);
+
+        // Perícias: restaura apenas 't' (treinamento) e 'm' (modificador) nos objetos existentes
+        if (comp[2]) {
+            comp[2].forEach((pArr, i) => {
+                if (sheet.pericias[i]) {
+                    sheet.pericias[i].t = pArr[0];
+                    sheet.pericias[i].m = pArr[1];
+                }
+            });
         }
 
-        try {
-            const stringJson = decodeURIComponent(escape(atob(codigo)));
-            const comp = JSON.parse(stringJson);
-
-            document.getElementById('user-nickname').value = comp[0];
-
-            const chavesAtr = ["FOR", "AGI", "INT", "CON", "POD"];
-            if (comp[1]) comp[1].forEach((v, i) => sheet.atributos[chavesAtr[i]] = v);
-
-            if (comp[2]) {
-                comp[2].forEach((pArr, i) => {
-                    if (sheet.pericias[i]) {
-                        sheet.pericias[i].t = pArr[0];
-                        sheet.pericias[i].m = pArr[1];
-                    }
-                });
-            }
-
-            if (comp[3]) {
-                sheet.habilidades = comp[3].map(h => ({
-                    tipo: h[0], nome: h[1], dano: h[2], desc: h[3], img: h[4], extras: h[5]
-                }));
-            }
-
-            if (comp[4]) {
-                document.getElementById('curr-pv').value = comp[4][0];
-                document.getElementById('max-pv').value = comp[4][1];
-                document.getElementById('curr-pa').value = comp[4][2];
-                document.getElementById('max-pa').value = comp[4][3];
-                document.getElementById('curr-ps').value = comp[4][4];
-                document.getElementById('max-ps').value = comp[4][5];
-            }
-
-            if (comp[5]) {
-                document.getElementById('val-defesa').value = comp[5][0];
-                document.getElementById('val-rd').value = comp[5][1];
-                document.getElementById('val-desloc').value = comp[5][2];
-            }
-
-            sheet.dificuldade = comp[6] || 'normal';
-
-            if (comp[7]) {
-                const slots = document.querySelectorAll('.inv-slot');
-                comp[7].forEach((val, i) => {
-                    if(slots[i] && slots[i].id !== 'codigo-export') slots[i].value = val;
-                });
-            }
-
-            render();
-            setDif(sheet.dificuldade);
-            ['pv', 'pa', 'ps'].forEach(updateBar);
-            salvarNoNavegador();
-            
-            spawnPopup('IMPORTAÇÃO', 'Ficha Carregada', 'SUCESSO', 'var(--light-purple)', 'CARREGADO');
-
-        } catch (e) {
-            console.error(e);
-            alert("Erro ao importar: Código inválido, incompleto ou corrompido.");
+        // Habilidades
+        if (comp[3]) {
+            sheet.habilidades = comp[3].map(h => ({
+                tipo: h[0], nome: h[1], dano: h[2], desc: h[3], img: h[4], extras: h[5]
+            }));
         }
+
+        // Recursos (Barras de Vida, etc)
+        if (comp[4]) {
+            document.getElementById('curr-pv').value = comp[4][0];
+            document.getElementById('max-pv').value = comp[4][1];
+            document.getElementById('curr-pa').value = comp[4][2];
+            document.getElementById('max-pa').value = comp[4][3];
+            document.getElementById('curr-ps').value = comp[4][4];
+            document.getElementById('max-ps').value = comp[4][5];
+        }
+
+        // Estatísticas Compactas
+        if (comp[5]) {
+            document.getElementById('val-defesa').value = comp[5][0];
+            document.getElementById('val-rd').value = comp[5][1];
+            document.getElementById('val-desloc').value = comp[5][2];
+        }
+
+        sheet.dificuldade = comp[6] || 'normal';
+
+        // Inventário: Popula os textareas baseando-se na ordem do Array
+        if (comp[7]) {
+            const slots = document.querySelectorAll('.inv-slot');
+            comp[7].forEach((val, i) => {
+                if(slots[i] && slots[i].id !== 'codigo-export') slots[i].value = val;
+            });
+        }
+
+        // 3. Atualiza toda a Interface Gráfica e força salvamento local
+        render();
+        setDif(sheet.dificuldade);
+        ['pv', 'pa', 'ps'].forEach(updateBar);
+        salvarNoNavegador();
+        
+        spawnPopup('IMPORTAÇÃO', 'Ficha Carregada', 'SUCESSO', 'var(--light-purple)', 'CARREGADO');
+
+    } catch (e) {
+        console.error(e);
+        alert("Erro ao importar: Código inválido, incompleto ou corrompido.");
     }
+}
 
     function formatText(tagStart, tagEnd = tagStart) {
         const area = document.getElementById('hab-desc');
@@ -840,7 +793,7 @@
         document.getElementById('attr-container').innerHTML = Object.entries(sheet.atributos).map(([k,v]) => `
             <div class="attr-container-outer" onclick="realizarRolagem('${k}', 0, 'Teste de ${k}')">
                 <div class="attr-hexagon-border"><div class="attr-hexagon-inner">
-                    <input type="number" class="attr-value-input" value="${v}" onchange="sheet.atributos['${k}']=parseInt(this.value)||0; calcularVelocidade();" onclick="event.stopPropagation()">
+                    <input type="number" class="attr-value-input" value="${v}" onchange="sheet.atributos['${k}']=parseInt(this.value)||0" onclick="event.stopPropagation()">
                     <span style="font-size:0.75rem; color:var(--text-gold); font-weight:bold;">${k}</span>
                 </div></div>
             </div>`).join('');
@@ -857,9 +810,7 @@
                     <input type="number" value="${p.m}" onchange="atualizarPericia('${p.n}', 'm', this.value)" style="width:35px; background:#000; color:var(--text-gold); border:1px solid #444; text-align:center;">
                 </div>
             </div>`).join('');
-            
         renderAbilities();
-        calcularVelocidade(); 
     }
 
     function renderAbilities() {
@@ -922,119 +873,134 @@
         document.getElementById('btn-'+a).classList.add('active');
     }
     function atualizarPericia(n, c, v) { let p = sheet.pericias.find(x => x.n === n); if(p) p[c] = parseInt(v) || 0; }
+    function salvarFicha() {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(sheet)], {type: 'application/json'}));
+        a.download = 'ficha_abyss.json'; a.click();
+    }
 
     window.onload = () => {
-        sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
-        carregarDoNavegador();
-        render(); 
-    };
+    // Primeiro cria a estrutura básica de perícias
+    sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
+    
+    // Depois tenta carregar o que está salvo no navegador
+    carregarDoNavegador();
+    
+    // Se não tinha nada salvo, o render() padrão rodará dentro do carregar ou aqui
+    render(); 
+};
     
     function updateBar(id) {
-        const current = parseInt(document.getElementById(`curr-${id}`).value) || 0;
-        const max = parseInt(document.getElementById(`max-${id}`).value) || 1;
-        const percentage = Math.min(Math.max((current / max) * 100, 0), 100);
-        document.getElementById(`bar-${id}`).style.width = percentage + "%";
-    }
+    const current = parseInt(document.getElementById(`curr-${id}`).value) || 0;
+    const max = parseInt(document.getElementById(`max-${id}`).value) || 1;
+    const percentage = Math.min(Math.max((current / max) * 100, 0), 100);
+    document.getElementById(`bar-${id}`).style.width = percentage + "%";
+}
 
-    function changeStat(id, amount) {
-        const input = document.getElementById(`curr-${id}`);
-        const max = parseInt(document.getElementById(`max-${id}`).value) || 0;
-        let newVal = parseInt(input.value) + amount;
+function changeStat(id, amount) {
+    const input = document.getElementById(`curr-${id}`);
+    const max = parseInt(document.getElementById(`max-${id}`).value) || 0;
+    let newVal = parseInt(input.value) + amount;
+    
+    // Trava entre 0 e o valor máximo definido pelo jogador
+    if (newVal < 0) newVal = 0;
+    if (newVal > max) newVal = max;
+    
+    input.value = newVal;
+    updateBar(id);
+}
+
+// Inicializa o visual das barras ao carregar
+window.addEventListener('load', () => {
+    ['pv', 'pa', 'ps'].forEach(updateBar);
+});
+
+function salvarNoNavegador() {
+    const recursos = {
+        pv: { curr: document.getElementById('curr-pv').value, max: document.getElementById('max-pv').value },
+        pa: { curr: document.getElementById('curr-pa').value, max: document.getElementById('max-pa').value },
+        ps: { curr: document.getElementById('curr-ps').value, max: document.getElementById('max-ps').value }
+    };
+
+    // Resgata os valores de forma segura (previne falhas se o elemento não existir)
+    const defesaElement = document.getElementById('val-defesa');
+    const rdElement = document.getElementById('val-rd');
+    const deslocElement = document.getElementById('val-desloc');
+
+    const estatisticas = {
+        defesa: defesaElement ? defesaElement.value : "10",
+        rd: rdElement ? rdElement.value : "0",
+        desloc: deslocElement ? deslocElement.value : "9"
+    };
+
+    // Coleta o valor de TODOS os slots do inventário na ordem em que aparecem
+    const invSlots = Array.from(document.querySelectorAll('.inv-slot')).map(slot => slot.value);
+
+    const dadosParaSalvar = {
+        nickname: document.getElementById('user-nickname').value,
+        atributos: sheet.atributos,
+        pericias: sheet.pericias, // ADICIONADO: Agora salva as modificações das perícias
+        habilidades: sheet.habilidades,
+        recursos: recursos,
+        estatisticas: estatisticas,
+        inventarioSlots: invSlots, // Salva o array do inventário
+        dificuldade: sheet.dificuldade
+    };
+
+    localStorage.setItem('ficha_abyss_v1', JSON.stringify(dadosParaSalvar));
+    alert("Progresso salvo no navegador!");
+}
+
+function carregarDoNavegador() {
+    const salvo = localStorage.getItem('ficha_abyss_v1');
+    
+    if (salvo) {
+        const dados = JSON.parse(salvo);
         
-        if (newVal < 0) newVal = 0;
-        if (newVal > max) newVal = max;
+        document.getElementById('user-nickname').value = dados.nickname || "";
         
-        input.value = newVal;
-        updateBar(id);
-    }
-
-    window.addEventListener('load', () => {
-        ['pv', 'pa', 'ps'].forEach(updateBar);
-    });
-
-    function salvarNoNavegador() {
-        const recursos = {
-            pv: { curr: document.getElementById('curr-pv').value, max: document.getElementById('max-pv').value },
-            pa: { curr: document.getElementById('curr-pa').value, max: document.getElementById('max-pa').value },
-            ps: { curr: document.getElementById('curr-ps').value, max: document.getElementById('max-ps').value }
-        };
-
-        const defesaElement = document.getElementById('val-defesa');
-        const rdElement = document.getElementById('val-rd');
-        const deslocElement = document.getElementById('val-desloc');
-
-        const estatisticas = {
-            defesa: defesaElement ? defesaElement.value : "10",
-            rd: rdElement ? rdElement.value : "0",
-            desloc: deslocElement ? deslocElement.value : "9"
-        };
-
-        const invSlots = Array.from(document.querySelectorAll('.inv-slot')).map(slot => slot.value);
-
-        const dadosParaSalvar = {
-            nickname: document.getElementById('user-nickname').value,
-            atributos: sheet.atributos,
-            pericias: sheet.pericias,
-            habilidades: sheet.habilidades,
-            recursos: recursos,
-            estatisticas: estatisticas,
-            inventarioSlots: invSlots,
-            dificuldade: sheet.dificuldade
-        };
-
-        localStorage.setItem('ficha_abyss_v1', JSON.stringify(dadosParaSalvar));
-        alert("Progresso salvo no navegador!");
-    }
-
-    // CORREÇÃO NO CACHE: Função blindada contra Arrays vazios
-    function carregarDoNavegador() {
-        const salvo = localStorage.getItem('ficha_abyss_v1');
-        
-        if (salvo) {
-            const dados = JSON.parse(salvo);
-            
-            document.getElementById('user-nickname').value = dados.nickname || "";
-            
-            if (dados.inventarioSlots && Array.isArray(dados.inventarioSlots)) {
-                const slots = document.querySelectorAll('.inv-slot');
-                dados.inventarioSlots.forEach((textoSalvo, index) => {
-                    if (slots[index]) {
-                        slots[index].value = textoSalvo;
-                    }
-                });
-            }
-            
-            sheet.atributos = dados.atributos || sheet.atributos;
-            sheet.habilidades = dados.habilidades || [];
-            sheet.dificuldade = dados.dificuldade || 'normal';
-            
-            // TRAVA DE SEGURANÇA: Só aceita as perícias do cache se não for um array vazio ou quebrado
-            if(dados.pericias && Array.isArray(dados.pericias) && dados.pericias.length > 0) {
-                sheet.pericias = dados.pericias;
-            } else {
-                sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
-            }
-            
-            if (dados.recursos) {
-                ['pv', 'pa', 'ps'].forEach(id => {
-                    if(document.getElementById(`curr-${id}`)) {
-                        document.getElementById(`curr-${id}`).value = dados.recursos[id].curr;
-                        document.getElementById(`max-${id}`).value = dados.recursos[id].max;
-                    }
-                });
-            }
-
-            if (dados.estatisticas) {
-                if(document.getElementById('val-defesa')) document.getElementById('val-defesa').value = dados.estatisticas.defesa || 10;
-                if(document.getElementById('val-rd')) document.getElementById('val-rd').value = dados.estatisticas.rd || 0;
-                if(document.getElementById('val-desloc')) document.getElementById('val-desloc').value = dados.estatisticas.desloc || 9;
-            }
-
-            render();
-            setDif(sheet.dificuldade);
-            ['pv', 'pa', 'ps'].forEach(updateBar);
+        if (dados.inventarioSlots && Array.isArray(dados.inventarioSlots)) {
+            const slots = document.querySelectorAll('.inv-slot');
+            dados.inventarioSlots.forEach((textoSalvo, index) => {
+                if (slots[index]) {
+                    slots[index].value = textoSalvo;
+                }
+            });
         }
+        
+        sheet.atributos = dados.atributos || sheet.atributos;
+        sheet.habilidades = dados.habilidades || [];
+        sheet.dificuldade = dados.dificuldade || 'normal';
+        
+        // Carrega as perícias salvas ou inicializa com as básicas
+        if(dados.pericias && Array.isArray(dados.pericias)) {
+            sheet.pericias = dados.pericias;
+        } else {
+            sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
+        }
+        
+        if (dados.recursos) {
+            ['pv', 'pa', 'ps'].forEach(id => {
+                if(document.getElementById(`curr-${id}`)) {
+                    document.getElementById(`curr-${id}`).value = dados.recursos[id].curr;
+                    document.getElementById(`max-${id}`).value = dados.recursos[id].max;
+                }
+            });
+        }
+
+        if (dados.estatisticas) {
+            if(document.getElementById('val-defesa')) document.getElementById('val-defesa').value = dados.estatisticas.defesa || 10;
+            if(document.getElementById('val-rd')) document.getElementById('val-rd').value = dados.estatisticas.rd || 0;
+            if(document.getElementById('val-desloc')) document.getElementById('val-desloc').value = dados.estatisticas.desloc || 9;
+        }
+
+        render();
+        setDif(sheet.dificuldade);
+        ['pv', 'pa', 'ps'].forEach(updateBar);
+        
+        console.log("Ficha carregada do armazenamento local.");
     }
+}
 
 </script>
 </body>
