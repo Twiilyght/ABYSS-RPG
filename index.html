@@ -68,7 +68,7 @@
             cursor: pointer; transition: 0.2s; font-family: 'Cinzel', serif;
         }
         .skill-item:hover { background: rgba(123, 31, 162, 0.1); border-color: var(--light-purple); }
-        .skill-name { font-size: 0.85rem; font-weight: bold; color: #ddd; }
+        .skill-name { font-size: 0.85rem; font-weight: bold; color: #ddd; font-family: 'Cinzel', serif; }
         
         .abilities-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
         .spell-section { grid-column: 1 / -1; }
@@ -172,7 +172,7 @@
         .item-weight-indicator { font-size: 0.75rem; color: #aaa; display: flex; align-items: center; gap: 4px; }
         .item-weight-indicator input { width: 40px; background: #000; border: 1px solid #333; color: var(--text-gold); text-align: center; border-radius: 3px; font-size: 0.75rem; font-family: 'Cinzel'; }
 
-        .btn-info-skill { background: transparent; border: none; color: var(--light-purple); cursor: pointer; font-size: 0.8rem; margin-left: 5px; }
+        .btn-info-skill { background: transparent; border: none; color: var(--light-purple); cursor: pointer; font-size: 0.8rem; margin-left: 20px; }
         .btn-info-skill:hover { color: #fff; }
     </style>
 </head>
@@ -184,9 +184,16 @@
     <button class="sidebar-btn" id="btn-inventario" onclick="mudarArea('inventario')">🎒</button>
     <button class="sidebar-btn" onclick="salvarNoNavegador()" title="Salvar">💾</button>
     <select id="save-slot" class="sidebar-btn" onchange="carregarDoNavegador()" title="Mudar Slot">
-        <option value="1">S1</option>
-        <option value="2">S2</option>
-        <option value="3">S3</option>
+        <option value="1">🗂️ 1</option>
+        <option value="2">🗂️ 2</option>
+        <option value="3">🗂️ 3</option>
+        <option value="4">🗂️ 4</option>
+        <option value="5">🗂️ 5</option>
+        <option value="6">🗂️ 6</option>
+        <option value="7">🗂️ 7</option>
+        <option value="8">🗂️ 8</option>
+        <option value="9">🗂️ 9</option>
+        <option value="10">🗂️ 10</option>
     </select>
 </div>
 
@@ -207,7 +214,7 @@
                 <span class="sep">/</span>
                 <input type="number" id="max-pv" value="20" onchange="updateBar('pv')">
                 <button class="arrow-btn" onclick="changeStat('pv', 1)">▶</button>
-                <input type="number" id="calc-pv" class="calc-input" placeholder="🔧" onchange="aplicarModificador('pv')">
+                <input type="number" id="calc-pv" class="calc-input" placeholder="+/-" onchange="aplicarModificador('pv')">
             </div>
         </div>
 
@@ -220,7 +227,7 @@
                 <span class="sep">/</span>
                 <input type="number" id="max-pa" value="10" onchange="updateBar('pa')">
                 <button class="arrow-btn" onclick="changeStat('pa', 1)">▶</button>
-                <input type="number" id="calc-pa" class="calc-input" placeholder="🔧" onchange="aplicarModificador('pa')">
+                <input type="number" id="calc-pa" class="calc-input" placeholder="+/-" onchange="aplicarModificador('pa')">
             </div>
         </div>
 
@@ -233,7 +240,7 @@
                 <span class="sep">/</span>
                 <input type="number" id="max-ps" value="15" onchange="updateBar('ps')">
                 <button class="arrow-btn" onclick="changeStat('ps', 1)">▶</button>
-                <input type="number" id="calc-ps" class="calc-input" placeholder="🔧" onchange="aplicarModificador('ps')">
+                <input type="number" id="calc-ps" class="calc-input" placeholder="+/-" onchange="aplicarModificador('ps')">
             </div>
         </div>
         
