@@ -210,13 +210,12 @@
 <body>
 
 <div class="sidebar">
-    <button class="sidebar-btn" id="btn-login" onclick="toggleLogin()" title="Login Google">👤</button>
     <button class="sidebar-btn" id="btn-log" onclick="toggleLog()" title="Log do Servidor">🌍</button>
     <button class="sidebar-btn active" id="btn-ficha" onclick="mudarArea('ficha')">📜</button>
     <button class="sidebar-btn" id="btn-combate" onclick="mudarArea('combate')">⚔️</button>
     <button class="sidebar-btn" id="btn-inventario" onclick="mudarArea('inventario')">🎒</button>
-    <button class="sidebar-btn" onclick="salvarNaNuvem()" title="Salvar na Nuvem">💾</button>
-    <select id="save-slot" class="sidebar-btn" onchange="carregarDaNuvem()" title="Mudar Slot">
+    <button class="sidebar-btn" onclick="salvarNoNavegador()" title="Salvar">💾</button>
+    <select id="save-slot" class="sidebar-btn" onchange="carregarDoNavegador()" title="Mudar Slot">
         <option value="1">🗂️ 1</option>
         <option value="2">🗂️ 2</option>
         <option value="3">🗂️ 3</option>
@@ -480,7 +479,6 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -548,7 +546,7 @@ const firebaseConfig = {
         "Investigação": "<i>Você é capaz de analisar pistas, conectar informações e tirar conclusões lógicas a partir de evidências... Também é o seu raciocínio dedutivo, atenção a detalhes relevantes e capacidade de reconstruir eventos.</i><br><br><b>Usos Específicos</b><br><b>[Reconstruir Pista]:</b> Você usa Investigação para tentar reconstruir pistas incompletas ou degradadas.<br><b>[Interrogar]:</b> Você usa Investigação no lugar de outras perícias comunicativas para Interrogar.",
         "Luta": "<i>Você usa Luta para fazer ataques corpo a corpo. A DT é a Defesa do alvo. Se você acertar, causa dano de acordo com a arma utilizada.</i>",
         "Medicina": "<i>Você possui conhecimento sobre o corpo, ferimentos e tratamentos, sendo capaz de diagnosticar, estabilizar e cuidar de condições físicas.</i><br><br><b>Usos Específicos</b><br><b>[Primeiros Socorros]:</b> Você presta atendimento emergencial a um alvo em estado de morrendo. Com sucesso, o alvo deixa esse estado e se torna estável, este uso exige uma Ação Padrão.<br><b>[Necropsia]:</b> Você analisa um corpo para determinar a causa da morte e extrair informações relevantes. Com sucesso, você identifica como a vítima morreu; resultados melhores podem revelar o tipo de arma, tempo de morte, condições anteriores e possíveis circunstâncias do ocorrido. Este processo exige tempo e, idealmente, ferramentas adequadas.",
-        "Percepção": "<i>Você nota coisas usando os sentidos.</i><br><br><b>Usos Específicos</b><br><b>[Observar]:</b> Você utiliza sua visão para perceber detalhes no ambiente, como movimentos, figuras escondidas, objetos discretos ou mudanças sutis na cena. Pode ser usado para localizar alvos ocultos, identificar ameaças visuais ou notar algo fora do lugar<br><b>[Escutar]:</b> Você utiliza sua audição para captar sons específicos, como passos, vozes, respiração ou mechanisms em funcionamento, mesmo à distância ou através de obstáculos. Pode ser usado para localizar presenças fora do campo de visão ou antecipar movimentações.",
+        "Percepção": "<i>Você nota coisas usando os sentidos.</i><br><br><b>Usos Específicos</b><br><b>[Observar]:</b> Você utiliza sua visão para perceber detalhes no ambiente, como movimentos, figuras escondidas, objetos discretos ou mudanças sutis na cena. Pode ser usado para localizar alvos ocultos, identificar ameaças visuais ou notar algo fora do lugar<br><b>[Escutar]:</b> Você utiliza sua audição para captar sons específicos, como passos, vozes, respiração ou mecanismos em funcionamento, mesmo à distância ou através de obstáculos. Pode ser usado para localizar presenças fora do campo de visão ou antecipar movimentações.",
         "Pilotagem": "<i>Você é capaz de conduzir veículos com controle e precisão, mantendo estabilidade mesmo em situações adversas. Pilotagem envolve reflexos rápidos, coordenação e domínio do veículo em movimento.</i>",
         "Pontaria": "<i>Você usa Pontaria para fazer ataques à distância. A DT é a Defesa do alvo. Se você acertar, causa dano de acordo com a arma utilizada.</i>",
         "Profissão": "<i>Você possui formação e experiência em uma área de trabalho específica, adquiridas por prática contínua, estudo ou vivência. Sua profissão representa não apenas o que você sabe fazer, mas também como você resolve problemas no dia a dia, utilizando técnicas, ferramentas e conhecimentos próprios da sua área. Em situações relacionadas à sua especialidade, você é capaz de agir com eficiência, improvisar soluções e reconhecer detalhes que passariam despercebidos para outros.</i><br><br>Você começa com um objeto de Peso 0 que tem funcionamento padrão e te concede +1 em testes de profissão.  (Você não pode usar Profissão como Luta e Pontaria)",
@@ -563,35 +561,6 @@ const firebaseConfig = {
         "Monstrologia": "<i>Você possui conhecimento sobre criaturas perigosas, sendo capaz de identificar suas características, comportamentos e fraquezas. Monstrologia permite entender como enfrentar e sobreviver a diferentes tipos de monstros.</i><br><br><b>Usos Específicos</b><br><b>[Analisar]:</b> Você reconhece uma criatura ou seus rastros, entendendo sua natureza, tipo e características gerais, dependendo do resultado. Você descobre fraquezas, resistências ou padrões de comportamento de um monstro.<br><b>[Explorar Fraqueza]:</b> Ao identificar uma vulnerabilidade, você pode aproveitar ela e anunciar aos aliados para que façam o mesmo. Isso confere +2 no teste de luta contra a criatura durante o combate.",
         "Linguística": "<i>Você compreende e domina idiomas, símbolos e formas de comunicação, sendo capaz de interpretar, traduzir e adaptar linguagem em diferentes contextos.</i><br><br><b>Usos Específicos</b><br><b>[Traduzir]:</b> Você interpreta idiomas desconhecidos, textos antigos ou mensagens estrangeiras, entendendo seu significado geral ou detalhado.<br><b>[Decifrar]:</b> Você identifica padrões em símbolos, códigos simples ou escritas incomuns, revelando mensagens ocultas."
     };
-
-    let currentUser = null;
-
-    firebase.auth().onAuthStateChanged((user) => {
-        currentUser = user;
-        const btnLogin = document.getElementById('btn-login');
-        if (user) {
-            btnLogin.innerText = "🔓";
-            btnLogin.title = "Sair (" + user.displayName + ")";
-            carregarDaNuvem(); 
-        } else {
-            btnLogin.innerText = "👤";
-            btnLogin.title = "Login Google";
-            sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
-            render();
-        }
-    });
-
-    function toggleLogin() {
-        if (currentUser) {
-            firebase.auth().signOut().then(() => alert("Deslogado com sucesso!"));
-        } else {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider).catch(error => {
-                console.error("Erro no login:", error);
-                alert("Erro ao fazer login com Google.");
-            });
-        }
-    }
 
     function toggleLog() {
         document.getElementById('log-panel').classList.toggle('active');
@@ -1023,7 +992,8 @@ const firebaseConfig = {
         const p = sheet.pericias.find(x => x.n === nome);
         if (p) {
             p[campo] = (campo === 't' || campo === 'm') ? (parseInt(valor) || 0) : valor;
-            if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+            if (typeof salvarDados === 'function') salvarDados();
+            else if (typeof salvarNoLocalStorage === 'function') salvarNoLocalStorage();
         }
     }
 
@@ -1114,11 +1084,7 @@ const firebaseConfig = {
         } catch(e) { alert("Erro crítico na leitura do código digital."); }
     }
 
-    function salvarNaNuvem() {
-        if (!currentUser) {
-            alert("Você precisa fazer login com o Google para salvar a ficha na nuvem!");
-            return;
-        }
+    function salvarNoNavegador() {
         const slot = document.getElementById('save-slot').value;
         const dados = {
             nickname: document.getElementById('user-nickname').value,
@@ -1134,46 +1100,42 @@ const firebaseConfig = {
                 ps_c: document.getElementById('curr-ps').value, ps_m: document.getElementById('max-ps').value
             }
         };
-        
-        database.ref('users/' + currentUser.uid + '/fichas/slot_' + slot).set(dados)
-            .then(() => alert(`Sincronizado na Nuvem! (Slot ${slot})`))
-            .catch(err => alert("Erro ao salvar: " + err.message));
+        localStorage.setItem('ficha_abyss_v2_slot_' + slot, JSON.stringify(dados));
+        alert(`Sincronizado no Slot ${slot} do Navegador!`);
     }
 
-    function carregarDaNuvem() {
-        if (!currentUser) return; // Se não tem usuário, já carregou o padrão no onAuthStateChanged
+    function carregarDoNavegador() {
         const slot = document.getElementById('save-slot').value;
-        
-        database.ref('users/' + currentUser.uid + '/fichas/slot_' + slot).once('value').then((snapshot) => {
-            const d = snapshot.val();
-            if (d) {
-                document.getElementById('user-nickname').value = d.nickname || "";
-                document.getElementById('user-sub').value = d.sub || "";
-                sheet.atributos = d.atributos || sheet.atributos;
-                sheet.pericias = d.pericias || []; sheet.habilidades = d.habilidades || [];
-                sheet.itens = d.itens || []; sheet.rds = d.rds || [];
-                sheet.recursosFinos = d.recursosFinos || { pv_temp:0, ps_temp:0 };
-                sheet.dificuldade = d.dificuldade || 'normal';
-                sheet.limiteCarga = d.limiteCarga || 20;
-                document.getElementById('peso-max-input').value = sheet.limiteCarga;
-                
-                if(d.defesa) document.getElementById('val-defesa').value = d.defesa;
-                if(d.bloqueio) document.getElementById('val-bloqueio').value = d.bloqueio;
-                if(d.nivel) document.getElementById('val-nivel').value = d.nivel;
+        const salvo = localStorage.getItem('ficha_abyss_v2_slot_' + slot) || localStorage.getItem('ficha_abyss_v2');
+        if (salvo) {
+            const d = JSON.parse(salvo);
+            document.getElementById('user-nickname').value = d.nickname || "";
+            document.getElementById('user-sub').value = d.sub || "";
+            sheet.atributos = d.atributos || sheet.atributos;
+            sheet.pericias = d.pericias || []; sheet.habilidades = d.habilidades || [];
+            sheet.itens = d.itens || []; sheet.rds = d.rds || [];
+            sheet.recursosFinos = d.recursosFinos || { pv_temp:0, ps_temp:0 };
+            sheet.dificuldade = d.dificuldade || 'normal';
+            sheet.limiteCarga = d.limiteCarga || 20;
+            document.getElementById('peso-max-input').value = sheet.limiteCarga;
+            
+            if(d.defesa) document.getElementById('val-defesa').value = d.defesa;
+            if(d.bloqueio) document.getElementById('val-bloqueio').value = d.bloqueio;
+            if(d.nivel) document.getElementById('val-nivel').value = d.nivel;
 
-                if(d.recValues) {
-                    document.getElementById('curr-pv').value = d.recValues.pv_c; document.getElementById('max-pv').value = d.recValues.pv_m;
-                    document.getElementById('curr-pa').value = d.recValues.pa_c; document.getElementById('max-pa').value = d.recValues.pa_m;
-                    document.getElementById('curr-ps').value = d.recValues.ps_c; document.getElementById('max-ps').value = d.recValues.ps_m;
-                }
-                render(); setDif(sheet.dificuldade); ['pv', 'pa', 'ps'].forEach(updateBar);
-            } else {
-                sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
-                render();
+            if(d.recValues) {
+                document.getElementById('curr-pv').value = d.recValues.pv_c; document.getElementById('max-pv').value = d.recValues.pv_m;
+                document.getElementById('curr-pa').value = d.recValues.pa_c; document.getElementById('max-pa').value = d.recValues.pa_m;
+                document.getElementById('curr-ps').value = d.recValues.ps_c; document.getElementById('max-ps').value = d.recValues.ps_m;
             }
-        }).catch(err => console.error("Erro ao carregar da nuvem:", err));
+            render(); setDif(sheet.dificuldade); ['pv', 'pa', 'ps'].forEach(updateBar);
+        } else {
+            sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
+            render();
+        }
     }
 
+    window.onload = () => { carregarDoNavegador(); };
 </script>
 </body>
 </html>
