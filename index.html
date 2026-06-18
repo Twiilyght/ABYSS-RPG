@@ -72,7 +72,13 @@
         select.sidebar-btn { appearance: none; padding-left: 10px; font-size: 1.2rem; }
 
         .container { max-width: 1400px; margin: 0 auto 0 100px; flex-grow: 1; padding: 40px 20px; }
-        .title { font-family: 'Cinzel', serif; text-align: center; color: var(--primary-purple); text-shadow: 0 0 20px rgba(123, 31, 162, 0.5); letter-spacing: 8px; font-size: 3rem; margin-bottom: 40px; }
+        .title { font-family: 'Cinzel', serif; color: var(--primary-purple); text-shadow: 0 0 20px rgba(123, 31, 162, 0.5); letter-spacing: 8px; font-size: 3rem; }
+
+        /* --- SELETOR DE CLASSES --- */
+        .class-selector { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .class-btn { background: #0c0c10; border: 1px solid var(--border-color); color: #aaa; padding: 12px 25px; cursor: pointer; font-family: 'Cinzel', serif; border-radius: 6px; transition: 0.3s; font-weight: bold; letter-spacing: 1.5px; box-shadow: 0 4px 6px rgba(0,0,0,0.5);}
+        .class-btn:hover { background: rgba(123, 31, 162, 0.15); border-color: var(--light-purple); color: #fff; transform: translateY(-2px);}
+        .class-btn.active { border-color: var(--text-gold); color: var(--text-gold); background: rgba(212, 175, 55, 0.1); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); transform: translateY(-2px);}
 
         .page-area { display: none; }
         .page-area.active { display: block; }
@@ -91,12 +97,12 @@
         .diff-btn { background: #111; border: 1px solid #333; color: #666; padding: 10px 25px; cursor: pointer; font-family: 'Cinzel', serif; border-radius: 4px; transition: 0.3s; }
         .diff-btn.active { border-color: var(--text-gold); color: var(--text-gold); background: rgba(212, 175, 55, 0.1); box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
 
-        .skills-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 6px; }
+        .skills-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 6px; }
         .skill-item { 
             background: rgba(0,0,0,0.3); border: 1px solid #2a2a2a; padding: 6px 10px; 
             display: flex; align-items: center; justify-content: space-between; 
             border-left: 3px solid var(--primary-purple); border-radius: 4px; 
-            cursor: pointer; transition: 0.2s; font-family: 'Cinzel', serif;
+            transition: 0.2s; font-family: 'Cinzel', serif;
         }
         .skill-item:hover { background: rgba(123, 31, 162, 0.1); border-color: var(--light-purple); }
         .skill-name { font-size: 0.95rem; font-weight: bold; color: #ddd; font-family: 'Cinzel', serif; letter-spacing: 1px;}
@@ -203,7 +209,7 @@
         .item-weight-indicator { font-size: 0.75rem; color: #aaa; display: flex; align-items: center; gap: 4px; }
         .item-weight-indicator input { width: 40px; background: #000; border: 1px solid #333; color: var(--text-gold); text-align: center; border-radius: 3px; font-size: 0.75rem; font-family: 'Cinzel', serif; }
 
-        .btn-info-skill { background: transparent; border: none; color: var(--light-purple); cursor: pointer; font-size: 0.8rem; margin-left: 20px; }
+        .btn-info-skill { background: transparent; border: none; color: var(--light-purple); cursor: pointer; font-size: 0.8rem; margin-left: 10px; }
         .btn-info-skill:hover { color: #fff; }
     </style>
 </head>
@@ -231,11 +237,28 @@
 </div>
 
 <div class="container">
-    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px; margin-bottom: 10px;">
-        <input type="text" id="user-nickname" placeholder="Nickname" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: var(--text-gold); text-align: right; outline: none; font-family: 'Cinzel', serif;">
-        <input type="text" id="user-sub" placeholder="Antecedência" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: #aaa; text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 0.85rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; gap: 20px;">
+        <div>
+            <h1 class="title" style="margin: 0; text-align: left; text-transform: uppercase;">Abyss RPG</h1>
+        </div>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
+                <input type="text" id="user-nickname" placeholder="Nickname" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: var(--text-gold); text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 1.1rem;">
+                <input type="text" id="user-sub" placeholder="Antecedência" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: #aaa; text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 0.85rem;">
+            </div>
+            <div onclick="mudarAvatar()" title="Alterar Avatar" style="width: 65px; height: 65px; border: 2px solid var(--border-color); border-radius: 8px; cursor:pointer; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#0a0a0c; box-shadow: 0 0 10px rgba(0,0,0,0.8);">
+                <img id="char-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
+                <span id="char-avatar-icon" style="font-size:1.5rem; color: var(--text-gold);">👤</span>
+            </div>
+        </div>
     </div>
-    <h1 class="title" style="margin-bottom: 10px; font-family: 'Cinzel', serif, Arial; text-transform: uppercase;">Abyss RPG</h1>
+
+    <div class="class-selector">
+        <button class="class-btn" id="btn-class-arcanista" onclick="selecionarClasse('arcanista')">ARCANISTA</button>
+        <button class="class-btn" id="btn-class-combatente" onclick="selecionarClasse('combatente')">COMBATENTE</button>
+        <button class="class-btn" id="btn-class-erudito" onclick="selecionarClasse('erudito')">ERUDITO</button>
+        <button class="class-btn" id="btn-class-projetante" onclick="selecionarClasse('projetante')">PROJETANTE</button>
+    </div>
 
     <div class="header-status-container">
         <div class="status-row">
@@ -284,7 +307,7 @@
             </div>
             <div class="mini-stat-item">
                 <span class="mini-stat-label">NÍVEL</span>
-                <select id="val-nivel" class="mini-stat-input" style="appearance: none; cursor: pointer; padding-left: 15px;">
+                <select id="val-nivel" class="mini-stat-input" style="appearance: none; cursor: pointer; padding-left: 15px;" onchange="calcularStatusClasse(); if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -292,6 +315,10 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
+            </div>
+            <div class="mini-stat-item">
+                <span class="mini-stat-label">PA/TURNO</span>
+                <input type="number" id="val-pa-turno" class="mini-stat-input" value="0" onchange="sheet.paTurno=parseInt(this.value)||0; if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
             </div>
             <div class="mini-stat-item">
                 <span class="mini-stat-label">DESLOC</span>
@@ -338,20 +365,7 @@
 
         <section class="section-box">
             <div class="section-title">Atributos Especiais</div>
-            <div class="skills-list">
-                <div class="skill-item" onclick="rolarSorte()" style="border-left-color: #ffca28;">
-                    <div><span class="skill-name" style="color: #ffca28;">Sorte</span></div>
-                    <span style="color: #aaa; font-size: 0.8rem;">(Sorte - Azar)</span>
-                </div>
-                <div class="skill-item" onclick="rolarSentidos()" style="border-left-color: #00e5ff;">
-                    <div><span class="skill-name" style="color: #00e5ff;">Sentidos</span></div>
-                    <span style="color: #aaa; font-size: 0.8rem;">Percepção + POD</span>
-                </div>
-                <div class="skill-item" style="cursor: default; border-left-color: #ff1744;">
-                    <div><span class="skill-name" style="color: #ff1744;">Velocidade</span></div>
-                    <span id="display-velocidade" style="color: #ddd; font-weight: bold; font-size: 0.9rem;"></span>
-                </div>
-            </div>
+            <div class="skills-list" id="especiais-container"></div>
         </section>
     </div>
 
@@ -509,7 +523,10 @@ const firebaseConfig = {
         dificuldade: 'normal',
         recursosFinos: { pv_temp: 0, ps_temp: 0 },
         limiteCarga: 20,
-        nivel: 0
+        nivel: 0,
+        classe: null,
+        avatar: "",
+        paTurno: 0
     };
 
     const dtTabela = {
@@ -561,7 +578,13 @@ const firebaseConfig = {
         "Arcanismo": "<i>Você tem conhecimentos arcanos sobre magia e é capaz de realizar a feitiçaria.</i><br><br><b>Usos Específicos</b><br><b>[Identificar Afinidade]:</b> Você analisa o alvo e sua energia. Através disso, você consegue (ou não) identificar a Afinidade do alvo com Umbra, Lumen, Caos, Éter ou Ley.<br><b>[Analisar Artefatos]:</b> Você analisa um objeto mágico. Através disso, você consegue (ou não) identificar seu uso, capacidades ou afinidade.<br><b>[Identificar Feitiço]:</b> Você analisa um feitiço. Através disso, você consegue (ou não) identificar a sua função, efeito ou como superar, caso seja um conhecimento plausível.<br><b>[Responder Questões]:</b> Você busca no seu cérebro por informações que já estudou. Você pode responder perguntas referentes as Entidades e o Arcanismo, ou apenas chegar numa conclusão lógica.",
         "Alquimia": "<i>Você domina a criação e manipulação de substâncias, sendo capaz de preparar compostos com efeitos variados, desde curativos até tóxicos ou reativos.</i><br><br><b>Usos Específicos</b><br><b>[Identificar]:</b> Você analisa substâncias desconhecidas, entendendo seus efeitos e possíveis riscos.<br><b>[Criar Componentes]:</b> Você coleta e aproveita materiais de criaturas, plantas ou ambientes para criar componentes.",
         "Monstrologia": "<i>Você possui conhecimento sobre criaturas perigosas, sendo capaz de identificar suas características, comportamentos e fraquezas. Monstrologia permite entender como enfrentar e sobreviver a diferentes tipos de monstros.</i><br><br><b>Usos Específicos</b><br><b>[Analisar]:</b> Você reconhece uma criatura ou seus rastros, entendendo sua natureza, tipo e características gerais, dependendo do resultado. Você descobre fraquezas, resistências ou padrões de comportamento de um monstro.<br><b>[Explorar Fraqueza]:</b> Ao identificar uma vulnerabilidade, você pode aproveitar ela e anunciar aos aliados para que façam o mesmo. Isso confere +2 no teste de luta contra a criatura durante o combate.",
-        "Linguística": "<i>Você compreende e domina idiomas, símbolos e formas de comunicação, sendo capaz de interpretar, traduzir e adaptar linguagem em diferentes contextos.</i><br><br><b>Usos Específicos</b><br><b>[Traduzir]:</b> Você interpreta idiomas desconhecidos, textos antigos ou mensagens estrangeiras, entendendo seu significado geral ou detalhado.<br><b>[Decifrar]:</b> Você identifica padrões em símbolos, códigos simples ou escritas incomuns, revelando mensagens ocultas."
+        "Linguística": "<i>Você compreende e domina idiomas, símbolos e formas de comunicação, sendo capaz de interpretar, traduzir e adaptar linguagem em diferentes contextos.</i><br><br><b>Usos Específicos</b><br><b>[Traduzir]:</b> Você interpreta idiomas desconhecidos, textos antigos ou mensagens estrangeiras, entendendo seu significado geral ou detalhado.<br><b>[Decifrar]:</b> Você identifica padrões em símbolos, códigos simples ou escritas incomuns, revelando mensagens ocultas.",
+        "Sabedoria": "<b>Sabedoria;</b> É o atributo e teste utilizado para momentos em que é necessário resgatar informações perdidas em sua mente, lógicas não compreendidas ou detalhes que contribuem para a formulação de um raciocínio. Sabedoria é o atributo que cobre o que Atualidades não toca e que Investigação não envolve, sendo também uma forma de evitar testes brutos de Intelecto.<br><br>Combatente = 0 + Int<br>Projetante = 1 + Int<br>Arcanista = 2 + Int<br>Erudito = 3 + Int",
+        "Sorte": "Mede a sua sorte momentânea. Você rola 1d6 de Sorte e 1d6 de Azar, o resultado é a diferença entre eles.",
+        "Sentidos_Farejar": "<b>Farejar:</b> Permite identificar, diferenciar, captar e seguir odores específicos.<br><br><i>O seu modificador de sentidos é definido com base na sua Percepção + Poder.</i>",
+        "Sentidos_Tatear": "<b>Tatear:</b> Permite identificar texturas, formas ocultas ou detalhes através do toque.<br><br><i>O seu modificador de sentidos é definido com base na sua Percepção + Poder.</i>",
+        "Sentidos_Degustar": "<b>Degustar:</b> Permite perceber sabores com grande precisão, também podendo identificar substâncias, ingredientes ou venenos.<br><br><i>O seu modificador de sentidos é definido com base na sua Percepção + Poder.</i>",
+        "Sentidos_Pressentir": "<b>Pressentir:</b> Um sexto sentido que permite perceber alterações no ambiente, presenças estranhas ou perigos iminentes.<br><br><i>O seu modificador de sentidos é definido com base na sua Percepção + Poder.</i>"
     };
 
     let currentUser = null;
@@ -576,7 +599,7 @@ const firebaseConfig = {
         } else {
             btnLogin.innerText = "👤";
             btnLogin.title = "Login Google";
-            sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
+            sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: undefined }));
             render();
         }
     });
@@ -641,10 +664,110 @@ const firebaseConfig = {
     }
 
     function abrirInfoPericia(nome) {
-        document.getElementById('skill-modal-title').innerText = nome;
+        document.getElementById('skill-modal-title').innerText = nome.replace('_', ': ');
         document.getElementById('skill-modal-desc').innerHTML = descPericias[nome] || "<i>Informação não disponível.</i>";
         document.getElementById('modal-skill').style.display = 'block';
     }
+
+    /* --- LÓGICA DE AVATAR --- */
+    function mudarAvatar() {
+        let url = prompt("Cole o link (URL) da imagem do seu personagem:");
+        if (url !== null) {
+            sheet.avatar = url;
+            atualizarAvatarUI();
+            if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+        }
+    }
+
+    function atualizarAvatarUI() {
+        let img = document.getElementById('char-avatar-img');
+        let icon = document.getElementById('char-avatar-icon');
+        if (sheet.avatar && sheet.avatar.trim() !== "") {
+            img.src = sheet.avatar;
+            img.style.display = 'block';
+            icon.style.display = 'none';
+        } else {
+            img.style.display = 'none';
+            icon.style.display = 'block';
+        }
+    }
+
+    /* --- LÓGICA DE CLASSES --- */
+    function atualizarVisuaisClasse() {
+        document.querySelectorAll('.class-btn').forEach(b => b.classList.remove('active'));
+        if(sheet.classe) {
+            let btn = document.getElementById('btn-class-' + sheet.classe);
+            if(btn) btn.classList.add('active');
+        }
+    }
+
+    function calcularStatusClasse() {
+        if (!sheet.classe) return;
+        
+        let con = parseInt(sheet.atributos['CON']) || 0;
+        let pod = parseInt(sheet.atributos['POD']) || 0;
+        let agi = parseInt(sheet.atributos['AGI']) || 0;
+        let nivel = parseInt(document.getElementById('val-nivel').value) || 0;
+
+        let maxPV = 0, maxPA = 0, maxPS = 0, def = 0;
+
+        if (sheet.classe === 'arcanista') {
+            maxPV = (15 + con) + (nivel * (15 + con));
+            maxPS = 20 + (nivel * 10);
+            maxPA = (15 + con + pod) + (Math.min(nivel, 4) * (12 + con + pod));
+            def = 11 + agi;
+        } else if (sheet.classe === 'combatente') {
+            maxPV = (20 + con) + (nivel * (20 + con));
+            maxPS = 10 + (nivel * 10);
+            maxPA = (10 + con + pod) + (nivel * (8 + con + pod));
+            def = 13 + agi;
+        } else if (sheet.classe === 'erudito') {
+            maxPV = (15 + con) + (nivel * (16 + con));
+            maxPS = 15 + (nivel * 10);
+            maxPA = (13 + con + pod) + (nivel * (10 + con + pod));
+            def = 15 + agi;
+        } else if (sheet.classe === 'projetante') {
+            maxPV = (17 + con) + (nivel * (16 + con));
+            maxPS = 12 + (nivel * 10);
+            maxPA = (12 + con + pod) + (nivel * (9 + con + pod));
+            def = 14 + agi;
+        }
+
+        document.getElementById('max-pv').value = maxPV;
+        document.getElementById('max-pa').value = maxPA;
+        document.getElementById('max-ps').value = maxPS;
+        document.getElementById('val-defesa').value = def;
+
+        let currPV = parseInt(document.getElementById('curr-pv').value) || 0;
+        let currPA = parseInt(document.getElementById('curr-pa').value) || 0;
+        let currPS = parseInt(document.getElementById('curr-ps').value) || 0;
+        
+        if(currPV > maxPV) document.getElementById('curr-pv').value = maxPV;
+        if(currPA > maxPA) document.getElementById('curr-pa').value = maxPA;
+        if(currPS > maxPS) document.getElementById('curr-ps').value = maxPS;
+
+        updateBar('pv');
+        updateBar('pa');
+        updateBar('ps');
+    }
+
+    function selecionarClasse(classe) {
+        sheet.classe = classe;
+        atualizarVisuaisClasse();
+        calcularStatusClasse();
+        render(); // Para atualizar o cálculo passivo da Sabedoria
+        if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+    }
+    
+    function calcularSabedoria() {
+        let base = 0;
+        if(sheet.classe === 'arcanista') base = 2;
+        else if(sheet.classe === 'erudito') base = 3;
+        else if(sheet.classe === 'projetante') base = 1;
+        else if(sheet.classe === 'combatente') base = 0;
+        return base + (parseInt(sheet.atributos['INT']) || 0);
+    }
+    /* -------------------------- */
 
     function aplicarModificador(tipo) {
         const inputMod = document.getElementById(`calc-${tipo}`);
@@ -919,7 +1042,7 @@ const firebaseConfig = {
             <div class="pop-detail-text">${subtitulo}</div>
             <div class="pop-status-text" style="color:${corStatus}">${txtStatus}</div>
             <div class="pop-total-text">${total}</div>
-            <div style="font-size:0.75rem; color:#666; margin-top:3px; font-family:'Cinzel';">${detalhes}</div>`;
+            <div style="font-size:0.75rem; color:#666; margin-top:3px; font-family:'Cinzel'; line-height: 1.4;">${detalhes}</div>`;
         
         const pop = document.getElementById('central-popup');
         pop.classList.add('active');
@@ -927,42 +1050,85 @@ const firebaseConfig = {
         window.popTimer = setTimeout(fecharPopup, 6000);
     }
 
+    function rolarD20(qtd) {
+        let rolagens = [];
+        let keepLowest = qtd <= 0;
+        let dadosRolar = keepLowest ? 2 : qtd;
+        for(let i=0; i<dadosRolar; i++) rolagens.push(Math.floor(Math.random() * 20) + 1);
+        let final = keepLowest ? Math.min(...rolagens) : Math.max(...rolagens);
+        return { final, rolagens, keepLowest };
+    }
+
     function realizarRolagem(attrNome, bonusManual, nomeDisplay, isPericia = false, periciaNome = "") {
         let attrValor = parseInt(sheet.atributos[attrNome]) || 0;
         let bonusTotal = bonusManual + attrValor;
+        let qtdDados = Math.max(1, attrValor);
 
         if(isPericia) {
             let p = sheet.pericias.find(x => x.n === periciaNome);
-            if(p) bonusTotal += parseInt(p.t) + parseInt(p.m);
+            if(p) {
+                bonusTotal += parseInt(p.t) + parseInt(p.m);
+                qtdDados = p.d !== undefined ? parseInt(p.d) : Math.max(1, attrValor);
+            }
+        } else {
+            qtdDados = attrValor; 
         }
 
-        let final = Math.floor(Math.random() * 20) + 1;
+        let rolar = rolarD20(qtdDados);
+        let final = rolar.final;
         const total = final + bonusTotal;
         const res = getNivelSucesso(final, total);
-        spawnPopup(nomeDisplay.toUpperCase(), `Dado: [${final}]`, total, res.cor, res.txt, `Soma: ${final} + ${bonusTotal}`);
-        enviarRolagemParaServidor(nomeDisplay.toUpperCase(), `Dado: [${final}]`, total, res.cor, res.txt, `Soma: ${final} + ${bonusTotal}`);
+        
+        let textoDados = rolar.keepLowest ? `<span style="color:#ff5252">Desvantagem</span> [${rolar.rolagens.join(', ')}]` : `[${rolar.rolagens.join(', ')}]`;
+        let detalheTxt = `Dados Rolados: ${textoDados}<br>Soma: ${final} + ${bonusTotal}`;
+        
+        spawnPopup(nomeDisplay.toUpperCase(), `Dado Base: [${final}]`, total, res.cor, res.txt, detalheTxt);
+        enviarRolagemParaServidor(nomeDisplay.toUpperCase(), `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt.replace(/<br>/g, ' | ').replace(/<[^>]+>/g, ''));
     }
 
-    function rolarSorte() {
-        let sorte = Math.floor(Math.random() * 6) + 1;
-        let azar = Math.floor(Math.random() * 6) + 1;
-        let total = sorte - azar;
-        let cor = total > 0 ? "#00ff88" : (total < 0 ? "#ff4444" : "#ffca28");
-        let txt = total > 0 ? "BOM" : (total < 0 ? "RUIM" : "NEUTRO");
-        spawnPopup("SORTE", `Dado Sorte [${sorte}] - Dado Azar [${azar}]`, total, cor, txt, `Resultado: ${total}`);
-        enviarRolagemParaServidor("SORTE", `Dado Sorte [${sorte}] - Dado Azar [${azar}]`, total, cor, txt, `Resultado: ${total}`); 
-    }
+    function rolarEspecial(tipo) {
+        let inputMod = document.getElementById(`mod-${tipo.toLowerCase()}`);
+        let modManual = inputMod ? parseInt(inputMod.value) || 0 : 0;
+        
+        if (tipo === 'Sorte') {
+            let sorte = Math.floor(Math.random() * 6) + 1;
+            let azar = Math.floor(Math.random() * 6) + 1;
+            let total = sorte - azar + modManual;
+            let cor = total > 0 ? "#00ff88" : (total < 0 ? "#ff4444" : "#ffca28");
+            let txt = total > 0 ? "BOM" : (total < 0 ? "RUIM" : "NEUTRO");
+            let modTxt = modManual !== 0 ? `| Mod Extra: ${modManual}` : '';
+            spawnPopup("SORTE", `Sorte [${sorte}] - Azar [${azar}]`, total, cor, txt, `Resultado: ${sorte - azar} ${modTxt}`);
+            enviarRolagemParaServidor("SORTE", `Sorte [${sorte}] - Azar [${azar}]`, total, cor, txt, `Res: ${sorte - azar} ${modTxt}`); 
+            return;
+        }
 
-    function rolarSentidos() {
-        let pod = parseInt(sheet.atributos['POD']) || 0;
-        let p = sheet.pericias.find(x => x.n === "Percepção");
-        let perMod = p ? (parseInt(p.t) + parseInt(p.m)) : 0;
-        let bonus = pod + perMod;
-        let dado = Math.floor(Math.random() * 20) + 1;
-        let total = dado + bonus;
-        const res = getNivelSucesso(dado, total);
-        spawnPopup("SENTIDOS", `Dado: [${dado}]`, total, res.cor, res.txt, `Soma: ${dado} + ${bonus} (Per+Pod)`);
-        enviarRolagemParaServidor("SENTIDOS", `Dado: [${dado}]`, total, res.cor, res.txt, `Soma: ${dado} + ${bonus} (Per+Pod)`);
+        let bonusBase = 0;
+        let qtdDados = 1; 
+        let nomeVisor = tipo.replace('_', ': ').toUpperCase();
+        
+        if (tipo === 'Sabedoria') {
+            bonusBase = calcularSabedoria();
+            qtdDados = parseInt(sheet.atributos['INT']) || 0;
+        } else if (tipo.startsWith('Sentidos')) {
+            let pod = parseInt(sheet.atributos['POD']) || 0;
+            let pPerc = sheet.pericias.find(x => x.n === "Percepção");
+            let percMod = pPerc ? (parseInt(pPerc.t) + parseInt(pPerc.m)) : 0;
+            bonusBase = pod + percMod;
+            qtdDados = pod;
+        }
+
+        let rolar = rolarD20(qtdDados);
+        let final = rolar.final;
+        let bonusTotal = bonusBase + modManual;
+
+        const total = final + bonusTotal;
+        const res = getNivelSucesso(final, total);
+        
+        let textoDados = rolar.keepLowest ? `<span style="color:#ff5252">Desv.</span> [${rolar.rolagens.join(', ')}]` : `[${rolar.rolagens.join(', ')}]`;
+        let detalheTxt = `Dados: ${textoDados}<br>Soma: ${final} + ${bonusBase}(Base) + ${modManual}(Mod)`;
+        
+        spawnPopup(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt);
+        enviarRolagemParaServidor(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt.replace(/<br>/g, ' | ').replace(/<[^>]+>/g, ''));
     }
 
     function calcularVelocidade() {
@@ -1022,23 +1188,60 @@ const firebaseConfig = {
     function atualizarPericia(nome, campo, valor) {
         const p = sheet.pericias.find(x => x.n === nome);
         if (p) {
-            p[campo] = (campo === 't' || campo === 'm') ? (parseInt(valor) || 0) : valor;
+            p[campo] = (campo === 't' || campo === 'm' || campo === 'd') ? (parseInt(valor) || 0) : valor;
             if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
         }
+    }
+
+    function renderEspeciais() {
+        let container = document.getElementById('especiais-container');
+        if(!container) return;
+
+        let sabBase = calcularSabedoria();
+        const templateExtra = (id, nome, cor, desc) => `
+            <div class="skill-item" style="border-left-color: ${cor};">
+                <div style="display: flex; flex-direction: column; flex-grow:1; cursor:pointer;" onclick="rolarEspecial('${id}')">
+                    <span class="skill-name" style="color: ${cor};">${nome}</span>
+                    <span style="color: #aaa; font-size: 0.75rem;">${desc}</span>
+                </div>
+                <div style="display:flex; gap:5px; align-items:center;" onclick="event.stopPropagation()">
+                    <span style="font-size:0.7rem; color:#aaa;">Mod:</span>
+                    <input type="number" id="mod-${id.toLowerCase()}" value="0" style="width:40px; background:#000; color:var(--text-gold); border:1px solid #444; text-align:center; font-family:'Cinzel', serif;">
+                    <button class="btn-info-skill" onclick="abrirInfoPericia('${id}')">❓</button>
+                </div>
+            </div>`;
+
+        container.innerHTML = `
+            ${templateExtra('Sorte', 'Sorte', '#ffca28', '(Sorte - Azar)')}
+            ${templateExtra('Sabedoria', 'Sabedoria', '#bc4ed8', `Base: ${sabBase} (Classe + INT)`)}
+            
+            <div class="skill-item" style="cursor: default; border-left-color: #ff1744;">
+                <div style="display: flex; flex-direction: column;">
+                    <span class="skill-name" style="color: #ff1744;">Velocidade</span>
+                    <span style="color: #aaa; font-size: 0.75rem;">Baseado em Agilidade</span>
+                </div>
+                <span id="display-velocidade" style="color: #ddd; font-weight: bold; font-size: 1.1rem; margin-right: 15px;"></span>
+            </div>
+
+            ${templateExtra('Sentidos_Farejar', 'Sentidos: Farejar', '#00e5ff', 'Percepção + POD')}
+            ${templateExtra('Sentidos_Tatear', 'Sentidos: Tatear', '#00e5ff', 'Percepção + POD')}
+            ${templateExtra('Sentidos_Degustar', 'Sentidos: Degustar', '#00e5ff', 'Percepção + POD')}
+            ${templateExtra('Sentidos_Pressentir', 'Sentidos: Pressentir', '#00e5ff', 'Percepção + POD')}
+        `;
     }
 
     function render() {
         document.getElementById('attr-container').innerHTML = Object.entries(sheet.atributos).map(([k,v]) => `
             <div class="attr-container-outer" onclick="realizarRolagem('${k}', 0, 'Teste de ${k}')">
                 <div class="attr-hexagon-border"><div class="attr-hexagon-inner">
-                    <input type="number" class="attr-value-input" value="${v}" onchange="sheet.atributos['${k}']=parseInt(this.value)||0; calcularVelocidade();" onclick="event.stopPropagation()">
+                    <input type="number" class="attr-value-input" value="${v}" onchange="sheet.atributos['${k}']=parseInt(this.value)||0; calcularVelocidade(); calcularStatusClasse(); renderEspeciais(); if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();" onclick="event.stopPropagation()">
                     <span style="font-size:0.75rem; color:var(--text-gold); font-weight:bold;">${k}</span>
                 </div></div>
             </div>`).join('');
 
         document.getElementById('skills-container').innerHTML = sheet.pericias.map(p => `
             <div class="skill-item" onclick="realizarRolagem('${p.a}', 0, '${p.n}', true, '${p.n}')">
-                <div style="display: flex; flex-grow: 1; align-items: center; justify-content: space-between; padding-right: 15px;">
+                <div style="display: flex; flex-grow: 1; align-items: center; justify-content: space-between; padding-right: 5px;">
                     <span class="skill-name">
                         ${p.n} 
                         <select onclick="event.stopPropagation()" onchange="event.stopPropagation(); atualizarPericia('${p.n}', 'a', this.value); render();" style="background: rgba(0,0,0,0.4); color: var(--text-gold); border: 1px solid var(--border-color); border-radius: 4px; font-family: 'Cinzel', serif; font-size: 0.75rem; cursor: pointer; outline: none; margin-left: 6px; padding: 2px 4px;">
@@ -1051,16 +1254,19 @@ const firebaseConfig = {
                     </span>
                     ${descPericias[p.n] ? `<button class="btn-info-skill" onclick="event.stopPropagation(); abrirInfoPericia('${p.n}')">❓</button>` : '<span style="width: 25px;"></span>'}
                 </div>
-                <div style="display:flex; gap:5px; flex-shrink: 0;" onclick="event.stopPropagation()">
-                    <select onchange="atualizarPericia('${p.n}', 't', this.value)" style="background:#000; color:var(--light-purple); border:1px solid #444; font-family:'Cinzel', serif; cursor: pointer;">
+                <div style="display:flex; gap:3px; flex-shrink: 0; align-items:center;" onclick="event.stopPropagation()">
+                    <input type="number" title="Dados" value="${p.d !== undefined ? p.d : (sheet.atributos[p.a] || 1)}" onchange="atualizarPericia('${p.n}', 'd', this.value)" style="width:28px; background:rgba(123, 31, 162, 0.2); color:#fff; border:1px solid var(--primary-purple); text-align:center; font-family:'Cinzel', serif; border-radius:3px;">
+                    <span style="color:#666; font-size:0.75rem; margin-right:4px;">D</span>
+                    <select onchange="atualizarPericia('${p.n}', 't', this.value)" style="background:#000; color:var(--light-purple); border:1px solid #444; font-family:'Cinzel', serif; cursor: pointer; border-radius:3px;">
                         <option value="0" ${p.t==0?'selected':''}>+0</option>
                         <option value="2" ${p.t==2?'selected':''}>+2</option>
                         <option value="4" ${p.t==4?'selected':''}>+4</option>
                     </select>
-                    <input type="number" value="${p.m}" onchange="atualizarPericia('${p.n}', 'm', this.value)" style="width:35px; background:#000; color:var(--text-gold); border:1px solid #444; text-align:center; font-family:'Cinzel', serif;">
+                    <input type="number" title="Mod" value="${p.m}" onchange="atualizarPericia('${p.n}', 'm', this.value)" style="width:32px; background:#000; color:var(--text-gold); border:1px solid #444; text-align:center; font-family:'Cinzel', serif; border-radius:3px;">
                 </div>
             </div>`).join('');
             
+        renderEspeciais();
         renderAbilities();
         renderRDs();
         atualizarPainelInventario();
@@ -1078,7 +1284,10 @@ const firebaseConfig = {
             document.getElementById('val-defesa').value,
             document.getElementById('val-bloqueio').value,
             document.getElementById('user-sub').value || "",
-            document.getElementById('val-nivel').value || 0
+            document.getElementById('val-nivel').value || 0,
+            sheet.classe,
+            sheet.avatar,
+            sheet.paTurno
         ];
         const codigo = btoa(unescape(encodeURIComponent(JSON.stringify(comp))));
         document.getElementById('codigo-export').value = codigo;
@@ -1108,6 +1317,14 @@ const firebaseConfig = {
             if(dados[11]) document.getElementById('val-bloqueio').value = dados[11];
             if(dados[12]) document.getElementById('user-sub').value = dados[12];
             if(dados[13]) document.getElementById('val-nivel').value = dados[13];
+            
+            sheet.classe = dados[14] || null;
+            sheet.avatar = dados[15] || "";
+            sheet.paTurno = dados[16] || 0;
+            
+            document.getElementById('val-pa-turno').value = sheet.paTurno;
+            atualizarVisuaisClasse();
+            atualizarAvatarUI();
 
             render(); setDif(sheet.dificuldade); ['pv', 'pa', 'ps'].forEach(updateBar);
             spawnPopup('IMPORTAÇÃO', 'Registros sincronizados', 'SUCESSO', 'var(--light-purple)', 'CARREGADO');
@@ -1128,6 +1345,9 @@ const firebaseConfig = {
             dificuldade: sheet.dificuldade, limiteCarga: sheet.limiteCarga,
             defesa: document.getElementById('val-defesa').value, bloqueio: document.getElementById('val-bloqueio').value,
             nivel: document.getElementById('val-nivel').value,
+            classe: sheet.classe,
+            avatar: sheet.avatar,
+            paTurno: sheet.paTurno,
             recValues: {
                 pv_c: document.getElementById('curr-pv').value, pv_m: document.getElementById('max-pv').value,
                 pa_c: document.getElementById('curr-pa').value, pa_m: document.getElementById('max-pa').value,
@@ -1141,7 +1361,7 @@ const firebaseConfig = {
     }
 
     function carregarDaNuvem() {
-        if (!currentUser) return; // Se não tem usuário, já carregou o padrão no onAuthStateChanged
+        if (!currentUser) return; 
         const slot = document.getElementById('save-slot').value;
         
         database.ref('users/' + currentUser.uid + '/fichas/slot_' + slot).once('value').then((snapshot) => {
@@ -1157,6 +1377,14 @@ const firebaseConfig = {
                 sheet.limiteCarga = d.limiteCarga || 20;
                 document.getElementById('peso-max-input').value = sheet.limiteCarga;
                 
+                sheet.classe = d.classe || null;
+                sheet.avatar = d.avatar || "";
+                sheet.paTurno = d.paTurno || 0;
+                
+                document.getElementById('val-pa-turno').value = sheet.paTurno;
+                atualizarVisuaisClasse();
+                atualizarAvatarUI();
+
                 if(d.defesa) document.getElementById('val-defesa').value = d.defesa;
                 if(d.bloqueio) document.getElementById('val-bloqueio').value = d.bloqueio;
                 if(d.nivel) document.getElementById('val-nivel').value = d.nivel;
@@ -1168,7 +1396,7 @@ const firebaseConfig = {
                 }
                 render(); setDif(sheet.dificuldade); ['pv', 'pa', 'ps'].forEach(updateBar);
             } else {
-                sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0 }));
+                sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: undefined }));
                 render();
             }
         }).catch(err => console.error("Erro ao carregar da nuvem:", err));
