@@ -599,7 +599,7 @@ const firebaseConfig = {
         } else {
             btnLogin.innerText = "👤";
             btnLogin.title = "Login Google";
-            sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: undefined }));
+            sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1 }));
             render();
         }
     });
@@ -1068,7 +1068,7 @@ const firebaseConfig = {
             let p = sheet.pericias.find(x => x.n === periciaNome);
             if(p) {
                 bonusTotal += parseInt(p.t) + parseInt(p.m);
-                qtdDados = p.d !== undefined ? parseInt(p.d) : Math.max(1, attrValor);
+                qtdDados = p.d !== undefined ? parseInt(p.d) : 1;
             }
         } else {
             qtdDados = attrValor; 
@@ -1255,7 +1255,7 @@ const firebaseConfig = {
                     ${descPericias[p.n] ? `<button class="btn-info-skill" onclick="event.stopPropagation(); abrirInfoPericia('${p.n}')">❓</button>` : '<span style="width: 25px;"></span>'}
                 </div>
                 <div style="display:flex; gap:3px; flex-shrink: 0; align-items:center;" onclick="event.stopPropagation()">
-                    <input type="number" title="Dados" value="${p.d !== undefined ? p.d : (sheet.atributos[p.a] || 1)}" onchange="atualizarPericia('${p.n}', 'd', this.value)" style="width:28px; background:rgba(123, 31, 162, 0.2); color:#fff; border:1px solid var(--primary-purple); text-align:center; font-family:'Cinzel', serif; border-radius:3px;">
+                    <input type="number" title="Dados" value="${p.d !== undefined ? p.d : 1}" onchange="atualizarPericia('${p.n}', 'd', this.value)" style="width:28px; background:rgba(123, 31, 162, 0.2); color:#fff; border:1px solid var(--primary-purple); text-align:center; font-family:'Cinzel', serif; border-radius:3px;">
                     <span style="color:#666; font-size:0.75rem; margin-right:4px;">D</span>
                     <select onchange="atualizarPericia('${p.n}', 't', this.value)" style="background:#000; color:var(--light-purple); border:1px solid #444; font-family:'Cinzel', serif; cursor: pointer; border-radius:3px;">
                         <option value="0" ${p.t==0?'selected':''}>+0</option>
@@ -1369,8 +1369,16 @@ const firebaseConfig = {
             if (d) {
                 document.getElementById('user-nickname').value = d.nickname || "";
                 document.getElementById('user-sub').value = d.sub || "";
-                sheet.atributos = d.atributos || sheet.atributos;
-                sheet.pericias = d.pericias || []; sheet.habilidades = d.habilidades || [];
+          // Garante que os atributos base sempre existam
+          sheet.atributos = d.atributos || {"FOR":1, "AGI":1, "INT":1, "CON":1, "POD":1};
+
+          // Se não houver perícias salvas no Firebase, ele recria a lista padrão com 1 dado base
+          if (!d.pericias || d.pericias.length === 0) {
+              sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1 }));
+          } else {
+              sheet.pericias = d.pericias;
+          }
+                sheet.habilidades = d.habilidades || [];
                 sheet.itens = d.itens || []; sheet.rds = d.rds || [];
                 sheet.recursosFinos = d.recursosFinos || { pv_temp:0, ps_temp:0 };
                 sheet.dificuldade = d.dificuldade || 'normal';
@@ -1396,7 +1404,7 @@ const firebaseConfig = {
                 }
                 render(); setDif(sheet.dificuldade); ['pv', 'pa', 'ps'].forEach(updateBar);
             } else {
-                sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: undefined }));
+                sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1}));
                 render();
             }
         }).catch(err => console.error("Erro ao carregar da nuvem:", err));
