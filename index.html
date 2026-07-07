@@ -218,9 +218,11 @@
 <div class="sidebar">
     <button class="sidebar-btn" id="btn-login" onclick="toggleLogin()" title="Login Google">👤</button>
     <button class="sidebar-btn" id="btn-log" onclick="toggleLog()" title="Log do Servidor">🌍</button>
+    <button class="sidebar-btn" id="btn-secreto" onclick="toggleSecreto()" title="Modo Secreto: Desativado">👁️</button>
     <button class="sidebar-btn active" id="btn-ficha" onclick="mudarArea('ficha')">📜</button>
     <button class="sidebar-btn" id="btn-combate" onclick="mudarArea('combate')">⚔️</button>
     <button class="sidebar-btn" id="btn-inventario" onclick="mudarArea('inventario')">🎒</button>
+    <button class="sidebar-btn" id="btn-notas" onclick="mudarArea('notas')" title="Anotações">📚</button>
     <button class="sidebar-btn" onclick="salvarNaNuvem()" title="Salvar na Nuvem">💾</button>
     <select id="save-slot" class="sidebar-btn" onchange="carregarDaNuvem()" title="Mudar Slot">
         <option value="1">🗂️ 1</option>
@@ -406,6 +408,14 @@
         </section>
     </div>
 
+    <div id="area-notas" class="page-area">
+        <section class="section-box">
+            <div class="section-title">Blocos de Anotações</div>
+            <button class="btn-forge" onclick="adicionarNota()">+ Criar Novo Bloco</button>
+            <div id="notas-container" style="display: flex; flex-direction: column; gap: 20px;"></div>
+        </section>
+    </div>
+
     <section class="section-box">
         <div class="section-title">Transferência Digital</div>
         <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
@@ -513,13 +523,29 @@ const firebaseConfig = {
 </script>
 
 <script>
+    let modoSecreto = false;
+
+    function toggleSecreto() {
+        modoSecreto = !modoSecreto;
+        const btn = document.getElementById('btn-secreto');
+        if (modoSecreto) {
+            btn.classList.add('active');
+            btn.innerText = '🕵️';
+            btn.title = "Modo Secreto: Ativado";
+        } else {
+            btn.classList.remove('active');
+            btn.innerText = '👁️';
+            btn.title = "Modo Secreto: Desativado";
+        }
+    }
   
     let sheet = {
         atributos: {"FOR":1, "AGI":1, "INT":1, "CON":1, "POD":1},
         pericias: [],
         habilidades: [],
         itens: [], 
-        rds: [],   
+        rds: [],
+        notas: [],
         dificuldade: 'normal',
         recursosFinos: { pv_temp: 0, ps_temp: 0 },
         limiteCarga: 20,
@@ -622,6 +648,8 @@ const firebaseConfig = {
     }
 
     function enviarRolagemParaServidor(titulo, subtitulo, total, corStatus, txtStatus, detalhes) {
+        if (modoSecreto) return; 
+
         const nick = document.getElementById('user-nickname').value || "Viajante Desconhecido";
         const novaRolagemRef = database.ref('rolagens').push();
         novaRolagemRef.set({
@@ -1052,10 +1080,22 @@ const firebaseConfig = {
 
     function rolarD20(qtd) {
         let rolagens = [];
-        let keepLowest = qtd <= 0;
-        let dadosRolar = keepLowest ? 2 : qtd;
-        for(let i=0; i<dadosRolar; i++) rolagens.push(Math.floor(Math.random() * 20) + 1);
+        let keepLowest = false;
+        let dadosRolar = 1;
+
+        if (qtd >= 1) {
+            dadosRolar = qtd; 
+        } else if (qtd < 0) {
+            keepLowest = true; 
+            dadosRolar = Math.abs(qtd) + 1; 
+        }
+
+        for(let i = 0; i < dadosRolar; i++) {
+            rolagens.push(Math.floor(Math.random() * 20) + 1);
+        }
+
         let final = keepLowest ? Math.min(...rolagens) : Math.max(...rolagens);
+        
         return { final, rolagens, keepLowest };
     }
 
@@ -1230,6 +1270,37 @@ const firebaseConfig = {
         `;
     }
 
+    function renderNotas() {
+        const container = document.getElementById('notas-container');
+        container.innerHTML = sheet.notas.map((nota, i) => `
+            <div class="hab-card" style="border-left-color: var(--text-gold); padding: 25px 20px 20px;">
+                <input type="text" value="${nota.titulo}" onchange="atualizarNota(${i}, 'titulo', this.value)" class="modal-input" style="font-size: 1.1rem; margin-bottom: 15px; width: calc(100% - 40px); background: rgba(0,0,0,0.5);" placeholder="Título (Ex: História)">
+                <button onclick="removerNota(${i})" style="position: absolute; right: 15px; top: 15px; background: none; border: none; color: #ff5252; cursor: pointer; font-size: 1.2rem; transition: 0.2s;">✕</button>
+                <textarea rows="6" class="modal-input" onchange="atualizarNota(${i}, 'conteudo', this.value)" placeholder="Escreva suas anotações aqui..." style="resize: vertical; margin-bottom: 0;">${nota.conteudo}</textarea>
+            </div>
+        `).join('');
+    }
+
+    function adicionarNota() {
+        if (!sheet.notas) sheet.notas = [];
+        sheet.notas.push({ titulo: "Novo Bloco", conteudo: "" });
+        renderNotas();
+        if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+    }
+
+    function atualizarNota(idx, campo, valor) {
+        sheet.notas[idx][campo] = valor;
+        if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+    }
+
+    function removerNota(idx) {
+        if (confirm("Deseja apagar este bloco de notas?")) {
+            sheet.notas.splice(idx, 1);
+            renderNotas();
+            if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+        }
+    }
+
     function render() {
         document.getElementById('attr-container').innerHTML = Object.entries(sheet.atributos).map(([k,v]) => `
             <div class="attr-container-outer" onclick="realizarRolagem('${k}', 0, 'Teste de ${k}')">
@@ -1269,6 +1340,7 @@ const firebaseConfig = {
         renderEspeciais();
         renderAbilities();
         renderRDs();
+        renderNotas();
         atualizarPainelInventario();
         calcularVelocidade(); 
     }
@@ -1287,7 +1359,8 @@ const firebaseConfig = {
             document.getElementById('val-nivel').value || 0,
             sheet.classe,
             sheet.avatar,
-            sheet.paTurno
+            sheet.paTurno,
+            sheet.notas
         ];
         const codigo = btoa(unescape(encodeURIComponent(JSON.stringify(comp))));
         document.getElementById('codigo-export').value = codigo;
@@ -1321,6 +1394,7 @@ const firebaseConfig = {
             sheet.classe = dados[14] || null;
             sheet.avatar = dados[15] || "";
             sheet.paTurno = dados[16] || 0;
+            sheet.notas = dados[17] || [];
             
             document.getElementById('val-pa-turno').value = sheet.paTurno;
             atualizarVisuaisClasse();
@@ -1342,6 +1416,7 @@ const firebaseConfig = {
             sub: document.getElementById('user-sub').value,
             atributos: sheet.atributos, pericias: sheet.pericias, habilidades: sheet.habilidades,
             itens: sheet.itens, rds: sheet.rds, recursosFinos: sheet.recursosFinos,
+            notas: sheet.notas,
             dificuldade: sheet.dificuldade, limiteCarga: sheet.limiteCarga,
             defesa: document.getElementById('val-defesa').value, bloqueio: document.getElementById('val-bloqueio').value,
             nivel: document.getElementById('val-nivel').value,
@@ -1369,10 +1444,9 @@ const firebaseConfig = {
             if (d) {
                 document.getElementById('user-nickname').value = d.nickname || "";
                 document.getElementById('user-sub').value = d.sub || "";
-          // Garante que os atributos base sempre existam
+          
           sheet.atributos = d.atributos || {"FOR":1, "AGI":1, "INT":1, "CON":1, "POD":1};
 
-          // Se não houver perícias salvas no Firebase, ele recria a lista padrão com 1 dado base
           if (!d.pericias || d.pericias.length === 0) {
               sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1 }));
           } else {
@@ -1380,6 +1454,7 @@ const firebaseConfig = {
           }
                 sheet.habilidades = d.habilidades || [];
                 sheet.itens = d.itens || []; sheet.rds = d.rds || [];
+                sheet.notas = d.notas || [];
                 sheet.recursosFinos = d.recursosFinos || { pv_temp:0, ps_temp:0 };
                 sheet.dificuldade = d.dificuldade || 'normal';
                 sheet.limiteCarga = d.limiteCarga || 20;
