@@ -148,44 +148,119 @@
         .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 650px; max-height: 90vh; overflow-y: auto; background: #0a0a0c; border: 2px solid var(--text-gold); padding: 30px; z-index: 10000; border-radius: 8px; }
         .modal-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; margin-bottom: 15px; border-radius: 4px; font-family: 'Cinzel', serif; }
    
-        .header-status-container {
-            display: flex; flex-direction: column; gap: 10px; margin: 0 auto 30px auto;
-            max-width: 600px; background: rgba(0, 0, 0, 0.4); padding: 15px;
-            border-radius: 8px; border: 1px solid var(--border-color);
+        /* --- ESTILOS NOVOS DAS CAIXAS DE STATUS (PV, PA, SA) --- */
+        .status-box {
+            background: rgba(15, 15, 20, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px 15px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+            border-bottom: 3px solid var(--border-color);
         }
-
-        .status-row { display: flex; align-items: center; gap: 12px; }
-        .status-label { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--text-gold); width: 30px; font-weight: bold; display: flex; align-items: center; gap: 2px; }
-        .status-bar-bg { flex-grow: 1; height: 6px; background: #000; border-radius: 3px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .turn-boxes {
+            position: absolute;
+            top: -10px;
+            display: flex;
+            gap: 6px;
+            background: var(--bg-dark);
+            padding: 0 10px;
+            border-radius: 4px;
+        }
+        .turn-box {
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--text-gold);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #ff1744;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            background: #000;
+            transition: 0.2s;
+        }
+        .turn-box:hover {
+            background: rgba(212, 175, 55, 0.2);
+        }
+        .status-box-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--text-gold);
+            margin-bottom: 15px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .status-inputs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .status-inputs input {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #333;
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            width: 50px;
+            text-align: center;
+            border-radius: 4px;
+            padding: 6px;
+            outline: none;
+        }
+        .status-inputs input:focus {
+            border-color: var(--light-purple);
+        }
+        .status-bar-wrapper {
+            width: 100%;
+            height: 12px;
+            background: #000;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 8px;
+        }
         .status-fill { height: 100%; width: 100%; transition: width 0.3s ease-out, background-color 0.3s; }
-
         .bg-red { background: #ff1744; box-shadow: 0 0 8px #ff1744; }
         .bg-pink { background: #ff4081; box-shadow: 0 0 8px #ff4081; }
         .bg-gold { background: #ffca28; box-shadow: 0 0 8px #ffca28; }
         .bg-cyan { background: #00e5ff; box-shadow: 0 0 8px #00e5ff; }
         .bg-blue { background: #2979ff; box-shadow: 0 0 8px #2979ff; } 
 
-        .status-controls { display: flex; align-items: center; gap: 4px; }
-        .status-controls input { background: rgba(0,0,0,0.3); border: 1px solid #333; color: #fff; font-family: 'Cinzel', serif; font-size: 0.85rem; width: 40px; text-align: center; border-radius: 4px; }
+        .status-condition-text {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            text-align: center;
+            min-height: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
 
-        .arrow-btn { background: none; border: none; color: var(--primary-purple); cursor: pointer; font-size: 0.7rem; transition: 0.2s; }
+        .arrow-btn { background: none; border: none; color: var(--primary-purple); cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
         .arrow-btn:hover { color: var(--light-purple); transform: scale(1.2); }
-        .sep { color: #555; font-size: 0.8rem; }
+        .sep { color: #555; font-size: 0.9rem; }
         
         .calc-input { width: 50px !important; border: 1px solid var(--text-gold) !important; background: rgba(212,175,55,0.05) !important; font-weight: bold; }
         
-        .condition-badge { font-size: 0.65rem; padding: 2px 6px; border-radius: 3px; font-weight: bold; margin-left: 5px; display: inline-block; vertical-align: middle; font-family: 'Cinzel', serif;}
-        .cond-normal { display: none; }
-        .cond-temp { background: #ff4081; color: #000; }
-        .cond-machucado { background: #ff9100; color: #000; }
-        .cond-morrendo { background: #000; color: #ff1744; border: 1px solid #ff1744; animation: pulse 1.5s infinite; }
-        .cond-perturbado { background: #7c4dff; color: #fff; }
-        .cond-enlouquecendo { background: #00e5ff; color: #000; border: 1px solid #fff; animation: pulse 1s infinite; }
-        .cond-sobrepeso { background: #ff5252; color: #fff; font-family: 'Cinzel', serif; letter-spacing: 1px; }
+        .condition-badge { display: inline-block; vertical-align: middle; }
+        .cond-temp { background: transparent; color: #ff4081; }
+        .cond-machucado { color: #ff9100; text-shadow: 0 0 5px rgba(255,145,0,0.5); }
+        .cond-morrendo { color: #ff1744; text-shadow: 0 0 5px rgba(255,23,68,0.5); animation: pulse 1.5s infinite; }
+        .cond-perturbado { color: #7c4dff; text-shadow: 0 0 5px rgba(124,77,255,0.5); }
+        .cond-enlouquecendo { color: #00e5ff; text-shadow: 0 0 5px rgba(0,229,255,0.5); animation: pulse 1s infinite; }
+        .cond-sobrepeso { font-size: 0.65rem; padding: 2px 6px; border-radius: 3px; font-weight: bold; margin-left: 5px; background: #ff5252; color: #fff; font-family: 'Cinzel', serif; letter-spacing: 1px; }
 
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
-        .mini-stats-overlay { display: flex; justify-content: space-around; padding-top: 10px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .mini-stats-overlay { display: flex; justify-content: space-around; background: rgba(0, 0, 0, 0.4); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 20px; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
         .mini-stat-item { display: flex; align-items: center; gap: 8px; }
         .mini-stat-label { font-family: 'Cinzel', serif; font-size: 0.7rem; color: var(--text-gold); }
         .mini-stat-input { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; font-family: 'Cinzel', serif; font-size: 1rem; width: 45px; text-align: center; border-radius: 4px; outline: none; }
@@ -218,7 +293,6 @@
 <div class="sidebar">
     <button class="sidebar-btn" id="btn-login" onclick="toggleLogin()" title="Login Google">👤</button>
     <button class="sidebar-btn" id="btn-log" onclick="toggleLog()" title="Log do Servidor">🌍</button>
-    <button class="sidebar-btn" id="btn-secreto" onclick="toggleSecreto()" title="Modo Secreto: Desativado">👁️</button>
     <button class="sidebar-btn active" id="btn-ficha" onclick="mudarArea('ficha')">📜</button>
     <button class="sidebar-btn" id="btn-combate" onclick="mudarArea('combate')">⚔️</button>
     <button class="sidebar-btn" id="btn-inventario" onclick="mudarArea('inventario')">🎒</button>
@@ -243,15 +317,18 @@
         <div>
             <h1 class="title" style="margin: 0; text-align: left; text-transform: uppercase;">Abyss RPG</h1>
         </div>
-        <div style="display: flex; gap: 15px; align-items: center;">
-            <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
-                <input type="text" id="user-nickname" placeholder="Nickname" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: var(--text-gold); text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 1.1rem;">
-                <input type="text" id="user-sub" placeholder="Antecedência" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: #aaa; text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 0.85rem;">
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
+                    <input type="text" id="user-nickname" placeholder="Nickname" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: var(--text-gold); text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 1.1rem;">
+                    <input type="text" id="user-sub" placeholder="Antecedência" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: #aaa; text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 0.85rem;">
+                </div>
+                <div onclick="mudarAvatar()" title="Alterar Avatar" style="width: 65px; height: 65px; border: 2px solid var(--border-color); border-radius: 8px; cursor:pointer; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#0a0a0c; box-shadow: 0 0 10px rgba(0,0,0,0.8);">
+                    <img id="char-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
+                    <span id="char-avatar-icon" style="font-size:1.5rem; color: var(--text-gold);">👤</span>
+                </div>
             </div>
-            <div onclick="mudarAvatar()" title="Alterar Avatar" style="width: 65px; height: 65px; border: 2px solid var(--border-color); border-radius: 8px; cursor:pointer; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#0a0a0c; box-shadow: 0 0 10px rgba(0,0,0,0.8);">
-                <img id="char-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
-                <span id="char-avatar-icon" style="font-size:1.5rem; color: var(--text-gold);">👤</span>
-            </div>
+            <button id="btn-secreto" onclick="toggleSecreto()" style="background: rgba(0,0,0,0.5); border: 1px solid #333; color: #888; font-family: 'Cinzel', serif; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; transition: 0.2s;">👁️ Modo Secreto: OFF</button>
         </div>
     </div>
 
@@ -262,11 +339,16 @@
         <button class="class-btn" id="btn-class-projetante" onclick="selecionarClasse('projetante')">PROJETANTE</button>
     </div>
 
-    <div class="header-status-container">
-        <div class="status-row">
-            <span class="status-label">PV <span id="badge-pv" class="condition-badge cond-normal"></span></span>
-            <div class="status-bar-bg"><div id="bar-pv" class="status-fill bg-red"></div></div>
-            <div class="status-controls">
+    <div class="header-status-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 0 auto;">
+        
+        <div class="status-box">
+            <div class="turn-boxes">
+                <div class="turn-box" onclick="toggleTurn(this)"></div>
+                <div class="turn-box" onclick="toggleTurn(this)"></div>
+                <div class="turn-box" onclick="toggleTurn(this)"></div>
+            </div>
+            <div class="status-box-title">PV</div>
+            <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('pv', -1)">◀</button>
                 <input type="number" id="curr-pv" value="20" onchange="updateBar('pv')">
                 <span class="sep">/</span>
@@ -274,12 +356,13 @@
                 <button class="arrow-btn" onclick="changeStat('pv', 1)">▶</button>
                 <input type="number" id="calc-pv" class="calc-input" placeholder="+/-" onchange="aplicarModificador('pv')">
             </div>
+            <div class="status-bar-wrapper"><div id="bar-pv" class="status-fill bg-red"></div></div>
+            <div class="status-condition-text" id="badge-pv"></div>
         </div>
 
-        <div class="status-row">
-            <span class="status-label">PA</span>
-            <div class="status-bar-bg"><div id="bar-pa" class="status-fill bg-gold"></div></div>
-            <div class="status-controls">
+        <div class="status-box">
+            <div class="status-box-title">PA</div>
+            <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('pa', -1)">◀</button>
                 <input type="number" id="curr-pa" value="10" onchange="updateBar('pa')">
                 <span class="sep">/</span>
@@ -287,45 +370,53 @@
                 <button class="arrow-btn" onclick="changeStat('pa', 1)">▶</button>
                 <input type="number" id="calc-pa" class="calc-input" placeholder="+/-" onchange="aplicarModificador('pa')">
             </div>
+            <div class="status-bar-wrapper"><div id="bar-pa" class="status-fill bg-gold"></div></div>
+            <div class="status-condition-text" id="badge-pa"></div>
         </div>
 
-        <div class="status-row">
-            <span class="status-label">PS <span id="badge-ps" class="condition-badge cond-normal"></span></span>
-            <div class="status-bar-bg"><div id="bar-ps" class="status-fill bg-cyan"></div></div>
-            <div class="status-controls">
-                <button class="arrow-btn" onclick="changeStat('ps', -1)">◀</button>
-                <input type="number" id="curr-ps" value="15" onchange="updateBar('ps')">
+        <div class="status-box">
+            <div class="turn-boxes">
+                <div class="turn-box" onclick="toggleTurn(this)"></div>
+                <div class="turn-box" onclick="toggleTurn(this)"></div>
+                <div class="turn-box" onclick="toggleTurn(this)"></div>
+            </div>
+            <div class="status-box-title">SA</div>
+            <div class="status-inputs">
+                <button class="arrow-btn" onclick="changeStat('sa', -1)">◀</button>
+                <input type="number" id="curr-sa" value="15" onchange="updateBar('sa')">
                 <span class="sep">/</span>
-                <input type="number" id="max-ps" value="15" onchange="updateBar('ps')">
-                <button class="arrow-btn" onclick="changeStat('ps', 1)">▶</button>
-                <input type="number" id="calc-ps" class="calc-input" placeholder="+/-" onchange="aplicarModificador('ps')">
+                <input type="number" id="max-sa" value="15" onchange="updateBar('sa')">
+                <button class="arrow-btn" onclick="changeStat('sa', 1)">▶</button>
+                <input type="number" id="calc-sa" class="calc-input" placeholder="+/-" onchange="aplicarModificador('sa')">
             </div>
+            <div class="status-bar-wrapper"><div id="bar-sa" class="status-fill bg-cyan"></div></div>
+            <div class="status-condition-text" id="badge-sa"></div>
         </div>
+    </div>
         
-        <div class="mini-stats-overlay">
-            <div class="mini-stat-item">
-                <span class="mini-stat-label">DEFESA</span>
-                <input type="number" id="val-defesa" class="mini-stat-input" value="10">
-            </div>
-            <div class="mini-stat-item">
-                <span class="mini-stat-label">NÍVEL</span>
-                <select id="val-nivel" class="mini-stat-input" style="appearance: none; cursor: pointer; padding-left: 15px;" onchange="calcularStatusClasse(); if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-            <div class="mini-stat-item">
-                <span class="mini-stat-label">PA/TURNO</span>
-                <input type="number" id="val-pa-turno" class="mini-stat-input" value="0" onchange="sheet.paTurno=parseInt(this.value)||0; if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
-            </div>
-            <div class="mini-stat-item">
-                <span class="mini-stat-label">DESLOC</span>
-                <input type="number" id="val-desloc" class="mini-stat-input" value="9">
-            </div>
+    <div class="mini-stats-overlay">
+        <div class="mini-stat-item">
+            <span class="mini-stat-label">DEFESA</span>
+            <input type="number" id="val-defesa" class="mini-stat-input" value="10">
+        </div>
+        <div class="mini-stat-item">
+            <span class="mini-stat-label">NÍVEL</span>
+            <select id="val-nivel" class="mini-stat-input" style="appearance: none; cursor: pointer; padding-left: 15px;" onchange="calcularStatusClasse(); if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="mini-stat-item">
+            <span class="mini-stat-label">PA/TURNO</span>
+            <input type="number" id="val-pa-turno" class="mini-stat-input" value="0" onchange="sheet.paTurno=parseInt(this.value)||0; if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
+        </div>
+        <div class="mini-stat-item">
+            <span class="mini-stat-label">DESLOC</span>
+            <input type="number" id="val-desloc" class="mini-stat-input" value="9">
         </div>
     </div>
 
@@ -529,13 +620,21 @@ const firebaseConfig = {
         modoSecreto = !modoSecreto;
         const btn = document.getElementById('btn-secreto');
         if (modoSecreto) {
-            btn.classList.add('active');
-            btn.innerText = '🕵️';
-            btn.title = "Modo Secreto: Ativado";
+            btn.style.color = 'var(--text-gold)';
+            btn.style.borderColor = 'var(--text-gold)';
+            btn.innerText = '🕵️ Modo Secreto: ON';
         } else {
-            btn.classList.remove('active');
-            btn.innerText = '👁️';
-            btn.title = "Modo Secreto: Desativado";
+            btn.style.color = '#888';
+            btn.style.borderColor = '#333';
+            btn.innerText = '👁️ Modo Secreto: OFF';
+        }
+    }
+
+    function toggleTurn(el) {
+        if (el.innerText === "X") {
+            el.innerText = "";
+        } else {
+            el.innerText = "X";
         }
     }
   
@@ -547,7 +646,7 @@ const firebaseConfig = {
         rds: [],
         notas: [],
         dificuldade: 'normal',
-        recursosFinos: { pv_temp: 0, ps_temp: 0 },
+        recursosFinos: { pv_temp: 0, sa_temp: 0 },
         limiteCarga: 20,
         nivel: 0,
         classe: null,
@@ -599,11 +698,11 @@ const firebaseConfig = {
         "Religião": "<i>Você possui conhecimento sobre crenças, tradições e instituições religiosas, sendo capaz de interpretar doutrinas, conduzir rituais e exercer autoridade espiritual sobre outras pessoas.</i>",
         "Sobrevivência": "<i>Você sabe como se manter vivo em ambientes hostis, utilizando recursos naturais, instinto e experiência para lidar com fome, clima e perigos do ambiente.</i>",
         "Tática": "<i>Você é capaz de ler o combate, antecipar ações e coordenar movimentos para obter vantagem. Tática representa tomada de decisão rápida, posicionamento e uso inteligente do campo de batalha.</i><br><br><b>Usos Específicos</b><br><b>[Analisar]:</b> Você avalia rapidamente o combate, identificando ameaças, alvos prioritários e oportunidades imediatas. Você ganha bônus dependendo do cenário, geralmente envolvendo um modificador de +2 em um teste relacionado ao o que observou.",
-        "Tecnologia": "<i>Você possui conhecimento sobre dispositivos eletrônicos, sistemas digitais e equipamentos tecnológicos, sendo capaz de operar, analisar e manipular tecnologia de forma eficiente.</i><br><br><b>Usos Específicos</b><br><b>[Hackear]:</b> Você invade, contorna ou manipula sistemas digitais, como redes, câmeras, fechaduras eletrônicas e bancos de dados.",
+        "Tecnologia": "<i>Você possui conhecimento sobre dispositivos eletrônicos, sistemas digitais e equipamentos tecnológicos, sendo capaz de operate, analisar e manipular tecnologia de forma eficiente.</i><br><br><b>Usos Específicos</b><br><b>[Hackear]:</b> Você invade, contorna ou manipula sistemas digitais, como redes, câmeras, fechaduras eletrônicas e bancos de dados.",
         "Vontade": "<i>Você possui força mental, disciplina e controle emocional, sendo capaz de resistir a medo, dor psicológica e influências externas sobre sua mente.</i>",
         "Arcanismo": "<i>Você tem conhecimentos arcanos sobre magia e é capaz de realizar a feitiçaria.</i><br><br><b>Usos Específicos</b><br><b>[Identificar Afinidade]:</b> Você analisa o alvo e sua energia. Através disso, você consegue (ou não) identificar a Afinidade do alvo com Umbra, Lumen, Caos, Éter ou Ley.<br><b>[Analisar Artefatos]:</b> Você analisa um objeto mágico. Através disso, você consegue (ou não) identificar seu uso, capacidades ou afinidade.<br><b>[Identificar Feitiço]:</b> Você analisa um feitiço. Através disso, você consegue (ou não) identificar a sua função, efeito ou como superar, caso seja um conhecimento plausível.<br><b>[Responder Questões]:</b> Você busca no seu cérebro por informações que já estudou. Você pode responder perguntas referentes as Entidades e o Arcanismo, ou apenas chegar numa conclusão lógica.",
         "Alquimia": "<i>Você domina a criação e manipulação de substâncias, sendo capaz de preparar compostos com efeitos variados, desde curativos até tóxicos ou reativos.</i><br><br><b>Usos Específicos</b><br><b>[Identificar]:</b> Você analisa substâncias desconhecidas, entendendo seus efeitos e possíveis riscos.<br><b>[Criar Componentes]:</b> Você coleta e aproveita materiais de criaturas, plantas ou ambientes para criar componentes.",
-        "Monstrologia": "<i>Você possui conhecimento sobre criaturas perigosas, sendo capaz de identificar suas características, comportamentos e fraquezas. Monstrologia permite entender como enfrentar e sobreviver a diferentes tipos de monstros.</i><br><br><b>Usos Específicos</b><br><b>[Analisar]:</b> Você reconhece uma criatura ou seus rastros, entendendo sua natureza, tipo e características gerais, dependendo do resultado. Você descobre fraquezas, resistências ou padrões de comportamento de um monstro.<br><b>[Explorar Fraqueza]:</b> Ao identificar uma vulnerabilidade, você pode aproveitar ela e anunciar aos aliados para que façam o mesmo. Isso confere +2 no teste de luta contra a criatura durante o combate.",
+        "Monstrologia": "<i>Você possui conhecimento sobre criaturas perigosas, sendo capaz de identificar suas características, comportamentos e fraquezas. Monstrologia permite entender como enfrentar e sobreviver a diferentes tipos de monstros.</i><br><br><b>Usos Específicos</b><br><b>[Analisar]:</b> Você reconhece uma criatura ou seus rastros, entendendo sua natureza, tipo e características gerais, dependendo do resultado. Você descobre fraquezas, resistências ou padrões de comportamento de um monstro.<br><b>[Explorar Fraqueza]:</b> Ao identificar uma vulnerabilidade, você pode aproveitar ela e anunciar aos aliados para que faça o mesmo. Isso confere +2 no teste de luta contra a criatura durante o combate.",
         "Linguística": "<i>Você compreende e domina idiomas, símbolos e formas de comunicação, sendo capaz de interpretar, traduzir e adaptar linguagem em diferentes contextos.</i><br><br><b>Usos Específicos</b><br><b>[Traduzir]:</b> Você interpreta idiomas desconhecidos, textos antigos ou mensagens estrangeiras, entendendo seu significado geral ou detalhado.<br><b>[Decifrar]:</b> Você identifica padrões em símbolos, códigos simples ou escritas incomuns, revelando mensagens ocultas.",
         "Sabedoria": "<b>Sabedoria;</b> É o atributo e teste utilizado para momentos em que é necessário resgatar informações perdidas em sua mente, lógicas não compreendidas ou detalhes que contribuem para a formulação de um raciocínio. Sabedoria é o atributo que cobre o que Atualidades não toca e que Investigação não envolve, sendo também uma forma de evitar testes brutos de Intelecto.<br><br>Combatente = 0 + Int<br>Projetante = 1 + Int<br>Arcanista = 2 + Int<br>Erudito = 3 + Int",
         "Sorte": "Mede a sua sorte momentânea. Você rola 1d6 de Sorte e 1d6 de Azar, o resultado é a diferença entre eles.",
@@ -737,53 +836,53 @@ const firebaseConfig = {
         let agi = parseInt(sheet.atributos['AGI']) || 0;
         let nivel = parseInt(document.getElementById('val-nivel').value) || 0;
 
-        let maxPV = 0, maxPA = 0, maxPS = 0, def = 0;
+        let maxPV = 0, maxPA = 0, maxSA = 0, def = 0;
 
         if (sheet.classe === 'arcanista') {
             maxPV = (15 + con) + (nivel * (15 + con));
-            maxPS = 20 + (nivel * 10);
+            maxSA = 20 + (nivel * 10);
             maxPA = (15 + con + pod) + (Math.min(nivel, 4) * (12 + con + pod));
             def = 11 + agi;
         } else if (sheet.classe === 'combatente') {
             maxPV = (20 + con) + (nivel * (20 + con));
-            maxPS = 10 + (nivel * 10);
+            maxSA = 10 + (nivel * 10);
             maxPA = (10 + con + pod) + (nivel * (8 + con + pod));
             def = 13 + agi;
         } else if (sheet.classe === 'erudito') {
             maxPV = (15 + con) + (nivel * (16 + con));
-            maxPS = 15 + (nivel * 10);
+            maxSA = 15 + (nivel * 10);
             maxPA = (13 + con + pod) + (nivel * (10 + con + pod));
             def = 15 + agi;
         } else if (sheet.classe === 'projetante') {
             maxPV = (17 + con) + (nivel * (16 + con));
-            maxPS = 12 + (nivel * 10);
+            maxSA = 12 + (nivel * 10);
             maxPA = (12 + con + pod) + (nivel * (9 + con + pod));
             def = 14 + agi;
         }
 
         document.getElementById('max-pv').value = maxPV;
         document.getElementById('max-pa').value = maxPA;
-        document.getElementById('max-ps').value = maxPS;
+        document.getElementById('max-sa').value = maxSA;
         document.getElementById('val-defesa').value = def;
 
         let currPV = parseInt(document.getElementById('curr-pv').value) || 0;
         let currPA = parseInt(document.getElementById('curr-pa').value) || 0;
-        let currPS = parseInt(document.getElementById('curr-ps').value) || 0;
+        let currSA = parseInt(document.getElementById('curr-sa').value) || 0;
         
         if(currPV > maxPV) document.getElementById('curr-pv').value = maxPV;
         if(currPA > maxPA) document.getElementById('curr-pa').value = maxPA;
-        if(currPS > maxPS) document.getElementById('curr-ps').value = maxPS;
+        if(currSA > maxSA) document.getElementById('curr-sa').value = maxSA;
 
         updateBar('pv');
         updateBar('pa');
-        updateBar('ps');
+        updateBar('sa');
     }
 
     function selecionarClasse(classe) {
         sheet.classe = classe;
         atualizarVisuaisClasse();
         calcularStatusClasse();
-        render(); // Para atualizar o cálculo passivo da Sabedoria
+        render(); 
         if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
     }
     
@@ -825,11 +924,11 @@ const firebaseConfig = {
                 } else {
                     danoPuro -= sheet.recursosFinos.pv_temp; sheet.recursosFinos.pv_temp = 0;
                 }
-            } else if (tipo === 'ps' && sheet.recursosFinos.ps_temp > 0) {
-                if (sheet.recursosFinos.ps_temp >= danoPuro) {
-                    sheet.recursosFinos.ps_temp -= danoPuro; danoPuro = 0;
+            } else if (tipo === 'sa' && sheet.recursosFinos.sa_temp > 0) {
+                if (sheet.recursosFinos.sa_temp >= danoPuro) {
+                    sheet.recursosFinos.sa_temp -= danoPuro; danoPuro = 0;
                 } else {
-                    danoPuro -= sheet.recursosFinos.ps_temp; sheet.recursosFinos.ps_temp = 0;
+                    danoPuro -= sheet.recursosFinos.sa_temp; sheet.recursosFinos.sa_temp = 0;
                 }
             }
             curr -= danoPuro;
@@ -838,7 +937,7 @@ const firebaseConfig = {
                 let excesso = (curr + valorMod) - max;
                 curr = max;
                 if (tipo === 'pv') sheet.recursosFinos.pv_temp += excesso;
-                if (tipo === 'ps') sheet.recursosFinos.ps_temp += excesso;
+                if (tipo === 'sa') sheet.recursosFinos.sa_temp += excesso;
             } else { curr += valorMod; }
         }
 
@@ -854,28 +953,49 @@ const firebaseConfig = {
         let percentage = Math.min(Math.max((current / max) * 100, 0), 100);
         const bar = document.getElementById(`bar-${id}`);
         const badge = document.getElementById(`badge-${id}`);
+        
+        badge.className = "status-condition-text condition-badge";
 
         if (id === 'pv') {
-            badge.className = "condition-badge";
             if (sheet.recursosFinos.pv_temp > 0) {
-                bar.className = "status-fill bg-pink"; badge.innerText = `+${sheet.recursosFinos.pv_temp} TEMP`; badge.classList.add("cond-temp"); percentage = 100;
+                bar.className = "status-fill bg-pink";
+                badge.innerHTML = `<span class="cond-temp">+${sheet.recursosFinos.pv_temp} TEMP</span>`;
+                percentage = 100;
             } else if (current <= 0) {
-                bar.className = "status-fill"; bar.style.backgroundColor = "#000"; badge.innerText = "💀 MORRENDO"; badge.classList.add("cond-morrendo");
+                bar.className = "status-fill"; bar.style.backgroundColor = "#000"; 
+                badge.innerHTML = '<span class="cond-morrendo">💀 MORRENDO</span>';
             } else if (current <= max / 2) {
-                bar.className = "status-fill bg-red"; badge.innerText = "🩸 MACHUCADO"; badge.classList.add("cond-machucado");
-            } else { bar.className = "status-fill bg-red"; badge.innerText = ""; }
+                bar.className = "status-fill bg-red";
+                badge.innerHTML = '<span class="cond-machucado">🩸 MACHUCADO</span>';
+            } else {
+                bar.className = "status-fill bg-red"; badge.innerHTML = "";
+            }
         }
 
-        if (id === 'ps') {
-            badge.className = "condition-badge";
-            if (sheet.recursosFinos.ps_temp > 0) {
-                bar.className = "status-fill bg-blue"; badge.innerText = `+${sheet.recursosFinos.ps_temp} TEMP`; badge.classList.add("cond-temp"); percentage = 100;
+        if (id === 'sa') {
+            if (sheet.recursosFinos.sa_temp > 0) {
+                bar.className = "status-fill bg-blue";
+                badge.innerHTML = `<span class="cond-temp">+${sheet.recursosFinos.sa_temp} TEMP</span>`;
+                percentage = 100;
             } else if (current <= 0) {
-                bar.className = "status-fill"; bar.style.backgroundColor = "#fff"; badge.innerText = "🌀 ENLOUQUECENDO"; badge.classList.add("cond-enlouquecendo");
+                bar.className = "status-fill"; bar.style.backgroundColor = "#fff";
+                badge.innerHTML = '<span class="cond-enlouquecendo">🌀 ENLOUQUECENDO</span>';
             } else if (current <= max / 2) {
-                bar.className = "status-fill bg-cyan"; badge.innerText = "🧠 PERTURBADO"; badge.classList.add("cond-perturbado");
-            } else { bar.className = "status-fill bg-cyan"; badge.innerText = ""; }
+                bar.className = "status-fill bg-cyan"; 
+                badge.innerHTML = '<span class="cond-perturbado">🧠 PERTURBADO</span>';
+            } else {
+                bar.className = "status-fill bg-cyan"; badge.innerHTML = "";
+            }
         }
+        
+        if (id === 'pa') {
+            if (current <= 0) {
+                badge.innerHTML = '<span style="color: #888;">💨 EXAUSTO</span>';
+            } else {
+                badge.innerHTML = "";
+            }
+        }
+        
         bar.style.width = percentage + "%";
     }
 
@@ -1310,8 +1430,13 @@ const firebaseConfig = {
                 </div></div>
             </div>`).join('');
 
-        document.getElementById('skills-container').innerHTML = sheet.pericias.map(p => `
-            <div class="skill-item" onclick="realizarRolagem('${p.a}', 0, '${p.n}', true, '${p.n}')">
+        document.getElementById('skills-container').innerHTML = sheet.pericias.map(p => {
+            let glowStyle = "";
+            if (p.t == 2) glowStyle = "box-shadow: 0 0 8px rgba(0,255,136,0.3); border-color: #00ff88;";
+            else if (p.t == 4) glowStyle = "box-shadow: 0 0 10px rgba(212,175,55,0.5); border-color: var(--text-gold);";
+
+            return `
+            <div class="skill-item" style="${glowStyle}" onclick="realizarRolagem('${p.a}', 0, '${p.n}', true, '${p.n}')">
                 <div style="display: flex; flex-grow: 1; align-items: center; justify-content: space-between; padding-right: 5px;">
                     <span class="skill-name">
                         ${p.n} 
@@ -1328,14 +1453,15 @@ const firebaseConfig = {
                 <div style="display:flex; gap:3px; flex-shrink: 0; align-items:center;" onclick="event.stopPropagation()">
                     <input type="number" title="Dados" value="${p.d !== undefined ? p.d : 1}" onchange="atualizarPericia('${p.n}', 'd', this.value)" style="width:28px; background:rgba(123, 31, 162, 0.2); color:#fff; border:1px solid var(--primary-purple); text-align:center; font-family:'Cinzel', serif; border-radius:3px;">
                     <span style="color:#666; font-size:0.75rem; margin-right:4px;">D</span>
-                    <select onchange="atualizarPericia('${p.n}', 't', this.value)" style="background:#000; color:var(--light-purple); border:1px solid #444; font-family:'Cinzel', serif; cursor: pointer; border-radius:3px;">
+                    <select onchange="atualizarPericia('${p.n}', 't', this.value); render();" style="background:#000; color:var(--light-purple); border:1px solid #444; font-family:'Cinzel', serif; cursor: pointer; border-radius:3px;">
                         <option value="0" ${p.t==0?'selected':''}>+0</option>
                         <option value="2" ${p.t==2?'selected':''}>+2</option>
                         <option value="4" ${p.t==4?'selected':''}>+4</option>
                     </select>
                     <input type="number" title="Mod" value="${p.m}" onchange="atualizarPericia('${p.n}', 'm', this.value)" style="width:32px; background:#000; color:var(--text-gold); border:1px solid #444; text-align:center; font-family:'Cinzel', serif; border-radius:3px;">
                 </div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
             
         renderEspeciais();
         renderAbilities();
@@ -1351,7 +1477,7 @@ const firebaseConfig = {
             sheet.atributos, sheet.pericias, sheet.habilidades, sheet.itens, sheet.rds, sheet.recursosFinos,
             [ document.getElementById('curr-pv').value, document.getElementById('max-pv').value,
               document.getElementById('curr-pa').value, document.getElementById('max-pa').value,
-              document.getElementById('curr-ps').value, document.getElementById('max-ps').value ],
+              document.getElementById('curr-sa').value, document.getElementById('max-sa').value ],
             sheet.dificuldade, sheet.limiteCarga,
             document.getElementById('val-defesa').value,
             document.getElementById('val-bloqueio').value,
@@ -1377,12 +1503,18 @@ const firebaseConfig = {
             document.getElementById('user-nickname').value = dados[0] || "";
             sheet.atributos = dados[1] || sheet.atributos; sheet.pericias = dados[2] || sheet.pericias;
             sheet.habilidades = dados[3] || []; sheet.itens = dados[4] || [];
-            sheet.rds = dados[5] || []; sheet.recursosFinos = dados[6] || { pv_temp: 0, ps_temp: 0 };
+            sheet.rds = dados[5] || []; sheet.recursosFinos = dados[6] || { pv_temp: 0, sa_temp: 0 };
             
+            // Tratativa de compatibilidade de save legado PS -> SA
+            if (sheet.recursosFinos.ps_temp !== undefined) {
+                sheet.recursosFinos.sa_temp = sheet.recursosFinos.ps_temp;
+                delete sheet.recursosFinos.ps_temp;
+            }
+
             if(dados[7]) {
                 document.getElementById('curr-pv').value = dados[7][0]; document.getElementById('max-pv').value = dados[7][1];
                 document.getElementById('curr-pa').value = dados[7][2]; document.getElementById('max-pa').value = dados[7][3];
-                document.getElementById('curr-ps').value = dados[7][4]; document.getElementById('max-ps').value = dados[7][5];
+                document.getElementById('curr-sa').value = dados[7][4]; document.getElementById('max-sa').value = dados[7][5];
             }
             sheet.dificuldade = dados[8] || 'normal';
             sheet.limiteCarga = dados[9] || 20; document.getElementById('peso-max-input').value = sheet.limiteCarga;
@@ -1400,7 +1532,7 @@ const firebaseConfig = {
             atualizarVisuaisClasse();
             atualizarAvatarUI();
 
-            render(); setDif(sheet.dificuldade); ['pv', 'pa', 'ps'].forEach(updateBar);
+            render(); setDif(sheet.dificuldade); ['pv', 'pa', 'sa'].forEach(updateBar);
             spawnPopup('IMPORTAÇÃO', 'Registros sincronizados', 'SUCESSO', 'var(--light-purple)', 'CARREGADO');
         } catch(e) { alert("Erro crítico na leitura do código digital."); }
     }
@@ -1426,7 +1558,7 @@ const firebaseConfig = {
             recValues: {
                 pv_c: document.getElementById('curr-pv').value, pv_m: document.getElementById('max-pv').value,
                 pa_c: document.getElementById('curr-pa').value, pa_m: document.getElementById('max-pa').value,
-                ps_c: document.getElementById('curr-ps').value, ps_m: document.getElementById('max-ps').value
+                sa_c: document.getElementById('curr-sa').value, sa_m: document.getElementById('max-sa').value
             }
         };
         
@@ -1445,17 +1577,25 @@ const firebaseConfig = {
                 document.getElementById('user-nickname').value = d.nickname || "";
                 document.getElementById('user-sub').value = d.sub || "";
           
-          sheet.atributos = d.atributos || {"FOR":1, "AGI":1, "INT":1, "CON":1, "POD":1};
+                sheet.atributos = d.atributos || {"FOR":1, "AGI":1, "INT":1, "CON":1, "POD":1};
 
-          if (!d.pericias || d.pericias.length === 0) {
-              sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1 }));
-          } else {
-              sheet.pericias = d.pericias;
-          }
+                if (!d.pericias || d.pericias.length === 0) {
+                    sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1 }));
+                } else {
+                    sheet.pericias = d.pericias;
+                }
+                
                 sheet.habilidades = d.habilidades || [];
                 sheet.itens = d.itens || []; sheet.rds = d.rds || [];
                 sheet.notas = d.notas || [];
-                sheet.recursosFinos = d.recursosFinos || { pv_temp:0, ps_temp:0 };
+                sheet.recursosFinos = d.recursosFinos || { pv_temp:0, sa_temp:0 };
+                
+                // Conversão de save legado PS -> SA
+                if (sheet.recursosFinos.ps_temp !== undefined) {
+                    sheet.recursosFinos.sa_temp = sheet.recursosFinos.ps_temp;
+                    delete sheet.recursosFinos.ps_temp;
+                }
+
                 sheet.dificuldade = d.dificuldade || 'normal';
                 sheet.limiteCarga = d.limiteCarga || 20;
                 document.getElementById('peso-max-input').value = sheet.limiteCarga;
@@ -1475,9 +1615,10 @@ const firebaseConfig = {
                 if(d.recValues) {
                     document.getElementById('curr-pv').value = d.recValues.pv_c; document.getElementById('max-pv').value = d.recValues.pv_m;
                     document.getElementById('curr-pa').value = d.recValues.pa_c; document.getElementById('max-pa').value = d.recValues.pa_m;
-                    document.getElementById('curr-ps').value = d.recValues.ps_c; document.getElementById('max-ps').value = d.recValues.ps_m;
+                    document.getElementById('curr-sa').value = d.recValues.sa_c !== undefined ? d.recValues.sa_c : (d.recValues.ps_c || 0); 
+                    document.getElementById('max-sa').value = d.recValues.sa_m !== undefined ? d.recValues.sa_m : (d.recValues.ps_m || 0);
                 }
-                render(); setDif(sheet.dificuldade); ['pv', 'pa', 'ps'].forEach(updateBar);
+                render(); setDif(sheet.dificuldade); ['pv', 'pa', 'sa'].forEach(updateBar);
             } else {
                 sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1}));
                 render();
