@@ -22,6 +22,25 @@
 
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
+
+        body { 
+    background-color: var(--bg-dark);
+    /* Efeito de Névoa Estática (Vários focos de roxo esfumaçados sobre o fundo preto) */
+    background-image: 
+        radial-gradient(circle at 15% 25%, rgba(123, 31, 162, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 85% 35%, rgba(49, 27, 146, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 50% 75%, rgba(186, 104, 200, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 35% 70%, rgba(74, 20, 140, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, #050507 0%, #0d0614 40%, #12071c 70%, #050507 100%);
+    background-attachment: fixed;
+    background-size: cover;
+    
+    color: var(--text-light);
+    font-family: 'Cinzel', serif;
+    margin: 0;
+    display: flex;
+    overflow-x: hidden;
+}
         
         /* --- MENU DE LOG DE ROLAGENS --- */
         #log-panel {
@@ -347,7 +366,7 @@
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
             </div>
-            <div class="status-box-title">PV</div>
+            <div class="status-box-title">Vida</div>
             <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('pv', -1)">◀</button>
                 <input type="number" id="curr-pv" value="20" onchange="updateBar('pv')">
@@ -380,7 +399,8 @@
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
             </div>
-            <div class="status-box-title">SA</div>
+            <div class="status-box-title">Sanidade
+            </div>
             <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('sa', -1)">◀</button>
                 <input type="number" id="curr-sa" value="15" onchange="updateBar('sa')">
