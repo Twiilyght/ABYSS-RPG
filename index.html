@@ -300,6 +300,7 @@
 
         .btn-info-skill { background: transparent; border: none; color: var(--light-purple); cursor: pointer; font-size: 0.8rem; margin-left: 10px; }
         .btn-info-skill:hover { color: #fff; }
+        .mod-val-display { position:absolute; top:-5px; right:-5px; background:#00e5ff; color:#000; border-radius:50%; width:20px; height:20px; font-size:0.7rem; display:flex; align-items:center; justify-content:center; font-weight:bold; box-shadow: 0 0 5px #00e5ff;}
     </style>
 </head>
 <body>
@@ -334,8 +335,8 @@
         <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
             <div style="display: flex; gap: 15px; align-items: center;">
                 <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
-                    <input type="text" id="user-nickname" placeholder="Nickname" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: var(--text-gold); text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 1.1rem;">
-                    <input type="text" id="user-sub" placeholder="Antecedência" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: #aaa; text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 0.85rem;">
+                    <input type="text" id="user-nickname" placeholder="Nickname" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: var(--text-gold); text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 1.1rem;" onchange="sheet.nickname = this.value; salvarNaNuvem();">
+                    <input type="text" id="user-sub" placeholder="Antecedência" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: #aaa; text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 0.85rem;" onchange="sheet.antecedencia = this.value; salvarNaNuvem();">
                 </div>
                 <div onclick="mudarAvatar()" title="Alterar Avatar" style="width: 65px; height: 65px; border: 2px solid var(--border-color); border-radius: 8px; cursor:pointer; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#0a0a0c; box-shadow: 0 0 10px rgba(0,0,0,0.8);">
                     <img id="char-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
@@ -361,7 +362,7 @@
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
             </div>
-            <div class="status-box-title">Vida</div>
+            <div class="status-box-title">Vida <span id="mod-ind-pv" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
             <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('pv', -1)">◀</button>
                 <input type="number" id="curr-pv" value="20" onchange="updateBar('pv')">
@@ -375,7 +376,7 @@
         </div>
 
         <div class="status-box">
-            <div class="status-box-title">PA</div>
+            <div class="status-box-title">PA <span id="mod-ind-pa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
             <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('pa', -1)">◀</button>
                 <input type="number" id="curr-pa" value="10" onchange="updateBar('pa')">
@@ -394,8 +395,7 @@
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
             </div>
-            <div class="status-box-title">Sanidade
-            </div>
+            <div class="status-box-title">Sanidade <span id="mod-ind-sa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
             <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('sa', -1)">◀</button>
                 <input type="number" id="curr-sa" value="15" onchange="updateBar('sa')">
@@ -411,12 +411,12 @@
         
     <div class="mini-stats-overlay">
         <div class="mini-stat-item">
-            <span class="mini-stat-label">DEFESA</span>
+            <span class="mini-stat-label">DEFESA <span id="mod-ind-def" style="color:#00e5ff;"></span></span>
             <input type="number" id="val-defesa" class="mini-stat-input" value="10">
         </div>
         <div class="mini-stat-item">
             <span class="mini-stat-label">NÍVEL</span>
-            <select id="val-nivel" class="mini-stat-input" style="appearance: none; cursor: pointer; padding-left: 15px;" onchange="calcularStatusClasse(); if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
+            <select id="val-nivel" class="mini-stat-input" style="appearance: none; cursor: pointer; padding-left: 15px;" onchange="sheet.nivel = parseInt(this.value)||0; calcularStatusClasse(); if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
                 <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -430,7 +430,7 @@
             <input type="number" id="val-pa-turno" class="mini-stat-input" value="0" onchange="sheet.paTurno=parseInt(this.value)||0; if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
         </div>
         <div class="mini-stat-item">
-            <span class="mini-stat-label">DESLOC</span>
+            <span class="mini-stat-label">DESLOC <span id="mod-ind-desloc" style="color:#00e5ff;"></span></span>
             <input type="number" id="val-desloc" class="mini-stat-input" value="9">
         </div>
     </div>
@@ -451,11 +451,11 @@
             </div>
 
             <div class="defense-panel">
-                <div class="defense-header" style="font-family: 'Cinzel', serif; text-transform: none;">Bloqueio</div>
+                <div class="defense-header" style="font-family: 'Cinzel', serif; text-transform: none;">Bloqueio <span id="mod-ind-bloq" style="color:#00e5ff; font-size:0.75rem;"></span></div>
                 <div class="rd-item-row" style="border-left: 3px solid var(--text-gold);">
                     <input type="checkbox" id="chk-bloqueio">
                     <span style="font-size: 0.8rem; font-weight: bold; color: var(--text-gold); flex-grow: 1;">Bloqueio Base</span>
-                    <input type="number" id="val-bloqueio" value="0" class="mini-stat-input" style="width: 40px; height: 25px; font-size: 0.85rem;">
+                    <input type="number" id="val-bloqueio" value="0" class="mini-stat-input" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="sheet.bloqueioBase = parseInt(this.value)||0; seSalvar();">
                 </div>
 
                 <div class="defense-header" style="margin-top: 20px;">
@@ -504,7 +504,8 @@
             <div class="inv-header-dashboard">
                 <div class="inv-weight-box">
                     Carga Total: <span id="peso-atual-display">0</span> / 
-                    <input type="number" id="peso-max-input" value="20" onchange="atualizarPainelInventario()" style="width: 50px; background: transparent; border: none; border-bottom: 1px solid var(--text-gold); color: var(--text-gold); font-family: 'Cinzel', serif; text-align: center; font-size: 1rem; outline: none;">
+                    <input type="number" id="peso-max-input" value="20" onchange="sheet.cargaBase = parseInt(this.value)||20; atualizarPainelInventario(); seSalvar();" style="width: 50px; background: transparent; border: none; border-bottom: 1px solid var(--text-gold); color: var(--text-gold); font-family: 'Cinzel', serif; text-align: center; font-size: 1rem; outline: none;">
+                    <span id="mod-ind-carga" style="color:#00e5ff; font-size:0.8rem;"></span>
                     <span id="badge-sobrepeso" class="condition-badge cond-sobrepeso" style="display: none;">SOBREPESO</span>
                 </div>
                 <button class="btn-forge" onclick="abrirEditorItem()" style="width: auto; margin-bottom: 0; padding: 8px 15px;">+ Forjar Novo Item</button>
@@ -559,10 +560,19 @@
             Adicionar Crítico
         </label>
         <div id="hab-crit-container" style="display:none; margin-bottom:15px; padding:10px; border:1px solid #333; background:#0a0a0c; border-radius:4px;">
-            <label style="color:var(--text-gold); font-size:0.7rem">MARGEM DE CRÍTICO (A partir de qual número no D20 é crítico?)</label>
-            <input type="number" id="hab-crit-margem" class="modal-input" placeholder="Ex: 19 ou 20">
+            <label style="color:var(--text-gold); font-size:0.7rem">MARGEM DE CRÍTICO (Ativa com base no resultado dos DADOS ROLADOS NO DANO)</label>
+            <input type="number" id="hab-crit-margem" class="modal-input" placeholder="Ex: 10">
             <label style="color:var(--text-gold); font-size:0.7rem">DANO CRÍTICO ADICIONAL (Ex: 1d10, ou 2d8)</label>
             <input type="text" id="hab-crit-dano" class="modal-input" placeholder="Ex: 1d10">
+        </div>
+
+        <label style="color:var(--text-gold); font-size:0.8rem; display:flex; align-items:center; gap:5px; margin-top:5px; margin-bottom: 10px;">
+            <input type="checkbox" id="hab-tem-mod" onchange="document.getElementById('hab-mod-container').style.display = this.checked ? 'block' : 'none'">
+            Concede Modificadores?
+        </label>
+        <div id="hab-mod-container" style="display:none; margin-bottom:15px; padding:10px; border:1px solid #333; background:#0a0a0c; border-radius:4px;">
+            <div id="hab-mods-lista"></div>
+            <button onclick="addInputModificador('hab')" style="background:none; border:1px solid #00e5ff; color:#00e5ff; cursor:pointer; padding:5px; width:100%; font-family: 'Cinzel', serif; font-size:0.75rem;">+ Adicionar Modificador</button>
         </div>
 
         <div class="editor-toolbar">
@@ -609,11 +619,20 @@
         <label style="color:var(--text-gold); font-size:0.7rem">DANOS SECUNDÁRIOS (Opcional, separados por vírgula)</label>
         <input type="text" id="item-weap-sec" class="modal-input" placeholder="Ex: 1d4 Fogo, 1d6 Veneno">
         
-        <label style="color:var(--text-gold); font-size:0.7rem">MARGEM DE CRÍTICO</label>
-        <input type="number" id="item-weap-crit-margem" class="modal-input" placeholder="Ex: 19" value="20">
+        <label style="color:var(--text-gold); font-size:0.7rem">MARGEM DE CRÍTICO (Ativa com base no DANO principal)</label>
+        <input type="number" id="item-weap-crit-margem" class="modal-input" placeholder="Ex: 8">
         
         <label style="color:var(--text-gold); font-size:0.7rem">DANO CRÍTICO</label>
         <input type="text" id="item-weap-crit-dano" class="modal-input" placeholder="Ex: 1d8">
+    </div>
+
+    <label style="color:var(--text-gold); font-size:0.8rem; display:flex; align-items:center; gap:5px; margin-top:5px; margin-bottom: 10px;">
+        <input type="checkbox" id="item-tem-mod" onchange="document.getElementById('item-mod-container').style.display = this.checked ? 'block' : 'none'">
+        Concede Modificadores?
+    </label>
+    <div id="item-mod-container" style="display:none; margin-bottom:15px; padding:10px; border:1px solid #333; background:#0a0a0c; border-radius:4px;">
+        <div id="item-mods-lista"></div>
+        <button onclick="addInputModificador('item')" style="background:none; border:1px solid #00e5ff; color:#00e5ff; cursor:pointer; padding:5px; width:100%; font-family: 'Cinzel', serif; font-size:0.75rem;">+ Adicionar Modificador</button>
     </div>
 
     <label style="color:var(--text-gold); font-size:0.8rem">DESCRIÇÃO DOS EFEITOS</label>
@@ -658,7 +677,44 @@ const firebaseConfig = {
 </script>
 
 <script>
+const periciasDados = [
+        { n: "Acrobacia", a: "AGI" }, { n: "Adestramento", a: "POD" }, { n: "Artes", a: "POD" },
+        { n: "Alquimia", a: "INT" }, { n: "Arcanismo", a: "POD" }, { n: "Atletismo", a: "FOR" },
+        { n: "Ciências", a: "INT" }, { n: "Crime", a: "AGI" }, { n: "Diplomacia", a: "POD" }, 
+        { n: "Enganação", a: "POD" }, { n: "Fortitude", a: "CON" }, { n: "Furtividade", a: "AGI" }, 
+        { n: "Iniciativa", a: "AGI" }, { n: "Intimidação", a: "POD" }, { n: "Intuição", a: "POD" }, 
+        { n: "Investigação", a: "INT" }, { n: "Linguística", a: "INT" }, { n: "Luta", a: "FOR" }, 
+        { n: "Medicina", a: "INT" }, { n: "Monstrologia", a: "INT" }, { n: "Percepção", a: "POD" }, 
+        { n: "Pilotagem", a: "AGI" }, { n: "Pontaria", a: "AGI" }, { n: "Profissão", a: "VAR" }, 
+        { n: "Reflexos", a: "AGI" }, { n: "Religião", a: "POD" }, { n: "Sobrevivência", a: "INT" }, 
+        { n: "Tática", a: "INT" }, { n: "Tecnologia", a: "INT" }, { n: "Vontade", a: "POD" }
+    ];
+
     let modoSecreto = false;
+
+    function getFichaZerada() {
+        return {
+            atributos: {"FOR":1, "AGI":1, "INT":1, "CON":1, "POD":1},
+            pericias: periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1 })),
+            habilidades: [],
+            itens: [], 
+            rds: [],
+            notas: [],
+            dificuldade: 'normal',
+            recursosFinos: { pv_temp: 0, sa_temp: 0 },
+            limiteCarga: 20,
+            nivel: 0,
+            classe: null,
+            avatar: "",
+            paTurno: 0,
+            bloqueioBase: 0,
+            cargaBase: 20,
+            nickname: "",
+            antecedencia: ""
+        };
+    }
+
+    let sheet = getFichaZerada();
 
     function toggleSecreto() {
         modoSecreto = !modoSecreto;
@@ -675,85 +731,59 @@ const firebaseConfig = {
     }
 
     function toggleTurn(el) {
-        if (el.innerText === "X") {
-            el.innerText = "";
-        } else {
-            el.innerText = "X";
-        }
+        if (el.innerText === "X") el.innerText = "";
+        else el.innerText = "X";
     }
   
-    let sheet = {
-        atributos: {"FOR":1, "AGI":1, "INT":1, "CON":1, "POD":1},
-        pericias: [],
-        habilidades: [],
-        itens: [], 
-        rds: [],
-        notas: [],
-        dificuldade: 'normal',
-        recursosFinos: { pv_temp: 0, sa_temp: 0 },
-        limiteCarga: 20,
-        nivel: 0,
-        classe: null,
-        avatar: "",
-        paTurno: 0
-    };
-
     const dtTabela = {
         facil: { falha: 9, sucesso: 10, bom: 20, extremo: 21 },
         normal: { falha: 12, sucesso: 13, bom: 20, extremo: 21 },
         dificil: { falha: 15, sucesso: 16, bom: 20, extremo: 21 }
     };
 
-    const periciasDados = [
-        { n: "Acrobacia", a: "AGI" }, { n: "Adestramento", a: "POD" }, { n: "Artes", a: "POD" },
-        { n: "Alquimia", a: "INT" }, { n: "Arcanismo", a: "POD" }, { n: "Atletismo", a: "FOR" },
-        { n: "Ciências", a: "INT" }, { n: "Crime", a: "AGI" }, { n: "Diplomacia", a: "POD" }, 
-        { n: "Enganação", a: "POD" }, { n: "Fortitude", a: "CON" }, { n: "Furtividade", a: "AGI" }, 
-        { n: "Iniciativa", a: "AGI" }, { n: "Intimidação", a: "POD" }, { n: "Intuição", a: "POD" }, 
-        { n: "Investigação", a: "INT" }, { n: "Linguística", a: "INT" }, { n: "Luta", a: "FOR" }, 
-        { n: "Medicina", a: "INT" }, { n: "Monstrologia", a: "INT" }, { n: "Percepção", a: "POD" }, 
-        { n: "Pilotagem", a: "AGI" }, { n: "Pontaria", a: "AGI" }, { n: "Profissão", a: "VAR" }, 
-        { n: "Reflexos", a: "AGI" }, { n: "Religião", a: "POD" }, { n: "Sobrevivência", a: "INT" }, 
-        { n: "Tática", a: "INT" }, { n: "Tecnologia", a: "INT" }, { n: "Vontade", a: "POD" }
+
+    const targetListPericias = periciasDados.map(p => p.n);
+    const targetListAtributos = ["FOR", "AGI", "INT", "CON", "POD"];
+    const targetListStatus = [
+        {k:"pv_max", n:"Vida Máxima"}, {k:"pv_atual", n:"Vida Atual"},
+        {k:"sa_max", n:"Sanidade Máx."}, {k:"sa_atual", n:"Sanidade Atual"},
+        {k:"pa_max", n:"PA Máximo"}, {k:"pa_atual", n:"PA Atual"},
+        {k:"defesa", n:"Defesa"}, {k:"bloqueio", n:"Bloqueio"},
+        {k:"carga", n:"Carga Máx."}, {k:"deslocamento", n:"Deslocamento"},
+        {k:"sabedoria", n:"Especial: Sabedoria"}, {k:"sorte", n:"Especial: Sorte"}
     ];
 
     const descPericias = {
-        "Acrobacia": "<i>Você é capaz de realizar movimentos ágeis e acrobacias difíceis, se equilibrar ou escapar habilmente.</i>",
-        "Adestramento": "<i>Você tem conhecimento sobre como lidar e educar animais, cuidar deles ou manipulá-los.</i>",
+        "Acrobacia": "<i>Você é capaz de realizar movimentos ágeis e acrobacias difíceis...</i>",
+        "Adestramento": "<i>Você tem conhecimento sobre como lidar e educar animais...</i>",
         "Artes": "<i>Você sabe se expressar com diversas formas de arte.</i>",
-        "Atletismo": "<i>Você é capaz de realizar feitos atléticos e sair na frente dos demais.</i>",
-        "Ciências": "<i>Você possui uma ou várias áreas de conhecimentos técnicos e especializados.</i>",
-        "Crime": "<i>Você sabe como trapacear e cometer crimes de forma habilidosa.</i>",
-        "Diplomacia": "<i>Você possui alta capacidade de oratória e diálogo, sabe como convencer e persuadir.</i>",
-        "Enganação": "<i>Blefar, mentir e distorcer ao seu bel prazer é quase um dom.</i>",
-        "Fortitude": "<i>Você possui resistência física e força de vontade para suportar dor.</i>",
-        "Furtividade": "<i>Você é capaz de se mover sem ser percebido, silenciosamente e evitando atenção.</i>",
+        "Atletismo": "<i>Você é capaz de realizar feitos atléticos...</i>",
+        "Ciências": "<i>Você possui uma ou várias áreas de conhecimentos técnicos.</i>",
+        "Crime": "<i>Você sabe como trapacear e cometer crimes...</i>",
+        "Diplomacia": "<i>Você possui alta capacidade de oratória e diálogo...</i>",
+        "Enganação": "<i>Blefar, mentir e distorcer ao seu bel prazer...</i>",
+        "Fortitude": "<i>Você possui resistência física e força de vontade...</i>",
+        "Furtividade": "<i>Você é capaz de se mover sem ser percebido...</i>",
         "Iniciativa": "<i>Esta perícia determina sua velocidade de reação.</i>",
-        "Intimidação": "<i>Seu porte, armas ou palavras são capazes de amedrontar pessoas.</i>",
-        "Intuição": "<i>Ao observar ou interagir com alguém, você pode tentar entender suas verdadeiras intenções.</i>",
-        "Investigação": "<i>Você é capaz de analisar pistas, conectar informações e tirar conclusões lógicas.</i>",
-        "Luta": "<i>Você usa Luta para fazer ataques corpo a corpo. A DT é a Defesa do alvo.</i>",
-        "Medicina": "<i>Você possui conhecimento sobre o corpo, ferimentos e tratamentos.</i>",
+        "Intimidação": "<i>Seu porte, armas ou palavras são capazes de amedrontar.</i>",
+        "Intuição": "<i>Ao observar ou interagir com alguém...</i>",
+        "Investigação": "<i>Você é capaz de analisar pistas, conectar informações...</i>",
+        "Luta": "<i>Você usa Luta para fazer ataques corpo a corpo.</i>",
+        "Medicina": "<i>Você possui conhecimento sobre o corpo e tratamentos.</i>",
         "Percepção": "<i>Você nota coisas usando os sentidos.</i>",
-        "Pilotagem": "<i>Você é capaz de conduzir veículos com controle e precisão.</i>",
-        "Pontaria": "<i>Você usa Pontaria para fazer ataques à distância. A DT é a Defesa do alvo.</i>",
-        "Profissão": "<i>Você possui formação e experiência em uma área de trabalho específica.</i>",
-        "Reflexos": "<i>Você usa esta perícia para testes de resistência contra efeitos rápidos.</i>",
-        "Religião": "<i>Você possui conhecimento sobre crenças, tradições e instituições religiosas.</i>",
+        "Pilotagem": "<i>Você é capaz de conduzir veículos com controle.</i>",
+        "Pontaria": "<i>Você usa Pontaria para fazer ataques à distância.</i>",
+        "Profissão": "<i>Você possui formação e experiência...</i>",
+        "Reflexos": "<i>Você usa esta perícia para testes de resistência...</i>",
+        "Religião": "<i>Você possui conhecimento sobre crenças...</i>",
         "Sobrevivência": "<i>Você sabe como se manter vivo em ambientes hostis.</i>",
-        "Tática": "<i>Você é capaz de ler o combate, antecipar ações e coordenar movimentos.</i>",
-        "Tecnologia": "<i>Você possui conhecimento sobre dispositivos eletrônicos e sistemas.</i>",
+        "Tática": "<i>Você é capaz de ler o combate, antecipar ações...</i>",
+        "Tecnologia": "<i>Você possui conhecimento sobre dispositivos eletrônicos.</i>",
         "Vontade": "<i>Você possui força mental, disciplina e controle emocional.</i>",
-        "Arcanismo": "<i>Você tem conhecimentos arcanos sobre magia e é capaz de realizar a feitiçaria.</i>",
+        "Arcanismo": "<i>Você tem conhecimentos arcanos sobre magia.</i>",
         "Alquimia": "<i>Você domina a criação e manipulação de substâncias.</i>",
         "Monstrologia": "<i>Você possui conhecimento sobre criaturas perigosas.</i>",
-        "Linguística": "<i>Você compreende e domina idiomas, símbolos e formas de comunicação.</i>",
-        "Sabedoria": "<b>Sabedoria;</b> É o atributo e teste utilizado para resgatar informações na mente.",
-        "Sorte": "Mede a sua sorte momentânea. Rola 1d6 de Sorte e 1d6 de Azar.",
-        "Sentidos_Farejar": "<b>Farejar:</b> Permite identificar odores específicos.",
-        "Sentidos_Tatear": "<b>Tatear:</b> Permite identificar texturas e formas através do toque.",
-        "Sentidos_Degustar": "<b>Degustar:</b> Permite perceber sabores com grande precisão.",
-        "Sentidos_Pressentir": "<b>Pressentir:</b> Um sexto sentido para perceber alterações no ambiente."
+        "Linguística": "<i>Você compreende e domina idiomas e símbolos.</i>"
     };
 
     let currentUser = null;
@@ -768,8 +798,8 @@ const firebaseConfig = {
         } else {
             btnLogin.innerText = "👤";
             btnLogin.title = "Login Google";
-            sheet.pericias = periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1 }));
-            render();
+            sheet = getFichaZerada();
+            atualizarVisuaisDaFicha();
         }
     });
 
@@ -810,13 +840,10 @@ const firebaseConfig = {
     database.ref('rolagens').limitToLast(50).on('child_added', (snapshot) => {
         const data = snapshot.val();
         const logContainer = document.getElementById('log-messages');
-        
         const msg = document.createElement('div');
         msg.className = 'log-msg';
         msg.style.borderLeft = `4px solid ${data.cor}`;
-        
         const hora = new Date(data.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
         msg.innerHTML = `
             <div class="log-msg-user">👤 ${data.jogador} <span style="float:right; font-size:0.65rem; color:#666;">${hora}</span></div>
             <div class="log-msg-title">${data.titulo} <span style="font-size:0.7rem; color:${data.cor}; border: 1px solid ${data.cor}; padding: 1px 4px; border-radius: 3px; margin-left: 5px;">${data.status}</span></div>
@@ -833,6 +860,7 @@ const firebaseConfig = {
             const parts = clean.replace(/-/g, '+-').split('+');
             let total = 0;
             let textParts = [];
+            let allRolls = [];
             
             parts.forEach(p => {
                 if (!p) return;
@@ -848,6 +876,7 @@ const firebaseConfig = {
                     for(let j=0; j<qtd; j++) {
                         let r = Math.floor(Math.random()*faces)+1;
                         rolagens.push(r);
+                        allRolls.push(r);
                         subTotal += r;
                     }
                     total += isNegative ? -subTotal : subTotal;
@@ -860,8 +889,8 @@ const firebaseConfig = {
                     textParts.push(`${prefix}${val}`);
                 }
             });
-            return { total: total, text: textParts.join(' ') };
-        } catch(e) { return { total: 0, text: 'Erro' }; }
+            return { total: total, text: textParts.join(' '), rolls: allRolls };
+        } catch(e) { return { total: 0, text: 'Erro', rolls: [] }; }
     }
 
     function acionarRolagemGlobal(titulo, subtitulo, formula, cor, txtStatus) {
@@ -871,28 +900,33 @@ const firebaseConfig = {
         enviarRolagemParaServidor(titulo, subtitulo, res.total, cor, txtStatus, detalhes);
     }
 
+    // NOVA FUNÇÃO DE CRÍTICO - AVALIA DADOS DE DANO DIRETAMENTE
     function rolarHabilidadeComOuSemCrit(nome, danoBase, temCrit, critMargem, critDano) {
-        if (!temCrit) {
-            acionarRolagemGlobal(nome, 'Rolagem Principal', danoBase, 'var(--text-gold)', 'DANO');
-            return;
+        let resPrincipal = rolarDadosAvancado(danoBase);
+        let isCrit = false;
+
+        if (temCrit) {
+            isCrit = resPrincipal.rolls.some(r => r >= critMargem);
         }
-        
-        let d20 = Math.floor(Math.random() * 20) + 1;
-        let isCrit = d20 >= critMargem;
-        
+
         let formulaFinal = danoBase;
+        let resFinalTotal = resPrincipal.total;
+        let resFinalText = resPrincipal.text;
+
         if (isCrit && critDano && critDano.trim() !== '') {
-            formulaFinal += '+' + critDano;
+            formulaFinal += ' + ' + critDano;
+            let resCrit = rolarDadosAvancado(critDano);
+            resFinalTotal += resCrit.total;
+            resFinalText += ' + <span style="color:#ff1744">' + resCrit.text + '</span>';
         }
-        
-        let resDano = rolarDadosAvancado(formulaFinal);
         
         let cor = isCrit ? '#ff1744' : 'var(--text-gold)';
         let status = isCrit ? 'ACERTO CRÍTICO!' : 'DANO NORMAL';
-        let detalhe = `Dado de Acerto: [${d20}] (Margem ${critMargem})<br>Fórmula: ${formulaFinal}<br>Dados de Dano: ${resDano.text}`;
+        let detalhe = temCrit ? `Dados base rolados: [${resPrincipal.rolls.join(', ')}] (Margem ${critMargem})<br>Fórmula Total: ${formulaFinal}<br>Soma dos Dados: ${resFinalText}` 
+                              : `Fórmula: ${formulaFinal}<br>Soma: ${resFinalText}`;
         
-        spawnPopup(nome, `Rolagem de Ataque/Dano`, resDano.total, cor, status, detalhe);
-        enviarRolagemParaServidor(nome, `Acerto: [${d20}]`, resDano.total, cor, status, detalhe);
+        spawnPopup(nome, isCrit ? `CRÍTICO ATIVADO!` : `Rolagem de Dano`, resFinalTotal, cor, status, detalhe);
+        enviarRolagemParaServidor(nome, isCrit ? `Ativou!` : `Dano`, resFinalTotal, cor, status, detalhe.replace(/<[^>]+>/g, ' | '));
     }
 
     function abrirInfoPericia(nome) {
@@ -906,7 +940,7 @@ const firebaseConfig = {
         if (url !== null) {
             sheet.avatar = url;
             atualizarAvatarUI();
-            if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+            seSalvar();
         }
     }
 
@@ -929,6 +963,29 @@ const firebaseConfig = {
             let btn = document.getElementById('btn-class-' + sheet.classe);
             if(btn) btn.classList.add('active');
         }
+    }
+
+    // MODIFICADORES TOTAIS AGREGADOS
+    function getMods(tipo, alvo) {
+        let total = 0;
+        if(sheet.itens) {
+            sheet.itens.filter(i => i.equipado).forEach(i => {
+                if(i.mods) i.mods.forEach(m => { if(m.tipo===tipo && m.alvo===alvo) total+=parseInt(m.valor)||0; });
+            });
+        }
+        if(sheet.habilidades) {
+            sheet.habilidades.forEach(h => {
+                if(h.mods) h.mods.forEach(m => { if(m.tipo===tipo && m.alvo===alvo) total+=parseInt(m.valor)||0; });
+            });
+        }
+        return total;
+    }
+
+    function renderIndicadorMod(idElemento, val) {
+        const el = document.getElementById(idElemento);
+        if(!el) return;
+        if(val !== 0) el.innerText = val > 0 ? `(+${val})` : `(${val})`;
+        else el.innerText = "";
     }
 
     function calcularStatusClasse() {
@@ -963,22 +1020,43 @@ const firebaseConfig = {
             def = 14 + agi;
         }
 
-        document.getElementById('max-pv').value = maxPV;
-        document.getElementById('max-pa').value = maxPA;
-        document.getElementById('max-sa').value = maxSA;
-        document.getElementById('val-defesa').value = def;
+        // Aplica Modificadores de Item/Habilidade
+        let modPV = getMods('status', 'pv_max');
+        let modSA = getMods('status', 'sa_max');
+        let modPA = getMods('status', 'pa_max');
+        let modDef = getMods('status', 'defesa');
+        let modBloq = getMods('status', 'bloqueio');
+        let modCarga = getMods('status', 'carga');
+        let modDesloc = getMods('status', 'deslocamento');
 
+        document.getElementById('max-pv').value = maxPV + modPV;
+        document.getElementById('max-pa').value = maxPA + modPA;
+        document.getElementById('max-sa').value = maxSA + modSA;
+        document.getElementById('val-defesa').value = def + modDef;
+        
+        let bloqueioBase = sheet.bloqueioBase !== undefined ? sheet.bloqueioBase : 0;
+        document.getElementById('val-bloqueio').value = bloqueioBase + modBloq;
+        
+        sheet.limiteCarga = (sheet.cargaBase !== undefined ? sheet.cargaBase : 20) + modCarga;
+
+        renderIndicadorMod('mod-ind-pv', modPV);
+        renderIndicadorMod('mod-ind-sa', modSA);
+        renderIndicadorMod('mod-ind-pa', modPA);
+        renderIndicadorMod('mod-ind-def', modDef);
+        renderIndicadorMod('mod-ind-bloq', modBloq);
+        renderIndicadorMod('mod-ind-carga', modCarga);
+        renderIndicadorMod('mod-ind-desloc', modDesloc);
+
+        // Aplica Mods nas atuais dinamicamente para manter o máximo possível correto
         let currPV = parseInt(document.getElementById('curr-pv').value) || 0;
         let currPA = parseInt(document.getElementById('curr-pa').value) || 0;
         let currSA = parseInt(document.getElementById('curr-sa').value) || 0;
         
-        if(currPV > maxPV) document.getElementById('curr-pv').value = maxPV;
-        if(currPA > maxPA) document.getElementById('curr-pa').value = maxPA;
-        if(currSA > maxSA) document.getElementById('curr-sa').value = maxSA;
+        if(currPV > (maxPV + modPV)) document.getElementById('curr-pv').value = (maxPV + modPV);
+        if(currPA > (maxPA + modPA)) document.getElementById('curr-pa').value = (maxPA + modPA);
+        if(currSA > (maxSA + modSA)) document.getElementById('curr-sa').value = (maxSA + modSA);
 
-        updateBar('pv');
-        updateBar('pa');
-        updateBar('sa');
+        updateBar('pv'); updateBar('pa'); updateBar('sa');
     }
 
     function selecionarClasse(classe) {
@@ -986,7 +1064,7 @@ const firebaseConfig = {
         atualizarVisuaisClasse();
         calcularStatusClasse();
         render(); 
-        if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+        seSalvar();
     }
     
     function calcularSabedoria() {
@@ -995,7 +1073,7 @@ const firebaseConfig = {
         else if(sheet.classe === 'erudito') base = 3;
         else if(sheet.classe === 'projetante') base = 1;
         else if(sheet.classe === 'combatente') base = 0;
-        return base + (parseInt(sheet.atributos['INT']) || 0);
+        return base + (parseInt(sheet.atributos['INT']) || 0) + getMods('status', 'sabedoria');
     }
 
     function aplicarModificador(tipo) {
@@ -1046,6 +1124,7 @@ const firebaseConfig = {
         document.getElementById(`curr-${tipo}`).value = curr;
         inputMod.value = ""; 
         updateBar(tipo);
+        seSalvar();
     }
 
     function updateBar(id) {
@@ -1107,11 +1186,12 @@ const firebaseConfig = {
         updateBar(id);
     }
 
-    function adicionarNovaRD(nome = "Nova RD", valor = 0) { sheet.rds.push({ nome, valor }); renderRDs(); }
-    function removerRD(idx) { sheet.rds.splice(idx, 1); renderRDs(); }
+    function adicionarNovaRD(nome = "Nova RD", valor = 0) { sheet.rds.push({ nome, valor }); renderRDs(); seSalvar(); }
+    function removerRD(idx) { sheet.rds.splice(idx, 1); renderRDs(); seSalvar(); }
     function atualizarDadosRD(idx, campo, valor) {
         if (campo === 'valor') sheet.rds[idx].valor = parseInt(valor) || 0;
         if (campo === 'nome') sheet.rds[idx].nome = valor;
+        seSalvar();
     }
 
     function renderRDs() {
@@ -1124,9 +1204,49 @@ const firebaseConfig = {
             </div>`).join('');
     }
 
+    function updateModTarget(selectEl) {
+        let targetSelect = selectEl.parentElement.querySelector('.mod-alvo');
+        let val = selectEl.value;
+        let opts = [];
+        if(val === 'pericia') opts = targetListPericias.map(p => `<option value="${p}">${p}</option>`);
+        else if(val === 'atributo') opts = targetListAtributos.map(a => `<option value="${a}">${a}</option>`);
+        else if(val === 'status') opts = targetListStatus.map(s => `<option value="${s.k}">${s.n}</option>`);
+        targetSelect.innerHTML = opts.join('');
+        
+        let priorValue = targetSelect.getAttribute('data-value');
+        if(priorValue) { targetSelect.value = priorValue; targetSelect.removeAttribute('data-value'); }
+    }
+
+    function addInputModificador(prefix, mod = {}) {
+        const div = document.createElement('div');
+        div.className = `${prefix}-mod-row`;
+        div.style.cssText = "display:flex; gap:5px; margin-bottom:5px;";
+        div.innerHTML = `
+            <select class="modal-input mod-tipo" style="width:40%; padding:5px; margin:0;" onchange="updateModTarget(this)">
+                <option value="pericia" ${mod.tipo==='pericia'?'selected':''}>Perícia</option>
+                <option value="atributo" ${mod.tipo==='atributo'?'selected':''}>Atributo</option>
+                <option value="status" ${mod.tipo==='status'?'selected':''}>Status (Vida, PA, etc)</option>
+            </select>
+            <select class="modal-input mod-alvo" style="width:40%; padding:5px; margin:0;" data-value="${mod.alvo||''}"></select>
+            <input type="number" class="modal-input mod-valor" value="${mod.valor||0}" style="width:20%; padding:5px; margin:0;">
+            <button onclick="this.parentElement.remove()" style="background:none; border:1px solid red; color:red; border-radius:3px; cursor:pointer;">X</button>
+        `;
+        document.getElementById(`${prefix}-mods-lista`).appendChild(div);
+        updateModTarget(div.querySelector('.mod-tipo'));
+    }
+
+    function getModsFromDOM(prefix) {
+        return Array.from(document.querySelectorAll(`.${prefix}-mod-row`)).map(row => ({
+            tipo: row.querySelector('.mod-tipo').value,
+            alvo: row.querySelector('.mod-alvo').value,
+            valor: parseInt(row.querySelector('.mod-valor').value) || 0
+        }));
+    }
+
     function abrirEditorHab(t, idxEdicao = null) { 
         document.getElementById('hab-tipo').value = t; 
         document.getElementById('rolagens-extras-container').innerHTML = '';
+        document.getElementById('hab-mods-lista').innerHTML = '';
         
         if (idxEdicao !== null) {
             const h = sheet.habilidades[idxEdicao];
@@ -1148,6 +1268,15 @@ const firebaseConfig = {
                 document.getElementById('hab-crit-dano').value = '';
             }
 
+            if (h.mods && h.mods.length > 0) {
+                document.getElementById('hab-tem-mod').checked = true;
+                document.getElementById('hab-mod-container').style.display = 'block';
+                h.mods.forEach(m => addInputModificador('hab', m));
+            } else {
+                document.getElementById('hab-tem-mod').checked = false;
+                document.getElementById('hab-mod-container').style.display = 'none';
+            }
+
             if (h.extras) h.extras.forEach(ex => addInputRolagem(ex));
         } else {
             document.getElementById('hab-id-edicao').value = "";
@@ -1157,8 +1286,8 @@ const firebaseConfig = {
             document.getElementById('hab-img').value = "";
             document.getElementById('hab-tem-crit').checked = false;
             document.getElementById('hab-crit-container').style.display = 'none';
-            document.getElementById('hab-crit-margem').value = '';
-            document.getElementById('hab-crit-dano').value = '';
+            document.getElementById('hab-tem-mod').checked = false;
+            document.getElementById('hab-mod-container').style.display = 'none';
         }
         document.getElementById('modal-hab').style.display = 'block'; 
         switchTab('tab-info');
@@ -1181,15 +1310,19 @@ const firebaseConfig = {
             temCrit: document.getElementById('hab-tem-crit').checked,
             critMargem: parseInt(document.getElementById('hab-crit-margem').value) || 20,
             critDano: document.getElementById('hab-crit-dano').value,
+            mods: document.getElementById('hab-tem-mod').checked ? getModsFromDOM('hab') : [],
             extras: Array.from(document.querySelectorAll('.extra-roll')).map(i => i.value).filter(v => v)
         };
         if (idEdicao !== "") sheet.habilidades[parseInt(idEdicao)] = h;
         else sheet.habilidades.push(h);
+        
+        atualizarVisualModificadoresGlobais();
         renderAbilities();
         document.getElementById('modal-hab').style.display = 'none';
+        seSalvar();
     }
 
-    function removerHab(i) { sheet.habilidades.splice(i, 1); renderAbilities(); }
+    function removerHab(i) { sheet.habilidades.splice(i, 1); atualizarVisualModificadoresGlobais(); renderAbilities(); seSalvar(); }
 
     function moverHabVisuais(index, dir) {
         let tipoAtual = sheet.habilidades[index].tipo;
@@ -1208,7 +1341,7 @@ const firebaseConfig = {
             sheet.habilidades[index] = sheet.habilidades[targetIndex];
             sheet.habilidades[targetIndex] = temp;
             renderAbilities();
-            if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+            seSalvar();
         }
     }
 
@@ -1216,7 +1349,7 @@ const firebaseConfig = {
         if(novoTipo) {
             sheet.habilidades[index].tipo = novoTipo;
             renderAbilities();
-            if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+            seSalvar();
         }
     }
 
@@ -1267,6 +1400,8 @@ const firebaseConfig = {
 
     function abrirEditorItem(idxEdicao = null) {
         document.getElementById('item-rolagens-container').innerHTML = '';
+        document.getElementById('item-mods-lista').innerHTML = '';
+
         if (idxEdicao !== null) {
             const item = sheet.itens[idxEdicao];
             document.getElementById('item-id-edicao').value = idxEdicao;
@@ -1284,10 +1419,15 @@ const firebaseConfig = {
             } else {
                 document.getElementById('item-is-weapon').checked = false;
                 document.getElementById('item-weapon-container').style.display = 'none';
-                document.getElementById('item-weap-dano').value = '';
-                document.getElementById('item-weap-sec').value = '';
-                document.getElementById('item-weap-crit-margem').value = '20';
-                document.getElementById('item-weap-crit-dano').value = '';
+            }
+
+            if (item.mods && item.mods.length > 0) {
+                document.getElementById('item-tem-mod').checked = true;
+                document.getElementById('item-mod-container').style.display = 'block';
+                item.mods.forEach(m => addInputModificador('item', m));
+            } else {
+                document.getElementById('item-tem-mod').checked = false;
+                document.getElementById('item-mod-container').style.display = 'none';
             }
 
             if (item.extras) item.extras.forEach(ex => addInputRolagemItem(ex));
@@ -1299,10 +1439,8 @@ const firebaseConfig = {
             
             document.getElementById('item-is-weapon').checked = false;
             document.getElementById('item-weapon-container').style.display = 'none';
-            document.getElementById('item-weap-dano').value = '';
-            document.getElementById('item-weap-sec').value = '';
-            document.getElementById('item-weap-crit-margem').value = '20';
-            document.getElementById('item-weap-crit-dano').value = '';
+            document.getElementById('item-tem-mod').checked = false;
+            document.getElementById('item-mod-container').style.display = 'none';
         }
         document.getElementById('modal-item').style.display = 'block';
     }
@@ -1329,6 +1467,7 @@ const firebaseConfig = {
             desc: document.getElementById('item-desc').value || "",
             equipado: wasEquipped,
             extras: Array.from(document.querySelectorAll('.item-extra-roll')).map(i => i.value).filter(v => v),
+            mods: document.getElementById('item-tem-mod').checked ? getModsFromDOM('item') : [],
             isWeapon: document.getElementById('item-is-weapon').checked,
             weapDano: document.getElementById('item-weap-dano').value,
             weapSec: document.getElementById('item-weap-sec').value,
@@ -1356,9 +1495,10 @@ const firebaseConfig = {
         }
 
         document.getElementById('modal-item').style.display = 'none';
+        atualizarVisualModificadoresGlobais();
         atualizarPainelInventario();
         renderAbilities();
-        if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+        seSalvar();
     }
 
     function alternarEquiparItem(idx) { 
@@ -1381,15 +1521,14 @@ const firebaseConfig = {
                     itemIdRef: item.idUnico
                 });
             } else {
-                if (item.idUnico) {
-                    sheet.habilidades = sheet.habilidades.filter(h => h.itemIdRef !== item.idUnico);
-                }
+                if (item.idUnico) sheet.habilidades = sheet.habilidades.filter(h => h.itemIdRef !== item.idUnico);
             }
             renderAbilities();
         }
         
+        atualizarVisualModificadoresGlobais();
         atualizarPainelInventario(); 
-        if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+        seSalvar();
     }
 
     function removerItem(idx) { 
@@ -1399,14 +1538,19 @@ const firebaseConfig = {
             renderAbilities();
         }
         sheet.itens.splice(idx, 1); 
+        atualizarVisualModificadoresGlobais();
         atualizarPainelInventario(); 
-        if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+        seSalvar();
     }
 
     function atualizarPainelInventario() {
-        sheet.limiteCarga = parseInt(document.getElementById('peso-max-input').value) || 20;
+        sheet.cargaBase = sheet.cargaBase !== undefined ? sheet.cargaBase : 20;
+        let modCarga = getMods('status', 'carga');
+        sheet.limiteCarga = sheet.cargaBase + modCarga;
+        document.getElementById('peso-max-input').value = sheet.cargaBase;
+        renderIndicadorMod('mod-ind-carga', modCarga);
+
         let pesoTotal = 0;
-        
         const grid = document.getElementById('inventario-itens-grid');
         grid.innerHTML = "";
 
@@ -1467,35 +1611,32 @@ const firebaseConfig = {
         let keepLowest = false;
         let dadosRolar = 1;
 
-        if (qtd >= 1) {
-            dadosRolar = qtd; 
-        } else if (qtd < 0) {
-            keepLowest = true; 
-            dadosRolar = Math.abs(qtd) + 1; 
-        }
+        if (qtd >= 1) { dadosRolar = qtd; } 
+        else if (qtd < 0) { keepLowest = true; dadosRolar = Math.abs(qtd) + 1; }
 
         for(let i = 0; i < dadosRolar; i++) {
             rolagens.push(Math.floor(Math.random() * 20) + 1);
         }
 
         let final = keepLowest ? Math.min(...rolagens) : Math.max(...rolagens);
-        
         return { final, rolagens, keepLowest };
     }
 
     function realizarRolagem(attrNome, bonusManual, nomeDisplay, isPericia = false, periciaNome = "") {
         let attrValor = parseInt(sheet.atributos[attrNome]) || 0;
-        let bonusTotal = bonusManual + attrValor;
-        let qtdDados = Math.max(1, attrValor);
+        let modAtributo = getMods('atributo', attrNome);
+        let bonusTotal = bonusManual + attrValor + modAtributo;
+        let qtdDados = Math.max(1, attrValor + modAtributo); // A quantidade de dados rola via Atributo+Mod
 
         if(isPericia) {
             let p = sheet.pericias.find(x => x.n === periciaNome);
             if(p) {
-                bonusTotal += parseInt(p.t) + parseInt(p.m);
-                qtdDados = p.d !== undefined ? parseInt(p.d) : 1;
+                let modPericia = getMods('pericia', periciaNome);
+                bonusTotal += parseInt(p.t) + parseInt(p.m) + modPericia;
+                qtdDados = p.d !== undefined ? parseInt(p.d) : (attrValor + modAtributo); 
             }
         } else {
-            qtdDados = attrValor; 
+            qtdDados = attrValor + modAtributo; 
         }
 
         let rolar = rolarD20(qtdDados);
@@ -1515,12 +1656,13 @@ const firebaseConfig = {
         let modManual = inputMod ? parseInt(inputMod.value) || 0 : 0;
         
         if (tipo === 'Sorte') {
+            let modEquip = getMods('status', 'sorte');
             let sorte = Math.floor(Math.random() * 6) + 1;
             let azar = Math.floor(Math.random() * 6) + 1;
-            let total = sorte - azar + modManual;
+            let total = sorte - azar + modManual + modEquip;
             let cor = total > 0 ? "#00ff88" : (total < 0 ? "#ff4444" : "#ffca28");
             let txt = total > 0 ? "BOM" : (total < 0 ? "RUIM" : "NEUTRO");
-            let modTxt = modManual !== 0 ? `| Mod Extra: ${modManual}` : '';
+            let modTxt = (modManual+modEquip) !== 0 ? `| Mod Extra: ${(modManual+modEquip)}` : '';
             spawnPopup("SORTE", `Sorte [${sorte}] - Azar [${azar}]`, total, cor, txt, `Resultado: ${sorte - azar} ${modTxt}`);
             enviarRolagemParaServidor("SORTE", `Sorte [${sorte}] - Azar [${azar}]`, total, cor, txt, `Res: ${sorte - azar} ${modTxt}`); 
             return;
@@ -1558,10 +1700,12 @@ const firebaseConfig = {
     function calcularVelocidade() {
         let agi = parseInt(sheet.atributos['AGI']) || 0;
         let vel = agi >= 1 ? 6 + ((agi - 1) * 2) : 6 + (agi - 1);
+        let modDesloc = getMods('status', 'deslocamento');
+        
         let display = document.getElementById('display-velocidade');
-        if (display) display.innerText = vel + "q";
+        if (display) display.innerText = (vel + modDesloc) + "q";
         let inputDesloc = document.getElementById('val-desloc');
-        if (inputDesloc) inputDesloc.value = vel;
+        if (inputDesloc) inputDesloc.value = vel + modDesloc;
     }
 
     function formatText(tagStart, tagEnd = tagStart) {
@@ -1592,7 +1736,7 @@ const firebaseConfig = {
         const p = sheet.pericias.find(x => x.n === nome);
         if (p) {
             p[campo] = (campo === 't' || campo === 'm' || campo === 'd') ? (parseInt(valor) || 0) : valor;
-            if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+            seSalvar();
         }
     }
 
@@ -1601,10 +1745,12 @@ const firebaseConfig = {
         if(!container) return;
 
         let sabBase = calcularSabedoria();
-        const templateExtra = (id, nome, cor, desc) => `
+        let modSorte = getMods('status', 'sorte');
+        
+        const templateExtra = (id, nome, cor, desc, displayMod = false, modVal = 0) => `
             <div class="skill-item" style="border-left-color: ${cor};">
                 <div style="display: flex; flex-direction: column; flex-grow:1; cursor:pointer;" onclick="rolarEspecial('${id}')">
-                    <span class="skill-name" style="color: ${cor};">${nome}</span>
+                    <span class="skill-name" style="color: ${cor};">${nome} ${displayMod && modVal !== 0 ? `<span style="font-size:0.7rem; color:#00e5ff;">(${modVal > 0 ? '+':''}${modVal})</span>` : ''}</span>
                     <span style="color: #aaa; font-size: 0.75rem;">${desc}</span>
                 </div>
                 <div style="display:flex; gap:5px; align-items:center;" onclick="event.stopPropagation()">
@@ -1615,7 +1761,7 @@ const firebaseConfig = {
             </div>`;
 
         container.innerHTML = `
-            ${templateExtra('Sorte', 'Sorte', '#ffca28', '(Sorte - Azar)')}
+            ${templateExtra('Sorte', 'Sorte', '#ffca28', '(Sorte - Azar)', true, modSorte)}
             ${templateExtra('Sabedoria', 'Sabedoria', '#bc4ed8', `Base: ${sabBase} (Classe + INT)`)}
             
             <div class="skill-item" style="cursor: default; border-left-color: #ff1744;">
@@ -1648,35 +1794,49 @@ const firebaseConfig = {
         if (!sheet.notas) sheet.notas = [];
         sheet.notas.push({ titulo: "Novo Bloco", conteudo: "" });
         renderNotas();
-        if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+        seSalvar();
     }
 
     function atualizarNota(idx, campo, valor) {
         sheet.notas[idx][campo] = valor;
-        if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+        seSalvar();
     }
 
     function removerNota(idx) {
         if (confirm("Deseja apagar este bloco de notas?")) {
             sheet.notas.splice(idx, 1);
             renderNotas();
-            if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+            seSalvar();
         }
     }
 
+    function atualizarVisualModificadoresGlobais() {
+        render();
+        calcularStatusClasse();
+        calcularVelocidade();
+        renderEspeciais();
+    }
+
     function render() {
-        document.getElementById('attr-container').innerHTML = Object.entries(sheet.atributos).map(([k,v]) => `
+        document.getElementById('attr-container').innerHTML = Object.entries(sheet.atributos).map(([k,v]) => {
+            let modAtributo = getMods('atributo', k);
+            return `
             <div class="attr-container-outer" onclick="realizarRolagem('${k}', 0, 'Teste de ${k}')">
                 <div class="attr-hexagon-border"><div class="attr-hexagon-inner">
-                    <input type="number" class="attr-value-input" value="${v}" onchange="sheet.atributos['${k}']=parseInt(this.value)||0; calcularVelocidade(); calcularStatusClasse(); renderEspeciais(); if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();" onclick="event.stopPropagation()">
+                    <input type="number" class="attr-value-input" value="${v}" onchange="sheet.atributos['${k}']=parseInt(this.value)||0; calcularVelocidade(); calcularStatusClasse(); renderEspeciais(); seSalvar();" onclick="event.stopPropagation()">
                     <span style="font-size:0.75rem; color:var(--text-gold); font-weight:bold;">${k}</span>
+                    ${modAtributo !== 0 ? `<div class="mod-val-display">${modAtributo > 0 ? '+' : ''}${modAtributo}</div>` : ''}
                 </div></div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
 
         document.getElementById('skills-container').innerHTML = sheet.pericias.map(p => {
             let glowStyle = "";
             if (p.t == 2) glowStyle = "box-shadow: 0 0 8px rgba(0,255,136,0.3); border-color: #00ff88;";
             else if (p.t == 4) glowStyle = "box-shadow: 0 0 10px rgba(212,175,55,0.5); border-color: var(--text-gold);";
+
+            let modEquip = getMods('pericia', p.n);
+            let modDisplay = modEquip !== 0 ? `<span style="color:#00e5ff; font-size:0.7rem; margin-right:4px;" title="Bônus de Item/Hab">${modEquip > 0 ? '+' : ''}${modEquip}</span>` : '';
 
             return `
             <div class="skill-item" style="${glowStyle}" onclick="realizarRolagem('${p.a}', 0, '${p.n}', true, '${p.n}')">
@@ -1694,93 +1854,89 @@ const firebaseConfig = {
                     ${descPericias[p.n] ? `<button class="btn-info-skill" onclick="event.stopPropagation(); abrirInfoPericia('${p.n}')">❓</button>` : '<span style="width: 25px;"></span>'}
                 </div>
                 <div style="display:flex; gap:3px; flex-shrink: 0; align-items:center;" onclick="event.stopPropagation()">
-                    <input type="number" title="Dados" value="${p.d !== undefined ? p.d : 1}" onchange="atualizarPericia('${p.n}', 'd', this.value)" style="width:28px; background:rgba(123, 31, 162, 0.2); color:#fff; border:1px solid var(--primary-purple); text-align:center; font-family:'Cinzel', serif; border-radius:3px;">
-                    <span style="color:#666; font-size:0.75rem; margin-right:4px;">D</span>
-                    <select onchange="atualizarPericia('${p.n}', 't', this.value); render();" style="background:#000; color:var(--light-purple); border:1px solid #444; font-family:'Cinzel', serif; cursor: pointer; border-radius:3px;">
+                    <span style="font-size:0.7rem; color:#aaa;">T:</span>
+                    <select class="mini-stat-input" style="width:40px; height:20px; font-size:0.75rem;" onchange="event.stopPropagation(); atualizarPericia('${p.n}', 't', this.value); render();" onclick="event.stopPropagation()">
                         <option value="0" ${p.t==0?'selected':''}>+0</option>
                         <option value="2" ${p.t==2?'selected':''}>+2</option>
                         <option value="4" ${p.t==4?'selected':''}>+4</option>
                     </select>
-                    <input type="number" title="Mod" value="${p.m}" onchange="atualizarPericia('${p.n}', 'm', this.value)" style="width:32px; background:#000; color:var(--text-gold); border:1px solid #444; text-align:center; font-family:'Cinzel', serif; border-radius:3px;">
+                    <span style="font-size:0.7rem; color:#aaa;">M:</span>
+                    ${modDisplay}
+                    <input type="number" class="mini-stat-input" style="width:35px; height:20px; font-size:0.75rem;" value="${p.m}" onchange="event.stopPropagation(); atualizarPericia('${p.n}', 'm', this.value); render();" onclick="event.stopPropagation()">
                 </div>
             </div>`;
         }).join('');
-            
-        renderEspeciais();
-        renderAbilities();
-        renderRDs();
-        renderNotas();
-        atualizarPainelInventario();
-        calcularVelocidade(); 
     }
 
     function exportarFicha() {
-        const comp = [
-            document.getElementById('user-nickname').value || "",
-            sheet.atributos, sheet.pericias, sheet.habilidades, sheet.itens, sheet.rds, sheet.recursosFinos,
-            [ document.getElementById('curr-pv').value, document.getElementById('max-pv').value,
-              document.getElementById('curr-pa').value, document.getElementById('max-pa').value,
-              document.getElementById('curr-sa').value, document.getElementById('max-sa').value ],
-            sheet.dificuldade, sheet.limiteCarga,
-            document.getElementById('val-defesa').value,
-            document.getElementById('val-bloqueio').value,
-            document.getElementById('user-sub').value || "",
-            document.getElementById('val-nivel').value || 0,
-            sheet.classe,
-            sheet.avatar,
-            sheet.paTurno,
-            sheet.notas
-        ];
-        const codigo = btoa(unescape(encodeURIComponent(JSON.stringify(comp))));
-        document.getElementById('codigo-export').value = codigo;
-        document.getElementById('codigo-export').select();
-        document.execCommand('copy');
-        spawnPopup('EXPORTAÇÃO', 'Ficha criptografada copiada!', 'SUCESSO', 'var(--text-gold)', 'PRONTO');
+        document.getElementById('codigo-export').value = btoa(unescape(encodeURIComponent(JSON.stringify(sheet))));
     }
 
     function importarFicha() {
         try {
-            const codigo = document.getElementById('codigo-export').value.trim();
-            const dados = JSON.parse(decodeURIComponent(escape(atob(codigo))));
-            
-            document.getElementById('user-nickname').value = dados[0] || "";
-            sheet.atributos = dados[1] || sheet.atributos; sheet.pericias = dados[2] || sheet.pericias;
-            sheet.habilidades = dados[3] || []; sheet.itens = dados[4] || [];
-            sheet.rds = dados[5] || []; sheet.recursosFinos = dados[6] || { pv_temp: 0, sa_temp: 0 };
-            
-            if (sheet.recursosFinos.ps_temp !== undefined) {
-                sheet.recursosFinos.sa_temp = sheet.recursosFinos.ps_temp;
-                delete sheet.recursosFinos.ps_temp;
-            }
-
-            if(dados[7]) {
-                document.getElementById('curr-pv').value = dados[7][0]; document.getElementById('max-pv').value = dados[7][1];
-                document.getElementById('curr-pa').value = dados[7][2]; document.getElementById('max-pa').value = dados[7][3];
-                document.getElementById('curr-sa').value = dados[7][4]; document.getElementById('max-sa').value = dados[7][5];
-            }
-            sheet.dificuldade = dados[8] || 'normal';
-            sheet.limiteCarga = dados[9] || 20; document.getElementById('peso-max-input').value = sheet.limiteCarga;
-            if(dados[10]) document.getElementById('val-defesa').value = dados[10];
-            if(dados[11]) document.getElementById('val-bloqueio').value = dados[11];
-            if(dados[12]) document.getElementById('user-sub').value = dados[12];
-            if(dados[13]) document.getElementById('val-nivel').value = dados[13];
-            
-            sheet.classe = dados[14] || null;
-            sheet.avatar = dados[15] || "";
-            sheet.paTurno = dados[16] || 0; document.getElementById('val-pa-turno').value = sheet.paTurno;
-            sheet.notas = dados[17] || [];
-
-            atualizarVisuaisClasse();
-            atualizarAvatarUI();
-            render();
-            spawnPopup('IMPORTAÇÃO', 'Ficha carregada com sucesso!', 'SUCESSO', '#00ff88', 'PRONTO');
-            if (typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
-        } catch(e) {
-            alert("Código de importação inválido!");
+            const raw = document.getElementById('codigo-export').value;
+            const obj = JSON.parse(decodeURIComponent(escape(atob(raw))));
+            sheet = Object.assign(getFichaZerada(), obj);
+            atualizarVisuaisDaFicha();
+            seSalvar();
+            alert("Ficha importada com sucesso!");
+        } catch (e) {
+            alert("Erro ao importar código. Verifique se copiou corretamente.");
         }
     }
 
-    render();
+    function salvarNaNuvem() {
+        if(!currentUser) return;
+        const slot = document.getElementById('save-slot').value;
+        database.ref(`users/${currentUser.uid}/slots/${slot}`).set(sheet)
+            .then(() => console.log('Ficha salva no Slot ' + slot))
+            .catch(e => console.error("Erro ao salvar:", e));
+    }
+
+    function seSalvar() {
+        if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+    }
+
+    function carregarDaNuvem() {
+        if(!currentUser) return;
+        const slot = document.getElementById('save-slot').value;
+        database.ref(`users/${currentUser.uid}/slots/${slot}`).once('value').then(snapshot => {
+            const data = snapshot.val();
+            if(data) {
+                sheet = Object.assign(getFichaZerada(), data); 
+            } else {
+                sheet = getFichaZerada(); // Slot zerado se não houver dados no banco
+            }
+            atualizarVisuaisDaFicha();
+        }).catch(e => console.error("Erro ao carregar:", e));
+    }
+
+    function atualizarVisuaisDaFicha() {
+        atualizarVisuaisClasse();
+        calcularStatusClasse();
+        calcularVelocidade();
+        atualizarAvatarUI();
+        render();
+        atualizarPainelInventario();
+        renderAbilities();
+        renderNotas();
+        renderRDs();
+        renderEspeciais();
+        
+        document.getElementById('user-nickname').value = sheet.nickname || "";
+        document.getElementById('user-sub').value = sheet.antecedencia || "";
+        document.getElementById('val-nivel').value = sheet.nivel || 0;
+        document.getElementById('val-pa-turno').value = sheet.paTurno || 0;
+        document.getElementById('curr-pv').value = sheet.recursosFinos?.pv_atual || document.getElementById('max-pv').value;
+        document.getElementById('curr-pa').value = sheet.recursosFinos?.pa_atual || document.getElementById('max-pa').value;
+        document.getElementById('curr-sa').value = sheet.recursosFinos?.sa_atual || document.getElementById('max-sa').value;
+        updateBar('pv'); updateBar('pa'); updateBar('sa');
+    }
+
+    window.onload = () => {
+        render();
+        renderEspeciais();
+    };
 </script>
 </body>
 </html>
