@@ -18,28 +18,48 @@
         }
 
         * { box-sizing: border-box; }
-        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Cinzel', serif; margin: 0; display: flex; overflow-x: hidden; }
+        
+        /* ANIMAÇÕES GERAIS E INTERATIVIDADE */
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px var(--primary-purple); }
+            50% { box-shadow: 0 0 15px var(--light-purple); }
+            100% { box-shadow: 0 0 5px var(--primary-purple); }
+        }
+
+        button, .sidebar-btn, .class-btn, .attr-container-outer, .turn-box {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        }
+        
+        button:active, .sidebar-btn:active, .class-btn:active {
+            transform: scale(0.92) !important;
+        }
 
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
 
         body { 
-    background-color: var(--bg-dark);
-    background-image: 
-        radial-gradient(circle at 15% 25%, rgba(123, 31, 162, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 85% 35%, rgba(49, 27, 146, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 50% 75%, rgba(186, 104, 200, 0.08) 0%, transparent 55%),
-        radial-gradient(circle at 35% 70%, rgba(74, 20, 140, 0.15) 0%, transparent 50%),
-        linear-gradient(180deg, #050507 0%, #0d0614 40%, #12071c 70%, #050507 100%);
-    background-attachment: fixed;
-    background-size: cover;
-    
-    color: var(--text-light);
-    font-family: 'Cinzel', serif;
-    margin: 0;
-    display: flex;
-    overflow-x: hidden;
-}
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(123, 31, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 35%, rgba(49, 27, 146, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 50% 75%, rgba(186, 104, 200, 0.08) 0%, transparent 55%),
+                radial-gradient(circle at 35% 70%, rgba(74, 20, 140, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg-dark) 0%, #0d0614 40%, #12071c 70%, var(--bg-dark) 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            color: var(--text-light);
+            font-family: 'Cinzel', serif;
+            margin: 0;
+            display: flex;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
         
         #log-panel {
             position: fixed; right: 0; top: 0; width: 350px; height: 100%;
@@ -64,6 +84,7 @@
         .log-msg {
             background: rgba(255,255,255,0.03); border: 1px solid #222;
             border-radius: 6px; padding: 12px; position: relative;
+            animation: popIn 0.3s ease-out;
         }
         .log-msg-user { color: var(--light-purple); font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; font-family: 'Cinzel', serif;}
         .log-msg-title { font-size: 0.95rem; color: #fff; font-family: 'Cinzel', serif; }
@@ -81,9 +102,10 @@
             color: var(--text-gold); font-size: 1.6rem; cursor: pointer; 
             margin-bottom: 20px; width: 60px; 
             height: 50px; border-radius: 12px; 
-            transition: 0.4s; display: flex; align-items: center; justify-content: center; 
+            display: flex; align-items: center; justify-content: center; 
             font-family: 'Cinzel', serif; outline: none;
         }
+        .sidebar-btn:hover { background: rgba(123, 31, 162, 0.3); border-color: var(--light-purple); }
         .sidebar-btn.active { border-color: var(--light-purple); box-shadow: 0 0 15px var(--primary-purple); background: rgba(123, 31, 162, 0.2); }
         select.sidebar-btn { appearance: none; padding-left: 10px; font-size: 1.2rem; }
 
@@ -91,25 +113,25 @@
         .title { font-family: 'Cinzel', serif; color: var(--primary-purple); text-shadow: 0 0 20px rgba(123, 31, 162, 0.5); letter-spacing: 8px; font-size: 3rem; }
 
         .class-selector { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
-        .class-btn { background: #0c0c10; border: 1px solid var(--border-color); color: #aaa; padding: 12px 25px; cursor: pointer; font-family: 'Cinzel', serif; border-radius: 6px; transition: 0.3s; font-weight: bold; letter-spacing: 1.5px; box-shadow: 0 4px 6px rgba(0,0,0,0.5);}
-        .class-btn:hover { background: rgba(123, 31, 162, 0.15); border-color: var(--light-purple); color: #fff; transform: translateY(-2px);}
+        .class-btn { background: #0c0c10; border: 1px solid var(--border-color); color: #aaa; padding: 12px 25px; cursor: pointer; font-family: 'Cinzel', serif; border-radius: 6px; font-weight: bold; letter-spacing: 1.5px; box-shadow: 0 4px 6px rgba(0,0,0,0.5);}
+        .class-btn:hover { background: rgba(123, 31, 162, 0.15); border-color: var(--light-purple); color: #fff; transform: translateY(-3px);}
         .class-btn.active { border-color: var(--text-gold); color: var(--text-gold); background: rgba(212, 175, 55, 0.1); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); transform: translateY(-2px);}
 
         .page-area { display: none; }
-        .page-area.active { display: block; }
+        .page-area.active { display: block; animation: popIn 0.3s ease-out; }
 
         .section-box { background: var(--panel-bg); border: 1px solid var(--border-color); margin-bottom: 30px; padding: 35px 20px 20px; border-radius: 8px; position: relative; }
         .section-title { font-family: 'Cinzel', serif; position: absolute; top: -12px; left: 25px; background: var(--bg-dark); padding: 0 15px; color: var(--text-gold); font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; }
 
         .attributes-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; }
-        .attr-container-outer { position: relative; width: 110px; height: 125px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
-        .attr-container-outer:hover { transform: translateY(-10px); filter: drop-shadow(0 0 15px var(--primary-purple)); }
+        .attr-container-outer { position: relative; width: 110px; height: 125px; cursor: pointer; }
+        .attr-container-outer:hover { transform: translateY(-8px) scale(1.05); filter: drop-shadow(0 0 15px var(--primary-purple)); }
         .attr-hexagon-border { position: absolute; width: 100%; height: 100%; background: var(--primary-purple); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: flex; justify-content: center; align-items: center; }
         .attr-hexagon-inner { width: 94%; height: 94%; background: #0c0c10; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .attr-value-input { background: transparent; border: none; color: #fff; font-family: 'Cinzel', serif; font-size: 2.5rem; width: 60px; text-align: center; outline: none; }
         
         .difficulty-selector { display: flex; justify-content: center; gap: 10px; margin: 20px auto; width: 100%; max-width: 400px; }
-        .diff-btn { background: #111; border: 1px solid #333; color: #666; padding: 10px 25px; cursor: pointer; font-family: 'Cinzel', serif; border-radius: 4px; transition: 0.3s; }
+        .diff-btn { background: #111; border: 1px solid #333; color: #666; padding: 10px 25px; cursor: pointer; font-family: 'Cinzel', serif; border-radius: 4px; }
         .diff-btn.active { border-color: var(--text-gold); color: var(--text-gold); background: rgba(212, 175, 55, 0.1); box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
 
         .skills-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 6px; }
@@ -119,19 +141,23 @@
             border-left: 3px solid var(--primary-purple); border-radius: 4px; 
             transition: 0.2s; font-family: 'Cinzel', serif;
         }
-        .skill-item:hover { background: rgba(123, 31, 162, 0.1); border-color: var(--light-purple); }
+        .skill-item:hover { background: rgba(123, 31, 162, 0.15); border-color: var(--light-purple); transform: translateX(4px); }
         .skill-name { font-size: 0.95rem; font-weight: bold; color: #ddd; font-family: 'Cinzel', serif; letter-spacing: 1px;}
         
         .abilities-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
         .spell-section { grid-column: 1 / -1; }
 
-        .hab-card { background: rgba(0,0,0,0.3); border: 1px solid #333; padding: 20px; border-left: 5px solid var(--primary-purple); border-radius: 4px; margin-bottom: 15px; position: relative; }
+        .hab-card { background: rgba(0,0,0,0.3); border: 1px solid #333; padding: 20px; border-left: 5px solid var(--primary-purple); border-radius: 4px; margin-bottom: 15px; position: relative; transition: all 0.3s ease; }
+        .hab-card:hover { border-color: var(--light-purple); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .hab-card.active-mod { border-left-color: var(--text-gold); background: rgba(212, 175, 55, 0.05); }
         .hab-desc-render { color: #aaa; font-size: 0.9rem; margin: 10px 0; white-space: pre-wrap; font-family: 'Cinzel', serif; }
         
-        .btn-roll { padding: 8px 15px; font-family: 'Cinzel', serif; cursor: pointer; border-radius: 4px; border: 1px solid; background: transparent; margin-right: 8px; margin-top: 8px; font-size: 0.85rem; transition: 0.2s; }
-        .btn-forge { background: var(--primary-purple); color: #fff; border: none; padding: 12px; width: 100%; font-family: 'Cinzel', serif; cursor: pointer; border-radius: 4px; margin-bottom: 20px; transition: 0.2s; }
-        .btn-action-card { background: none; border: none; color: #888; cursor: pointer; font-size: 0.9rem; margin-left: 5px; transition: 0.2s; }
-        .btn-action-card:hover { color: #fff; }
+        .btn-roll { padding: 8px 15px; font-family: 'Cinzel', serif; cursor: pointer; border-radius: 4px; border: 1px solid; background: transparent; margin-right: 8px; margin-top: 8px; font-size: 0.85rem; }
+        .btn-roll:hover { background: rgba(255,255,255,0.1); }
+        .btn-forge { background: var(--primary-purple); color: #fff; border: none; padding: 12px; width: 100%; font-family: 'Cinzel', serif; cursor: pointer; border-radius: 4px; margin-bottom: 20px; font-weight: bold; letter-spacing: 1px; }
+        .btn-forge:hover { background: var(--light-purple); box-shadow: 0 0 15px var(--primary-purple); }
+        .btn-action-card { background: none; border: none; color: #888; cursor: pointer; font-size: 0.9rem; margin-left: 5px; }
+        .btn-action-card:hover { color: #fff; transform: scale(1.2); }
 
         #central-popup {
             position: fixed; bottom: 20px; right: 20px; width: 320px; 
@@ -139,9 +165,9 @@
             padding: 15px; z-index: 9999; text-align: center; font-family: 'Cinzel', serif;
             box-shadow: 0 0 30px rgba(0,0,0,0.9);
             opacity: 0; pointer-events: none;
-            transform: translateX(120%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            transform: translateX(120%) scale(0.9); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #central-popup.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+        #central-popup.active { opacity: 1; transform: translateX(0) scale(1); pointer-events: all; }
         .ornament { position: absolute; width: 30px; height: 30px; border: 1px solid var(--text-gold); }
         .tl { top: -5px; left: -5px; border-right: none; border-bottom: none; }
         .tr { top: -5px; right: -5px; border-left: none; border-bottom: none; }
@@ -156,12 +182,13 @@
         .tab-btn { background: none; border: none; color: #666; padding: 10px; cursor: pointer; font-family: 'Cinzel', serif; }
         .tab-btn.active { color: var(--text-gold); border-bottom: 2px solid var(--text-gold); }
 
-        .pop-total-text { font-size: 2.8rem; color: var(--text-gold); margin: 0; }
+        .pop-total-text { font-size: 2.8rem; color: var(--text-gold); margin: 0; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .pop-status-text { font-size: 1.3rem; margin: 5px 0; font-weight: bold; }
         .pop-detail-text { font-family: 'Cinzel', serif; font-size: 0.85rem; color: #aaa; margin-bottom: 5px; }
 
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 650px; max-height: 90vh; overflow-y: auto; background: #0a0a0c; border: 2px solid var(--text-gold); padding: 30px; z-index: 10000; border-radius: 8px; }
-        .modal-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; margin-bottom: 15px; border-radius: 4px; font-family: 'Cinzel', serif; }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 650px; max-height: 90vh; overflow-y: auto; background: #0a0a0c; border: 2px solid var(--text-gold); padding: 30px; z-index: 10000; border-radius: 8px; animation: popIn 0.3s ease-out; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+        .modal-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; margin-bottom: 15px; border-radius: 4px; font-family: 'Cinzel', serif; outline: none; }
+        .modal-input:focus { border-color: var(--light-purple); }
    
         .status-box {
             background: rgba(15, 15, 20, 0.9);
@@ -197,69 +224,23 @@
             font-family: Arial, sans-serif;
             font-weight: bold;
             background: #000;
-            transition: 0.2s;
         }
-        .turn-box:hover {
-            background: rgba(212, 175, 55, 0.2);
-        }
-        .status-box-title {
-            font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            color: var(--text-gold);
-            margin-bottom: 15px;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-        .status-inputs {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        .status-inputs input {
-            background: rgba(0,0,0,0.6);
-            border: 1px solid #333;
-            color: #fff;
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            width: 50px;
-            text-align: center;
-            border-radius: 4px;
-            padding: 6px;
-            outline: none;
-        }
-        .status-inputs input:focus {
-            border-color: var(--light-purple);
-        }
-        .status-bar-wrapper {
-            width: 100%;
-            height: 12px;
-            background: #000;
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 8px;
-        }
-        .status-fill { height: 100%; width: 100%; transition: width 0.3s ease-out, background-color 0.3s; }
+        .turn-box:hover { background: rgba(212, 175, 55, 0.2); transform: scale(1.1); }
+        .status-box-title { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--text-gold); margin-bottom: 15px; font-weight: bold; letter-spacing: 2px; }
+        .status-inputs { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .status-inputs input { background: rgba(0,0,0,0.6); border: 1px solid #333; color: #fff; font-family: 'Cinzel', serif; font-size: 1.1rem; width: 50px; text-align: center; border-radius: 4px; padding: 6px; outline: none; }
+        .status-inputs input:focus { border-color: var(--light-purple); }
+        .status-bar-wrapper { width: 100%; height: 12px; background: #000; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px; }
+        .status-fill { height: 100%; width: 100%; transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s; }
         .bg-red { background: #ff1744; box-shadow: 0 0 8px #ff1744; }
         .bg-pink { background: #ff4081; box-shadow: 0 0 8px #ff4081; }
         .bg-gold { background: #ffca28; box-shadow: 0 0 8px #ffca28; }
         .bg-cyan { background: #00e5ff; box-shadow: 0 0 8px #00e5ff; }
         .bg-blue { background: #2979ff; box-shadow: 0 0 8px #2979ff; } 
 
-        .status-condition-text {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            text-align: center;
-            min-height: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
-        }
-
-        .arrow-btn { background: none; border: none; color: var(--primary-purple); cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
-        .arrow-btn:hover { color: var(--light-purple); transform: scale(1.2); }
+        .status-condition-text { font-family: 'Cinzel', serif; font-size: 0.85rem; text-align: center; min-height: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+        .arrow-btn { background: none; border: none; color: var(--primary-purple); cursor: pointer; font-size: 0.9rem; }
+        .arrow-btn:hover { color: var(--light-purple); transform: scale(1.3); }
         .sep { color: #555; font-size: 0.9rem; }
         
         .calc-input { width: 50px !important; border: 1px solid var(--text-gold) !important; background: rgba(212,175,55,0.05) !important; font-weight: bold; }
@@ -278,6 +259,7 @@
         .mini-stat-item { display: flex; align-items: center; gap: 8px; }
         .mini-stat-label { font-family: 'Cinzel', serif; font-size: 0.7rem; color: var(--text-gold); }
         .mini-stat-input { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; font-family: 'Cinzel', serif; font-size: 1rem; width: 45px; text-align: center; border-radius: 4px; outline: none; }
+        .mini-stat-input:focus { border-color: var(--light-purple); }
 
         .defense-layout-container { display: grid; grid-template-columns: 1fr 320px; gap: 30px; }
         @media(max-width: 1000px) { .defense-layout-container { grid-template-columns: 1fr; } }
@@ -292,15 +274,55 @@
         .inv-header-dashboard { display: flex; justify-content: space-between; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #222; align-items: center; }
         .inv-weight-box { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--text-gold); }
         .item-grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
-        .item-card { background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; position: relative; border-left: 4px solid #888; }
+        .item-card { background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; position: relative; border-left: 4px solid #888; transition: all 0.2s; }
+        .item-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .item-card.equipped { border-left-color: var(--text-gold); background: rgba(212,175,55,0.03); }
         .item-footer-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); }
         .item-weight-indicator { font-size: 0.75rem; color: #aaa; display: flex; align-items: center; gap: 4px; }
         .item-weight-indicator input { width: 40px; background: #000; border: 1px solid #333; color: var(--text-gold); text-align: center; border-radius: 3px; font-size: 0.75rem; font-family: 'Cinzel', serif; }
 
         .btn-info-skill { background: transparent; border: none; color: var(--light-purple); cursor: pointer; font-size: 0.8rem; margin-left: 10px; }
-        .btn-info-skill:hover { color: #fff; }
+        .btn-info-skill:hover { color: #fff; transform: scale(1.2); }
         .mod-val-display { position:absolute; top:-5px; right:-5px; background:#00e5ff; color:#000; border-radius:50%; width:20px; height:20px; font-size:0.7rem; display:flex; align-items:center; justify-content:center; font-weight:bold; box-shadow: 0 0 5px #00e5ff;}
+        
+        /* BOTÃO E MODAL DE TEMAS FLUTUANTE (Inferior Direito) */
+        #theme-float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #0c0c10;
+            border: 2px solid var(--text-gold);
+            color: var(--text-gold);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+            transition: all 0.3s;
+        }
+        #theme-float-btn:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 0 20px var(--primary-purple); }
+        
+        #theme-panel {
+            display: none;
+            position: fixed;
+            bottom: 140px;
+            right: 20px;
+            width: 250px;
+            background: #0a0a0e;
+            border: 2px solid var(--text-gold);
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 9998;
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+            animation: popIn 0.2s ease-out;
+        }
+        .theme-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.8rem; }
+        .theme-row input[type=color] { border: none; width: 30px; height: 30px; cursor: pointer; background: transparent; }
     </style>
 </head>
 <body>
@@ -312,7 +334,7 @@
     <button class="sidebar-btn" id="btn-combate" onclick="mudarArea('combate')">⚔️</button>
     <button class="sidebar-btn" id="btn-inventario" onclick="mudarArea('inventario')">🎒</button>
     <button class="sidebar-btn" id="btn-notas" onclick="mudarArea('notas')" title="Anotações">📚</button>
-    <button class="sidebar-btn" onclick="salvarNaNuvem()" title="Salvar na Nuvem">💾</button>
+    <button class="sidebar-btn" onclick="confirmarSalvar()" title="Salvar na Nuvem">💾</button>
     <select id="save-slot" class="sidebar-btn" onchange="carregarDaNuvem()" title="Mudar Slot">
         <option value="1">🗂️ 1</option>
         <option value="2">🗂️ 2</option>
@@ -335,15 +357,15 @@
         <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
             <div style="display: flex; gap: 15px; align-items: center;">
                 <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
-                    <input type="text" id="user-nickname" placeholder="Nickname" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: var(--text-gold); text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 1.1rem;" onchange="sheet.nickname = this.value; salvarNaNuvem();">
-                    <input type="text" id="user-sub" placeholder="Antecedência" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: #aaa; text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 0.85rem;" onchange="sheet.antecedencia = this.value; salvarNaNuvem();">
+                    <input type="text" id="user-nickname" placeholder="Nickname" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: var(--text-gold); text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 1.1rem;" onchange="sheet.nickname = this.value; marcarAlteracao();">
+                    <input type="text" id="user-sub" placeholder="Antecedência" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: #aaa; text-align: right; outline: none; font-family: 'Cinzel', serif; font-size: 0.85rem;" onchange="sheet.antecedencia = this.value; marcarAlteracao();">
                 </div>
                 <div onclick="mudarAvatar()" title="Alterar Avatar" style="width: 65px; height: 65px; border: 2px solid var(--border-color); border-radius: 8px; cursor:pointer; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#0a0a0c; box-shadow: 0 0 10px rgba(0,0,0,0.8);">
                     <img id="char-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
                     <span id="char-avatar-icon" style="font-size:1.5rem; color: var(--text-gold);">👤</span>
                 </div>
             </div>
-            <button id="btn-secreto" onclick="toggleSecreto()" style="background: rgba(0,0,0,0.5); border: 1px solid #333; color: #888; font-family: 'Cinzel', serif; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; transition: 0.2s;">👁️ Modo Secreto: OFF</button>
+            <button id="btn-secreto" onclick="toggleSecreto()" style="background: rgba(0,0,0,0.5); border: 1px solid #333; color: #888; font-family: 'Cinzel', serif; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">👁️ Modo Secreto: OFF</button>
         </div>
     </div>
 
@@ -365,9 +387,9 @@
             <div class="status-box-title">Vida <span id="mod-ind-pv" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
             <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('pv', -1)">◀</button>
-                <input type="number" id="curr-pv" value="20" onchange="updateBar('pv')">
+                <input type="number" id="curr-pv" value="20" onchange="updateBar('pv'); marcarAlteracao();">
                 <span class="sep">/</span>
-                <input type="number" id="max-pv" value="20" onchange="updateBar('pv')">
+                <input type="number" id="max-pv" value="20" onchange="updateBar('pv'); marcarAlteracao();">
                 <button class="arrow-btn" onclick="changeStat('pv', 1)">▶</button>
                 <input type="number" id="calc-pv" class="calc-input" placeholder="+/-" onchange="aplicarModificador('pv')">
             </div>
@@ -379,9 +401,9 @@
             <div class="status-box-title">PA <span id="mod-ind-pa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
             <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('pa', -1)">◀</button>
-                <input type="number" id="curr-pa" value="10" onchange="updateBar('pa')">
+                <input type="number" id="curr-pa" value="10" onchange="updateBar('pa'); marcarAlteracao();">
                 <span class="sep">/</span>
-                <input type="number" id="max-pa" value="10" onchange="updateBar('pa')">
+                <input type="number" id="max-pa" value="10" onchange="updateBar('pa'); marcarAlteracao();">
                 <button class="arrow-btn" onclick="changeStat('pa', 1)">▶</button>
                 <input type="number" id="calc-pa" class="calc-input" placeholder="+/-" onchange="aplicarModificador('pa')">
             </div>
@@ -398,9 +420,9 @@
             <div class="status-box-title">Sanidade <span id="mod-ind-sa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
             <div class="status-inputs">
                 <button class="arrow-btn" onclick="changeStat('sa', -1)">◀</button>
-                <input type="number" id="curr-sa" value="15" onchange="updateBar('sa')">
+                <input type="number" id="curr-sa" value="15" onchange="updateBar('sa'); marcarAlteracao();">
                 <span class="sep">/</span>
-                <input type="number" id="max-sa" value="15" onchange="updateBar('sa')">
+                <input type="number" id="max-sa" value="15" onchange="updateBar('sa'); marcarAlteracao();">
                 <button class="arrow-btn" onclick="changeStat('sa', 1)">▶</button>
                 <input type="number" id="calc-sa" class="calc-input" placeholder="+/-" onchange="aplicarModificador('sa')">
             </div>
@@ -412,11 +434,11 @@
     <div class="mini-stats-overlay">
         <div class="mini-stat-item">
             <span class="mini-stat-label">DEFESA <span id="mod-ind-def" style="color:#00e5ff;"></span></span>
-            <input type="number" id="val-defesa" class="mini-stat-input" value="10">
+            <input type="number" id="val-defesa" class="mini-stat-input" value="10" onchange="marcarAlteracao()">
         </div>
         <div class="mini-stat-item">
             <span class="mini-stat-label">NÍVEL</span>
-            <select id="val-nivel" class="mini-stat-input" style="appearance: none; cursor: pointer; padding-left: 15px;" onchange="sheet.nivel = parseInt(this.value)||0; calcularStatusClasse(); if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
+            <select id="val-nivel" class="mini-stat-input" style="appearance: none; cursor: pointer; padding-left: 15px;" onchange="sheet.nivel = parseInt(this.value)||0; calcularStatusClasse(); marcarAlteracao();">
                 <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -427,11 +449,11 @@
         </div>
         <div class="mini-stat-item">
             <span class="mini-stat-label">PA/TURNO</span>
-            <input type="number" id="val-pa-turno" class="mini-stat-input" value="0" onchange="sheet.paTurno=parseInt(this.value)||0; if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();">
+            <input type="number" id="val-pa-turno" class="mini-stat-input" value="0" onchange="sheet.paTurno=parseInt(this.value)||0; marcarAlteracao();">
         </div>
         <div class="mini-stat-item">
             <span class="mini-stat-label">DESLOC <span id="mod-ind-desloc" style="color:#00e5ff;"></span></span>
-            <input type="number" id="val-desloc" class="mini-stat-input" value="9">
+            <input type="number" id="val-desloc" class="mini-stat-input" value="9" onchange="marcarAlteracao()">
         </div>
     </div>
 
@@ -453,9 +475,9 @@
             <div class="defense-panel">
                 <div class="defense-header" style="font-family: 'Cinzel', serif; text-transform: none;">Bloqueio <span id="mod-ind-bloq" style="color:#00e5ff; font-size:0.75rem;"></span></div>
                 <div class="rd-item-row" style="border-left: 3px solid var(--text-gold);">
-                    <input type="checkbox" id="chk-bloqueio">
+                    <input type="checkbox" id="chk-bloqueio" onchange="marcarAlteracao()">
                     <span style="font-size: 0.8rem; font-weight: bold; color: var(--text-gold); flex-grow: 1;">Bloqueio Base</span>
-                    <input type="number" id="val-bloqueio" value="0" class="mini-stat-input" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="sheet.bloqueioBase = parseInt(this.value)||0; seSalvar();">
+                    <input type="number" id="val-bloqueio" value="0" class="mini-stat-input" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="sheet.bloqueioBase = parseInt(this.value)||0; marcarAlteracao();">
                 </div>
 
                 <div class="defense-header" style="margin-top: 20px;">
@@ -493,7 +515,7 @@
         <section class="section-box spell-section">
             <div class="section-title">Feitiços</div>
             <button class="btn-forge" onclick="abrirEditorHab('feitico')">+ Forjar Novo Feitiço</button>
-            <div id="feiticos-lista" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;"></div>
+            <div id="feiticos-lista" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px;"></div>
         </section>
     </div>
 
@@ -504,7 +526,7 @@
             <div class="inv-header-dashboard">
                 <div class="inv-weight-box">
                     Carga Total: <span id="peso-atual-display">0</span> / 
-                    <input type="number" id="peso-max-input" value="20" onchange="sheet.cargaBase = parseInt(this.value)||20; atualizarPainelInventario(); seSalvar();" style="width: 50px; background: transparent; border: none; border-bottom: 1px solid var(--text-gold); color: var(--text-gold); font-family: 'Cinzel', serif; text-align: center; font-size: 1rem; outline: none;">
+                    <input type="number" id="peso-max-input" value="20" onchange="sheet.cargaBase = parseInt(this.value)||20; atualizarPainelInventario(); marcarAlteracao();" style="width: 50px; background: transparent; border: none; border-bottom: 1px solid var(--text-gold); color: var(--text-gold); font-family: 'Cinzel', serif; text-align: center; font-size: 1rem; outline: none;">
                     <span id="mod-ind-carga" style="color:#00e5ff; font-size:0.8rem;"></span>
                     <span id="badge-sobrepeso" class="condition-badge cond-sobrepeso" style="display: none;">SOBREPESO</span>
                 </div>
@@ -531,6 +553,37 @@
             <button class="btn-roll" onclick="importarFicha()" style="color: var(--text-gold); border-color: var(--text-gold); height: 45px; margin: 0;">Importar Código</button>
         </div>
     </section>
+</div>
+
+<button id="theme-float-btn" onclick="toggleThemePanel()" title="Personalizar Cores do Site">🎨</button>
+<div id="theme-panel">
+    <div style="text-align:center; color:var(--text-gold); font-weight:bold; margin-bottom:10px; font-size:0.9rem;">Paleta de Cores</div>
+    <div class="theme-row">
+        <span>Fundo Principal:</span>
+        <input type="color" id="picker-bg" onchange="mudarCor('--bg-dark', this.value)">
+    </div>
+    <div class="theme-row">
+        <span>Roxo Principal:</span>
+        <input type="color" id="picker-prim" onchange="mudarCor('--primary-purple', this.value)">
+    </div>
+    <div class="theme-row">
+        <span>Roxo Claro (Destaque):</span>
+        <input type="color" id="picker-light" onchange="mudarCor('--light-purple', this.value)">
+    </div>
+    <div class="theme-row">
+        <span>Texto Dourado:</span>
+        <input type="color" id="picker-gold" onchange="mudarCor('--text-gold', this.value)">
+    </div>
+    <button onclick="resetarTema()" style="width:100%; background:none; border:1px solid #444; color:#aaa; font-family:'Cinzel'; cursor:pointer; padding:5px; margin-top:5px; font-size:0.75rem;">Resetar Padrão</button>
+</div>
+
+<div id="modal-confirm-save" class="modal" style="width: 400px; text-align: center;">
+    <h3 style="color: var(--text-gold); margin-top:0;">Sobrescrever Dados?</h3>
+    <p style="color: #ccc; font-size: 0.9rem;">Você tem certeza que deseja salvar sua ficha na nuvem? Os dados anteriores deste slot serão substituídos pelo progresso atual.</p>
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button onclick="executarSalvarNuvem()" style="flex:1; padding: 10px; background: var(--primary-purple); color: #fff; border:none; cursor:pointer; font-family:'Cinzel'; font-weight:bold;">Sim, Salvar</button>
+        <button onclick="document.getElementById('modal-confirm-save').style.display='none'" style="flex:1; padding: 10px; background: none; border: 1px solid #444; color: #aaa; cursor:pointer; font-family:'Cinzel';">Cancelar</button>
+    </div>
 </div>
 
 <div id="central-popup">
@@ -677,7 +730,114 @@ const firebaseConfig = {
 </script>
 
 <script>
-const periciasDados = [
+    /* SISTEMA DE SOM SINTETIZADO VIA WEB AUDIO API */
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function tocarSom(tipo) {
+        try {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            const agora = audioCtx.currentTime;
+
+            if (tipo === 'click' || tipo === 'roll') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, agora);
+                osc.frequency.exponentialRampToValueAtTime(100, agora + 0.08);
+                gain.gain.setValueAtTime(0.1, agora);
+                gain.gain.exponentialRampToValueAtTime(0.01, agora + 0.08);
+                osc.start(agora);
+                osc.stop(agora + 0.08);
+            } else if (tipo === 'crit') {
+                // Fanfarra triunfante
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, agora); // Dó
+                osc.frequency.setValueAtTime(659.25, agora + 0.1); // Mi
+                osc.frequency.setValueAtTime(783.99, agora + 0.2); // Sol
+                osc.frequency.setValueAtTime(1046.50, agora + 0.3); // Dó agudo
+                gain.gain.setValueAtTime(0.15, agora);
+                gain.gain.linearRampToValueAtTime(0.2, agora + 0.3);
+                gain.gain.exponentialRampToValueAtTime(0.001, agora + 0.8);
+                osc.start(agora);
+                osc.stop(agora + 0.8);
+            } else if (tipo === 'fail') {
+                // Som de falha grave
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, agora);
+                osc.frequency.linearRampToValueAtTime(80, agora + 0.3);
+                gain.gain.setValueAtTime(0.15, agora);
+                gain.gain.exponentialRampToValueAtTime(0.01, agora + 0.3);
+                osc.start(agora);
+                osc.stop(agora + 0.3);
+            }
+        } catch(e) {}
+    }
+
+    /* SISTEMA DE TEMAS (Personalização de cores) */
+    function toggleThemePanel() {
+        const painel = document.getElementById('theme-panel');
+        painel.style.display = painel.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function mudarCor(variavel, valor) {
+        document.documentElement.style.setProperty(variavel, valor);
+        localStorage.setItem('abyss_theme_' + variavel, valor);
+    }
+
+    function resetarTema() {
+        mudarCor('--bg-dark', '#050507');
+        mudarCor('--primary-purple', '#7b1fa2');
+        mudarCor('--light-purple', '#bc4ed8');
+        mudarCor('--text-gold', '#d4af37');
+        carregarCoresPickers();
+    }
+
+    function carregarCoresPickers() {
+        const cores = {
+            '--bg-dark': 'picker-bg',
+            '--primary-purple': 'picker-prim',
+            '--light-purple': 'picker-light',
+            '--text-gold': 'picker-gold'
+        };
+        for (let varName in cores) {
+            let val = localStorage.getItem('abyss_theme_' + varName) || getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+            if (val) {
+                document.documentElement.style.setProperty(varName, val);
+                let input = document.getElementById(cores[varName]);
+                if (input && val.startsWith('#')) input.value = val;
+            }
+        }
+    }
+
+    /* SISTEMA DE PROTEÇÃO CONTRA PERDA DE DADOS */
+    let alteracoesNaoSalvas = false;
+
+    function marcarAlteracao() {
+        alteracoesNaoSalvas = true;
+    }
+
+    window.addEventListener('beforeunload', function (e) {
+        if (alteracoesNaoSalvas) {
+            e.preventDefault();
+            e.returnValue = 'Você tem alterações não salvas. Deseja sair mesmo assim?';
+        }
+    });
+
+    function confirmarSalvar() {
+        document.getElementById('modal-confirm-save').style.display = 'block';
+    }
+
+    function executarSalvarNuvem() {
+        document.getElementById('modal-confirm-save').style.display = 'none';
+        salvarNaNuvem();
+    }
+
+    const periciasDados = [
         { n: "Acrobacia", a: "AGI" }, { n: "Adestramento", a: "POD" }, { n: "Artes", a: "POD" },
         { n: "Alquimia", a: "INT" }, { n: "Arcanismo", a: "POD" }, { n: "Atletismo", a: "FOR" },
         { n: "Ciências", a: "INT" }, { n: "Crime", a: "AGI" }, { n: "Diplomacia", a: "POD" }, 
@@ -731,6 +891,7 @@ const periciasDados = [
     }
 
     function toggleTurn(el) {
+        tocarSom('click');
         if (el.innerText === "X") el.innerText = "";
         else el.innerText = "X";
     }
@@ -740,7 +901,6 @@ const periciasDados = [
         normal: { falha: 12, sucesso: 13, bom: 20, extremo: 21 },
         dificil: { falha: 15, sucesso: 16, bom: 20, extremo: 21 }
     };
-
 
     const targetListPericias = periciasDados.map(p => p.n);
     const targetListAtributos = ["FOR", "AGI", "INT", "CON", "POD"];
@@ -805,7 +965,9 @@ const periciasDados = [
 
     function toggleLogin() {
         if (currentUser) {
-            firebase.auth().signOut().then(() => alert("Deslogado com sucesso!"));
+            if(confirm("Deseja realmente deslogar?")) {
+                firebase.auth().signOut().then(() => alert("Deslogado com sucesso!"));
+            }
         } else {
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider).catch(error => {
@@ -816,13 +978,13 @@ const periciasDados = [
     }
 
     function toggleLog() {
+        tocarSom('click');
         document.getElementById('log-panel').classList.toggle('active');
         document.getElementById('btn-log').classList.toggle('active');
     }
 
     function enviarRolagemParaServidor(titulo, subtitulo, total, corStatus, txtStatus, detalhes) {
         if (modoSecreto) return; 
-
         const nick = document.getElementById('user-nickname').value || "Viajante Desconhecido";
         const novaRolagemRef = database.ref('rolagens').push();
         novaRolagemRef.set({
@@ -894,13 +1056,13 @@ const periciasDados = [
     }
 
     function acionarRolagemGlobal(titulo, subtitulo, formula, cor, txtStatus) {
+        tocarSom('roll');
         let res = rolarDadosAvancado(formula);
         let detalhes = `Fórmula: ${formula}<br>Dados: ${res.text}`;
         spawnPopup(titulo, subtitulo, res.total, cor, txtStatus, detalhes);
         enviarRolagemParaServidor(titulo, subtitulo, res.total, cor, txtStatus, detalhes);
     }
 
-    // NOVA FUNÇÃO DE CRÍTICO - AVALIA DADOS DE DANO DIRETAMENTE
     function rolarHabilidadeComOuSemCrit(nome, danoBase, temCrit, critMargem, critDano) {
         let resPrincipal = rolarDadosAvancado(danoBase);
         let isCrit = false;
@@ -908,6 +1070,9 @@ const periciasDados = [
         if (temCrit) {
             isCrit = resPrincipal.rolls.some(r => r >= critMargem);
         }
+
+        if (isCrit) tocarSom('crit');
+        else tocarSom('roll');
 
         let formulaFinal = danoBase;
         let resFinalTotal = resPrincipal.total;
@@ -930,6 +1095,7 @@ const periciasDados = [
     }
 
     function abrirInfoPericia(nome) {
+        tocarSom('click');
         document.getElementById('skill-modal-title').innerText = nome.replace('_', ': ');
         document.getElementById('skill-modal-desc').innerHTML = descPericias[nome] || "<i>Informação não disponível.</i>";
         document.getElementById('modal-skill').style.display = 'block';
@@ -940,7 +1106,7 @@ const periciasDados = [
         if (url !== null) {
             sheet.avatar = url;
             atualizarAvatarUI();
-            seSalvar();
+            marcarAlteracao();
         }
     }
 
@@ -965,7 +1131,7 @@ const periciasDados = [
         }
     }
 
-    // MODIFICADORES TOTAIS AGREGADOS
+    /* MODIFICADORES AGREGADOS (Itens E Habilidades Ativadas) */
     function getMods(tipo, alvo) {
         let total = 0;
         if(sheet.itens) {
@@ -974,7 +1140,7 @@ const periciasDados = [
             });
         }
         if(sheet.habilidades) {
-            sheet.habilidades.forEach(h => {
+            sheet.habilidades.filter(h => h.ativa).forEach(h => {
                 if(h.mods) h.mods.forEach(m => { if(m.tipo===tipo && m.alvo===alvo) total+=parseInt(m.valor)||0; });
             });
         }
@@ -1020,7 +1186,6 @@ const periciasDados = [
             def = 14 + agi;
         }
 
-        // Aplica Modificadores de Item/Habilidade
         let modPV = getMods('status', 'pv_max');
         let modSA = getMods('status', 'sa_max');
         let modPA = getMods('status', 'pa_max');
@@ -1047,7 +1212,6 @@ const periciasDados = [
         renderIndicadorMod('mod-ind-carga', modCarga);
         renderIndicadorMod('mod-ind-desloc', modDesloc);
 
-        // Aplica Mods nas atuais dinamicamente para manter o máximo possível correto
         let currPV = parseInt(document.getElementById('curr-pv').value) || 0;
         let currPA = parseInt(document.getElementById('curr-pa').value) || 0;
         let currSA = parseInt(document.getElementById('curr-sa').value) || 0;
@@ -1060,11 +1224,12 @@ const periciasDados = [
     }
 
     function selecionarClasse(classe) {
+        tocarSom('click');
         sheet.classe = classe;
         atualizarVisuaisClasse();
         calcularStatusClasse();
         render(); 
-        seSalvar();
+        marcarAlteracao();
     }
     
     function calcularSabedoria() {
@@ -1077,6 +1242,7 @@ const periciasDados = [
     }
 
     function aplicarModificador(tipo) {
+        tocarSom('click');
         const inputMod = document.getElementById(`calc-${tipo}`);
         const valorMod = parseInt(inputMod.value);
         if (isNaN(valorMod)) return;
@@ -1124,7 +1290,7 @@ const periciasDados = [
         document.getElementById(`curr-${tipo}`).value = curr;
         inputMod.value = ""; 
         updateBar(tipo);
-        seSalvar();
+        marcarAlteracao();
     }
 
     function updateBar(id) {
@@ -1181,23 +1347,35 @@ const periciasDados = [
     }
 
     function changeStat(id, amount) {
+        tocarSom('click');
         const input = document.getElementById(`curr-${id}`);
         input.value = parseInt(input.value) + amount;
         updateBar(id);
+        marcarAlteracao();
     }
 
-    function adicionarNovaRD(nome = "Nova RD", valor = 0) { sheet.rds.push({ nome, valor }); renderRDs(); seSalvar(); }
-    function removerRD(idx) { sheet.rds.splice(idx, 1); renderRDs(); seSalvar(); }
+    function adicionarNovaRD(nome = "Nova RD", valor = 0) { 
+        sheet.rds.push({ nome, valor }); 
+        renderRDs(); 
+        marcarAlteracao();
+    }
+    
+    function removerRD(idx) { 
+        sheet.rds.splice(idx, 1); 
+        renderRDs(); 
+        marcarAlteracao();
+    }
+    
     function atualizarDadosRD(idx, campo, valor) {
         if (campo === 'valor') sheet.rds[idx].valor = parseInt(valor) || 0;
         if (campo === 'nome') sheet.rds[idx].nome = valor;
-        seSalvar();
+        marcarAlteracao();
     }
 
     function renderRDs() {
         document.getElementById('rd-dinamicas-lista').innerHTML = sheet.rds.map((rd, i) => `
             <div class="rd-item-row" id="rd-row-${i}">
-                <input type="checkbox" id="chk-rd-${i}" onchange="document.getElementById('rd-row-${i}').classList.toggle('active-mitigation', this.checked)">
+                <input type="checkbox" id="chk-rd-${i}" onchange="document.getElementById('rd-row-${i}').classList.toggle('active-mitigation', this.checked); marcarAlteracao();">
                 <input type="text" class="rd-name-input" value="${rd.nome}" onchange="atualizarDadosRD(${i}, 'nome', this.value)">
                 <input type="number" class="mini-stat-input" value="${rd.valor}" onchange="atualizarDadosRD(${i}, 'valor', this.value)" style="width: 40px; height: 25px; font-size: 0.85rem;">
                 <button onclick="removerRD(${i})" style="background:none; border:none; color:#ff5252; cursor:pointer; font-size:0.75rem;">✕</button>
@@ -1244,6 +1422,7 @@ const periciasDados = [
     }
 
     function abrirEditorHab(t, idxEdicao = null) { 
+        tocarSom('click');
         document.getElementById('hab-tipo').value = t; 
         document.getElementById('rolagens-extras-container').innerHTML = '';
         document.getElementById('hab-mods-lista').innerHTML = '';
@@ -1300,6 +1479,7 @@ const periciasDados = [
     }
 
     function salvarHabilidade() {
+        tocarSom('click');
         const idEdicao = document.getElementById('hab-id-edicao').value;
         const h = {
             tipo: document.getElementById('hab-tipo').value,
@@ -1311,7 +1491,8 @@ const periciasDados = [
             critMargem: parseInt(document.getElementById('hab-crit-margem').value) || 20,
             critDano: document.getElementById('hab-crit-dano').value,
             mods: document.getElementById('hab-tem-mod').checked ? getModsFromDOM('hab') : [],
-            extras: Array.from(document.querySelectorAll('.extra-roll')).map(i => i.value).filter(v => v)
+            extras: Array.from(document.querySelectorAll('.extra-roll')).map(i => i.value).filter(v => v),
+            ativa: idEdicao !== "" ? sheet.habilidades[parseInt(idEdicao)].ativa : false
         };
         if (idEdicao !== "") sheet.habilidades[parseInt(idEdicao)] = h;
         else sheet.habilidades.push(h);
@@ -1319,10 +1500,17 @@ const periciasDados = [
         atualizarVisualModificadoresGlobais();
         renderAbilities();
         document.getElementById('modal-hab').style.display = 'none';
-        seSalvar();
+        marcarAlteracao();
     }
 
-    function removerHab(i) { sheet.habilidades.splice(i, 1); atualizarVisualModificadoresGlobais(); renderAbilities(); seSalvar(); }
+    function removerHab(i) { 
+        if(confirm("Apagar esta habilidade/ataque?")) {
+            sheet.habilidades.splice(i, 1); 
+            atualizarVisualModificadoresGlobais(); 
+            renderAbilities(); 
+            marcarAlteracao();
+        }
+    }
 
     function moverHabVisuais(index, dir) {
         let tipoAtual = sheet.habilidades[index].tipo;
@@ -1341,7 +1529,7 @@ const periciasDados = [
             sheet.habilidades[index] = sheet.habilidades[targetIndex];
             sheet.habilidades[targetIndex] = temp;
             renderAbilities();
-            seSalvar();
+            marcarAlteracao();
         }
     }
 
@@ -1349,8 +1537,15 @@ const periciasDados = [
         if(novoTipo) {
             sheet.habilidades[index].tipo = novoTipo;
             renderAbilities();
-            seSalvar();
+            marcarAlteracao();
         }
+    }
+
+    function alternarAtivarHab(idx) {
+        sheet.habilidades[idx].ativa = !sheet.habilidades[idx].ativa;
+        atualizarVisualModificadoresGlobais();
+        renderAbilities();
+        marcarAlteracao();
     }
 
     function renderAbilities() {
@@ -1362,7 +1557,7 @@ const periciasDados = [
         sheet.habilidades.forEach((h, i) => {
             const listas = { ataque: 'ataques-lista', habilidade: 'habilidades-lista', feitico: 'feiticos-lista' };
             const card = document.createElement('div');
-            card.className = 'hab-card';
+            card.className = `hab-card ${h.ativa ? 'active-mod' : ''}`;
             
             let htmlControles = '';
             if (h.geradoPorItem) {
@@ -1382,6 +1577,15 @@ const periciasDados = [
                 `;
             }
 
+            let chkMod = '';
+            if (h.mods && h.mods.length > 0) {
+                chkMod = `
+                <div style="margin-top:10px; padding-top:8px; border-top:1px dashed #333; display:flex; align-items:center; gap:6px;">
+                    <input type="checkbox" id="chk-hab-${i}" onchange="alternarAtivarHab(${i})" ${h.ativa ? 'checked' : ''}>
+                    <label for="chk-hab-${i}" style="font-size:0.75rem; color:var(--text-gold); cursor:pointer;">Ativar Modificadores da Habilidade</label>
+                </div>`;
+            }
+
             let nomeRoll = h.nome ? h.nome.replace(/'/g, "\\'") : '';
             card.innerHTML = `
                 <div style="position:absolute; right:10px; top:10px; display:flex; gap:2px; align-items:center;">
@@ -1392,6 +1596,7 @@ const periciasDados = [
                 ${h.img ? `<img src="${h.img}" style="max-width:100%; display:block; margin:10px 0; border-radius:4px;">` : ''}
                 ${h.dano ? `<button class="btn-roll" style="color:#ff4444; border-color:#ff4444;" onclick="rolarHabilidadeComOuSemCrit('${nomeRoll}', '${h.dano}', ${h.temCrit ? 'true' : 'false'}, ${h.critMargem || 20}, '${h.critDano || ''}')">⚔️ ${h.dano}</button>` : ''}
                 ${h.extras ? h.extras.map(ex => `<button class="btn-roll" style="color:var(--light-purple); border-color:var(--light-purple);" onclick="acionarRolagemGlobal('${nomeRoll}', 'Rolagem Extra', '${ex}', 'var(--light-purple)', 'BÔNUS')">🎲 ${ex}</button>`).join('') : ''}
+                ${chkMod}
             `;
             const containerAlvo = document.getElementById(listas[h.tipo]);
             if (containerAlvo) containerAlvo.appendChild(card);
@@ -1399,6 +1604,7 @@ const periciasDados = [
     }
 
     function abrirEditorItem(idxEdicao = null) {
+        tocarSom('click');
         document.getElementById('item-rolagens-container').innerHTML = '';
         document.getElementById('item-mods-lista').innerHTML = '';
 
@@ -1452,6 +1658,7 @@ const periciasDados = [
     }
 
     function salvarItemInventario() {
+        tocarSom('click');
         const idEdicao = document.getElementById('item-id-edicao').value;
         const isEditing = idEdicao !== "";
         const originalItem = isEditing ? sheet.itens[parseInt(idEdicao)] : null;
@@ -1498,10 +1705,11 @@ const periciasDados = [
         atualizarVisualModificadoresGlobais();
         atualizarPainelInventario();
         renderAbilities();
-        seSalvar();
+        marcarAlteracao();
     }
 
     function alternarEquiparItem(idx) { 
+        tocarSom('click');
         let item = sheet.itens[idx];
         item.equipado = !item.equipado; 
         
@@ -1528,19 +1736,21 @@ const periciasDados = [
         
         atualizarVisualModificadoresGlobais();
         atualizarPainelInventario(); 
-        seSalvar();
+        marcarAlteracao();
     }
 
     function removerItem(idx) { 
-        let item = sheet.itens[idx];
-        if (item.idUnico) {
-            sheet.habilidades = sheet.habilidades.filter(h => h.itemIdRef !== item.idUnico);
-            renderAbilities();
+        if(confirm("Deseja deletar este item?")) {
+            let item = sheet.itens[idx];
+            if (item.idUnico) {
+                sheet.habilidades = sheet.habilidades.filter(h => h.itemIdRef !== item.idUnico);
+                renderAbilities();
+            }
+            sheet.itens.splice(idx, 1); 
+            atualizarVisualModificadoresGlobais();
+            atualizarPainelInventario(); 
+            marcarAlteracao();
         }
-        sheet.itens.splice(idx, 1); 
-        atualizarVisualModificadoresGlobais();
-        atualizarPainelInventario(); 
-        seSalvar();
     }
 
     function atualizarPainelInventario() {
@@ -1584,11 +1794,11 @@ const periciasDados = [
 
     function getNivelSucesso(dado, total) {
         const dts = dtTabela[sheet.dificuldade];
-        if (dado === 1) return { txt: "FALHA CRÍTICA", cor: "#8b0000" };
-        if (dado === 20) return { txt: "SUCESSO EXTREMO", cor: "#00ff88" }; 
-        if (total >= 20) return { txt: "SUCESSO BOM", cor: "#7fffd4" }; 
-        if (total >= dts.sucesso) return { txt: "SUCESSO NORMAL", cor: "#4488ff" };
-        return { txt: "FALHA", cor: "#ff4444" };
+        if (dado === 1) return { txt: "FALHA CRÍTICA", cor: "#ff1744", sound: 'fail' };
+        if (dado === 20) return { txt: "SUCESSO EXTREMO", cor: "#00ff88", sound: 'crit' }; 
+        if (total >= 20) return { txt: "SUCESSO BOM", cor: "#7fffd4", sound: 'roll' }; 
+        if (total >= dts.sucesso) return { txt: "SUCESSO NORMAL", cor: "#4488ff", sound: 'roll' };
+        return { txt: "FALHA", cor: "#ff5252", sound: 'fail' };
     }
 
     function spawnPopup(titulo, subtitulo, total, corStatus, txtStatus, detalhes = "") {
@@ -1626,7 +1836,7 @@ const periciasDados = [
         let attrValor = parseInt(sheet.atributos[attrNome]) || 0;
         let modAtributo = getMods('atributo', attrNome);
         let bonusTotal = bonusManual + attrValor + modAtributo;
-        let qtdDados = Math.max(1, attrValor + modAtributo); // A quantidade de dados rola via Atributo+Mod
+        let qtdDados = Math.max(1, attrValor + modAtributo); 
 
         if(isPericia) {
             let p = sheet.pericias.find(x => x.n === periciaNome);
@@ -1644,6 +1854,8 @@ const periciasDados = [
         const total = final + bonusTotal;
         const res = getNivelSucesso(final, total);
         
+        tocarSom(res.sound);
+        
         let textoDados = rolar.keepLowest ? `<span style="color:#ff5252">Desvantagem</span> [${rolar.rolagens.join(', ')}]` : `[${rolar.rolagens.join(', ')}]`;
         let detalheTxt = `Dados Rolados: ${textoDados}<br>Soma: ${final} + ${bonusTotal}`;
         
@@ -1656,6 +1868,7 @@ const periciasDados = [
         let modManual = inputMod ? parseInt(inputMod.value) || 0 : 0;
         
         if (tipo === 'Sorte') {
+            tocarSom('roll');
             let modEquip = getMods('status', 'sorte');
             let sorte = Math.floor(Math.random() * 6) + 1;
             let azar = Math.floor(Math.random() * 6) + 1;
@@ -1690,6 +1903,8 @@ const periciasDados = [
         const total = final + bonusTotal;
         const res = getNivelSucesso(final, total);
         
+        tocarSom(res.sound);
+        
         let textoDados = rolar.keepLowest ? `<span style="color:#ff5252">Desv.</span> [${rolar.rolagens.join(', ')}]` : `[${rolar.rolagens.join(', ')}]`;
         let detalheTxt = `Dados: ${textoDados}<br>Soma: ${final} + ${bonusBase}(Base) + ${modManual}(Mod)`;
         
@@ -1723,9 +1938,16 @@ const periciasDados = [
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.getAttribute('onclick') && b.getAttribute('onclick').includes(id)));
     }
     function fecharPopup() { document.getElementById('central-popup').classList.remove('active'); }
-    function setDif(v) { sheet.dificuldade = v; document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active')); document.getElementById('df-'+v).classList.add('active'); }
+    function setDif(v) { 
+        tocarSom('click');
+        sheet.dificuldade = v; 
+        document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active')); 
+        document.getElementById('df-'+v).classList.add('active'); 
+        marcarAlteracao();
+    }
     
     function mudarArea(a) { 
+        tocarSom('click');
         document.querySelectorAll('.page-area').forEach(e => e.classList.remove('active'));
         document.getElementById('area-'+a).classList.add('active');
         document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
@@ -1736,7 +1958,7 @@ const periciasDados = [
         const p = sheet.pericias.find(x => x.n === nome);
         if (p) {
             p[campo] = (campo === 't' || campo === 'm' || campo === 'd') ? (parseInt(valor) || 0) : valor;
-            seSalvar();
+            marcarAlteracao();
         }
     }
 
@@ -1791,22 +2013,23 @@ const periciasDados = [
     }
 
     function adicionarNota() {
+        tocarSom('click');
         if (!sheet.notas) sheet.notas = [];
         sheet.notas.push({ titulo: "Novo Bloco", conteudo: "" });
         renderNotas();
-        seSalvar();
+        marcarAlteracao();
     }
 
     function atualizarNota(idx, campo, valor) {
         sheet.notas[idx][campo] = valor;
-        seSalvar();
+        marcarAlteracao();
     }
 
     function removerNota(idx) {
         if (confirm("Deseja apagar este bloco de notas?")) {
             sheet.notas.splice(idx, 1);
             renderNotas();
-            seSalvar();
+            marcarAlteracao();
         }
     }
 
@@ -1823,7 +2046,7 @@ const periciasDados = [
             return `
             <div class="attr-container-outer" onclick="realizarRolagem('${k}', 0, 'Teste de ${k}')">
                 <div class="attr-hexagon-border"><div class="attr-hexagon-inner">
-                    <input type="number" class="attr-value-input" value="${v}" onchange="sheet.atributos['${k}']=parseInt(this.value)||0; calcularVelocidade(); calcularStatusClasse(); renderEspeciais(); seSalvar();" onclick="event.stopPropagation()">
+                    <input type="number" class="attr-value-input" value="${v}" onchange="sheet.atributos['${k}']=parseInt(this.value)||0; calcularVelocidade(); calcularStatusClasse(); renderEspeciais(); marcarAlteracao();" onclick="event.stopPropagation()">
                     <span style="font-size:0.75rem; color:var(--text-gold); font-weight:bold;">${k}</span>
                     ${modAtributo !== 0 ? `<div class="mod-val-display">${modAtributo > 0 ? '+' : ''}${modAtributo}</div>` : ''}
                 </div></div>
@@ -1869,16 +2092,18 @@ const periciasDados = [
     }
 
     function exportarFicha() {
+        tocarSom('click');
         document.getElementById('codigo-export').value = btoa(unescape(encodeURIComponent(JSON.stringify(sheet))));
     }
 
     function importarFicha() {
+        tocarSom('click');
         try {
             const raw = document.getElementById('codigo-export').value;
             const obj = JSON.parse(decodeURIComponent(escape(atob(raw))));
             sheet = Object.assign(getFichaZerada(), obj);
             atualizarVisuaisDaFicha();
-            seSalvar();
+            marcarAlteracao();
             alert("Ficha importada com sucesso!");
         } catch (e) {
             alert("Erro ao importar código. Verifique se copiou corretamente.");
@@ -1886,15 +2111,22 @@ const periciasDados = [
     }
 
     function salvarNaNuvem() {
-        if(!currentUser) return;
+        if(!currentUser) {
+            alert("Faça o login com o Google para poder salvar na nuvem!");
+            return;
+        }
         const slot = document.getElementById('save-slot').value;
         database.ref(`users/${currentUser.uid}/slots/${slot}`).set(sheet)
-            .then(() => console.log('Ficha salva no Slot ' + slot))
-            .catch(e => console.error("Erro ao salvar:", e));
-    }
-
-    function seSalvar() {
-        if(typeof salvarNaNuvem === 'function' && currentUser) salvarNaNuvem();
+            .then(() => {
+                tocarSom('crit');
+                alteracoesNaoSalvas = false; // Reseta o rastreador
+                spawnPopup("SISTEMA", `Slot ${slot} Atualizado`, "SALVO", "#00ff88", "PROGRESSO SALVO", "Sua ficha está segura na nuvem!");
+            })
+            .catch(e => {
+                tocarSom('fail');
+                console.error("Erro ao salvar:", e);
+                alert("Ocorreu um erro ao tentar salvar na nuvem.");
+            });
     }
 
     function carregarDaNuvem() {
@@ -1905,9 +2137,10 @@ const periciasDados = [
             if(data) {
                 sheet = Object.assign(getFichaZerada(), data); 
             } else {
-                sheet = getFichaZerada(); // Slot zerado se não houver dados no banco
+                sheet = getFichaZerada(); 
             }
             atualizarVisuaisDaFicha();
+            alteracoesNaoSalvas = false; // Carregou, então está limpo
         }).catch(e => console.error("Erro ao carregar:", e));
     }
 
@@ -1934,6 +2167,7 @@ const periciasDados = [
     }
 
     window.onload = () => {
+        carregarCoresPickers();
         render();
         renderEspeciais();
     };
