@@ -8,6 +8,8 @@
     <style>
         :root {
             --bg-dark: #050507;
+            --bg-gradient-top: #050507;
+            --bg-gradient-bottom: #12071c;
             --panel-bg: rgba(21, 21, 26, 0.95);
             --primary-purple: #7b1fa2;
             --light-purple: #bc4ed8;
@@ -50,7 +52,7 @@
                 radial-gradient(circle at 85% 35%, rgba(49, 27, 146, 0.12) 0%, transparent 45%),
                 radial-gradient(circle at 50% 75%, rgba(186, 104, 200, 0.08) 0%, transparent 55%),
                 radial-gradient(circle at 35% 70%, rgba(74, 20, 140, 0.15) 0%, transparent 50%),
-                linear-gradient(180deg, var(--bg-dark) 0%, #0d0614 40%, #12071c 70%, var(--bg-dark) 100%);
+                linear-gradient(180deg, var(--bg-gradient-top) 0%, #0d0614 40%, var(--bg-gradient-bottom) 70%, var(--bg-gradient-top) 100%);
             background-attachment: fixed;
             background-size: cover;
             color: var(--text-light);
@@ -58,7 +60,7 @@
             margin: 0;
             display: flex;
             overflow-x: hidden;
-            transition: background-color 0.5s ease;
+            transition: background 0.5s ease;
         }
         
         #log-panel {
@@ -312,7 +314,7 @@
             position: fixed;
             bottom: 140px;
             right: 20px;
-            width: 250px;
+            width: 260px;
             background: #0a0a0e;
             border: 2px solid var(--text-gold);
             padding: 15px;
@@ -559,8 +561,12 @@
 <div id="theme-panel">
     <div style="text-align:center; color:var(--text-gold); font-weight:bold; margin-bottom:10px; font-size:0.9rem;">Paleta de Cores</div>
     <div class="theme-row">
-        <span>Fundo Principal:</span>
-        <input type="color" id="picker-bg" onchange="mudarCor('--bg-dark', this.value)">
+        <span>Fundo (Topo):</span>
+        <input type="color" id="picker-bg-top" onchange="mudarCor('--bg-gradient-top', this.value); mudarCor('--bg-dark', this.value);">
+    </div>
+    <div class="theme-row">
+        <span>Fundo (Rodapé):</span>
+        <input type="color" id="picker-bg-bottom" onchange="mudarCor('--bg-gradient-bottom', this.value)">
     </div>
     <div class="theme-row">
         <span>Roxo Principal:</span>
@@ -730,7 +736,7 @@ const firebaseConfig = {
 </script>
 
 <script>
-    /* SISTEMA DE SOM SINTETIZADO VIA WEB AUDIO API */
+    /* SISTEMA DE SOM SINTETIZADO VIA WEB AUDIO API (DADOS E EFEITOS EXPLOSIVOS) */
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
@@ -739,13 +745,13 @@ const firebaseConfig = {
             if (!audioCtx) audioCtx = new AudioContext();
             if (audioCtx.state === 'suspended') audioCtx.resume();
             
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
             const agora = audioCtx.currentTime;
 
-            if (tipo === 'click' || tipo === 'roll') {
+            if (tipo === 'click') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
                 osc.type = 'triangle';
                 osc.frequency.setValueAtTime(300, agora);
                 osc.frequency.exponentialRampToValueAtTime(100, agora + 0.08);
@@ -753,20 +759,72 @@ const firebaseConfig = {
                 gain.gain.exponentialRampToValueAtTime(0.01, agora + 0.08);
                 osc.start(agora);
                 osc.stop(agora + 0.08);
+            } else if (tipo === 'roll') {
+                // Simulação realista de dados rolando (ruído branco filtrado com batidas curtas)
+                const duracao = 0.45;
+                const bufferSize = audioCtx.sampleRate * duracao;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(1200, agora);
+                filter.Q.setValueAtTime(1.5, agora);
+
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.3, agora);
+                // Oscilação rápida para simular os quiques do dado na mesa
+                gain.gain.setValueAtTime(0.3, agora + 0.05);
+                gain.gain.setValueAtTime(0.1, agora + 0.1);
+                gain.gain.setValueAtTime(0.25, agora + 0.15);
+                gain.gain.setValueAtTime(0.05, agora + 0.25);
+                gain.gain.setValueAtTime(0.15, agora + 0.3);
+                gain.gain.exponentialRampToValueAtTime(0.001, agora + duracao);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+                noise.start(agora);
+                noise.stop(agora + duracao);
             } else if (tipo === 'crit') {
-                // Fanfarra triunfante
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(523.25, agora); // Dó
-                osc.frequency.setValueAtTime(659.25, agora + 0.1); // Mi
-                osc.frequency.setValueAtTime(783.99, agora + 0.2); // Sol
-                osc.frequency.setValueAtTime(1046.50, agora + 0.3); // Dó agudo
-                gain.gain.setValueAtTime(0.15, agora);
-                gain.gain.linearRampToValueAtTime(0.2, agora + 0.3);
-                gain.gain.exponentialRampToValueAtTime(0.001, agora + 0.8);
-                osc.start(agora);
-                osc.stop(agora + 0.8);
+                // Impacto sub-bass explosivo seguido por brilho épico triunfante
+                const oscBass = audioCtx.createOscillator();
+                const gainBass = audioCtx.createGain();
+                oscBass.connect(gainBass);
+                gainBass.connect(audioCtx.destination);
+                oscBass.type = 'sine';
+                oscBass.frequency.setValueAtTime(180, agora);
+                oscBass.frequency.exponentialRampToValueAtTime(30, agora + 0.5);
+                gainBass.gain.setValueAtTime(0.5, agora);
+                gainBass.gain.exponentialRampToValueAtTime(0.01, agora + 0.6);
+                oscBass.start(agora);
+                oscBass.stop(agora + 0.6);
+
+                const oscAgudo = audioCtx.createOscillator();
+                const gainAgudo = audioCtx.createGain();
+                oscAgudo.connect(gainAgudo);
+                gainAgudo.connect(audioCtx.destination);
+                oscAgudo.type = 'sawtooth';
+                oscAgudo.frequency.setValueAtTime(523.25, agora + 0.05); // Dó
+                oscAgudo.frequency.setValueAtTime(659.25, agora + 0.15); // Mi
+                oscAgudo.frequency.setValueAtTime(783.99, agora + 0.25); // Sol
+                oscAgudo.frequency.setValueAtTime(1046.50, agora + 0.35); // Dó agudo
+                gainAgudo.gain.setValueAtTime(0.1, agora + 0.05);
+                gainAgudo.gain.linearRampToValueAtTime(0.2, agora + 0.35);
+                gainAgudo.gain.exponentialRampToValueAtTime(0.001, agora + 0.9);
+                oscAgudo.start(agora + 0.05);
+                oscAgudo.stop(agora + 0.9);
             } else if (tipo === 'fail') {
-                // Som de falha grave
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(150, agora);
                 osc.frequency.linearRampToValueAtTime(80, agora + 0.3);
@@ -778,7 +836,7 @@ const firebaseConfig = {
         } catch(e) {}
     }
 
-    /* SISTEMA DE TEMAS (Personalização de cores) */
+    /* SISTEMA DE TEMAS (Personalização de cores e degradê) */
     function toggleThemePanel() {
         const painel = document.getElementById('theme-panel');
         painel.style.display = painel.style.display === 'block' ? 'none' : 'block';
@@ -790,6 +848,8 @@ const firebaseConfig = {
     }
 
     function resetarTema() {
+        mudarCor('--bg-gradient-top', '#050507');
+        mudarCor('--bg-gradient-bottom', '#12071c');
         mudarCor('--bg-dark', '#050507');
         mudarCor('--primary-purple', '#7b1fa2');
         mudarCor('--light-purple', '#bc4ed8');
@@ -799,7 +859,8 @@ const firebaseConfig = {
 
     function carregarCoresPickers() {
         const cores = {
-            '--bg-dark': 'picker-bg',
+            '--bg-gradient-top': 'picker-bg-top',
+            '--bg-gradient-bottom': 'picker-bg-bottom',
             '--primary-purple': 'picker-prim',
             '--light-purple': 'picker-light',
             '--text-gold': 'picker-gold'
@@ -808,6 +869,7 @@ const firebaseConfig = {
             let val = localStorage.getItem('abyss_theme_' + varName) || getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
             if (val) {
                 document.documentElement.style.setProperty(varName, val);
+                if (varName === '--bg-gradient-top') document.documentElement.style.setProperty('--bg-dark', val);
                 let input = document.getElementById(cores[varName]);
                 if (input && val.startsWith('#')) input.value = val;
             }
