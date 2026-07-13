@@ -1248,37 +1248,221 @@ function proximoTurno() {
     ];
 
     const descPericias = {
-        "Acrobacia": "<i>Você é capaz de realizar movimentos ágeis e acrobacias difíceis...</i>",
-        "Adestramento": "<i>Você tem conhecimento sobre como lidar e educar animais...</i>",
-        "Artes": "<i>Você sabe se expressar com diversas formas de arte.</i>",
-        "Atletismo": "<i>Você é capaz de realizar feitos atléticos...</i>",
-        "Ciências": "<i>Você possui uma ou várias áreas de conhecimentos técnicos.</i>",
-        "Crime": "<i>Você sabe como trapacear e cometer crimes...</i>",
-        "Diplomacia": "<i>Você possui alta capacidade de oratória e diálogo...</i>",
-        "Enganação": "<i>Blefar, mentir e distorcer ao seu bel prazer...</i>",
-        "Fortitude": "<i>Você possui resistência física e força de vontade...</i>",
-        "Furtividade": "<i>Você é capaz de se mover sem ser percebido...</i>",
-        "Iniciativa": "<i>Esta perícia determina sua velocidade de reação.</i>",
-        "Intimidação": "<i>Seu porte, armas ou palavras são capazes de amedrontar.</i>",
-        "Intuição": "<i>Ao observar ou interagir com alguém...</i>",
-        "Investigação": "<i>Você é capaz de analisar pistas, conectar informações...</i>",
-        "Luta": "<i>Você usa Luta para fazer ataques corpo a corpo.</i>",
-        "Medicina": "<i>Você possui conhecimento sobre o corpo e tratamentos.</i>",
-        "Percepção": "<i>Você nota coisas usando os sentidos.</i>",
-        "Pilotagem": "<i>Você é capaz de conduzir veículos com controle.</i>",
-        "Pontaria": "<i>Você usa Pontaria para fazer ataques à distância.</i>",
-        "Profissão": "<i>Você possui formação e experiência...</i>",
-        "Reflexos": "<i>Você usa esta perícia para testes de resistência...</i>",
-        "Religião": "<i>Você possui conhecimento sobre crenças...</i>",
-        "Sobrevivência": "<i>Você sabe como se manter vivo em ambientes hostis.</i>",
-        "Tática": "<i>Você é capaz de ler o combate, antecipar ações...</i>",
-        "Tecnologia": "<i>Você possui conhecimento sobre dispositivos eletrônicos.</i>",
-        "Vontade": "<i>Você possui força mental, disciplina e controle emocional.</i>",
-        "Arcanismo": "<i>Você tem conhecimentos arcanos sobre magia.</i>",
-        "Alquimia": "<i>Você domina a criação e manipulação de substâncias.</i>",
-        "Monstrologia": "<i>Você possui conhecimento sobre criaturas perigosas.</i>",
-        "Linguística": "<i>Você compreende e domina idiomas e símbolos.</i>"
-    };
+    "Acrobacia": {
+        atributo: "AGI",
+        descricao: "Você é capaz de realizar movimentos ágeis e acrobacias difíceis, se equilibrar ou escapar habilmente.",
+        usos: [
+            { titulo: "Amortecer Queda", texto: "Você se move para cair da forma correta e reduzir o dano. Você reduz o dano pela metade. (Sucesso Normal)" },
+            { titulo: "Levantar Rapidamente", texto: "Gaste sua ação de Interferência para levantar-se imediatamente após a queda. Se falhar, você permanece Caído. (Sucesso Bom)" }
+        ]
+    },
+    "Adestramento": {
+        atributo: "POD",
+        descricao: "Você tem conhecimento sobre como lidar e educar animais, cuidar deles ou manipulá-los.",
+        usos: [
+            { titulo: "Manejar Animal", texto: "Gaste uma ação de movimento para fazer um animal realizar uma ação a qual foi treinado para fazer (In Lore ou durante Cenas de Descanso). (Sucesso Normal)" },
+            { titulo: "Entender Animal", texto: "Você consegue supor o que um Animal quer dizer de acordo com sua linguagem corporal. Entender um Animal não possui uma DT específica, mas o seu resultado define o seu entendimento sobre isso. Por exemplo, uma Falha Normal pode ser um entendimento APROXIMADO do verdadeiro. Ação livre." }
+        ]
+    },
+    "Artes": {
+        atributo: "POD",
+        descricao: "Você sabe se expressar com diversas formas de arte, como música, dança, escrita, pintura, atuação e outras.",
+        usos: [
+            { titulo: "Impressionar", texto: "Faça um teste de Artes oposto pelo teste de Vontade de quem você está tentando impressionar. Se você passar, recebe +2 em testes de perícia baseadas em Presença contra essa pessoa no mesmo dia. Se falhar, sofre –2 nesses testes. Se estiver tentando impressionar mais de uma pessoa, o mestre faz apenas um teste pela plateia toda, usando o melhor bônus. Este uso leva de alguns minutos (música ou dança) até algumas horas (apresentação de teatro). Um uso por dia." },
+            { titulo: "Atuar", texto: "Você pode usar Artes no lugar de Enganação para mentir." }
+        ]
+    },
+    "Atletismo": {
+        atributo: "FOR",
+        descricao: "Você é capaz de realizar feitos atléticos e sair na frente dos demais.",
+        usos: [
+            { titulo: "Correr", texto: "Você utiliza uma ação completa para correr e soma o seu nível de Sucesso na corrida. Sucesso Normal adiciona +2 Quadrados, Sucesso Bom adiciona +4 Quadrados e Sucesso Extremo adiciona +6 Quadrados." },
+            { titulo: "Escalar", texto: "Você escala por 5m e soma seu nível de Sucesso no resultado. Sucesso Normal adiciona +3m, Sucesso Bom adiciona +4m e Sucesso Extremo adiciona +7m. Escalar custa uma ação de movimento e pode ser reutilizada com uma ação padrão. Uma Falha Normal te faz escorregar por 5m e uma Falha Crítica faz você cair direto no chão. Ação completa." },
+            { titulo: "Nadar e Mergulhar", texto: "Você avança por 6q e soma seu nível de Sucesso no resultado. Sucesso Normal adiciona +4q, Sucesso Bom adiciona +6q e Sucesso Extremo adiciona +8q. Nadar custa uma ação de movimento e pode ser reutilizada com uma ação padrão. Uma Falha Normal te faz afundar, e você precisa gastar uma ação padrão pra retornar a superfície e uma Falha Crítica faz você afundar ainda mais, precisando gastar a ação de Movimento e Ação Padrão pra voltar." },
+            { titulo: "Saltar", texto: "Você salta por uma distância igual ao seu deslocamento +3. Gasta ação de movimento." },
+            { titulo: "Arremessar", texto: "Você arremessa algo numa distância equivalente ao seu deslocamento e gasta ação de movimento." },
+            { titulo: "Levantar", texto: "Você levanta um objeto, seu sucesso é definido pela Zona de acerto atingido." }
+        ]
+    },
+    "Ciências": {
+        atributo: "INT",
+        descricao: "Você possui uma ou várias áreas de conhecimentos técnicos e especializados, adquiridas por meio de estudo formal, pesquisa e método científico. É capaz de compreender leis naturais, realizar análises precisas, formular hipóteses e explicar fenômenos com base em lógica e evidências. Ciências representa o saber acadêmico, sistemático e aprofundado.",
+        usos: []
+    },
+    "Crime": {
+        atributo: "AGI",
+        descricao: "Você sabe como trapacear e cometer crimes de forma habilidosa.",
+        usos: [
+            { titulo: "Arrombar", texto: "Abrir fechaduras, portas, cofres ou dispositivos trancados sem a chave adequada, usando ferramentas ou improviso. A DT varia de acordo com a qualidade da fechadura." },
+            { titulo: "Furtar", texto: "Roubar objetos de alvos ou ambientes sem ser percebido, seja em movimento ou distraindo a vítima. A DT é igual ao valor de Percepção do alvo." },
+            { titulo: "Plantar", texto: "Colocar objetos em posse de outra pessoa ou em um local específico sem levantar suspeitas. A DT é igual ao valor de Percepção do alvo ou das pessoas na mesma sala." },
+            { titulo: "Trapacear", texto: "Enganar em jogos, negociações ou situações sociais, manipulando regras ou percepções a seu favor. A DT varia de acordo com a cena." }
+        ]
+    },
+    "Diplomacia": {
+        atributo: "POD",
+        descricao: "Você possui alta capacidade de oratória e diálogo, sabe como convencer e persuadir. Testes de Diplomacia com o intuito de manipular ou convencer geralmente são um teste oposto à Vontade do alvo quando o alvo está relutante.",
+        usos: [
+            { titulo: "Persuadir", texto: "Convencer alguém por meio de argumentos lógicos, carisma e boa comunicação. (DT Vontade)" },
+            { titulo: "Negociar", texto: "Mediar acordos, barganhar termos e buscar soluções equilibradas entre diferentes interesses. (DT Vontade)" },
+            { titulo: "Acalmar", texto: "Reduzir tensões, conter discussões ou evitar que situações saiam do controle (DT Vontade). Você pode usar Acalmar para tirar alguém do estado de Enlouquecendo, a DT é um Sucesso Bom." },
+            { titulo: "Etiquetas", texto: "Agir de acordo com normas sociais, culturais ou formais, evitando gafes e ganhando respeito. Passar num teste de Etiquetas (no ambiente certo) garante +2 em testes sociais até o fim da cena." },
+            { titulo: "Inspirar Confiança", texto: "Transmitir sentimentos e credibilidade, fazendo com que confiem em você e em suas intenções. Dependendo do seu resultado, NPCs e alguns seres podem mudar de atitude com relação a você." }
+        ]
+    },
+    "Enganação": {
+        atributo: "POD",
+        descricao: "Blefar, mentir e distorcer ao seu bel prazer é quase um dom.",
+        usos: [
+            { titulo: "Fintar", texto: "Enganar alguém em uma situação imediata, usando movimentos, palavras ou atitudes rápidas para criar uma abertura, distrair o alvo ou fazê-lo reagir de forma errada. Um inimigo Fintado fica Desprevenido contra você no seu próximo ataque. (DT Percepção)" },
+            { titulo: "Lábia", texto: "Você mente, manipula ou blefa para induzir ações ou enganar NPCs ou Jogadores. (DT Intuição). Você não precisa anunciar que é uma rolagem de Lábia quando contra outros jogadores." },
+            { titulo: "Disfarçar Intenções", texto: "Esconder seus verdadeiros objetivos ou sentimentos durante interações. (DT Intuição). Você não precisa anunciar que está disfarçando intenções contra outros jogadores. Passar em um teste de Disfarçar Intenções confere +2 em testes sociais contra um ou mais alvos envolvidos na enganação." }
+        ]
+    },
+    "Fortitude": {
+        atributo: "CON",
+        descricao: "Você possui resistência física e força de vontade para suportar dor, exaustão e condições adversas. Essa perícia representa sua capacidade de continuar agindo mesmo quando o corpo pede para parar.",
+        usos: []
+    },
+    "Furtividade": {
+        atributo: "AGI",
+        descricao: "Você é capaz de se mover sem ser percebido, silenciosamente e evitando atenção.",
+        nota: "Sua velocidade/deslocamento é cortado pela metade",
+        usos: [
+            { titulo: "Esconder", texto: "Você se esconde utilizando o cenário ao seu favor por um momento. Ao se esconder, faça um teste de Furtividade. Esconderijos Parciais (atrás de uma pedra, árvore, etc...) concedem +1 no teste, enquanto Esconderijos Completos (dentro de um armário, em um cômodo fechado, embaixo da cama) concedem +3. Enquanto permanecer escondido, você não pode ser diretamente alvo sem antes ser detectado. Sair do esconderijo ou realizar ações chamativas encerra o efeito." },
+            { titulo: "Camuflar", texto: "Você se mistura no ambiente. Jogue seu dado de Furtividade, ele limita a DT de Percepção para te ver. Ações chamativas desfazem sua Camuflagem." },
+            { titulo: "Espreitar", texto: "Você persegue um alvo à distância, movendo-se furtivamente (seu deslocamento permanece reduzido pela metade). Caso ataque um alvo que não percebe sua presença, você reduz -2 na Defesa dele contra esse ataque. (Reflexos evita)" }
+        ]
+    },
+    "Iniciativa": {
+        atributo: "AGI",
+        descricao: "Esta perícia determina sua velocidade de reação. Quando uma cena de ação começa, cada personagem envolvido faz um teste de Iniciativa. Eles então agem em ordem decrescente dos resultados.",
+        usos: []
+    },
+    "Intimidação": {
+        atributo: "POD",
+        descricao: "Seu porte, armas ou palavras são capazes de amedrontar pessoas para conseguir informações ou alcançar algum objetivo. Testes de Intimidação são testes opostos ao teste de Vontade do alvo.",
+        usos: []
+    },
+    "Intuição": {
+        atributo: "POD",
+        descricao: "Ao observar ou interagir com alguém, você pode tentar entender suas verdadeiras intenções. Você identifica mentiras, emoções dominantes e possíveis objetivos ocultos. Bons resultados podem revelar detalhes mais profundos ou antecipar cenas.",
+        usos: []
+    },
+    "Investigação": {
+        atributo: "INT",
+        descricao: "Você é capaz de analisar pistas, conectar informações e tirar conclusões lógicas a partir de evidências... Também é o seu raciocínio dedutivo, atenção a detalhes relevantes e capacidade de reconstruir eventos.",
+        usos: [
+            { titulo: "Reconstruir Pista", texto: "Você usa Investigação para tentar reconstruir pistas incompletas ou degradadas." },
+            { titulo: "Interrogar", texto: "Você usa Investigação no lugar de outras perícias comunicativas para Interrogar." }
+        ]
+    },
+    "Luta": {
+        atributo: "FOR",
+        descricao: "Você usa Luta para fazer ataques corpo a corpo. A DT é a Defesa do alvo. Se você acertar, causa dano de acordo com a arma utilizada.",
+        usos: []
+    },
+    "Medicina": {
+        atributo: "INT",
+        descricao: "Você possui conhecimento sobre o corpo, ferimentos e tratamentos, sendo capaz de diagnosticar, estabilizar e cuidar de condições físicas.",
+        usos: [
+            { titulo: "Primeiros Socorros", texto: "Você presta atendimento emergencial a um alvo em estado de morrendo. Com sucesso, o alvo deixa esse estado e se torna estável, este uso exige uma Ação Padrão." },
+            { titulo: "Necropsia", texto: "Você analisa um corpo para determinar a causa da morte e extrair informações relevantes. Com sucesso, você identifica como a vítima morreu; resultados melhores podem revelar o tipo de arma, tempo de morte, condições anteriores e possíveis circunstâncias do ocorrido. Este processo exige tempo e, idealmente, ferramentas adequadas." }
+        ]
+    },
+    "Percepção": {
+        atributo: "POD",
+        descricao: "Você nota coisas usando os sentidos.",
+        usos: [
+            { titulo: "Observar", texto: "Você utiliza sua visão para perceber detalhes no ambiente, como movimentos, figuras escondidas, objetos discretos ou mudanças sutis na cena. Pode ser usado para localizar alvos ocultos, identificar ameaças visuais ou notar algo fora do lugar." },
+            { titulo: "Escutar", texto: "Você utiliza sua audição para captar sons específicos, como passos, vozes, respiração ou mecanismos em funcionamento, mesmo à distância ou através de obstáculos. Pode ser usado para localizar presenças fora do campo de visão ou antecipar movimentações." }
+        ]
+    },
+    "Pilotagem": {
+        atributo: "AGI",
+        descricao: "Você é capaz de conduzir veículos com controle e precisão, mantendo estabilidade mesmo em situações adversas. Pilotagem envolve reflexos rápidos, coordenação e domínio do veículo em movimento.",
+        usos: []
+    },
+    "Pontaria": {
+        atributo: "AGI",
+        descricao: "Você usa Pontaria para fazer ataques à distância. A DT é a Defesa do alvo. Se você acertar, causa dano de acordo com a arma utilizada.",
+        usos: []
+    },
+    "Profissão": {
+        atributo: "VAR",
+        descricao: "Você possui formação e experiência em uma área de trabalho específica, adquiridas por prática contínua, estudo ou vivência. Sua profissão representa não apenas o que você sabe fazer, mas também como você resolve problemas no dia a dia, utilizando técnicas, ferramentas e conhecimentos próprios da sua área. Em situações relacionadas à sua especialidade, você é capaz de agir com eficiência, improvisar soluções e reconhecer detalhes que passariam despercebidos para outros.\n\nVocê começa com um objeto de Peso 0 que tem funcionamento padrão e te concede +1 em testes de profissão. (Você não pode usar Profissão como Luta e Pontaria)",
+        usos: []
+    },
+    "Reflexos": {
+        atributo: "AGI",
+        descricao: "Você usa esta perícia para testes de resistência contra efeitos que exigem reação rápida, como armadilhas e explosões. A DT é determina pelo efeito. Você também usa Reflexos para evitar fintas.",
+        usos: []
+    },
+    "Religião": {
+        atributo: "POD",
+        descricao: "Você possui conhecimento sobre crenças, tradições e instituições religiosas, sendo capaz de interpretar doutrinas, conduzir rituais e exercer autoridade espiritual sobre outras pessoas.",
+        usos: []
+    },
+    "Sobrevivência": {
+        atributo: "INT",
+        descricao: "Você sabe como se manter vivo em ambientes hostis, utilizando recursos naturais, instinto e experiência para lidar com fome, clima e perigos do ambiente.",
+        usos: []
+    },
+    "Tática": {
+        atributo: "INT",
+        descricao: "Você é capaz de ler o combate, antecipar ações e coordenar movimentos para obter vantagem. Tática representa tomada de decisão rápida, posicionamento e uso inteligente do campo de batalha.",
+        usos: [
+            { titulo: "Analisar", texto: "Você avalia rapidamente o combate, identificando ameaças, alvos prioritários e oportunidades imediatas. Você ganha bônus dependendo do cenário, geralmente envolvendo um modificador de +2 em um teste relacionado ao o que observou." }
+        ]
+    },
+    "Tecnologia": {
+        atributo: "INT",
+        descricao: "Você possui conhecimento sobre dispositivos eletrônicos, sistemas digitais e equipamentos tecnológicos, sendo capaz de operar, analisar e manipular tecnologia de forma eficiente.",
+        usos: [
+            { titulo: "Hackear", texto: "Você invade, contorna ou manipula sistemas digitais, como redes, câmeras, fechaduras eletrônicas e bancos de dados." }
+        ]
+    },
+    "Vontade": {
+        atributo: "POD",
+        descricao: "Você possui força mental, disciplina e controle emocional, sendo capaz de resistir a medo, dor psicológica e influências externas sobre sua mente.",
+        usos: []
+    },
+    "Arcanismo": {
+        atributo: "POD",
+        descricao: "Você tem conhecimentos arcanos sobre magia e é capaz de realizar a feitiçaria.",
+        nota: "Substitui Ocultismo no CRIS",
+        usos: [
+            { titulo: "Identificar Afinidade", texto: "Você analisa o alvo e sua energia. Através disso, você consegue (ou não) identificar a Afinidade do alvo com Umbra, Lumen, Caos, Éter ou Ley." },
+            { titulo: "Analisar Artefatos", texto: "Você analisa um objeto mágico. Através disso, você consegue (ou não) identificar seu uso, capacidades ou afinidade." },
+            { titulo: "Identificar Feitiço", texto: "Você analisa um feitiço. Através disso, você consegue (ou não) identificar a sua função, efeito ou como superar, caso seja um conhecimento plausível." },
+            { titulo: "Responder Questões", texto: "Você busca no seu cérebro por informações que já estudou. Você pode responder perguntas referentes as Entidades e o Arcanismo, ou apenas chegar numa conclusão lógica." }
+        ]
+    },
+    "Alquimia": {
+        atributo: "INT",
+        descricao: "Você domina a criação e manipulação de substâncias, sendo capaz de preparar compostos com efeitos variados, desde curativos até tóxicos ou reativos.",
+        usos: [
+            { titulo: "Identificar", texto: "Você analisa substâncias desconhecidas, entendendo seus efeitos e possíveis riscos." },
+            { titulo: "Criar Componentes", texto: "Você coleta e aproveita materiais de criaturas, plantas ou ambientes para criar componentes." }
+        ]
+    },
+    "Monstrologia": {
+        atributo: "INT",
+        descricao: "Você possui conhecimento sobre criaturas perigosas, sendo capaz de identificar suas características, comportamentos e fraquezas. Monstrologia permite entender como enfrentar e sobreviver a diferentes tipos de monstros.",
+        usos: [
+            { titulo: "Analisar", texto: "Você reconhece uma criatura ou seus rastros, entendendo sua natureza, tipo e características gerais, dependendo do resultado. Você descobre fraquezas, resistências ou padrões de comportamento de um monstro." },
+            { titulo: "Explorar Fraqueza", texto: "Ao identificar uma vulnerabilidade, você pode aproveitar ela e anunciar aos aliados para que façam o mesmo. Isso confere +2 no teste de luta contra a criatura durante o combate." }
+        ]
+    },
+    "Linguística": {
+        atributo: "INT",
+        descricao: "Você compreende e domina idiomas, símbolos e formas de comunicação, sendo capaz de interpretar, traduzir e adaptar linguagem em diferentes contextos.",
+        usos: [
+            { titulo: "Traduzir", texto: "Você interpreta idiomas desconhecidos, textos antigos ou mensagens estrangeiras, entendendo seu significado geral ou detalhado." },
+            { titulo: "Decifrar", texto: "Você identifica padrões em símbolos, códigos simples ou escritas incomuns, revelando mensagens ocultas." }
+        ]
+    }
+};
 
     let currentUser = null;
 
@@ -1429,11 +1613,38 @@ function proximoTurno() {
     }
 
     function abrirInfoPericia(nome) {
-        tocarSom('click');
-        document.getElementById('skill-modal-title').innerText = nome.replace('_', ': ');
-        document.getElementById('skill-modal-desc').innerHTML = descPericias[nome] || "<i>Informação não disponível.</i>";
-        document.getElementById('modal-skill').style.display = 'block';
+    tocarSom('click');
+    document.getElementById('skill-modal-title').innerText = nome.replace('_', ': ');
+    
+    // 1. Busca a perícia no nosso objeto
+    let p = descPericias[nome];
+    let conteudoHtml = "<i>Informação não disponível.</i>";
+
+    // 2. Se a perícia existir, montamos o visual dela
+    if (p) {
+        // Coloca o atributo e o texto principal
+        conteudoHtml = `<b>[${p.atributo}] ${nome.replace('_', ' ')}</b><br>`;
+        conteudoHtml += `<i>${p.descricao.replace(/\n/g, "<br>")}</i><br>`;
+        
+        // Se tiver aquela nota especial (como na Furtividade), adiciona aqui
+        if (p.nota) {
+            conteudoHtml += `<br><small><i>-# ${p.nota}</i></small><br>`;
+        }
+        
+        // Se tiver usos específicos, cria o bloco de citação (blockquote) e lista eles
+        if (p.usos && p.usos.length > 0) {
+            conteudoHtml += `<br><blockquote><b>Usos Específicos</b><br><br>`;
+            p.usos.forEach(uso => {
+                conteudoHtml += `<b>[${uso.titulo}]:</b> ${uso.texto}<br><br>`;
+            });
+            conteudoHtml += `</blockquote>`;
+        }
     }
+
+    // 3. Joga o texto formatado no modal e exibe
+    document.getElementById('skill-modal-desc').innerHTML = conteudoHtml;
+    document.getElementById('modal-skill').style.display = 'block';
+}
 
     function mudarAvatar() {
         let url = prompt("Cole o link (URL) da imagem do seu personagem:");
