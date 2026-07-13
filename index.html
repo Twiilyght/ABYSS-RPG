@@ -2068,7 +2068,7 @@ function tocarSom(tipo) {
             let azar = Math.floor(Math.random() * 6) + 1;
             let total = sorte - azar + modManual + modEquip;
             let cor = total > 0 ? "#00ff88" : (total < 0 ? "#ff4444" : "#ffca28");
-            let txt = total > 0 ? "BOM" : (total < 0 ? "RUIM" : "NEUTRO");
+            let txt = total > 0 ? "SORTE" : (total < 0 ? "AZAR" : "NEUTRO");
             let modTxt = (modManual+modEquip) !== 0 ? `| Mod Extra: ${(modManual+modEquip)}` : '';
             spawnPopup("SORTE", `Sorte [${sorte}] - Azar [${azar}]`, total, cor, txt, `Resultado: ${sorte - azar} ${modTxt}`);
             enviarRolagemParaServidor("SORTE", `Sorte [${sorte}] - Azar [${azar}]`, total, cor, txt, `Res: ${sorte - azar} ${modTxt}`); 
@@ -2086,7 +2086,6 @@ function tocarSom(tipo) {
             let pPerc = sheet.pericias.find(x => x.n === "Percepção");
             let percMod = pPerc ? (parseInt(pPerc.t) + parseInt(pPerc.m)) : 0;
             bonusBase = pod + percMod;
-            qtdDados = pod;
         }
 
         let rolar = rolarD20(qtdDados);
@@ -2099,7 +2098,7 @@ function tocarSom(tipo) {
         tocarSom(res.sound);
         
         let textoDados = rolar.keepLowest ? `<span style="color:#ff5252">Desv.</span> [${rolar.rolagens.join(', ')}]` : `[${rolar.rolagens.join(', ')}]`;
-        let detalheTxt = `Dados: ${textoDados}<br>Soma: ${final} + ${bonusBase}(Base) + ${modManual}(Mod)`;
+        let detalheTxt = `Dados: ${textoDados}<br>Soma: ${final} + ${bonusBase}(Percepção + Pod) + ${modManual}(Mod)`;
         
         spawnPopup(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt);
         enviarRolagemParaServidor(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt.replace(/<br>/g, ' | ').replace(/<[^>]+>/g, ''));
