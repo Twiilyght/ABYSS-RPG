@@ -325,35 +325,6 @@
         }
         .theme-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.8rem; }
         .theme-row input[type=color] { border: none; width: 30px; height: 30px; cursor: pointer; background: transparent; }
-
-        /* --- SISTEMA DE CAMPANHA --- */
-.party-hud {
-    position: fixed; top: 15px; left: 100px; 
-    display: flex; gap: 10px; z-index: 999;
-    flex-wrap: wrap; max-width: calc(100% - 460px);
-}
-.party-card {
-    background: rgba(15, 15, 20, 0.95); border: 1px solid var(--border-color);
-    padding: 10px; border-radius: 6px; min-width: 140px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.8); transition: 0.3s;
-}
-.party-card.turno-ativo {
-    border-color: var(--text-gold);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-    transform: translateY(-3px);
-}
-#initiative-sidebar {
-    position: fixed; left: 85px; top: 50%; transform: translateY(-50%);
-    width: 220px; background: rgba(10, 10, 15, 0.98);
-    border-right: 2px solid var(--text-gold); border-top: 2px solid var(--text-gold); border-bottom: 2px solid var(--text-gold);
-    padding: 15px; z-index: 999; display: none; border-radius: 0 12px 12px 0;
-    box-shadow: 5px 0 20px rgba(0,0,0,0.9);
-}
-.ini-item {
-    padding: 8px; border-bottom: 1px solid #333; display: flex; justify-content: space-between;
-    font-family: 'Cinzel', serif; font-size: 0.85rem; color: #ccc;
-}
-.ini-item.ativo { background: rgba(212, 175, 55, 0.15); border-left: 3px solid var(--text-gold); color: #fff;}
     </style>
 </head>
 <body>
@@ -365,7 +336,6 @@
     <button class="sidebar-btn" id="btn-combate" onclick="mudarArea('combate')">⚔️</button>
     <button class="sidebar-btn" id="btn-inventario" onclick="mudarArea('inventario')">🎒</button>
     <button class="sidebar-btn" id="btn-notas" onclick="mudarArea('notas')" title="Anotações">📚</button>
-    <button class="sidebar-btn" id="btn-campanha" onclick="mudarArea('campanha')" title="Campanha">🏕️</button>
     <button class="sidebar-btn" onclick="confirmarSalvar()" title="Salvar na Nuvem">💾</button>
     <select id="save-slot" class="sidebar-btn" onchange="carregarDaNuvem()" title="Mudar Slot">
         <option value="1">🗂️ 1</option>
@@ -587,52 +557,6 @@
     </section>
 </div>
 
-<!-- TELA DE CAMPANHA -->
-<div id="area-campanha" class="page-area">
-    <section class="section-box">
-        <div class="section-title">Central de Campanha</div>
-        
-        <!-- Estado: Fora de Campanha -->
-        <div id="campanha-lobby" style="display: flex; gap: 20px; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 250px; background: rgba(0,0,0,0.3); padding: 20px; border: 1px solid #333; border-radius: 6px;">
-                <h3 style="color: var(--text-gold); margin-top: 0; font-family: 'Cinzel', serif;">Criar Mesa</h3>
-                <input type="text" id="nova-camp-nome" class="modal-input" placeholder="Nome da Campanha">
-                <button class="btn-forge" onclick="criarCampanha()">Fundar Campanha (Você será o Mestre)</button>
-            </div>
-            <div style="flex: 1; min-width: 250px; background: rgba(0,0,0,0.3); padding: 20px; border: 1px solid #333; border-radius: 6px;">
-                <h3 style="color: var(--light-purple); margin-top: 0; font-family: 'Cinzel', serif;">Entrar em Mesa</h3>
-                <input type="text" id="join-camp-id" class="modal-input" placeholder="ID da Campanha fornecido pelo Mestre">
-                <button class="btn-forge" style="background: var(--bg-dark); border: 1px solid var(--light-purple);" onclick="entrarCampanha()">Unir-se à Campanha</button>
-            </div>
-        </div>
-
-        <!-- Estado: Dentro da Campanha -->
-        <div id="campanha-ativa" style="display: none; text-align: center;">
-            <h2 id="camp-title-display" style="color: var(--text-gold); font-family: 'Cinzel', serif;"></h2>
-            <p>ID para convidar jogadores: <span id="camp-id-display" style="color: var(--light-purple); user-select: all; font-weight: bold;"></span></p>
-            
-            <div id="painel-mestre" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #ff1744; background: rgba(255, 23, 68, 0.05); border-radius: 8px;">
-                <h3 style="color: #ff1744; margin-top: 0; font-family: 'Cinzel', serif;">👑 Controles do Mestre</h3>
-                <button class="btn-forge" id="btn-toggle-combate" style="background: #ff1744; width: auto; padding: 10px 20px;" onclick="toggleCombate()">⚔️ Iniciar Combate</button>
-            </div>
-            
-            <button class="btn-roll" onclick="sairCampanha()" style="margin-top: 30px; color: #888;">Sair da Campanha</button>
-        </div>
-    </section>
-</div>
-
-<!-- HUD DOS JOGADORES (Topo) -->
-<div id="party-hud" class="party-hud" style="display: none;"></div>
-
-<!-- SIDEBAR DE INICIATIVA (Esquerda) -->
-<div id="initiative-sidebar">
-    <div style="font-family: 'Cinzel', serif; color: var(--text-gold); text-align: center; margin-bottom: 10px; font-weight: bold;">Ordem de Combate</div>
-    <div id="initiative-list-container"></div>
-    <div id="master-ini-controls" style="display: none; margin-top: 15px;">
-        <button class="btn-forge" style="padding: 8px; font-size: 0.8rem;" onclick="proximoTurno()">Passar Turno ⏩</button>
-    </div>
-</div>
-
 <button id="theme-float-btn" onclick="toggleThemePanel()" title="Personalizar Cores do Site">🎨</button>
 <div id="theme-panel">
     <div style="text-align:center; color:var(--text-gold); font-weight:bold; margin-bottom:10px; font-size:0.9rem;">Paleta de Cores</div>
@@ -809,200 +733,6 @@ const firebaseConfig = {
 
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
-
-  /* =========================================
-   SISTEMA DE CAMPANHAS EM TEMPO REAL
-========================================= */
-let currentCampanhaId = null;
-let souMestre = false;
-let syncTimeoutCampanha;
-
-// Cria uma nova campanha no Firebase
-function criarCampanha() {
-    if (!currentUser) return alert("Faça login no Google pela sidebar primeiro!");
-    let nome = document.getElementById('nova-camp-nome').value;
-    if (!nome) return alert("Dê um nome à campanha!");
-
-    let novaCampRef = database.ref('campanhas').push();
-    novaCampRef.set({
-        nome: nome,
-        mestre: currentUser.uid,
-        emCombate: false,
-        turnoAtualUid: ""
-    }).then(() => {
-        document.getElementById('join-camp-id').value = novaCampRef.key;
-        entrarCampanha();
-    });
-}
-
-// Conecta à campanha e inicia os Listeners (ouvintes)
-function entrarCampanha() {
-    if (!currentUser) return alert("Faça login primeiro!");
-    let id = document.getElementById('join-camp-id').value.trim();
-    if (!id) return alert("Insira o ID da campanha.");
-
-    database.ref('campanhas/' + id).once('value').then(snap => {
-        if (!snap.exists()) return alert("Campanha não encontrada!");
-        
-        currentCampanhaId = id;
-        document.getElementById('campanha-lobby').style.display = 'none';
-        document.getElementById('campanha-ativa').style.display = 'block';
-        document.getElementById('camp-id-display').innerText = id;
-        document.getElementById('party-hud').style.display = 'flex';
-
-        // Escuta as atualizações da campanha em tempo real
-        database.ref('campanhas/' + id).on('value', atualizarTelaCampanha);
-        
-        // Dispara o status inicial do jogador para a nuvem
-        sincronizarStatusCampanha();
-    });
-}
-
-function sairCampanha() {
-    if(currentCampanhaId) database.ref('campanhas/' + currentCampanhaId).off('value');
-    currentCampanhaId = null;
-    souMestre = false;
-    document.getElementById('campanha-lobby').style.display = 'flex';
-    document.getElementById('campanha-ativa').style.display = 'none';
-    document.getElementById('party-hud').style.display = 'none';
-    document.getElementById('initiative-sidebar').style.display = 'none';
-}
-
-// Atualiza e desenha a UI de todo mundo (HUD e Iniciativa)
-function atualizarTelaCampanha(snap) {
-    let dados = snap.val();
-    if (!dados) return;
-
-    document.getElementById('camp-title-display').innerText = dados.nome;
-    souMestre = (dados.mestre === currentUser.uid);
-    
-    let painelMestre = document.getElementById('painel-mestre');
-    painelMestre.style.display = souMestre ? 'block' : 'none';
-    
-    let btnCombate = document.getElementById('btn-toggle-combate');
-    btnCombate.innerText = dados.emCombate ? "🛑 Encerrar Combate" : "⚔️ Iniciar Combate";
-
-    // Desenhar a barra flutuante (HUD) dos jogadores
-    let hud = document.getElementById('party-hud');
-    hud.innerHTML = '';
-    
-    let jogadores = dados.jogadores ? Object.entries(dados.jogadores).map(([uid, p]) => ({uid, ...p})) : [];
-    
-    jogadores.forEach(p => {
-        let isMe = (p.uid === currentUser.uid);
-        let btnIni = '';
-        
-        // Se estiver em combate e eu ainda não rolei iniciativa, o botão aparece na MINHA ficha
-        if (dados.emCombate && isMe && p.iniciativa === undefined) {
-            btnIni = `<button onclick="rolarIniciativa()" style="width:100%; margin-top:8px; background:#ff1744; color:#fff; border:none; padding:5px; border-radius:3px; cursor:pointer; font-family:'Cinzel',serif; font-size:0.7rem; font-weight:bold;">🎲 Rolar Iniciativa</button>`;
-        }
-
-        hud.innerHTML += `
-            <div class="party-card ${dados.turnoAtualUid === p.uid ? 'turno-ativo' : ''}">
-                <div style="font-weight:bold; color:var(--text-gold); font-size:0.85rem;">${p.nome || 'Desconhecido'}</div>
-                <div style="font-size:0.75rem; display:flex; gap:5px; margin-top:5px; font-weight:bold;">
-                    <span style="color:#ff1744;">PV: ${p.pv}</span> |
-                    <span style="color:#ffca28;">PA: ${p.pa}</span> |
-                    <span style="color:#00e5ff;">SA: ${p.sa}</span>
-                </div>
-                ${btnIni}
-            </div>
-        `;
-    });
-
-    // Sidebar de Iniciativa
-    let iniSidebar = document.getElementById('initiative-sidebar');
-    if (dados.emCombate) {
-        iniSidebar.style.display = 'block';
-        let lista = document.getElementById('initiative-list-container');
-        lista.innerHTML = '';
-        
-        // Organiza do maior número para o menor
-        let jogadoresCombate = jogadores.filter(j => j.iniciativa !== undefined);
-        jogadoresCombate.sort((a, b) => b.iniciativa - a.iniciativa);
-
-        jogadoresCombate.forEach(p => {
-            let ativo = (dados.turnoAtualUid === p.uid);
-            lista.innerHTML += `
-                <div class="ini-item ${ativo ? 'ativo' : ''}">
-                    <span>${p.nome}</span>
-                    <span style="color:var(--text-gold);">${p.iniciativa}</span>
-                </div>
-            `;
-        });
-
-        document.getElementById('master-ini-controls').style.display = souMestre ? 'block' : 'none';
-    } else {
-        iniSidebar.style.display = 'none';
-    }
-}
-
-// Envia os dados vitais do jogador para a mesa
-function sincronizarStatusCampanha() {
-    if (!currentCampanhaId || !currentUser) return;
-    
-    let nick = document.getElementById('user-nickname').value || "Jogador";
-    let pv = document.getElementById('curr-pv').value || 0;
-    let pa = document.getElementById('curr-pa').value || 0;
-    let sa = document.getElementById('curr-sa').value || 0;
-
-    database.ref(`campanhas/${currentCampanhaId}/jogadores/${currentUser.uid}`).update({
-        nome: nick,
-        pv: pv,
-        pa: pa,
-        sa: sa
-    });
-}
-
-/* --- FUNÇÕES DE COMBATE --- */
-function toggleCombate() {
-    if (!souMestre) return;
-    database.ref(`campanhas/${currentCampanhaId}`).once('value').then(snap => {
-        let estadoAtual = snap.val().emCombate;
-        let updates = { emCombate: !estadoAtual, turnoAtualUid: "" };
-        
-        // Se está encerrando o combate, reseta a iniciativa de todos
-        if (estadoAtual && snap.val().jogadores) {
-            Object.keys(snap.val().jogadores).forEach(uid => {
-                database.ref(`campanhas/${currentCampanhaId}/jogadores/${uid}/iniciativa`).remove();
-            });
-        }
-        database.ref(`campanhas/${currentCampanhaId}`).update(updates);
-    });
-}
-
-function rolarIniciativa() {
-    // Rola 1d20 usando seu sistema de som e cálculo
-    let res = rolarDadosAvancado("1d20");
-    // Tenta pegar o bônus de Agilidade ou Perícia (se a sua ficha possuir o atributo populado)
-    let bonus = parseInt(document.getElementById('attr-AGI')?.value || sheet.atributos['AGI'] || 0);
-    let total = res.total + bonus;
-    
-    database.ref(`campanhas/${currentCampanhaId}/jogadores/${currentUser.uid}`).update({
-        iniciativa: total
-    });
-    
-    spawnPopup("Iniciativa", "Ordem de Combate", total, "var(--text-gold)", "INICIATIVA", `1d20 + ${bonus}`);
-    enviarRolagemParaServidor("Iniciativa", "Ordem de Combate", total, "var(--text-gold)", "INICIATIVA", `1d20 + ${bonus}`);
-}
-
-function proximoTurno() {
-    if (!souMestre) return;
-    database.ref(`campanhas/${currentCampanhaId}`).once('value').then(snap => {
-        let dados = snap.val();
-        let jogadoresCombate = dados.jogadores ? Object.entries(dados.jogadores).map(([uid, p]) => ({uid, ...p})) : [];
-        jogadoresCombate = jogadoresCombate.filter(j => j.iniciativa !== undefined).sort((a, b) => b.iniciativa - a.iniciativa);
-        
-        if (jogadoresCombate.length === 0) return;
-
-        let currentIndex = jogadoresCombate.findIndex(j => j.uid === dados.turnoAtualUid);
-        let nextIndex = (currentIndex + 1) % jogadoresCombate.length;
-        
-        database.ref(`campanhas/${currentCampanhaId}`).update({
-            turnoAtualUid: jogadoresCombate[nextIndex].uid
-        });
-    });
-}
 </script>
 
 <script>
@@ -1151,8 +881,6 @@ function proximoTurno() {
 
     function marcarAlteracao() {
         alteracoesNaoSalvas = true;
-        clearTimeout(syncTimeoutCampanha);
-    syncTimeoutCampanha = setTimeout(sincronizarStatusCampanha, 800);
     }
 
     window.addEventListener('beforeunload', function (e) {
