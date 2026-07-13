@@ -2081,7 +2081,6 @@ function tocarSom(tipo) {
         
         if (tipo === 'Sabedoria') {
             bonusBase = calcularSabedoria();
-            qtdDados = parseInt(sheet.atributos['INT']) || 0;
         } else if (tipo.startsWith('Sentidos')) {
             let pod = parseInt(sheet.atributos['POD']) || 0;
             let pPerc = sheet.pericias.find(x => x.n === "Percepção");
@@ -2178,7 +2177,7 @@ function tocarSom(tipo) {
 
         container.innerHTML = `
             ${templateExtra('Sorte', 'Sorte', '#ffca28', '(Sorte - Azar)', true, modSorte)}
-            ${templateExtra('Sabedoria', 'Sabedoria', '#bc4ed8', `Base: ${sabBase} (Classe + INT)`)}
+            ${templateExtra('Sabedoria', 'Sabedoria', '#bc4ed8', `Modificador: ${sabBase} (Classe + INT)`)}
             
             <div class="skill-item" style="cursor: default; border-left-color: #ff1744;">
                 <div style="display: flex; flex-direction: column;">
@@ -2312,12 +2311,12 @@ function tocarSom(tipo) {
         const slot = document.getElementById('save-slot').value;
         database.ref(`users/${currentUser.uid}/slots/${slot}`).set(sheet)
             .then(() => {
-                tocarSom('crit');
+                tocarSom('click');
                 alteracoesNaoSalvas = false; // Reseta o rastreador
                 spawnPopup("SISTEMA", `Slot ${slot} Atualizado`, "SALVO", "#00ff88", "PROGRESSO SALVO", "Sua ficha está segura na nuvem!");
             })
             .catch(e => {
-                tocarSom('fail');
+                tocarSom('click');
                 console.error("Erro ao salvar:", e);
                 alert("Ocorreu um erro ao tentar salvar na nuvem.");
             });
