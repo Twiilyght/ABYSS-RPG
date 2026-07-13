@@ -738,10 +738,10 @@ const firebaseConfig = {
 <script>
     /* SISTEMA DE SOM VIA ARQUIVOS DE ÁUDIO (.MP3 / .WAV) */
 const efeitosSonoros = {
-    click: new Audio('click.mp3'),
-    roll:  new Audio('roll.mp3'),
-    crit:  new Audio('crit.mp3'),
-    fail:  new Audio('fail.mp3')
+    click: new Audio('sons/click.mp3'),
+    roll:  new Audio('sons/roll.mp3'),
+    crit:  new Audio('sons/crit.mp3'),
+    fail:  new Audio('sons/fail.mp3')
 };
 
 function tocarSom(tipo) {
@@ -1992,7 +1992,7 @@ function tocarSom(tipo) {
         if (dado === 20) return { txt: "SUCESSO EXTREMO", cor: "#00ff88", sound: 'crit' }; 
         if (total >= 20) return { txt: "SUCESSO BOM", cor: "#7fffd4", sound: 'roll' }; 
         if (total >= dts.sucesso) return { txt: "SUCESSO NORMAL", cor: "#4488ff", sound: 'roll' };
-        return { txt: "FALHA", cor: "#ff5252", sound: 'fail' };
+        return { txt: "FALHA", cor: "#ff5252", sound: 'roll' };
     }
 
     function spawnPopup(titulo, subtitulo, total, corStatus, txtStatus, detalhes = "") {
