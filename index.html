@@ -736,106 +736,28 @@ const firebaseConfig = {
 </script>
 
 <script>
-    /* SISTEMA DE SOM SINTETIZADO VIA WEB AUDIO API (DADOS E EFEITOS EXPLOSIVOS) */
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioCtx = null;
+    /* SISTEMA DE SOM VIA ARQUIVOS DE ÁUDIO (.MP3 / .WAV) */
+const efeitosSonoros = {
+    click: new Audio('sons/click.mp3'),
+    roll:  new Audio('sons/roll.mp3'),
+    crit:  new Audio('sons/crit.mp3'),
+    fail:  new Audio('sons/fail.mp3')
+};
 
-    function tocarSom(tipo) {
-        try {
-            if (!audioCtx) audioCtx = new AudioContext();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            
-            const agora = audioCtx.currentTime;
-
-            if (tipo === 'click') {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(300, agora);
-                osc.frequency.exponentialRampToValueAtTime(100, agora + 0.08);
-                gain.gain.setValueAtTime(0.1, agora);
-                gain.gain.exponentialRampToValueAtTime(0.01, agora + 0.08);
-                osc.start(agora);
-                osc.stop(agora + 0.08);
-            } else if (tipo === 'roll') {
-                // Simulação realista de dados rolando (ruído branco filtrado com batidas curtas)
-                const duracao = 0.45;
-                const bufferSize = audioCtx.sampleRate * duracao;
-                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = Math.random() * 2 - 1;
-                }
-
-                const noise = audioCtx.createBufferSource();
-                noise.buffer = buffer;
-
-                const filter = audioCtx.createBiquadFilter();
-                filter.type = 'bandpass';
-                filter.frequency.setValueAtTime(1200, agora);
-                filter.Q.setValueAtTime(1.5, agora);
-
-                const gain = audioCtx.createGain();
-                gain.gain.setValueAtTime(0.3, agora);
-                // Oscilação rápida para simular os quiques do dado na mesa
-                gain.gain.setValueAtTime(0.3, agora + 0.05);
-                gain.gain.setValueAtTime(0.1, agora + 0.1);
-                gain.gain.setValueAtTime(0.25, agora + 0.15);
-                gain.gain.setValueAtTime(0.05, agora + 0.25);
-                gain.gain.setValueAtTime(0.15, agora + 0.3);
-                gain.gain.exponentialRampToValueAtTime(0.001, agora + duracao);
-
-                noise.connect(filter);
-                filter.connect(gain);
-                gain.connect(audioCtx.destination);
-                noise.start(agora);
-                noise.stop(agora + duracao);
-            } else if (tipo === 'crit') {
-                // Impacto sub-bass explosivo seguido por brilho épico triunfante
-                const oscBass = audioCtx.createOscillator();
-                const gainBass = audioCtx.createGain();
-                oscBass.connect(gainBass);
-                gainBass.connect(audioCtx.destination);
-                oscBass.type = 'sine';
-                oscBass.frequency.setValueAtTime(180, agora);
-                oscBass.frequency.exponentialRampToValueAtTime(30, agora + 0.5);
-                gainBass.gain.setValueAtTime(0.5, agora);
-                gainBass.gain.exponentialRampToValueAtTime(0.01, agora + 0.6);
-                oscBass.start(agora);
-                oscBass.stop(agora + 0.6);
-
-                const oscAgudo = audioCtx.createOscillator();
-                const gainAgudo = audioCtx.createGain();
-                oscAgudo.connect(gainAgudo);
-                gainAgudo.connect(audioCtx.destination);
-                oscAgudo.type = 'sawtooth';
-                oscAgudo.frequency.setValueAtTime(523.25, agora + 0.05); // Dó
-                oscAgudo.frequency.setValueAtTime(659.25, agora + 0.15); // Mi
-                oscAgudo.frequency.setValueAtTime(783.99, agora + 0.25); // Sol
-                oscAgudo.frequency.setValueAtTime(1046.50, agora + 0.35); // Dó agudo
-                gainAgudo.gain.setValueAtTime(0.1, agora + 0.05);
-                gainAgudo.gain.linearRampToValueAtTime(0.2, agora + 0.35);
-                gainAgudo.gain.exponentialRampToValueAtTime(0.001, agora + 0.9);
-                oscAgudo.start(agora + 0.05);
-                oscAgudo.stop(agora + 0.9);
-            } else if (tipo === 'fail') {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(150, agora);
-                osc.frequency.linearRampToValueAtTime(80, agora + 0.3);
-                gain.gain.setValueAtTime(0.15, agora);
-                gain.gain.exponentialRampToValueAtTime(0.01, agora + 0.3);
-                osc.start(agora);
-                osc.stop(agora + 0.3);
-            }
-        } catch(e) {}
+function tocarSom(tipo) {
+    const som = efeitosSonoros[tipo];
+    
+    if (som) {
+        // currentTime = 0 garante que se você clicar 2x rápido, 
+        // o som recomeça imediatamente em vez de ignorar o segundo clique
+        som.currentTime = 0; 
+        
+        // Toca o arquivo
+        som.play().catch(erro => {
+            console.log("O navegador bloqueou o áudio. O usuário precisa interagir com a página primeiro.", erro);
+        });
     }
-
+}
     /* SISTEMA DE TEMAS (Personalização de cores e degradê) */
     function toggleThemePanel() {
         const painel = document.getElementById('theme-panel');
