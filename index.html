@@ -758,7 +758,7 @@ function tocarSom(tipo) {
         });
     }
 }
-    /* SISTEMA DE TEMAS (Personalização de cores e degradê) */
+    /* SISTEMA DE TEMAS (Personalização de cores e degradê por slot) */
     function toggleThemePanel() {
         const painel = document.getElementById('theme-panel');
         painel.style.display = painel.style.display === 'block' ? 'none' : 'block';
@@ -766,7 +766,13 @@ function tocarSom(tipo) {
 
     function mudarCor(variavel, valor) {
         document.documentElement.style.setProperty(variavel, valor);
-        localStorage.setItem('abyss_theme_' + variavel, valor);
+        
+        // Garante que o objeto tema existe na ficha atual (caso carregue uma ficha antiga)
+        if (!sheet.tema) sheet.tema = {}; 
+        
+        // Salva a cor no objeto da ficha e marca para salvar na nuvem
+        sheet.tema[variavel] = valor;
+        marcarAlteracao();
     }
 
     function resetarTema() {
@@ -776,10 +782,11 @@ function tocarSom(tipo) {
         mudarCor('--primary-purple', '#7b1fa2');
         mudarCor('--light-purple', '#bc4ed8');
         mudarCor('--text-gold', '#d4af37');
-        carregarCoresPickers();
+        aplicarTemaDaFicha(); // Atualiza os inputs de cor
     }
 
-    function carregarCoresPickers() {
+    // Trocamos o nome e a lógica para ler do `sheet` em vez do localStorage
+    function aplicarTemaDaFicha() {
         const cores = {
             '--bg-gradient-top': 'picker-bg-top',
             '--bg-gradient-bottom': 'picker-bg-bottom',
@@ -787,11 +794,18 @@ function tocarSom(tipo) {
             '--light-purple': 'picker-light',
             '--text-gold': 'picker-gold'
         };
+        
+        // Se a ficha não tiver tema salvo ainda, ignora
+        if (!sheet.tema) return; 
+
         for (let varName in cores) {
-            let val = localStorage.getItem('abyss_theme_' + varName) || getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+            let val = sheet.tema[varName];
             if (val) {
+                // Aplica a cor na página
                 document.documentElement.style.setProperty(varName, val);
                 if (varName === '--bg-gradient-top') document.documentElement.style.setProperty('--bg-dark', val);
+                
+                // Atualiza a bolinha de cor no painel visual
                 let input = document.getElementById(cores[varName]);
                 if (input && val.startsWith('#')) input.value = val;
             }
@@ -854,7 +868,15 @@ function tocarSom(tipo) {
             bloqueioBase: 0,
             cargaBase: 20,
             nickname: "",
-            antecedencia: ""
+            antecedencia: "",
+            // Adicione esta nova propriedade:
+            tema: {
+                '--bg-gradient-top': '#050507',
+                '--bg-gradient-bottom': '#12071c',
+                '--primary-purple': '#7b1fa2',
+                '--light-purple': '#bc4ed8',
+                '--text-gold': '#d4af37'
+            }
         };
     }
 
@@ -2359,7 +2381,7 @@ function tocarSom(tipo) {
     }
 
     window.onload = () => {
-        carregarCoresPickers();
+        aplicarTemaDaFicha();
         render();
         renderEspeciais();
     };
