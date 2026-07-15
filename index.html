@@ -1375,9 +1375,10 @@ function tocarSom(tipo) {
         if (!sheet.classe) return;
         
         let con = parseInt(sheet.atributos['CON']) || 0;
-let pod = parseInt(sheet.atributos['POD']) || 0;
-let agi = parseInt(sheet.atributos['AGI']) || 0;
-let nivel = parseInt(sheet.nivel) || 0; // CORRETO: Lê direto da memória
+        let pod = parseInt(sheet.atributos['POD']) || 0;
+        let agi = parseInt(sheet.atributos['AGI']) || 0;
+        let nivel = parseInt(document.getElementById('val-nivel').value) || 0;
+
         let maxPV = 0, maxPA = 0, maxSA = 0, def = 0;
 
         if (sheet.classe === 'arcanista') {
@@ -2317,7 +2318,6 @@ let nivel = parseInt(sheet.nivel) || 0; // CORRETO: Lê direto da memória
             const raw = document.getElementById('codigo-export').value;
             const obj = JSON.parse(decodeURIComponent(escape(atob(raw))));
             sheet = Object.assign(getFichaZerada(), obj);
-            aplicarTemaDaFicha();
             atualizarVisuaisDaFicha();
             marcarAlteracao();
             alert("Ficha importada com sucesso!");
@@ -2326,68 +2326,40 @@ let nivel = parseInt(sheet.nivel) || 0; // CORRETO: Lê direto da memória
         }
     }
 
-    function obterSlotAtual() {
-    return document.getElementById('save-slot').value;
-}
-
-function sincronizarInterfaceComSheet() {
-    // Atualiza Nickname e Antecedência
-    document.getElementById('user-nickname').value = sheet.nickname || "";
-    document.getElementById('user-sub').value = sheet.antecedencia || "";
-    
-    // Atualiza Nível
-    document.getElementById('val-nivel').value = sheet.nivel || 0;
-    
-    // Atualiza Status Básicos
-    document.getElementById('curr-pv').value = sheet.recursosFinos?.pv_atual || document.getElementById('max-pv').value;
-    document.getElementById('curr-pa').value = sheet.recursosFinos?.pa_atual || document.getElementById('max-pa').value;
-    document.getElementById('curr-sa').value = sheet.recursosFinos?.sa_atual || document.getElementById('max-sa').value;
-    
-    // Atualiza Avatar e Classe
-    atualizarAvatarUI();
-    atualizarVisuaisClasse();
-    
-    // Aqui você também deve chamar funções que recriam a lista de itens, habilidades e perícias
-    // renderizarAtributos();
-    // renderizarPericias();
-    // renderizarInventario();
-}
-
-function salvarNaNuvem() {
-    if (!currentUser) return;
-    
-    const slot = obterSlotAtual();
-    const caminhoFicha = `usuarios/${currentUser.uid}/fichas/slot_${slot}`;
-    
-    database.ref(caminhoFicha).set(sheet).then(() => {
-        alteracoesNaoSalvas = false;
-        alert(`Ficha salva com sucesso no Slot ${slot}!`);
-    }).catch(error => {
-        console.error("Erro ao salvar:", error);
-    });
-}
-
-function carregarDaNuvem() {
-    if (!currentUser) return;
-    
-    const slot = obterSlotAtual();
-    const caminhoFicha = `usuarios/${currentUser.uid}/fichas/slot_${slot}`;
-    
-    database.ref(caminhoFicha).once('value').then((snapshot) => {
-        if (snapshot.exists()) {
-            // Se o slot tem dados, carrega eles
-            sheet = snapshot.val();
-        } else {
-            // Se o slot está vazio, zera a ficha para não vazar dados do slot anterior!
-            sheet = getFichaZerada();
+    function salvarNaNuvem() {
+        if(!currentUser) {
+            alert("Faça o login com o Google para poder salvar na nuvem!");
+            return;
         }
-        
-        // Aplica os dados carregados na interface
-        sincronizarInterfaceComSheet(); 
-        calcularStatusClasse();
-        aplicarTemaDaFicha();
-    });
-}
+        const slot = document.getElementById('save-slot').value;
+        database.ref(`users/${currentUser.uid}/slots/${slot}`).set(sheet)
+            .then(() => {
+                tocarSom('click');
+                alteracoesNaoSalvas = false; // Reseta o rastreador
+                spawnPopup("SISTEMA", `Slot ${slot} Atualizado`, "SALVO", "#00ff88", "PROGRESSO SALVO", "Sua ficha está segura na nuvem!");
+            })
+            .catch(e => {
+                tocarSom('click');
+                console.error("Erro ao salvar:", e);
+                alert("Ocorreu um erro ao tentar salvar na nuvem.");
+            });
+    }
+
+    function carregarDaNuvem() {
+        if(!currentUser) return;
+        const slot = document.getElementById('save-slot').value;
+        database.ref(`users/${currentUser.uid}/slots/${slot}`).once('value').then(snapshot => {
+            const data = snapshot.val();
+            if(data) {
+                sheet = Object.assign(getFichaZerada(), data); 
+            } else {
+                sheet = getFichaZerada(); 
+            }
+            atualizarVisuaisDaFicha();
+            alteracoesNaoSalvas = false; // Carregou, então está limpo
+        }).catch(e => console.error("Erro ao carregar:", e));
+    }
+
     function atualizarVisuaisDaFicha() {
         atualizarVisuaisClasse();
         calcularStatusClasse();
