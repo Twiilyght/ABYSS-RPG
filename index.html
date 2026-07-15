@@ -1144,6 +1144,7 @@ function tocarSom(tipo) {
             btnLogin.innerText = "🔓";
             btnLogin.title = "Sair (" + user.displayName + ")";
             carregarDaNuvem(); 
+            aplicarTemaDaFicha();
         } else {
             btnLogin.innerText = "👤";
             btnLogin.title = "Login Google";
@@ -1445,6 +1446,7 @@ function tocarSom(tipo) {
         atualizarVisuaisClasse();
         calcularStatusClasse();
         render(); 
+        aplicarTemaDaFicha();
         marcarAlteracao();
     }
     
