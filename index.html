@@ -2318,6 +2318,7 @@ function tocarSom(tipo) {
             const raw = document.getElementById('codigo-export').value;
             const obj = JSON.parse(decodeURIComponent(escape(atob(raw))));
             sheet = Object.assign(getFichaZerada(), obj);
+            aplicarTemaDaFicha();
             atualizarVisuaisDaFicha();
             marcarAlteracao();
             alert("Ficha importada com sucesso!");
@@ -2355,6 +2356,7 @@ function tocarSom(tipo) {
             } else {
                 sheet = getFichaZerada(); 
             }
+            aplicarTemaDaFicha()
             atualizarVisuaisDaFicha();
             alteracoesNaoSalvas = false; // Carregou, então está limpo
         }).catch(e => console.error("Erro ao carregar:", e));
