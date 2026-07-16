@@ -46,26 +46,22 @@
         input[type=number] { -moz-appearance: textfield; }
 
         body { 
-    background-color: var(--bg-dark);
-    background-image: 
-        /* Brilhos radiais agora acompanham o tema dinamicamente */
-        radial-gradient(circle at 15% 25%, color-mix(in srgb, var(--primary-purple) 15%, transparent) 0%, transparent 50%),
-        radial-gradient(circle at 85% 35%, color-mix(in srgb, var(--primary-purple) 12%, transparent) 0%, transparent 45%),
-        radial-gradient(circle at 50% 75%, color-mix(in srgb, var(--light-purple) 8%, transparent) 0%, transparent 55%),
-        radial-gradient(circle at 35% 70%, color-mix(in srgb, var(--primary-purple) 15%, transparent) 0%, transparent 50%),
-        
-        /* A faixa linear (#0d0614) substituída por uma mistura das variáveis de fundo */
-        linear-gradient(180deg, var(--bg-gradient-top) 0%, color-mix(in srgb, var(--bg-gradient-bottom) 30%, var(--bg-dark)) 40%, var(--bg-gradient-bottom) 70%, var(--bg-gradient-top) 100%);
-    
-    background-attachment: fixed;
-    background-size: cover;
-    color: var(--text-light);
-    font-family: 'Cinzel', serif;
-    margin: 0;
-    display: flex;
-    overflow-x: hidden;
-    transition: background 0.5s ease;
-}
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(123, 31, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 35%, rgba(49, 27, 146, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 50% 75%, rgba(186, 104, 200, 0.08) 0%, transparent 55%),
+                radial-gradient(circle at 35% 70%, rgba(74, 20, 140, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg-gradient-top) 0%, #0d0614 40%, var(--bg-gradient-bottom) 70%, var(--bg-gradient-top) 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            color: var(--text-light);
+            font-family: 'Cinzel', serif;
+            margin: 0;
+            display: flex;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
         
         #log-panel {
             position: fixed; right: 0; top: 0; width: 350px; height: 100%;
@@ -2391,35 +2387,7 @@ function tocarSom(tipo) {
         aplicarTemaDaFicha();
         render();
         renderEspeciais();
-        renderizarAtributos()
     };
-
-    function renderizarAtributos() {
-    const container = document.getElementById('attr-container');
-    if (!container) return;
-    
-    container.innerHTML = ''; // Limpa os atributos atuais
-    
-    // O loop forEach passa pela array, forçando o HTML a ser gerado na ordem estipulada
-    targetListAtributos.forEach(attr => {
-        // Pega o valor atual do atributo na ficha do jogador
-        const valorAtual = sheet.atributos[attr] || 1;
-        
-        // Monta a estrutura HTML baseada no seu CSS (hexágonos)
-        container.innerHTML += `
-            <div class="attr-container-outer" title="Rolar ${attr}">
-                <div class="attr-hexagon-border">
-                    <div class="attr-hexagon-inner">
-                        <span style="color: var(--text-gold); font-size: 0.8rem; font-weight: bold; margin-bottom: -5px;">${attr}</span>
-                        <input type="number" class="attr-value-input" value="${valorAtual}" 
-                            onchange="sheet.atributos['${attr}'] = parseInt(this.value) || 1; marcarAlteracao();" 
-                            onclick="event.stopPropagation()">
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-}
 </script>
 </body>
 </html>
