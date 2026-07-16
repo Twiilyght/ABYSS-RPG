@@ -2361,26 +2361,27 @@ function tocarSom(tipo) {
     }
 
     function atualizarVisuaisDaFicha() {
-        atualizarVisuaisClasse();
-        calcularStatusClasse();
-        calcularVelocidade();
-        atualizarAvatarUI();
-        render();
-        atualizarPainelInventario();
-        renderAbilities();
-        renderNotas();
-        renderRDs();
-        renderEspeciais();
-        
-        document.getElementById('user-nickname').value = sheet.nickname || "";
-        document.getElementById('user-sub').value = sheet.antecedencia || "";
-        document.getElementById('val-nivel').value = sheet.nivel || 0;
-        document.getElementById('val-pa-turno').value = sheet.paTurno || 0;
-        document.getElementById('curr-pv').value = sheet.recursosFinos?.pv_atual || document.getElementById('max-pv').value;
-        document.getElementById('curr-pa').value = sheet.recursosFinos?.pa_atual || document.getElementById('max-pa').value;
-        document.getElementById('curr-sa').value = sheet.recursosFinos?.sa_atual || document.getElementById('max-sa').value;
-        updateBar('pv'); updateBar('pa'); updateBar('sa');
-    }
+    aplicarTemaDaFicha(); // <- Adicione esta linha para puxar a cor do slot automaticamente
+    atualizarVisuaisClasse();
+    calcularStatusClasse();
+    calcularVelocidade();
+    atualizarAvatarUI();
+    render();
+    atualizarPainelInventario();
+    renderAbilities();
+    renderNotas();
+    renderRDs();
+    renderEspeciais();
+    
+    document.getElementById('user-nickname').value = sheet.nickname || "";
+    document.getElementById('user-sub').value = sheet.antecedencia || "";
+    document.getElementById('val-nivel').value = sheet.nivel || 0;
+    document.getElementById('val-pa-turno').value = sheet.paTurno || 0;
+    document.getElementById('curr-pv').value = sheet.recursosFinos?.pv_atual || document.getElementById('max-pv').value;
+    document.getElementById('curr-pa').value = sheet.recursosFinos?.pa_atual || document.getElementById('max-pa').value;
+    document.getElementById('curr-sa').value = sheet.recursosFinos?.sa_atual || document.getElementById('max-sa').value;
+    updateBar('pv'); updateBar('pa'); updateBar('sa');
+}
 
     window.onload = () => {
         aplicarTemaDaFicha();
