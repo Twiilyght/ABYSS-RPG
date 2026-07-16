@@ -1381,7 +1381,7 @@ function tocarSom(tipo) {
         let con = parseInt(sheet.atributos['CON']) || 0;
         let pod = parseInt(sheet.atributos['POD']) || 0;
         let agi = parseInt(sheet.atributos['AGI']) || 0;
-        let nivel = parseInt(document.getElementById('val-nivel').value) || 0;
+        let nivel = parseInt(sheet.nivel) || 0;
 
         let maxPV = 0, maxPA = 0, maxSA = 0, def = 0;
 
@@ -2360,6 +2360,7 @@ function tocarSom(tipo) {
                 sheet = getFichaZerada(); 
             }
             atualizarVisuaisDaFicha();
+            document.getElementById('val-nivel').value = sheet.nivel || 0;
             alteracoesNaoSalvas = false; // Carregou, então está limpo
         }).catch(e => console.error("Erro ao carregar:", e));
     }
