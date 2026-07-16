@@ -2391,7 +2391,35 @@ function tocarSom(tipo) {
         aplicarTemaDaFicha();
         render();
         renderEspeciais();
+        renderizarAtributos()
     };
+
+    function renderizarAtributos() {
+    const container = document.getElementById('attr-container');
+    if (!container) return;
+    
+    container.innerHTML = ''; // Limpa os atributos atuais
+    
+    // O loop forEach passa pela array, forçando o HTML a ser gerado na ordem estipulada
+    targetListAtributos.forEach(attr => {
+        // Pega o valor atual do atributo na ficha do jogador
+        const valorAtual = sheet.atributos[attr] || 1;
+        
+        // Monta a estrutura HTML baseada no seu CSS (hexágonos)
+        container.innerHTML += `
+            <div class="attr-container-outer" title="Rolar ${attr}">
+                <div class="attr-hexagon-border">
+                    <div class="attr-hexagon-inner">
+                        <span style="color: var(--text-gold); font-size: 0.8rem; font-weight: bold; margin-bottom: -5px;">${attr}</span>
+                        <input type="number" class="attr-value-input" value="${valorAtual}" 
+                            onchange="sheet.atributos['${attr}'] = parseInt(this.value) || 1; marcarAlteracao();" 
+                            onclick="event.stopPropagation()">
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
 </script>
 </body>
 </html>
