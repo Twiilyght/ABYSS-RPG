@@ -465,34 +465,61 @@
 
     <div id="area-ficha" class="page-area active">
         <div class="defense-layout-container">
-            <div>
-                <section class="section-box">
-                    <div class="section-title">Atributos</div>
-                    <div id="attr-container" class="attributes-grid"></div>
-                </section>
+    <!-- Coluna Esquerda: Atributos e Dificuldade -->
+    <div>
+        <section class="section-box">
+            <div class="section-title">Atributos</div>
+            <div id="attr-container" class="attributes-grid"></div>
+        </section>
 
-                <div class="difficulty-selector">
-                    <button class="diff-btn" id="df-facil" onclick="setDif('facil')">FÁCIL</button>
-                    <button class="diff-btn active" id="df-normal" onclick="setDif('normal')">NORMAL</button>
-                    <button class="diff-btn" id="df-dificil" onclick="setDif('dificil')">DIFÍCIL</button>
-                </div>
-            </div>
-
-            <div class="defense-panel">
-                <div class="defense-header" style="font-family: 'Cinzel', serif; text-transform: none;">Bloqueio <span id="mod-ind-bloq" style="color:#00e5ff; font-size:0.75rem;"></span></div>
-                <div class="rd-item-row" style="border-left: 3px solid var(--text-gold);">
-                    <input type="checkbox" id="chk-bloqueio" onchange="marcarAlteracao()">
-                    <span style="font-size: 0.8rem; font-weight: bold; color: var(--text-gold); flex-grow: 1;">Bloqueio Base</span>
-                    <input type="number" id="val-bloqueio" value="0" class="mini-stat-input" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="sheet.bloqueioBase = parseInt(this.value)||0; marcarAlteracao();">
-                </div>
-
-                <div class="defense-header" style="margin-top: 20px;">
-                    <span>🔮 Resistências (RD)</span>
-                    <button onclick="adicionarNovaRD()" style="background: none; border: 1px solid var(--light-purple); color: var(--light-purple); font-size: 0.7rem; padding: 2px 5px; cursor: pointer; border-radius: 3px; font-family: 'Cinzel', serif;">+ Add RD</button>
-                </div>
-                <div id="rd-dinamicas-lista"></div>
-            </div>
+        <div class="difficulty-selector">
+            <button class="diff-btn" id="df-facil" onclick="setDif('facil')">FÁCIL</button>
+            <button class="diff-btn active" id="df-normal" onclick="setDif('normal')">NORMAL</button>
+            <button class="diff-btn" id="df-dificil" onclick="setDif('dificil')">DIFÍCIL</button>
         </div>
+    </div>
+
+    <!-- Coluna Direita: Envolvida em uma div com flex-direction: column para empilhar os painéis -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- NOVA CAIXA DE DT -->
+        <div class="defense-panel">
+            <div class="defense-header" style="font-family: 'Cinzel', serif; text-transform: none;">
+                <span>🎯 Dificuldade dos Testes (DT)</span>
+                <button onclick="adicionarNovaDT()" style="background: none; border: 1px solid var(--light-purple); color: var(--light-purple); font-size: 0.7rem; padding: 2px 5px; cursor: pointer; border-radius: 3px; font-family: 'Cinzel', serif;">+ Add DT</button>
+            </div>
+            
+            <div class="rd-item-row" style="border-left: 3px solid var(--text-gold);">
+                <span style="font-size: 0.8rem; font-weight: bold; color: var(--text-gold); flex-grow: 1;">DT de Feitiços</span>
+                <input type="number" id="val-dt-feiticos" value="0" class="mini-stat-input" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="sheet.dtFeiticos = parseInt(this.value)||0; marcarAlteracao();">
+            </div>
+            
+            <div class="rd-item-row" style="border-left: 3px solid var(--text-gold);">
+                <span style="font-size: 0.8rem; font-weight: bold; color: var(--text-gold); flex-grow: 1;">DT de Habilidades</span>
+                <input type="number" id="val-dt-habilidades" value="0" class="mini-stat-input" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="sheet.dtHabilidades = parseInt(this.value)||0; marcarAlteracao();">
+            </div>
+            
+            <div id="dt-dinamicas-lista"></div>
+        </div>
+
+        <!-- CAIXA DE BLOQUEIO E RD (O painel original que você já tinha) -->
+        <div class="defense-panel">
+            <div class="defense-header" style="font-family: 'Cinzel', serif; text-transform: none;">Bloqueio <span id="mod-ind-bloq" style="color:#00e5ff; font-size:0.75rem;"></span></div>
+            <div class="rd-item-row" style="border-left: 3px solid var(--text-gold);">
+                <input type="checkbox" id="chk-bloqueio" onchange="marcarAlteracao()">
+                <span style="font-size: 0.8rem; font-weight: bold; color: var(--text-gold); flex-grow: 1;">Bloqueio Base</span>
+                <input type="number" id="val-bloqueio" value="0" class="mini-stat-input" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="sheet.bloqueioBase = parseInt(this.value)||0; marcarAlteracao();">
+            </div>
+
+            <div class="defense-header" style="margin-top: 20px;">
+                <span>🔮 Resistências (RD)</span>
+                <button onclick="adicionarNovaRD()" style="background: none; border: 1px solid var(--light-purple); color: var(--light-purple); font-size: 0.7rem; padding: 2px 5px; cursor: pointer; border-radius: 3px; font-family: 'Cinzel', serif;">+ Add RD</button>
+            </div>
+            <div id="rd-dinamicas-lista"></div>
+        </div>
+        
+    </div>
+</div>
 
         <section class="section-box">
             <div class="section-title">Perícias</div>
@@ -873,7 +900,11 @@ function tocarSom(tipo) {
             cargaBase: 20,
             nickname: "",
             antecedencia: "",
-            // Adicione esta nova propriedade:
+           rds: [],
+           dts: [], // <-- ADICIONE ISTO
+           dtFeiticos: 0, // <-- ADICIONE ISTO
+           dtHabilidades: 0, // <-- ADICIONE ISTO
+           notas: [],
             tema: {
                 '--bg-gradient-top': '#050507',
                 '--bg-gradient-bottom': '#12071c',
@@ -2393,6 +2424,47 @@ function tocarSom(tipo) {
         render();
         renderEspeciais();
     };
+
+    // --- SISTEMA DE DTs (Classes de Dificuldade) ---
+
+function adicionarNovaDT() {
+    tocarSom('click');
+    if (!sheet.dts) sheet.dts = [];
+    sheet.dts.push({ nome: "Nova DT", valor: 0 });
+    renderizarDTs();
+    marcarAlteracao();
+}
+
+function removerDT(index) {
+    tocarSom('click');
+    if (!sheet.dts) return;
+    sheet.dts.splice(index, 1);
+    renderizarDTs();
+    marcarAlteracao();
+}
+
+function renderizarDTs() {
+    const lista = document.getElementById('dt-dinamicas-lista');
+    if (!lista) return;
+    lista.innerHTML = '';
+    
+    // Atualiza os inputs das DTs fixas de acordo com a ficha carregada
+    document.getElementById('val-dt-feiticos').value = sheet.dtFeiticos || 0;
+    document.getElementById('val-dt-habilidades').value = sheet.dtHabilidades || 0;
+
+    // Renderiza as DTs extras geradas pelo usuário
+    if (!sheet.dts) sheet.dts = [];
+    sheet.dts.forEach((dt, idx) => {
+        const row = document.createElement('div');
+        row.className = 'rd-item-row';
+        row.innerHTML = `
+            <button onclick="removerDT(${idx})" style="background: none; border: none; color: #ff1744; cursor: pointer; font-size: 1rem; font-weight: bold; margin-right: 5px; margin-top: 2px;" title="Remover DT">✕</button>
+            <input type="text" class="rd-name-input" value="${dt.nome}" placeholder="Nome da DT" onchange="sheet.dts[${idx}].nome = this.value; marcarAlteracao();">
+            <input type="number" class="mini-stat-input" value="${dt.valor}" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="sheet.dts[${idx}].valor = parseInt(this.value)||0; marcarAlteracao();">
+        `;
+        lista.appendChild(row);
+    });
+}
 </script>
 </body>
 </html>
