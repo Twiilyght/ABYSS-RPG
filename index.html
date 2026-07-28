@@ -900,11 +900,11 @@ function tocarSom(tipo) {
             cargaBase: 20,
             nickname: "",
             antecedencia: "",
-           rds: [],
-           dts: [], // <-- ADICIONE ISTO
-           dtFeiticos: 0, // <-- ADICIONE ISTO
-           dtHabilidades: 0, // <-- ADICIONE ISTO
-           notas: [],
+            rds: [],
+            dts: [], // <-- ADICIONE ISTO
+            dtFeiticos: 0, // <-- ADICIONE ISTO
+            dtHabilidades: 0, // <-- ADICIONE ISTO
+            notas: [],
             tema: {
                 '--bg-gradient-top': '#050507',
                 '--bg-gradient-bottom': '#12071c',
@@ -2408,6 +2408,7 @@ function tocarSom(tipo) {
     renderNotas();
     renderRDs();
     renderEspeciais();
+    atualizarVisuaisDTs();
     
     document.getElementById('user-nickname').value = sheet.nickname || "";
     document.getElementById('user-sub').value = sheet.antecedencia || "";
@@ -2465,6 +2466,74 @@ function renderizarDTs() {
         lista.appendChild(row);
     });
 }
+
+function atualizarVisuaisDTs() {
+    // Garante inicialização caso a ficha carregada seja de uma versão anterior
+    if (sheet.dtFeiticos === undefined) sheet.dtFeiticos = 0;
+    if (sheet.dtHabilidades === undefined) sheet.dtHabilidades = 0;
+    if (!Array.isArray(sheet.dts)) sheet.dts = [];
+
+    // Preenche os inputs fixos com os valores da ficha atual
+    const inputFeiticos = document.getElementById('val-dt-feiticos');
+    const inputHabilidades = document.getElementById('val-dt-habilidades');
+    
+    if (inputFeiticos) inputFeiticos.value = sheet.dtFeiticos;
+    if (inputHabilidades) inputHabilidades.value = sheet.dtHabilidades;
+
+    // Renderiza a lista de DTs extras/dinâmicas
+    renderizarDTsDinamicas();
+}
+
+function adicionarNovaDT() {
+    if (!Array.isArray(sheet.dts)) sheet.dts = [];
+    
+    sheet.dts.push({
+        id: Date.now(),
+        nome: "Nova DT",
+        valor: 0
+    });
+    
+    marcarAlteracao();
+    renderizarDTsDinamicas();
+}
+
+function removerDT(id) {
+    sheet.dts = sheet.dts.filter(dt => dt.id !== id);
+    marcarAlteracao();
+    renderizarDTsDinamicas();
+}
+
+function atualizarDT(id, campo, valor) {
+    const dt = sheet.dts.find(item => item.id === id);
+    if (dt) {
+        if (campo === 'valor') dt.valor = parseInt(valor) || 0;
+        else if (campo === 'nome') dt.nome = valor;
+        marcarAlteracao();
+    }
+}
+
+function renderizarDTsDinamicas() {
+    const container = document.getElementById('dt-dinamicas-lista');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (!sheet.dts || sheet.dts.length === 0) return;
+
+    sheet.dts.forEach(dt => {
+        const row = document.createElement('div');
+        row.className = 'rd-item-row';
+        row.style.borderLeft = '3px solid var(--primary-purple)';
+        row.innerHTML = `
+            <input type="text" class="rd-name-input" value="${dt.nome}" onchange="atualizarDT(${dt.id}, 'nome', this.value)">
+            <input type="number" class="mini-stat-input" value="${dt.valor}" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="atualizarDT(${dt.id}, 'valor', this.value)">
+            <button onclick="removerDT(${dt.id})" style="background: none; border: none; color: #ff1744; cursor: pointer; font-size: 0.8rem; margin-left: 5px;">✕</button>
+        `;
+        container.appendChild(row);
+    });
+}
+
+
 </script>
 </body>
 </html>
