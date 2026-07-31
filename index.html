@@ -937,11 +937,48 @@ function tocarSom(tipo) {
         else el.innerText = "X";
     }
   
-    const dtTabela = {
-        facil: { falha: 9, sucesso: 10, bom: 20, extremo: 21 },
-        normal: { falha: 12, sucesso: 13, bom: 20, extremo: 21 },
-        dificil: { falha: 15, sucesso: 16, bom: 20, extremo: 21 }
-    };
+    // Novas cores definidas conforme a sua solicitação
+const coresRolagem = {
+    critica: "#800020",      // Vermelho-vinho
+    falha: "#ff1744",        // Vermelho (mantendo o padrão do seu CSS)
+    parcial: "#ff9100",      // Laranja
+    normal: "#006400",       // Verde escuro
+    bom: "#4caf50",          // Verde
+    extremo: "#32cd32"       // Verde limão
+};
+
+function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
+    // 1. Verificação imediata de Falha Crítica e Sucesso Extremo (Natural)
+    if (valorNaturalD20 === 1) {
+        return { status: "FALHA CRÍTICA", cor: coresRolagem.critica };
+    }
+    if (valorNaturalD20 === 20) {
+        return { status: "SUCESSO EXTREMO", cor: coresRolagem.extremo };
+    }
+
+    // 2. Avaliação baseada na Zona de Dificuldade
+    if (zonaDificuldade === 'facil') {
+        if (valorTotal <= 9) return { status: "FALHA NORMAL", cor: coresRolagem.falha };
+        if (valorTotal <= 14) return { status: "SUCESSO PARCIAL", cor: coresRolagem.parcial };
+        if (valorTotal <= 21) return { status: "SUCESSO NORMAL", cor: coresRolagem.normal };
+        return { status: "SUCESSO BOM", cor: coresRolagem.bom }; // 22+
+    } 
+    else if (zonaDificuldade === 'normal') {
+        if (valorTotal <= 12) return { status: "FALHA NORMAL", cor: coresRolagem.falha };
+        if (valorTotal <= 17) return { status: "SUCESSO PARCIAL", cor: coresRolagem.parcial };
+        if (valorTotal <= 24) return { status: "SUCESSO NORMAL", cor: coresRolagem.normal };
+        return { status: "SUCESSO BOM", cor: coresRolagem.bom }; // 25+
+    } 
+    else if (zonaDificuldade === 'dificil') {
+        if (valorTotal <= 15) return { status: "FALHA NORMAL", cor: coresRolagem.falha };
+        if (valorTotal <= 20) return { status: "SUCESSO PARCIAL", cor: coresRolagem.parcial };
+        if (valorTotal <= 27) return { status: "SUCESSO NORMAL", cor: coresRolagem.normal };
+        return { status: "SUCESSO BOM", cor: coresRolagem.bom }; // 28+
+    }
+
+    // Retorno padrão de segurança
+    return { status: "INDEFINIDO", cor: "#ffffff" };
+}
 
     const targetListPericias = periciasDados.map(p => p.n);
     const targetListAtributos = ["FOR", "AGI", "INT", "CON", "POD"];
@@ -2046,13 +2083,35 @@ function tocarSom(tipo) {
     }
 
     function getNivelSucesso(dado, total) {
-        const dts = dtTabela[sheet.dificuldade];
-        if (dado === 1) return { txt: "FALHA CRÍTICA", cor: "#ff1744", sound: 'fail' };
-        if (dado === 20) return { txt: "SUCESSO EXTREMO", cor: "#00ff88", sound: 'crit' }; 
-        if (total >= 20) return { txt: "SUCESSO BOM", cor: "#7fffd4", sound: 'roll' }; 
-        if (total >= dts.sucesso) return { txt: "SUCESSO NORMAL", cor: "#4488ff", sound: 'roll' };
-        return { txt: "FALHA", cor: "#ff5252", sound: 'roll' };
+    const zonaDificuldade = sheet.dificuldade; // Puxa 'facil', 'normal' ou 'dificil' da sua ficha
+
+    // 1. Verificação imediata de Falha Crítica e Sucesso Extremo (Natural 1 e 20)
+    if (dado === 1) return { txt: "FALHA CRÍTICA", cor: "#800020", sound: 'fail' };
+    if (dado === 20) return { txt: "SUCESSO EXTREMO", cor: "#32cd32", sound: 'crit' };
+
+    // 2. Avaliação baseada na Zona de Dificuldade para resultados não-naturais
+    if (zonaDificuldade === 'facil') {
+        if (total <= 9) return { txt: "FALHA NORMAL", cor: "#ff1744", sound: 'roll' };
+        if (total <= 14) return { txt: "SUCESSO PARCIAL", cor: "#ff9100", sound: 'roll' };
+        if (total <= 21) return { txt: "SUCESSO NORMAL", cor: "#006400", sound: 'roll' };
+        return { txt: "SUCESSO BOM", cor: "#4caf50", sound: 'roll' }; // 22+
+    } 
+    else if (zonaDificuldade === 'normal') {
+        if (total <= 12) return { txt: "FALHA NORMAL", cor: "#ff1744", sound: 'roll' };
+        if (total <= 17) return { txt: "SUCESSO PARCIAL", cor: "#ff9100", sound: 'roll' };
+        if (total <= 24) return { txt: "SUCESSO NORMAL", cor: "#006400", sound: 'roll' };
+        return { txt: "SUCESSO BOM", cor: "#4caf50", sound: 'roll' }; // 25+
+    } 
+    else if (zonaDificuldade === 'dificil') {
+        if (total <= 15) return { txt: "FALHA NORMAL", cor: "#ff1744", sound: 'roll' };
+        if (total <= 20) return { txt: "SUCESSO PARCIAL", cor: "#ff9100", sound: 'roll' };
+        if (total <= 27) return { txt: "SUCESSO NORMAL", cor: "#006400", sound: 'roll' };
+        return { txt: "SUCESSO BOM", cor: "#4caf50", sound: 'roll' }; // 28+
     }
+
+    // Retorno de segurança caso algo dê errado
+    return { txt: "INDEFINIDO", cor: "#ffffff", sound: 'roll' };
+}
 
     function spawnPopup(titulo, subtitulo, total, corStatus, txtStatus, detalhes = "") {
         document.getElementById('pop-content').innerHTML = `
