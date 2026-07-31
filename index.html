@@ -329,6 +329,112 @@
         }
         .theme-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.8rem; }
         .theme-row input[type=color] { border: none; width: 30px; height: 30px; cursor: pointer; background: transparent; }
+
+        /* === ESTILOS DA TELA DE CAMPANHAS === */
+.btn-campanha-glow {
+    background: rgba(10, 10, 15, 0.8);
+    border: 2px solid var(--primary-purple);
+    color: var(--text-light);
+    padding: 20px 50px;
+    font-size: 1.5rem;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--primary-purple);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.btn-campanha-glow:hover {
+    background: var(--primary-purple);
+    color: #fff;
+    box-shadow: 0 0 40px var(--light-purple);
+    transform: scale(1.05) translateY(-5px);
+    border-color: var(--text-gold);
+}
+
+.campanha-card {
+    background: rgba(15, 15, 20, 0.9);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    height: 180px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.campanha-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+    border-color: var(--light-purple);
+}
+
+.campanha-banner {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.campanha-card:hover .campanha-banner { opacity: 0.8; }
+
+.campanha-titulo {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    padding: 20px 15px 10px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--text-gold);
+    font-weight: bold;
+    text-shadow: 0 0 10px #000;
+}
+
+/* Mini Cards do Escudo do Mestre */
+.ficha-mestre-card {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--light-purple);
+    padding: 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ficha-mestre-icon {
+    width: 50px; height: 50px;
+    border-radius: 8px;
+    border: 1px solid var(--text-gold);
+    object-fit: cover;
+    background: #000;
+}
+
+.ficha-mestre-stats {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+}
+.stat-input-mestre {
+    background: #111; border: 1px solid #333; color: #fff;
+    width: 45px; text-align: center; border-radius: 3px; font-family: 'Cinzel', serif;
+}
     </style>
 </head>
 <body>
@@ -372,6 +478,63 @@
                 </div>
             </div>
             <button id="btn-secreto" onclick="toggleSecreto()" style="background: rgba(0,0,0,0.5); border: 1px solid #333; color: #888; font-family: 'Cinzel', serif; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">👁️ Modo Secreto: OFF</button>
+            <!-- === ADICIONE ISSO LOGO ABAIXO DO BOTÃO "Modo Secreto" === -->
+<button id="btn-campanhas" onclick="abrirTelaCampanhas()" style="background: rgba(123, 31, 162, 0.2); border: 1px solid var(--primary-purple); color: var(--text-gold); font-family: 'Cinzel', serif; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; margin-top: 8px; width: 100%; box-shadow: 0 0 5px var(--primary-purple);">🏕️ Campanhas</button>
+
+<!-- === ADICIONE ISSO ANTES DA TAG </body> === -->
+<!-- Tela Exclusiva de Campanhas -->
+<div id="tela-campanhas" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-dark); z-index: 100000; overflow-y: auto; padding: 40px; background-image: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--primary-purple) 10%, transparent) 0%, transparent 60%);">
+    
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+        <button class="toolbar-btn" onclick="fecharTelaCampanhas()" style="font-family: 'Cinzel', serif; font-size: 1rem; padding: 10px 20px;">◀ Voltar para o Site</button>
+        
+        <button id="btn-escudo-mestre" class="btn-forge" onclick="abrirEscudoMestre()" style="width: auto; margin: 0; display: none; box-shadow: 0 0 15px var(--text-gold); border: 1px solid var(--text-gold);">🛡️ Escudo do Mestre</button>
+    </div>
+
+    <!-- Botões Centrais -->
+    <div style="display: flex; justify-content: center; gap: 40px; margin-top: 80px;">
+        <button class="btn-campanha-glow" onclick="abrirModalCriarCampanha()">Criar Campanha</button>
+        <button class="btn-campanha-glow" onclick="abrirModalEntrarCampanha()">Entrar em Campanha</button>
+    </div>
+
+    <!-- Listagem Inferior -->
+    <div style="margin-top: 100px;">
+        <h2 style="font-family: 'Cinzel', serif; color: var(--text-gold); border-bottom: 1px solid #333; padding-bottom: 10px;">Minhas Campanhas</h2>
+        <div id="lista-campanhas" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+            <!-- Campanhas aparecerão aqui -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Criar Campanha -->
+<div id="modal-criar-campanha" class="modal">
+    <h3 style="color: var(--text-gold); font-family: 'Cinzel', serif; text-align: center;">Forjar Nova Campanha</h3>
+    
+    <label style="color:var(--text-gold); font-size:0.8rem">NOME DA CAMPANHA</label>
+    <input type="text" id="camp-nome" class="modal-input" placeholder="Ex: O Abismo de Tenebris">
+    
+    <label style="color:var(--text-gold); font-size:0.8rem">DESCRIÇÃO</label>
+    <textarea id="camp-desc" class="modal-input" rows="4" placeholder="Sinopse da aventura..."></textarea>
+    
+    <label style="color:var(--text-gold); font-size:0.8rem">LINK DO BANNER (Imagem)</label>
+    <input type="text" id="camp-banner" class="modal-input" placeholder="https://link-da-imagem.png">
+
+    <button onclick="salvarNovaCampanha()" style="width:100%; padding:15px; background:var(--primary-purple); color:#fff; border:none; font-family:'Cinzel', serif; cursor:pointer; font-weight: bold; margin-top: 10px;">CRIAR</button>
+    <button onclick="document.getElementById('modal-criar-campanha').style.display='none'" style="width:100%; margin-top:10px; background:none; border:1px solid #333; color:#eee; padding:10px; cursor:pointer; font-family: 'Cinzel', serif;">Cancelar</button>
+</div>
+
+<!-- Painel do Escudo do Mestre -->
+<div id="modal-escudo-mestre" class="modal" style="width: 800px; max-width: 90vw;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--text-gold); padding-bottom: 10px; margin-bottom: 20px;">
+        <h3 style="color: var(--text-gold); font-family: 'Cinzel', serif; margin: 0;">🛡️ Escudo do Mestre</h3>
+        <button onclick="document.getElementById('modal-escudo-mestre').style.display='none'" style="background:none; border:none; color:#eee; cursor:pointer; font-size: 1.2rem;">✕</button>
+    </div>
+    
+    <div id="escudo-jogadores-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+        <!-- Fichas dos jogadores carregadas em tempo real aqui -->
+    </div>
+</div>
         </div>
     </div>
 
@@ -1581,6 +1744,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         inputMod.value = ""; 
         updateBar(tipo);
         marcarAlteracao();
+        sincronizarFichaComCampanha();
     }
 
     function updateBar(id) {
@@ -2592,6 +2756,196 @@ function renderizarDTsDinamicas() {
     });
 }
 
+let campanhaAtualId = null;
+let isMestre = false;
+
+// Controle de Telas
+function abrirTelaCampanhas() {
+    if (!currentUser) {
+        alert("Você precisa fazer login para acessar as campanhas!");
+        return;
+    }
+    tocarSom('click');
+    document.getElementById('tela-campanhas').style.display = 'flex';
+    carregarMinhasCampanhas();
+}
+
+function fecharTelaCampanhas() {
+    tocarSom('click');
+    document.getElementById('tela-campanhas').style.display = 'none';
+}
+
+function abrirModalCriarCampanha() {
+    tocarSom('click');
+    document.getElementById('modal-criar-campanha').style.display = 'block';
+}
+
+function abrirModalEntrarCampanha() {
+    tocarSom('click');
+    let codigo = prompt("Insira o Código (ID) da Campanha:");
+    if (codigo) entrarNaCampanha(codigo);
+}
+
+// Lógica do Firebase
+function salvarNovaCampanha() {
+    const nome = document.getElementById('camp-nome').value;
+    const desc = document.getElementById('camp-desc').value;
+    const banner = document.getElementById('camp-banner').value;
+
+    if (!nome) return alert("A campanha precisa de um nome!");
+
+    const novaCampanhaRef = database.ref('campanhas').push();
+    novaCampanhaRef.set({
+        nome: nome,
+        descricao: desc,
+        banner: banner || "https://i.imgur.com/G5ZkX1H.png", // Imagem padrão de fallback
+        mestreId: currentUser.uid,
+        mestreNome: currentUser.displayName,
+        jogadores: {} // Inicialmente vazio
+    }).then(() => {
+        document.getElementById('modal-criar-campanha').style.display = 'none';
+        carregarMinhasCampanhas();
+        alert(`Campanha criada! Código para convidar jogadores: ${novaCampanhaRef.key}`);
+    });
+}
+
+function entrarNaCampanha(campanhaId) {
+    // Regra: Jogadores entram e vinculam até 3 personagens.
+    const refJogadores = database.ref(`campanhas/${campanhaId}/jogadores/${currentUser.uid}`);
+    
+    refJogadores.once('value').then(snap => {
+        const chars = snap.val() || [];
+        if (chars.length >= 3 && chars.mestreId !== currentUser.uid) { // Exceto o Mestre que não tem limite
+            alert("Você já atingiu o limite de 3 personagens nesta campanha.");
+            return;
+        }
+        
+        // Vincula a ficha atual (slot ativo) à campanha
+        const slotAtual = document.getElementById('save-slot').value;
+        const charId = `slot_${slotAtual}`;
+        
+        if (!chars.includes(charId)) {
+            chars.push(charId);
+            refJogadores.set(chars).then(() => {
+                alert("Personagem vinculado à campanha com sucesso!");
+                carregarMinhasCampanhas();
+            });
+        }
+    }).catch(() => alert("Campanha não encontrada."));
+}
+
+function carregarMinhasCampanhas() {
+    const lista = document.getElementById('lista-campanhas');
+    lista.innerHTML = '<span style="color:#aaa;">Buscando conhecimento no Abismo...</span>';
+    
+    // Busca campanhas onde o usuário é Mestre OU Jogador
+    database.ref('campanhas').once('value').then(snap => {
+        lista.innerHTML = '';
+        const campanhas = snap.val();
+        if (!campanhas) return;
+
+        Object.keys(campanhas).forEach(key => {
+            const camp = campanhas[key];
+            const souMestre = camp.mestreId === currentUser.uid;
+            const souJogador = camp.jogadores && camp.jogadores[currentUser.uid];
+
+            if (souMestre || souJogador) {
+                lista.innerHTML += `
+                    <div class="campanha-card" onclick="entrarSessao('${key}', ${souMestre})">
+                        <img src="${camp.banner}" class="campanha-banner" onerror="this.src='https://i.imgur.com/G5ZkX1H.png'">
+                        <div class="campanha-titulo">${camp.nome}</div>
+                    </div>
+                `;
+            }
+        });
+    });
+}
+
+function entrarSessao(id, mestre) {
+    campanhaAtualId = id;
+    isMestre = mestre;
+    
+    document.getElementById('tela-campanhas').style.display = 'none'; // Fecha a tela de menu
+    document.getElementById('btn-escudo-mestre').style.display = 'block'; // Habilita o escudo
+
+    alert(`Você entrou na campanha como ${isMestre ? 'MESTRE' : 'JOGADOR'}. Alterações na sua ficha agora são espelhadas.`);
+    
+    // O Mestre vai começar a escutar as alterações em tempo real das fichas na função de abrirEscudoMestre().
+}
+
+// Escudo do Mestre: Edição em Tempo Real
+function abrirEscudoMestre() {
+    tocarSom('click');
+    if (!campanhaAtualId) return alert("Você não está em nenhuma campanha ativa.");
+    
+    document.getElementById('modal-escudo-mestre').style.display = 'block';
+    const grid = document.getElementById('escudo-jogadores-grid');
+    grid.innerHTML = '<span style="color:#aaa;">Conectando-se aos jogadores...</span>';
+
+    // Ouve em tempo real as fichas de quem está na campanha
+    database.ref(`campanhas/${campanhaAtualId}/fichas`).on('value', snap => {
+        grid.innerHTML = '';
+        const fichas = snap.val();
+        if (!fichas) {
+            grid.innerHTML = '<span style="color:#888;">Nenhuma ficha conectada.</span>';
+            return;
+        }
+
+        Object.keys(fichas).forEach(uidJogador => {
+            const dados = fichas[uidJogador];
+            
+            // Controle de visualização vs edição
+            // Se for mestre, a input não tem 'disabled'. Se for player, tem 'disabled'.
+            const readonlyAttr = isMestre ? '' : 'disabled';
+            
+            grid.innerHTML += `
+                <div class="ficha-mestre-card">
+                    <img src="${dados.avatar || 'https://via.placeholder.com/50'}" class="ficha-mestre-icon">
+                    <div class="ficha-mestre-stats">
+                        <span style="color:var(--text-gold); font-weight:bold; font-size:1rem;">${dados.nickname || 'Desconhecido'}</span>
+                        
+                        <div class="stat-row">
+                            <span style="color:#ff1744; width:30px;">PV:</span>
+                            <input type="number" class="stat-input-mestre" value="${dados.pv_atual}" ${readonlyAttr} onchange="atualizarStatusJogador('${uidJogador}', 'pv_atual', this.value)"> / ${dados.pv_max}
+                        </div>
+                        <div class="stat-row">
+                            <span style="color:#ffca28; width:30px;">PA:</span>
+                            <input type="number" class="stat-input-mestre" value="${dados.pa_atual}" ${readonlyAttr} onchange="atualizarStatusJogador('${uidJogador}', 'pa_atual', this.value)"> / ${dados.pa_max}
+                        </div>
+                        <div class="stat-row">
+                            <span style="color:#00e5ff; width:30px;">SAN:</span>
+                            <input type="number" class="stat-input-mestre" value="${dados.sa_atual}" ${readonlyAttr} onchange="atualizarStatusJogador('${uidJogador}', 'sa_atual', this.value)"> / ${dados.sa_max}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    });
+}
+
+// Mestre atualiza os valores e empurra pro BD, que atualiza a tela do jogador original
+function atualizarStatusJogador(uidJogador, atributo, novoValor) {
+    if (!isMestre) return; // Apenas por segurança
+    database.ref(`campanhas/${campanhaAtualId}/fichas/${uidJogador}/${atributo}`).set(parseInt(novoValor));
+}
+
+// INTEGRAÇÃO COM SEU SALVAMENTO ATUAL:
+// Sempre que a ficha for alterada, precisamos mandar os dados essenciais para o escudo do mestre.
+// Você deve chamar essa função 'sincronizarFichaComCampanha()' dentro da sua função original que roda ao 'marcarAlteracao()' ou 'updateBar()'.
+function sincronizarFichaComCampanha() {
+    if (campanhaAtualId && currentUser) {
+        database.ref(`campanhas/${campanhaAtualId}/fichas/${currentUser.uid}`).set({
+            nickname: sheet.nickname,
+            avatar: sheet.avatar,
+            pv_atual: document.getElementById('curr-pv').value,
+            pv_max: document.getElementById('max-pv').value,
+            pa_atual: document.getElementById('curr-pa').value,
+            pa_max: document.getElementById('max-pa').value,
+            sa_atual: document.getElementById('curr-sa').value,
+            sa_max: document.getElementById('max-sa').value,
+        });
+    }
+}
 
 </script>
 </body>
