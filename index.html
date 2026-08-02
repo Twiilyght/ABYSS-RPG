@@ -1233,7 +1233,50 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             { titulo: "Traduzir", texto: "Você interpreta idiomas desconhecidos, textos antigos ou mensagens estrangeiras, entendendo seu significado geral ou detalhado." },
             { titulo: "Decifrar", texto: "Você identifica padrões em símbolos, códigos simples ou escritas incomuns, revelando mensagens ocultas." }
         ]
-    }
+    },
+
+    "Sorte": { 
+        atributo: "N/A",
+        descricao: "Sua sorte... Ironicamente, é decidida na sorte. Ela é utilizada em cenários específicos ou até quando o mestre ou o próprio jogador requisitar, podendo ser utilizada como uma rolagem coringa em diversos cenários. Por exemplo, definir se o jogador caiu numa armadilha em uma masmorra, se encontrou uma passagem secreta ou se a sua tentativa de alquimia por sorte deu mais frutos. Sempre que uma rolagem de sorte for requisitada, role INDIVIDUALMENTE dois dados de 6 lados (2d6). O primeiro dado SEMPRE será a sua sorte, enquanto o segundo será o azar. Após isso, subtraia o azar na sua sorte e pegue o resultado. Geralmente, testes de Sorte não tem DT interna e não funcionam com Zonas de Acerto, mas servem como um grande ''sim ou não'' que tem seus resultados baseado no valor tirado.",
+    },
+
+   "Sabedoria": {
+        atributo: "INT",
+        descricao: "É o atributo e teste utilizado para momentos em que é necessário resgatar informações perdidas em sua mente, lógicas não compreendidas ou detalhes que contribuem para a formulação de um raciocínio, sendo também uma forma de evitar testes brutos de Intelecto.",
+    },
+
+      "Sentidos_Farejar": { 
+        atributo: "POD",
+        descricao: "Os seus sentidos representam a sua capacidade de perceber o mundo através de estímulos específicos. O seu modificador de sentidos é definido com base na sua Percepção + Poder. Por exemplo, se você for Adepto (+2) em Percepção e tiver 3 em Poder, sempre que você desejar usar Sentidos você rodará 1d20 utilizando o modificador que você calculou. Sendo assim, seguindo o exemplo anterior, 1d20+5. Você pode utilizar Sentidos da seguinte maneira:",
+        usos: [
+            { titulo: "Farejar", texto: "Permite identificar, diferenciar, captar e seguir odores específicos." },
+        ]
+    },
+
+          "Sentidos_Tatear": { 
+        atributo: "POD",
+        descricao: "Os seus sentidos representam a sua capacidade de perceber o mundo através de estímulos específicos. O seu modificador de sentidos é definido com base na sua Percepção + Poder. Por exemplo, se você for Adepto (+2) em Percepção e tiver 3 em Poder, sempre que você desejar usar Sentidos você rodará 1d20 utilizando o modificador que você calculou. Sendo assim, seguindo o exemplo anterior, 1d20+5. Você pode utilizar Sentidos da seguinte maneira:",
+        usos: [
+            { titulo: "Tatear", texto: "Permite identificar texturas, formas ocultas ou detalhes através do toque." },
+        ]
+    },
+
+         "Sentidos_Degustar": { 
+        atributo: "POD",
+        descricao: "Os seus sentidos representam a sua capacidade de perceber o mundo através de estímulos específicos. O seu modificador de sentidos é definido com base na sua Percepção + Poder. Por exemplo, se você for Adepto (+2) em Percepção e tiver 3 em Poder, sempre que você desejar usar Sentidos você rodará 1d20 utilizando o modificador que você calculou. Sendo assim, seguindo o exemplo anterior, 1d20+5. Você pode utilizar Sentidos da seguinte maneira:",
+        usos: [
+            { titulo: "Degustar", texto: "Permite perceber sabores com grande precisão, também podendo identificar substâncias, ingredientes ou venenos." },
+        ]
+    },
+
+        "Sentidos_Pressentir": { 
+        atributo: "POD",
+        descricao: "Os seus sentidos representam a sua capacidade de perceber o mundo através de estímulos específicos. O seu modificador de sentidos é definido com base na sua Percepção + Poder. Por exemplo, se você for Adepto (+2) em Percepção e tiver 3 em Poder, sempre que você desejar usar Sentidos você rodará 1d20 utilizando o modificador que você calculou. Sendo assim, seguindo o exemplo anterior, 1d20+5. Você pode utilizar Sentidos da seguinte maneira:",
+        usos: [
+            { titulo: "Pressentir", texto: "Um sexto sentido que permite perceber alterações no ambiente, presenças estranhas ou perigos iminentes." },
+        ]
+    },
+
 };
 
     let currentUser = null;
@@ -2620,8 +2663,6 @@ function renderizarDTsDinamicas() {
         container.appendChild(row);
     });
 }
-
-
 </script>
 </body>
 </html>
