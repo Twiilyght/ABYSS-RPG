@@ -584,10 +584,10 @@
             <textarea id="codigo-export" class="mini-stat-input" placeholder="Código de Importação/Exportação..." style="flex-grow: 1; height: 45px; padding: 12px; font-size: 0.9rem; white-space: nowrap; overflow-x: auto; text-align: left; width: auto;"></textarea>
             <button class="btn-forge" onclick="exportarFicha()" style="width: auto; margin-bottom: 0;">Exportar Código</button>
             <button class="btn-roll" onclick="importarFicha()" style="color: var(--text-gold); border-color: var(--text-gold); height: 45px; margin: 0;">Importar Código</button>
-        </div>
-    </section>
-</div>
-
+        <button class="btn-roll" onclick="resetarSlot()" style="color: #ff1744; border-color: #ff1744; height: 45px; margin: 0;" title="Zerar Ficha Atual">Resetar Slot</button>
+    </div>
+</section>
+  
 <button id="theme-float-btn" onclick="toggleThemePanel()" title="Personalizar Cores do Site">🎨</button>
 <div id="theme-panel">
     <div style="text-align:center; color:var(--text-gold); font-weight:bold; margin-bottom:10px; font-size:0.9rem;">Paleta de Cores</div>
@@ -914,6 +914,35 @@ function tocarSom(tipo) {
             }
         };
     }
+
+    function resetarSlot() {
+    if (confirm("Você tem certeza que deseja resetar este slot? A ficha ficará completamente vazia e todos os dados não salvos na nuvem serão perdidos.")) {
+        // Zera o objeto principal da ficha
+        sheet = getFichaZerada();
+        
+        // Limpa também os inputs do cabeçalho que não estão amarrados direto à renderização
+        document.getElementById('user-nickname').value = "";
+        document.getElementById('user-sub').value = "";
+        
+        // Tenta atualizar a UI chamando os métodos já estruturados no código
+        if (typeof atualizarVisuaisDaFicha === 'function') {
+            atualizarVisuaisDaFicha();
+        } else {
+            // Fallback caso a função não reconstrua a página toda
+            if (typeof render === 'function') render();
+            calcularStatusClasse();
+            atualizarVisuaisClasse();
+            atualizarAvatarUI();
+            aplicarTemaDaFicha();
+        }
+        
+        // Marca que houve uma alteração para o sistema avisar/preparar para salvar
+        marcarAlteracao();
+        tocarSom('click');
+        
+        alert("Slot resetado. Lembre-se de clicar no botão 'Salvar na Nuvem' para gravar a ficha em branco.");
+    }
+}
 
     let sheet = getFichaZerada();
 
