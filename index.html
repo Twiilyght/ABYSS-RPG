@@ -946,20 +946,26 @@ function tocarSom(tipo) {
 
     let sheet = getFichaZerada();
 
-    function toggleSecreto() {
-        modoSecreto = !modoSecreto;
-        const btn = document.getElementById('btn-secreto');
-        if (modoSecreto) {
-            btn.style.color = 'var(--text-gold)';
-            btn.style.borderColor = 'var(--text-gold)';
-            btn.innerText = '🕵️ Modo Secreto: ON';
-        } else {
-            btn.style.color = '#888';
-            btn.style.borderColor = '#333';
-            btn.innerText = '👁️ Modo Secreto: OFF';
-        }
+function toggleSecreto() {
+    modoSecreto = !modoSecreto;
+    const btn = document.getElementById('btn-secreto');
+    
+    if (modoSecreto) {
+        btn.style.color = 'var(--text-gold)';
+        btn.style.borderColor = 'var(--text-gold)';
+        btn.innerText = '🕵️ Modo Secreto: ON';
+        
+        // SALVA no navegador que o modo está ativado
+        localStorage.setItem('estadoModoSecreto', 'ativado');
+    } else {
+        btn.style.color = '#888';
+        btn.style.borderColor = '#333';
+        btn.innerText = '👁️ Modo Secreto: OFF';
+        
+        // SALVA no navegador que o modo está desativado
+        localStorage.setItem('estadoModoSecreto', 'desativado');
     }
-
+}
     function toggleTurn(el) {
         tocarSom('click');
         if (el.innerText === "X") el.innerText = "";
@@ -2663,6 +2669,35 @@ function renderizarDTsDinamicas() {
         container.appendChild(row);
     });
 }
+
+// Roda assim que a página termina de carregar
+document.addEventListener('DOMContentLoaded', () => {
+    const statusSalvo = localStorage.getItem('estadoModoSecreto');
+    const btn = document.getElementById('btn-secreto');
+    
+    // Se o jogador deixou o modo ativado na última vez
+    if (statusSalvo === 'ativado') {
+        modoSecreto = true; // Força a sua variável a ficar verdadeira
+        
+        // Atualiza o botão para o visual de "ON"
+        if (btn) {
+            btn.style.color = 'var(--text-gold)';
+            btn.style.borderColor = 'var(--text-gold)';
+            btn.innerText = '🕵️ Modo Secreto: ON';
+        }
+    } 
+    // Se for a primeira vez no site ou se estiver salvo como desativado
+    else {
+        modoSecreto = false;
+        
+        // Garante o visual de "OFF"
+        if (btn) {
+            btn.style.color = '#888';
+            btn.style.borderColor = '#333';
+            btn.innerText = '👁️ Modo Secreto: OFF';
+        }
+    }
+});
 </script>
 </body>
 </html>
