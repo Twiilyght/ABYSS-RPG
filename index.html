@@ -2729,6 +2729,54 @@ textarea[data-auto-grow] { min-height: 108px; overflow-y: hidden; resize: vertic
     .resource-dashboard-panel .resource-control-bar { grid-template-columns: 25px 25px minmax(86px, 1fr) 25px 25px 48px; }
 }
 
+/* TIPOGRAFIA PRINCIPAL DE LEITURA
+   Mantém Cinzel nos títulos ornamentais, mas usa a mesma fonte serifada
+   vista durante a escrita para textos, descrições e campos do site. */
+:root { --font-reading: "Times New Roman", Times, serif; }
+
+body { font-family: var(--font-reading); }
+
+input:not([type="number"]):not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea,
+select,
+option,
+.modal-input,
+.hab-desc-render,
+.hab-desc-render *,
+#skill-modal-desc,
+.log-msg-detail,
+.pop-detail-text,
+.sheet-brand-subtitle,
+.character-origin-input,
+.class-selector-note,
+.sheet-dashboard-panel .class-btn small,
+.sheet-dashboard-panel .status-box-title small,
+.resource-value-group label small,
+.resource-dashboard-panel .resource-value-group .sep,
+.roll-mode-copy small,
+.settings-intro,
+.settings-checkbox-row small,
+.slot-folder-empty,
+.ability-separator-toggle small,
+.modifier-chip,
+.modifier-summary span,
+.damage-attribute-help,
+.damage-attribute-badge,
+.item-weapon-summary,
+#campaign-app p,
+#campaign-app small,
+#campaign-app .campaign-panel-note,
+#campaign-app .campaign-section-heading span,
+#campaign-app .campaign-empty,
+#campaign-app .viewer-chip,
+#campaign-app .visibility-control,
+#campaign-app .shield-private-note,
+#campaign-app .combat-panel-note,
+#campaign-app .combat-wait-card span,
+#campaign-app .combat-mini-resource {
+    font-family: var(--font-reading) !important;
+}
+
     </style>
 </head>
 <body>
