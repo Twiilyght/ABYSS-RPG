@@ -10,7 +10,8 @@
             --bg-dark: #050507;
             --bg-gradient-top: #050507;
             --bg-gradient-bottom: #12071c;
-            --panel-bg: rgba(21, 21, 26, 0.95);
+            --container-bg: #0f0e12;
+            --panel-bg: var(--container-bg);
             --primary-purple: #7b1fa2;
             --light-purple: #bc4ed8;
             --text-gold: #d4af37;
@@ -1301,9 +1302,9 @@
 
 /* SISTEMA VISUAL 2D — APLICADO A TODA A EXPERIÊNCIA */
 :root {
-    --flat-surface: #0f0e12;
-    --flat-surface-2: #151219;
-    --flat-surface-3: #1b171f;
+    --flat-surface: var(--container-bg);
+    --flat-surface-2: color-mix(in srgb, var(--container-bg) 90%, #fff);
+    --flat-surface-3: color-mix(in srgb, var(--container-bg) 82%, #fff);
     --flat-line: #332c39;
     --flat-line-soft: #25212a;
     --flat-muted: #8d8592;
@@ -2044,6 +2045,639 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
     .sheet-dashboard-panel .mini-stats-overlay { margin-top: 18px; }
 }
 
+/* CONTROLES COMPACTOS E CONTEÚDO ADAPTÁVEL */
+.sheet-dashboard-panel .class-btn {
+    min-height: 56px;
+    padding: 9px 12px;
+    border-radius: 7px;
+}
+.sheet-dashboard-panel .class-btn::before { margin-bottom: 5px; }
+.sheet-dashboard-panel .class-btn span { font-size: .66rem; }
+.sheet-dashboard-panel .class-btn small { margin-top: 2px; font-size: .56rem; }
+
+.sheet-dashboard-panel .status-box {
+    min-height: 0;
+    padding: 13px 14px 11px;
+    border-radius: 8px;
+}
+.sheet-dashboard-panel .status-box-title { gap: 8px; margin-bottom: 9px; }
+.sheet-dashboard-panel .status-title-icon {
+    flex-basis: 28px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+}
+.sheet-dashboard-panel .status-inputs {
+    grid-template-columns: 25px minmax(106px, 1fr) 25px 40px minmax(48px, .75fr);
+    gap: 5px;
+    margin-bottom: 8px;
+}
+.resource-value-group {
+    display: grid;
+    grid-template-columns: minmax(42px, 1fr) 8px minmax(42px, 1fr);
+    align-items: end;
+    gap: 3px;
+    min-width: 0;
+}
+.resource-value-group label { display: grid; min-width: 0; gap: 2px; }
+.resource-value-group label small {
+    color: #6e6872;
+    font-family: Arial, sans-serif;
+    font-size: .44rem;
+    letter-spacing: .7px;
+    text-align: center;
+}
+.sheet-dashboard-panel .status-inputs .resource-value-group input {
+    height: 29px;
+    padding: 2px;
+    border-radius: 5px;
+    font-size: .9rem;
+}
+.sheet-dashboard-panel .status-inputs .calc-input { height: 31px; }
+.resource-edge-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    height: 29px;
+    border: 1px solid #39323f;
+    border-radius: 5px;
+}
+.resource-edge-actions button {
+    min-width: 0;
+    padding: 0;
+    color: var(--resource-accent);
+    border: 0;
+    border-right: 1px solid #39323f;
+    background: rgba(0,0,0,.3);
+    font-size: .82rem;
+}
+.resource-edge-actions button:last-child { border-right: 0; }
+.resource-edge-actions button:hover { color: #fff; background: color-mix(in srgb, var(--resource-accent) 14%, #08080a); }
+.sheet-dashboard-panel .arrow-btn { width: 25px; height: 27px; border-radius: 5px; }
+.sheet-dashboard-panel .status-bar-wrapper { height: 7px; margin-bottom: 4px; border-radius: 3px; }
+.sheet-dashboard-panel .status-condition-text { min-height: 13px; margin-top: 4px; font-size: .58rem; }
+
+.roll-mode-control {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 10px;
+    width: min(100%, 420px);
+    margin: -10px auto 22px;
+    padding: 9px 10px;
+    border: 1px solid #302b35;
+    border-radius: 6px;
+    background: rgba(8,7,10,.72);
+}
+.roll-mode-copy { display: grid; min-width: 0; gap: 2px; }
+.roll-mode-copy strong { color: var(--text-gold); font-size: .63rem; letter-spacing: 1.2px; }
+.roll-mode-copy small { overflow: hidden; color: #766f7a; font-family: Arial, sans-serif; font-size: .59rem; text-overflow: ellipsis; white-space: nowrap; }
+.roll-disadvantage-toggle { display: flex; align-items: center; gap: 5px; color: #a19aa5; font-size: .62rem; cursor: pointer; }
+.roll-disadvantage-toggle input { accent-color: #ff5252; }
+.roll-dice-count {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    height: 30px;
+    border: 1px solid #403847;
+    border-radius: 5px;
+    background: #09080b;
+}
+.roll-dice-count input { width: 42px; height: 100%; color: #fff; border: 0; background: transparent; text-align: center; outline: 0; }
+.roll-dice-count span { padding: 0 7px; color: var(--light-purple); font-size: .63rem; }
+.roll-mode-control.is-disadvantage { border-color: rgba(255,82,82,.42); }
+.roll-mode-control.is-disadvantage .roll-mode-copy strong { color: #ff6b6b; }
+
+.settings-modal { width: min(680px, calc(100vw - 32px)); }
+.media-modal { width: min(560px, calc(100vw - 32px)); }
+.settings-modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 13px; }
+.settings-modal-header h3 { margin: 3px 0 0; color: #f1edf3; font-size: 1.05rem; }
+.settings-eyebrow, .media-field-label { color: var(--text-gold); font-size: .57rem; letter-spacing: 1.8px; }
+.settings-close { padding: 5px 8px; color: #8f8793; border: 1px solid #342f38; border-radius: 4px; background: transparent; cursor: pointer; }
+.settings-intro { margin: 0 0 18px; color: #8e8791; font-family: Arial, sans-serif; font-size: .78rem; line-height: 1.45; }
+.audio-setting-row {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 0;
+    border-top: 1px solid #29252d;
+}
+.audio-setting-copy { display: grid; gap: 2px; }
+.audio-setting-copy strong { color: #e4dfe6; font-size: .68rem; }
+.audio-setting-copy small { color: #706a73; font-size: .57rem; }
+.audio-setting-row .modal-input { margin: 0; padding: 9px; }
+.file-picker-button, .audio-test-button, .settings-secondary, .settings-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 7px 10px;
+    border: 1px solid #413a47;
+    border-radius: 4px;
+    background: #0e0c11;
+    color: #b7afb9;
+    font-family: 'Cinzel', serif;
+    font-size: .62rem;
+    cursor: pointer;
+}
+.file-picker-button input { display: none; }
+.file-picker-button.wide { width: 100%; margin-bottom: 12px; }
+.audio-test-button:hover, .file-picker-button:hover, .settings-secondary:hover { color: #fff; border-color: var(--light-purple); }
+.settings-checkbox-row { display: flex; align-items: flex-start; gap: 9px; padding: 14px 0; border-top: 1px solid #29252d; cursor: pointer; }
+.settings-checkbox-row input { margin-top: 3px; accent-color: var(--light-purple); }
+.settings-checkbox-row span { display: grid; gap: 3px; }
+.settings-checkbox-row strong { color: #e6e1e8; font-size: .69rem; }
+.settings-checkbox-row small { color: #78717b; font-family: Arial, sans-serif; font-size: .65rem; }
+.settings-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 15px; }
+.settings-primary { color: #fff; border-color: var(--primary-purple); background: var(--primary-purple); }
+.media-file-row { display: flex; align-items: stretch; gap: 10px; }
+.media-file-row .file-picker-button.wide { flex: 1; }
+.media-preview-frame {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    min-height: 130px;
+    margin: 4px 0 16px;
+    border: 1px dashed #3a3440;
+    border-radius: 5px;
+    background: #070609;
+}
+.media-preview-frame img { display: none; width: 100%; max-height: 280px; object-fit: contain; }
+.media-preview-compact { flex: 0 0 92px; min-height: 62px; margin: 0 0 12px; }
+.media-preview-compact img { height: 62px; object-fit: cover; }
+.avatar-media-preview { min-height: 230px; }
+.avatar-media-preview img { max-height: 300px; }
+
+.adaptive-card-header, .adaptive-note-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 9px 13px;
+    min-width: 0;
+}
+.adaptive-card-title {
+    flex: 1 1 180px;
+    min-width: 0;
+    margin: 0;
+    padding: 0 !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+.adaptive-card-actions { display: flex; flex: 0 1 auto; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 3px; max-width: 100%; }
+.adaptive-card-actions select { max-width: 110px; }
+.adaptive-note-header { flex-wrap: nowrap; margin-bottom: 12px; }
+.adaptive-note-title { min-width: 0; margin: 0 !important; }
+.adaptive-note-remove { flex: 0 0 auto; padding: 7px; color: #ff5252; border: 0; background: none; cursor: pointer; }
+.hab-desc-render, .item-card, .hab-card { overflow-wrap: anywhere; word-break: break-word; }
+.hab-desc-render { line-height: 1.55; }
+.content-card-image { display: block; width: 100%; max-height: 320px; margin: 10px 0; border-radius: 4px; object-fit: contain; }
+textarea[data-auto-grow] { min-height: 108px; overflow-y: hidden; resize: vertical; line-height: 1.55; }
+.hab-card .btn-roll, .item-card .btn-roll {
+    max-width: 100%;
+    min-height: 28px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.35;
+}
+.item-footer-controls { align-items: flex-start; flex-wrap: wrap; gap: 8px; }
+.item-footer-controls > div { min-width: 0; flex-wrap: wrap; justify-content: flex-end; }
+
+@media (max-width: 760px) {
+    .audio-setting-row { grid-template-columns: 1fr 1fr; }
+    .audio-setting-copy, .audio-setting-row .modal-input { grid-column: 1 / -1; }
+    .sheet-dashboard-panel .class-btn { min-height: 54px; }
+}
+@media (max-width: 520px) {
+    .roll-mode-control { grid-template-columns: 1fr auto; }
+    .roll-mode-copy { grid-column: 1 / -1; }
+    .sheet-dashboard-panel .status-inputs { grid-template-columns: 25px minmax(105px, 1fr) 25px 40px; }
+    .sheet-dashboard-panel .status-inputs .calc-input { grid-column: 1 / -1; height: 30px; }
+    .settings-actions { flex-direction: column-reverse; }
+    .settings-actions > * { width: 100%; }
+    .media-file-row { flex-direction: column; }
+}
+
+/* ACABAMENTO 2D, RECURSOS HORIZONTAIS E PERSONALIZAÇÃO DE CONTAINERS */
+:root {
+    --flat-surface: var(--container-bg);
+    --flat-surface-2: color-mix(in srgb, var(--container-bg) 90%, #fff);
+    --flat-surface-3: color-mix(in srgb, var(--container-bg) 82%, #fff);
+}
+
+.class-path-panel,
+.resource-dashboard-panel {
+    background: var(--container-bg);
+}
+.class-path-panel .class-selector { margin-bottom: 0; }
+.class-path-panel .class-btn {
+    min-height: 116px;
+    padding: 13px 14px;
+    border-radius: 4px;
+}
+.class-path-panel .class-btn::before { margin: 0; }
+.class-path-panel .class-btn span { font-size: .76rem; }
+.class-path-panel .class-btn small { margin-top: 4px; font-size: .62rem; }
+
+.resource-dashboard-panel { padding: 18px 20px 15px; }
+.resource-dashboard-panel .header-status-container {
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 12px;
+}
+.resource-dashboard-panel .status-box {
+    display: grid;
+    grid-template-columns: minmax(84px, .5fr) minmax(218px, 1.5fr);
+    grid-template-rows: auto 7px 13px;
+    align-items: center;
+    column-gap: 13px;
+    row-gap: 5px;
+    min-height: 0;
+    padding: 10px 12px 8px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--container-bg) 94%, #000);
+}
+.resource-dashboard-panel .status-box-title {
+    grid-column: 1;
+    grid-row: 1;
+    gap: 9px;
+    min-width: 0;
+    margin: 0;
+    font-size: .84rem;
+    letter-spacing: 1.4px;
+}
+.resource-dashboard-panel .status-box-title > span:nth-child(2) { min-width: 0; }
+.resource-dashboard-panel .status-box-title small {
+    overflow: hidden;
+    max-width: 115px;
+    font-size: .49rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.resource-dashboard-panel .status-box-title > [id^="mod-ind-"] {
+    overflow: hidden;
+    max-width: 82px;
+    margin-left: auto !important;
+    font-size: .47rem !important;
+    letter-spacing: .3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.resource-dashboard-panel .status-title-icon {
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    font-size: 1.15rem;
+}
+.resource-dashboard-panel .resource-control-bar {
+    display: grid;
+    grid-column: 2;
+    grid-row: 1;
+    grid-template-columns: 24px 24px minmax(74px, 1fr) 24px 24px minmax(42px, 50px);
+    align-items: stretch;
+    gap: 0;
+    overflow: hidden;
+    min-width: 0;
+    height: 32px;
+    margin: 0;
+    border: 1px solid var(--flat-line);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--container-bg) 82%, #000);
+}
+.resource-dashboard-panel .resource-control-bar > button,
+.resource-dashboard-panel .resource-control-bar > input,
+.resource-dashboard-panel .resource-value-group {
+    min-width: 0;
+    height: 30px;
+    border: 0;
+    border-right: 1px solid var(--flat-line-soft);
+    border-radius: 0;
+    background: transparent;
+}
+.resource-dashboard-panel .resource-control-bar > *:last-child { border-right: 0; }
+.resource-dashboard-panel .resource-control-bar button {
+    display: grid;
+    place-items: center;
+    width: auto;
+    padding: 0;
+    color: var(--resource-accent);
+    cursor: pointer;
+}
+.resource-dashboard-panel .resource-control-bar button:hover {
+    color: #fff;
+    background: color-mix(in srgb, var(--resource-accent) 13%, var(--container-bg));
+}
+.resource-dashboard-panel .resource-limit-btn { font-size: .88rem; }
+.resource-dashboard-panel .resource-value-group {
+    display: grid;
+    grid-template-columns: minmax(36px, 1fr) 9px minmax(36px, 1fr);
+    align-items: center;
+    gap: 0;
+}
+.resource-dashboard-panel .resource-value-group .sep {
+    color: #68616c;
+    font-family: Arial, sans-serif;
+    font-size: .65rem;
+    text-align: center;
+}
+.resource-dashboard-panel .status-inputs .resource-value-group input,
+.resource-dashboard-panel .status-inputs .calc-input {
+    width: 100% !important;
+    height: 30px;
+    padding: 0 3px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    font-size: .82rem;
+    text-align: center;
+}
+.resource-dashboard-panel .status-inputs .calc-input {
+    grid-column: auto;
+    color: var(--resource-accent);
+    font-size: .72rem;
+}
+.resource-dashboard-panel .status-bar-wrapper {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    height: 7px;
+    margin: 0;
+    border-radius: 2px;
+}
+.resource-dashboard-panel .status-condition-text {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    min-height: 11px;
+    margin: 0;
+    font-size: .53rem;
+    line-height: 11px;
+}
+.resource-dashboard-panel .mini-stats-overlay { margin-top: 16px; }
+
+.defense-side-stack {
+    display: flex;
+    min-width: 0;
+    align-self: start;
+    flex-direction: column;
+    gap: 18px;
+}
+.defense-side-stack .defense-panel { width: 100%; }
+.dt-panel { overflow: hidden; }
+#dt-dinamicas-lista {
+    overflow-y: auto;
+    max-height: 160px;
+    padding-right: 4px;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+}
+.mitigation-panel { margin-top: 0 !important; }
+
+.slot-select { font-size: .56rem; text-align: center; }
+.slot-manager-modal { width: min(820px, calc(100vw - 32px)); }
+.slot-manager-create-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+.slot-create-card {
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid var(--flat-line-soft);
+    border-radius: 4px;
+    background: var(--flat-surface-2);
+}
+.slot-create-card > label { color: var(--text-gold); font-size: .56rem; letter-spacing: 1.4px; }
+.slot-create-card > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; }
+.slot-create-card .modal-input { margin: 0; }
+.slot-create-card button,
+.slot-row button {
+    padding: 7px 10px;
+    color: #ddd7e0;
+    border: 1px solid var(--flat-line);
+    border-radius: 3px;
+    background: var(--container-bg);
+    font-family: 'Cinzel', serif;
+    font-size: .58rem;
+    cursor: pointer;
+}
+.slot-create-card button:hover,
+.slot-row button:hover { color: #fff; border-color: var(--light-purple); }
+.slot-manager-list { display: grid; gap: 12px; max-height: 48vh; overflow-y: auto; padding-right: 4px; }
+.slot-folder-card { border: 1px solid var(--flat-line); border-radius: 4px; background: var(--container-bg); }
+.slot-folder-header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--flat-line-soft);
+    background: var(--flat-surface-2);
+}
+.slot-folder-header span { color: var(--text-gold); }
+.slot-folder-header input,
+.slot-row input,
+.slot-row select {
+    min-width: 0;
+    padding: 7px 8px;
+    color: #e5e0e7;
+    border: 1px solid var(--flat-line);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--container-bg) 86%, #000);
+    outline: none;
+}
+.slot-folder-header small { color: var(--flat-muted); font-size: .56rem; }
+.slot-folder-rows { display: grid; }
+.slot-row {
+    display: grid;
+    grid-template-columns: minmax(125px, 1fr) minmax(120px, .7fr) auto;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-top: 1px solid var(--flat-line-soft);
+}
+.slot-row:first-child { border-top: 0; }
+.slot-folder-empty { padding: 13px; color: var(--flat-muted); font: .7rem Arial, sans-serif; }
+
+.ability-create-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; margin-bottom: 18px; }
+.ability-create-actions .btn-forge { margin-bottom: 0; }
+.btn-separator-create {
+    padding: 9px 11px;
+    color: #9d95a2;
+    border: 1px solid var(--flat-line);
+    border-radius: 4px;
+    background: var(--container-bg);
+    font-family: 'Cinzel', serif;
+    font-size: .57rem;
+    cursor: pointer;
+}
+.btn-separator-create:hover { color: var(--text-gold); border-color: var(--text-gold); }
+.ability-separator-toggle {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 10px 0 12px;
+    padding: 9px;
+    border: 1px solid var(--flat-line-soft);
+    border-radius: 3px;
+    cursor: pointer;
+}
+.ability-separator-toggle input { margin-top: 3px; accent-color: var(--text-gold); }
+.ability-separator-toggle span { display: grid; gap: 2px; }
+.ability-separator-toggle strong { color: #dcd6df; font-size: .65rem; }
+.ability-separator-toggle small { color: var(--flat-muted); font: .62rem Arial, sans-serif; }
+.ability-separator-preview,
+.ability-separator {
+    display: none;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+.ability-separator-preview::before,
+.ability-separator-preview::after,
+.ability-separator::before {
+    content: '';
+    height: 1px;
+    flex: 1;
+    background: color-mix(in srgb, var(--text-gold) 45%, var(--flat-line));
+}
+.ability-separator-preview span,
+.ability-separator-title { color: var(--text-gold); font-size: .58rem; letter-spacing: 1.5px; }
+.ability-separator {
+    display: flex;
+    margin: 18px 0 11px;
+}
+.ability-separator-title { flex: 0 1 auto; overflow-wrap: anywhere; }
+.ability-separator-actions { display: flex; flex: 0 0 auto; gap: 3px; }
+.ability-separator-actions button {
+    padding: 3px 5px;
+    color: #827b86;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+.ability-separator-actions button:hover { color: #fff; }
+.modifier-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+}
+.modifier-chip {
+    padding: 4px 6px;
+    color: #817986;
+    border: 1px solid var(--flat-line-soft);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--container-bg) 88%, #000);
+    font-family: Arial, sans-serif;
+    font-size: .59rem;
+}
+.modifier-summary.active .modifier-chip {
+    color: #aeefff;
+    border-color: color-mix(in srgb, #00e5ff 32%, var(--flat-line));
+}
+
+/* Os containers principais e as campanhas obedecem à mesma cor escolhida. */
+.sheet-hero,
+.sheet-dashboard-panel,
+.section-box,
+.defense-panel,
+.inv-header-dashboard,
+.hab-card,
+.item-card,
+.modal,
+#theme-panel,
+.campaign-panel,
+.campaign-content-box,
+.campaign-shield,
+.campaign-viewer,
+.combat-panel,
+.initiative-request-card,
+.shield-card,
+.combat-current-card,
+#campaign-edit-bar {
+    background: var(--container-bg);
+}
+#campaign-app {
+    background-color: color-mix(in srgb, var(--container-bg) 52%, var(--bg-gradient-top));
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--flat-line) 35%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--flat-line) 35%, transparent) 1px, transparent 1px);
+}
+.campaign-panel,
+.campaign-content-box,
+.campaign-shield,
+.campaign-viewer,
+.combat-panel,
+.initiative-request-card,
+.shield-card,
+.campaign-hero,
+.campaign-card,
+.combat-current-card {
+    border-color: var(--flat-line);
+    border-radius: 4px;
+    box-shadow: none;
+}
+.campaign-primary-btn,
+.campaign-submit-btn,
+.campaign-back-btn,
+.campaign-ghost-btn,
+.gm-shield-btn,
+.campaign-icon-action,
+.campaign-add-character,
+.shield-card-actions button {
+    border-radius: 3px;
+    box-shadow: none;
+    filter: none;
+}
+.campaign-primary-btn,
+.campaign-submit-btn {
+    border: 1px solid color-mix(in srgb, var(--primary-purple) 76%, var(--flat-line));
+    background: color-mix(in srgb, var(--primary-purple) 52%, var(--container-bg));
+}
+.campaign-primary-btn.secondary,
+.campaign-submit-btn.cyan {
+    color: #e8e4ea;
+    border-color: color-mix(in srgb, var(--text-gold) 60%, var(--flat-line));
+    background: color-mix(in srgb, var(--text-gold) 18%, var(--container-bg));
+}
+.campaign-primary-btn:hover,
+.campaign-submit-btn:hover { transform: none; filter: none; box-shadow: none; background: color-mix(in srgb, var(--primary-purple) 65%, var(--container-bg)); }
+.campaign-primary-btn.secondary:hover,
+.campaign-submit-btn.cyan:hover { background: color-mix(in srgb, var(--text-gold) 27%, var(--container-bg)); }
+.campaign-field input,
+.campaign-field textarea,
+.campaign-field select,
+.campaign-code,
+.initiative-formula,
+.shield-private-note,
+.combat-current-resources,
+.campaign-character-mini,
+.combat-select-card,
+.combat-wait-card,
+.combat-order-item {
+    border-color: var(--flat-line-soft);
+    border-radius: 3px;
+    background-color: color-mix(in srgb, var(--container-bg) 88%, #000);
+}
+.campaign-card { background: var(--flat-surface-2); }
+.campaign-card:hover { transform: none; border-color: var(--light-purple); box-shadow: none; }
+
+@media (max-width: 620px) {
+    .class-path-panel .class-btn { min-height: 100px; }
+    .resource-dashboard-panel .status-box { grid-template-columns: 1fr; grid-template-rows: auto auto 7px 13px; }
+    .resource-dashboard-panel .status-box-title { grid-column: 1; grid-row: 1; }
+    .resource-dashboard-panel .resource-control-bar { grid-column: 1; grid-row: 2; width: 100%; }
+    .resource-dashboard-panel .status-bar-wrapper { grid-row: 3; }
+    .resource-dashboard-panel .status-condition-text { grid-row: 4; }
+    .slot-manager-create-grid { grid-template-columns: 1fr; }
+    .slot-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 430px) {
+    .class-path-panel .class-btn { min-height: 92px; }
+    .resource-dashboard-panel .resource-control-bar { grid-template-columns: 25px 25px minmax(86px, 1fr) 25px 25px 48px; }
+}
+
     </style>
 </head>
 <body>
@@ -2056,18 +2690,11 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
     <button class="sidebar-btn" id="btn-inventario" onclick="mudarArea('inventario')">🎒</button>
     <button class="sidebar-btn" id="btn-notas" onclick="mudarArea('notas')" title="Anotações">📚</button>
     <button class="sidebar-btn" onclick="confirmarSalvar()" title="Salvar na Nuvem">💾</button>
-    <select id="save-slot" class="sidebar-btn" onchange="carregarDaNuvem()" title="Mudar Slot">
-        <option value="1">🗂️ 1</option>
-        <option value="2">🗂️ 2</option>
-        <option value="3">🗂️ 3</option>
-        <option value="4">🗂️ 4</option>
-        <option value="5">🗂️ 5</option>
-        <option value="6">🗂️ 6</option>
-        <option value="7">🗂️ 7</option>
-        <option value="8">🗂️ 8</option>
-        <option value="9">🗂️ 9</option>
-        <option value="10">🗂️ 10</option>
+    <button class="sidebar-btn" id="btn-configuracoes" onclick="abrirConfiguracoesAudio()" title="Configurações de áudio">⚙️</button>
+    <select id="save-slot" class="sidebar-btn slot-select" onchange="carregarDaNuvem()" title="Mudar ficha">
+        <option value="1">Slot 1</option>
     </select>
+    <button class="sidebar-btn" id="btn-slot-manager" onclick="abrirGerenciadorSlots()" title="Organizar fichas e pastas">🗃️</button>
 </div>
 
 <div class="container">
@@ -2099,7 +2726,7 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
         </div>
     </section>
 
-    <section class="sheet-dashboard-panel">
+    <section class="sheet-dashboard-panel class-path-panel">
         <div class="class-selector-header">
             <div>
                 <span class="dashboard-eyebrow">CAMINHO DO PERSONAGEM</span>
@@ -2113,7 +2740,9 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
             <button class="class-btn" id="btn-class-erudito" onclick="selecionarClasse('erudito')"><span>ERUDITO</span><small>Conhecimento e técnica</small></button>
             <button class="class-btn" id="btn-class-projetante" onclick="selecionarClasse('projetante')"><span>PROJETANTE</span><small>Versatilidade tática</small></button>
         </div>
+    </section>
 
+    <section class="sheet-dashboard-panel resource-dashboard-panel">
     <div class="header-status-container">
         
         <div class="status-box status-box-pv">
@@ -2122,14 +2751,18 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
             </div>
-            <div class="status-box-title"><span class="status-title-icon">♥</span><span>Vida<small>Pontos de vida</small></span> <span id="mod-ind-pv" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
-            <div class="status-inputs">
+            <div class="status-box-title"><span class="status-title-icon">♥</span><span>PV<small>Pontos de vida</small></span> <span id="mod-ind-pv" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
+            <div class="status-inputs resource-control-bar">
+                <button class="resource-limit-btn" type="button" onclick="definirRecursoExtremo('pv', false)" title="Esvaziar PV">⇣</button>
                 <button class="arrow-btn" onclick="changeStat('pv', -1)">◀</button>
-                <input type="number" id="curr-pv" value="20" onchange="updateBar('pv'); marcarAlteracao();">
-                <span class="sep">/</span>
-                <input type="number" id="max-pv" value="20" onchange="updateBar('pv'); marcarAlteracao();">
+                <div class="resource-value-group">
+                    <input type="number" id="curr-pv" value="20" aria-label="PV atual" onchange="updateBar('pv'); marcarAlteracao();">
+                    <span class="sep">/</span>
+                    <input type="number" id="max-pv" value="20" aria-label="PV máximo" onchange="updateBar('pv'); marcarAlteracao();">
+                </div>
                 <button class="arrow-btn" onclick="changeStat('pv', 1)">▶</button>
-                <input type="number" id="calc-pv" class="calc-input" placeholder="+/-" onchange="aplicarModificador('pv')">
+                <button class="resource-limit-btn" type="button" onclick="definirRecursoExtremo('pv', true)" title="Encher PV">⇡</button>
+                <input type="number" id="calc-pv" class="calc-input" placeholder="+/-" aria-label="Alteração personalizada de PV" onchange="aplicarModificador('pv')">
             </div>
             <div class="status-bar-wrapper"><div id="bar-pv" class="status-fill bg-red"></div></div>
             <div class="status-condition-text" id="badge-pv"></div>
@@ -2137,13 +2770,17 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
 
         <div class="status-box status-box-pa">
             <div class="status-box-title"><span class="status-title-icon">✦</span><span>PA<small>Pontos de ação</small></span> <span id="mod-ind-pa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
-            <div class="status-inputs">
+            <div class="status-inputs resource-control-bar">
+                <button class="resource-limit-btn" type="button" onclick="definirRecursoExtremo('pa', false)" title="Esvaziar PA">⇣</button>
                 <button class="arrow-btn" onclick="changeStat('pa', -1)">◀</button>
-                <input type="number" id="curr-pa" value="10" onchange="updateBar('pa'); marcarAlteracao();">
-                <span class="sep">/</span>
-                <input type="number" id="max-pa" value="10" onchange="updateBar('pa'); marcarAlteracao();">
+                <div class="resource-value-group">
+                    <input type="number" id="curr-pa" value="10" aria-label="PA atual" onchange="updateBar('pa'); marcarAlteracao();">
+                    <span class="sep">/</span>
+                    <input type="number" id="max-pa" value="10" aria-label="PA máximo" onchange="updateBar('pa'); marcarAlteracao();">
+                </div>
                 <button class="arrow-btn" onclick="changeStat('pa', 1)">▶</button>
-                <input type="number" id="calc-pa" class="calc-input" placeholder="+/-" onchange="aplicarModificador('pa')">
+                <button class="resource-limit-btn" type="button" onclick="definirRecursoExtremo('pa', true)" title="Encher PA">⇡</button>
+                <input type="number" id="calc-pa" class="calc-input" placeholder="+/-" aria-label="Alteração personalizada de PA" onchange="aplicarModificador('pa')">
             </div>
             <div class="status-bar-wrapper"><div id="bar-pa" class="status-fill bg-gold"></div></div>
             <div class="status-condition-text" id="badge-pa"></div>
@@ -2156,13 +2793,17 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
             </div>
             <div class="status-box-title"><span class="status-title-icon">◈</span><span>Sanidade<small>Estabilidade mental</small></span> <span id="mod-ind-sa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
-            <div class="status-inputs">
+            <div class="status-inputs resource-control-bar">
+                <button class="resource-limit-btn" type="button" onclick="definirRecursoExtremo('sa', false)" title="Esvaziar Sanidade">⇣</button>
                 <button class="arrow-btn" onclick="changeStat('sa', -1)">◀</button>
-                <input type="number" id="curr-sa" value="15" onchange="updateBar('sa'); marcarAlteracao();">
-                <span class="sep">/</span>
-                <input type="number" id="max-sa" value="15" onchange="updateBar('sa'); marcarAlteracao();">
+                <div class="resource-value-group">
+                    <input type="number" id="curr-sa" value="15" aria-label="Sanidade atual" onchange="updateBar('sa'); marcarAlteracao();">
+                    <span class="sep">/</span>
+                    <input type="number" id="max-sa" value="15" aria-label="Sanidade máxima" onchange="updateBar('sa'); marcarAlteracao();">
+                </div>
                 <button class="arrow-btn" onclick="changeStat('sa', 1)">▶</button>
-                <input type="number" id="calc-sa" class="calc-input" placeholder="+/-" onchange="aplicarModificador('sa')">
+                <button class="resource-limit-btn" type="button" onclick="definirRecursoExtremo('sa', true)" title="Encher Sanidade">⇡</button>
+                <input type="number" id="calc-sa" class="calc-input" placeholder="+/-" aria-label="Alteração personalizada de Sanidade" onchange="aplicarModificador('sa')">
             </div>
             <div class="status-bar-wrapper"><div id="bar-sa" class="status-fill bg-cyan"></div></div>
             <div class="status-condition-text" id="badge-sa"></div>
@@ -2213,13 +2854,26 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
             <button class="diff-btn active" id="df-normal" onclick="setDif('normal')">NORMAL</button>
             <button class="diff-btn" id="df-dificil" onclick="setDif('dificil')">DIFÍCIL</button>
         </div>
+        <div class="roll-mode-control" aria-label="Configuração de vantagem e desvantagem">
+            <div class="roll-mode-copy">
+                <strong id="roll-mode-label">VANTAGEM</strong>
+                <small id="roll-mode-help">Mantém o maior resultado.</small>
+            </div>
+            <label class="roll-disadvantage-toggle">
+                <input type="checkbox" id="roll-desvantagem" onchange="atualizarConfigRolagem('desvantagem', this.checked)">
+                <span>Desvantagem</span>
+            </label>
+            <label class="roll-dice-count" title="Quantidade de d20 rolados">
+                <input type="number" id="roll-qtd-dados" min="1" max="20" value="1" onchange="atualizarConfigRolagem('quantidade', this.value)">
+                <span>d20</span>
+            </label>
+        </div>
     </div>
 
-    <!-- Coluna Direita: Envolvida em uma div com flex-direction: column para empilhar os painéis -->
-    <div style="display: flex; flex-direction: column; gap: 20px;">
+    <!-- Coluna Direita: DT, bloqueio e resistências -->
+    <div class="defense-side-stack">
         
-        <!-- NOVA CAIXA DE DT -->
-        <div class="defense-panel">
+        <div class="defense-panel dt-panel">
             <div class="defense-header" style="font-family: 'Cinzel', serif; text-transform: none;">
                 <span>🎯 Dificuldade dos Testes (DT)</span>
                 <button onclick="adicionarNovaDT()" style="background: none; border: 1px solid var(--light-purple); color: var(--light-purple); font-size: 0.7rem; padding: 2px 5px; cursor: pointer; border-radius: 3px; font-family: 'Cinzel', serif;">+ Add DT</button>
@@ -2238,8 +2892,7 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
             <div id="dt-dinamicas-lista"></div>
         </div>
 
-        <!-- CAIXA DE BLOQUEIO E RD (O painel original que você já tinha) -->
-        <div class="defense-panel">
+        <div class="defense-panel mitigation-panel">
             <div class="defense-header" style="font-family: 'Cinzel', serif; text-transform: none;">Bloqueio <span id="mod-ind-bloq" style="color:#00e5ff; font-size:0.75rem;"></span></div>
             <div class="rd-item-row" style="border-left: 3px solid var(--text-gold);">
                 <input type="checkbox" id="chk-bloqueio" onchange="marcarAlteracao()">
@@ -2272,7 +2925,10 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
     <div class="abilities-columns">
         <section class="section-box">
             <div class="section-title">Ataques</div>
-            <button class="btn-forge" onclick="abrirEditorHab('ataque')">+ Forjar Novo Ataque</button>
+            <div class="ability-create-actions">
+                <button class="btn-forge" onclick="abrirEditorHab('ataque')">+ Forjar Novo Ataque</button>
+                <button class="btn-separator-create" onclick="abrirEditorSeparador('ataque')">— Separador</button>
+            </div>
             <!-- NOVA BARRA DE PESQUISA AQUI -->
             <input type="text" class="search-bar" id="search-ataques" placeholder="Pesquisar ataque..." onkeyup="filtrarCards('search-ataques', 'ataques-lista')">
             <div id="ataques-lista"></div>
@@ -2280,7 +2936,10 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
         
         <section class="section-box">
             <div class="section-title">Habilidades</div>
-            <button class="btn-forge" onclick="abrirEditorHab('habilidade')">+ Forjar Nova Habilidade</button>
+            <div class="ability-create-actions">
+                <button class="btn-forge" onclick="abrirEditorHab('habilidade')">+ Forjar Nova Habilidade</button>
+                <button class="btn-separator-create" onclick="abrirEditorSeparador('habilidade')">— Separador</button>
+            </div>
             <!-- NOVA BARRA DE PESQUISA AQUI -->
             <input type="text" class="search-bar" id="search-habilidades" placeholder="Pesquisar habilidade..." onkeyup="filtrarCards('search-habilidades', 'habilidades-lista')">
             <div id="habilidades-lista"></div>
@@ -2289,7 +2948,10 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
     
     <section class="section-box spell-section">
         <div class="section-title">Feitiços</div>
-        <button class="btn-forge" onclick="abrirEditorHab('feitico')">+ Forjar Novo Feitiço</button>
+        <div class="ability-create-actions">
+            <button class="btn-forge" onclick="abrirEditorHab('feitico')">+ Forjar Novo Feitiço</button>
+            <button class="btn-separator-create" onclick="abrirEditorSeparador('feitico')">— Separador</button>
+        </div>
         <!-- NOVA BARRA DE PESQUISA AQUI -->
         <input type="text" class="search-bar" id="search-feiticos" placeholder="Pesquisar feitiço..." onkeyup="filtrarCards('search-feiticos', 'feiticos-lista')">
         <div id="feiticos-lista" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px;"></div>
@@ -2429,8 +3091,7 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
                         <div class="campaign-field">
                             <label for="campaign-character-slot">FICHA / SLOT</label>
                             <select id="campaign-character-slot">
-                                <option value="1">Slot 1</option><option value="2">Slot 2</option><option value="3">Slot 3</option><option value="4">Slot 4</option><option value="5">Slot 5</option>
-                                <option value="6">Slot 6</option><option value="7">Slot 7</option><option value="8">Slot 8</option><option value="9">Slot 9</option><option value="10">Slot 10</option>
+                                <option value="1">Slot 1</option>
                             </select>
                         </div>
                         <button type="submit" class="campaign-submit-btn" style="width:100%;">Vincular ficha</button>
@@ -2479,7 +3140,12 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
                                 <h3 style="color:var(--text-gold); font-size:.72rem; letter-spacing:1px; margin-top:22px;">FICHA AVULSA / NPC</h3>
                                 <form onsubmit="adicionarNpcAoCombate(event)">
                                     <div class="campaign-field"><label for="combat-npc-name">NOME</label><input id="combat-npc-name" required maxlength="60" placeholder="Ex: Criatura do Abismo"></div>
-                                    <div class="campaign-field"><label for="combat-npc-avatar">FOTO (URL OPCIONAL)</label><input id="combat-npc-avatar" type="url" placeholder="https://..."></div>
+                                    <div class="campaign-field">
+                                        <label for="combat-npc-avatar">FOTO (LINK OU ARQUIVO OPCIONAL)</label>
+                                        <input id="combat-npc-avatar" type="text" placeholder="https://..." oninput="atualizarPreviewImagem('combat-npc-avatar', 'combat-npc-avatar-preview')">
+                                        <label class="file-picker-button wide">📁 Escolher imagem<input type="file" accept="image/*" onchange="carregarImagemLocal(this, 'combat-npc-avatar', 'combat-npc-avatar-preview')"></label>
+                                        <div class="media-preview-frame media-preview-compact"><img id="combat-npc-avatar-preview" alt="Prévia da ficha avulsa"></div>
+                                    </div>
                                     <div class="campaign-field"><label for="combat-npc-initiative">INICIATIVA</label><input id="combat-npc-initiative" type="number" required value="0"></div>
                                     <button class="campaign-submit-btn" type="submit" style="width:100%;">Adicionar ficha avulsa</button>
                                 </form>
@@ -2622,6 +3288,10 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
         <span>Texto Dourado:</span>
         <input type="color" id="picker-gold" onchange="mudarCor('--text-gold', this.value)">
     </div>
+    <div class="theme-row">
+        <span>Caixas / Containers:</span>
+        <input type="color" id="picker-container" onchange="mudarCor('--container-bg', this.value)">
+    </div>
     <button onclick="resetarTema()" style="width:100%; background:none; border:1px solid #444; color:#aaa; font-family:'Cinzel'; cursor:pointer; padding:5px; margin-top:5px; font-size:0.75rem;">Resetar Padrão</button>
 </div>
 
@@ -2631,6 +3301,86 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
     <div style="display: flex; gap: 10px; margin-top: 20px;">
         <button onclick="executarSalvarNuvem()" style="flex:1; padding: 10px; background: var(--primary-purple); color: #fff; border:none; cursor:pointer; font-family:'Cinzel'; font-weight:bold;">Sim, Salvar</button>
         <button onclick="document.getElementById('modal-confirm-save').style.display='none'" style="flex:1; padding: 10px; background: none; border: 1px solid #444; color: #aaa; cursor:pointer; font-family:'Cinzel';">Cancelar</button>
+    </div>
+</div>
+
+<div id="modal-audio-settings" class="modal settings-modal">
+    <div class="settings-modal-header">
+        <div>
+            <span class="settings-eyebrow">PREFERÊNCIAS</span>
+            <h3>Áudio das rolagens</h3>
+        </div>
+        <button type="button" class="settings-close" onclick="fecharConfiguracoesAudio()" title="Fechar">✕</button>
+    </div>
+    <p class="settings-intro">Escolha os sons de um 20 natural e de uma falha crítica. Você pode usar um link ou um arquivo do seu aparelho.</p>
+
+    <div class="audio-setting-row">
+        <div class="audio-setting-copy"><strong>Sucesso extremo</strong><small>20 natural</small></div>
+        <input type="text" id="audio-crit-url" class="modal-input" placeholder="crit.mp3 ou https://...">
+        <label class="file-picker-button">📁 Arquivo<input type="file" id="audio-crit-file" accept="audio/*" onchange="carregarAudioLocal(this, 'audio-crit-url')"></label>
+        <button type="button" class="audio-test-button" onclick="testarSomConfigurado('crit')">▶ Testar</button>
+    </div>
+
+    <div class="audio-setting-row">
+        <div class="audio-setting-copy"><strong>Falha crítica</strong><small>1 natural</small></div>
+        <input type="text" id="audio-fail-url" class="modal-input" placeholder="fail.mp3 ou https://...">
+        <label class="file-picker-button">📁 Arquivo<input type="file" id="audio-fail-file" accept="audio/*" onchange="carregarAudioLocal(this, 'audio-fail-url')"></label>
+        <button type="button" class="audio-test-button" onclick="testarSomConfigurado('fail')">▶ Testar</button>
+    </div>
+
+    <label class="settings-checkbox-row">
+        <input type="checkbox" id="audio-ouvir-alheios" checked>
+        <span><strong>Ouvir críticos de outros jogadores</strong><small>Quando desativado, seus próprios críticos continuam tocando.</small></span>
+    </label>
+
+    <div class="settings-actions">
+        <button type="button" class="settings-secondary" onclick="resetarConfiguracoesAudio()">Restaurar padrão</button>
+        <button type="button" class="settings-primary" onclick="salvarConfiguracoesAudio()">Salvar configurações</button>
+    </div>
+</div>
+
+<div id="modal-slot-manager" class="modal slot-manager-modal">
+    <div class="settings-modal-header">
+        <div>
+            <span class="settings-eyebrow">FICHAS NA NUVEM</span>
+            <h3>Pastas e slots</h3>
+        </div>
+        <button type="button" class="settings-close" onclick="fecharGerenciadorSlots()" title="Fechar">✕</button>
+    </div>
+    <p class="settings-intro">Crie quantas fichas precisar, dê nomes a elas e organize tudo em pastas.</p>
+    <div class="slot-manager-create-grid">
+        <form class="slot-create-card" onsubmit="criarPastaSlot(event)">
+            <label for="new-slot-folder-name">NOVA PASTA</label>
+            <div><input id="new-slot-folder-name" class="modal-input" maxlength="45" placeholder="Ex: Mesa de sexta"><button type="submit">Criar</button></div>
+        </form>
+        <form class="slot-create-card" onsubmit="criarNovoSlot(event)">
+            <label for="new-slot-name">NOVO SLOT</label>
+            <input id="new-slot-name" class="modal-input" maxlength="45" placeholder="Nome da ficha">
+            <select id="new-slot-folder" class="modal-input"></select>
+            <button type="submit">Criar ficha</button>
+        </form>
+    </div>
+    <div id="slot-manager-list" class="slot-manager-list"></div>
+</div>
+
+<div id="modal-avatar" class="modal media-modal">
+    <div class="settings-modal-header">
+        <div>
+            <span class="settings-eyebrow">PERSONAGEM</span>
+            <h3>Imagem da ficha</h3>
+        </div>
+        <button type="button" class="settings-close" onclick="fecharEditorAvatar()" title="Fechar">✕</button>
+    </div>
+    <div class="media-preview-frame avatar-media-preview"><img id="avatar-editor-preview" alt="Prévia do personagem"></div>
+    <label class="media-field-label" for="avatar-url">LINK DA IMAGEM</label>
+    <input type="text" id="avatar-url" class="modal-input" placeholder="https://..." oninput="atualizarPreviewImagem('avatar-url', 'avatar-editor-preview')">
+    <div class="media-file-row">
+        <label class="file-picker-button wide">📁 Escolher imagem do aparelho<input type="file" id="avatar-file" accept="image/*" onchange="carregarImagemLocal(this, 'avatar-url', 'avatar-editor-preview')"></label>
+        <button type="button" class="settings-secondary" onclick="limparImagemCampo('avatar-url', 'avatar-editor-preview')">Remover</button>
+    </div>
+    <div class="settings-actions">
+        <button type="button" class="settings-secondary" onclick="fecharEditorAvatar()">Cancelar</button>
+        <button type="button" class="settings-primary" onclick="salvarAvatar()">Usar imagem</button>
     </div>
 </div>
 
@@ -2644,15 +3394,22 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
 <div id="modal-hab" class="modal">
     <div class="modal-tabs">
         <button class="tab-btn active" onclick="switchTab('tab-info')">Informações</button>
-        <button class="tab-btn" onclick="switchTab('tab-media')">Mídia/Imagem</button>
+        <button class="tab-btn" id="hab-media-tab" onclick="switchTab('tab-media')">Mídia/Imagem</button>
     </div>
 
     <div id="tab-info">
         <input type="hidden" id="hab-id-edicao" value="">
         <input type="hidden" id="hab-tipo">
         <label style="color:var(--text-gold); font-size:0.8rem">NOME DA HABILIDADE</label>
-        <input type="text" id="hab-nome" class="modal-input">
+        <input type="text" id="hab-nome" class="modal-input" oninput="atualizarPreviewSeparadorHab()">
+
+        <label class="ability-separator-toggle">
+            <input type="checkbox" id="hab-is-separator" onchange="atualizarModoSeparadorHab()">
+            <span><strong>Usar como linha de separação</strong><small>Cria um divisor nomeado para organizar esta lista.</small></span>
+        </label>
+        <div id="hab-separator-preview" class="ability-separator-preview"><span>LINHA DE SEPARAÇÃO</span></div>
         
+        <div id="hab-detail-fields">
         <label style="color:var(--text-gold); font-size:0.8rem">DANO / ROLAGEM PRINCIPAL (Ex: 2d10 + 5)</label>
         <input type="text" id="hab-dano" class="modal-input" placeholder="Ex: 2d10 + 5">
 
@@ -2682,15 +3439,18 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
             <button class="toolbar-btn" onclick="formatText('<u>', '</u>')"><u>U</u></button>
             <button class="toolbar-btn" onclick="formatText('~~')"><s>S</s></button>
         </div>
-        <textarea id="hab-desc" class="modal-input" rows="6" placeholder="Descrição da habilidade..."></textarea>
+        <textarea id="hab-desc" class="modal-input" rows="6" data-auto-grow placeholder="Descrição da habilidade..."></textarea>
         
         <div id="rolagens-extras-container"></div>
         <button onclick="addInputRolagem()" style="background:none; border:1px solid var(--primary-purple); color:var(--light-purple); cursor:pointer; padding:5px; margin-bottom:15px; width:100%; font-family: 'Cinzel', serif;">+ Adicionar Rolagem Opcional</button>
+        </div>
     </div>
 
     <div id="tab-media" style="display:none">
         <label style="color:var(--text-gold); font-size:0.8rem">LINK DA IMAGEM / ÍCONE</label>
-        <input type="text" id="hab-img" class="modal-input" placeholder="https://link-da-imagem.png">
+        <input type="text" id="hab-img" class="modal-input" placeholder="https://link-da-imagem.png" oninput="atualizarPreviewImagem('hab-img', 'hab-img-preview')">
+        <label class="file-picker-button wide">📁 Escolher imagem do aparelho<input type="file" id="hab-img-file" accept="image/*" onchange="carregarImagemLocal(this, 'hab-img', 'hab-img-preview')"></label>
+        <div class="media-preview-frame"><img id="hab-img-preview" alt="Prévia da habilidade"></div>
     </div>
 
     <button onclick="salvarHabilidade()" style="width:100%; padding:15px; background:var(--primary-purple); color:#fff; border:none; font-family:'Cinzel', serif; cursor:pointer;">GRAVAR NO GRIMÓRIO</button>
@@ -2705,6 +3465,13 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
     
     <label style="color:var(--text-gold); font-size:0.8rem">NOME DO ITEM</label>
     <input type="text" id="item-nome" class="modal-input" placeholder="Ex: Espada de Ébano">
+
+    <label style="color:var(--text-gold); font-size:0.8rem">IMAGEM / ÍCONE DO ITEM</label>
+    <input type="text" id="item-img" class="modal-input" placeholder="https://link-da-imagem.png" oninput="atualizarPreviewImagem('item-img', 'item-img-preview')">
+    <div class="media-file-row">
+        <label class="file-picker-button wide">📁 Escolher imagem do aparelho<input type="file" id="item-img-file" accept="image/*" onchange="carregarImagemLocal(this, 'item-img', 'item-img-preview')"></label>
+        <div class="media-preview-frame media-preview-compact"><img id="item-img-preview" alt="Prévia do item"></div>
+    </div>
     
     <label style="color:var(--text-gold); font-size:0.8rem">ESPAÇOS QUE OCUPA (PESO)</label>
     <input type="number" id="item-peso" class="modal-input" value="1">
@@ -2743,7 +3510,7 @@ select.sidebar-btn { padding-left: 7px; background: var(--flat-surface); }
         <button type="button" class="toolbar-btn" onclick="formatText('<u>', '</u>', 'item-desc')"><u>U</u></button>
         <button type="button" class="toolbar-btn" onclick="formatText('~~', '~~', 'item-desc')"><s>S</s></button>
     </div>
-    <textarea id="item-desc" class="modal-input" rows="6" placeholder="Propriedades do item..."></textarea>
+    <textarea id="item-desc" class="modal-input" rows="6" data-auto-grow placeholder="Propriedades do item..."></textarea>
     
     <div id="item-rolagens-container"></div>
     <button onclick="addInputRolagemItem()" style="background:none; border:1px solid var(--primary-purple); color:var(--light-purple); cursor:pointer; padding:5px; margin-bottom:15px; width:100%; font-family: 'Cinzel', serif;">+ Adicionar Rolagem Opcional ao Item</button>
@@ -2814,26 +3581,119 @@ function filtrarCards(inputId, containerId) {
 }
 
     /* SISTEMA DE SOM VIA ARQUIVOS DE ÁUDIO (.MP3 / .WAV) */
-const efeitosSonoros = {
-    click: new Audio('click.mp3'),
-    roll:  new Audio('roll.mp3'),
-    crit:  new Audio('crit.mp3'),
-    fail:  new Audio('fail.mp3')
+const AUDIO_CONFIG_KEY = 'abyssAudioConfigV1';
+const AUDIO_DEFAULTS = {
+    critUrl: 'crit.mp3',
+    failUrl: 'fail.mp3',
+    ouvirCriticosAlheios: true
 };
 
-function tocarSom(tipo) {
-    const som = efeitosSonoros[tipo];
-    
-    if (som) {
-        // currentTime = 0 garante que se você clicar 2x rápido, 
-        // o som recomeça imediatamente em vez de ignorar o segundo clique
-        som.currentTime = 0; 
-        
-        // Toca o arquivo
-        som.play().catch(erro => {
-            console.log("O navegador bloqueou o áudio. O usuário precisa interagir com a página primeiro.", erro);
-        });
+function lerConfiguracoesAudio() {
+    try {
+        const salvas = JSON.parse(localStorage.getItem(AUDIO_CONFIG_KEY) || '{}');
+        return { ...AUDIO_DEFAULTS, ...salvas };
+    } catch (erro) {
+        console.warn('Não foi possível ler as configurações de áudio.', erro);
+        return { ...AUDIO_DEFAULTS };
     }
+}
+
+let configuracoesAudio = lerConfiguracoesAudio();
+const efeitosSonoros = {
+    click: new Audio('click.mp3'),
+    roll: new Audio('roll.mp3')
+};
+let ultimoSomDeClique = 0;
+
+function obterFonteSom(tipo) {
+    if (tipo === 'crit') return configuracoesAudio.critUrl || AUDIO_DEFAULTS.critUrl;
+    if (tipo === 'fail') return configuracoesAudio.failUrl || AUDIO_DEFAULTS.failUrl;
+    return efeitosSonoros[tipo] || null;
+}
+
+function reproduzirAudio(audio) {
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(erro => {
+        console.log('O navegador bloqueou o áudio. Interaja com a página e tente novamente.', erro);
+    });
+}
+
+function tocarSom(tipo) {
+    if (tipo === 'click') {
+        const agora = performance.now();
+        if (agora - ultimoSomDeClique < 45) return;
+        ultimoSomDeClique = agora;
+    }
+    const fonte = obterFonteSom(tipo);
+    if (!fonte) return;
+    reproduzirAudio(typeof fonte === 'string' ? new Audio(fonte) : fonte);
+}
+
+document.addEventListener('click', event => {
+    const controle = event.target.closest?.('button, input[type="button"], input[type="submit"], [role="button"]');
+    if (controle && !controle.disabled) tocarSom('click');
+}, true);
+
+function abrirConfiguracoesAudio() {
+    tocarSom('click');
+    document.getElementById('audio-crit-url').value = configuracoesAudio.critUrl || '';
+    document.getElementById('audio-fail-url').value = configuracoesAudio.failUrl || '';
+    document.getElementById('audio-ouvir-alheios').checked = configuracoesAudio.ouvirCriticosAlheios !== false;
+    document.getElementById('modal-audio-settings').style.display = 'block';
+}
+
+function fecharConfiguracoesAudio() {
+    document.getElementById('modal-audio-settings').style.display = 'none';
+}
+
+function testarSomConfigurado(tipo) {
+    const inputId = tipo === 'crit' ? 'audio-crit-url' : 'audio-fail-url';
+    const fonte = document.getElementById(inputId).value.trim();
+    if (!fonte) return alert('Escolha um link ou arquivo de áudio primeiro.');
+    reproduzirAudio(new Audio(fonte));
+}
+
+function carregarAudioLocal(input, targetId) {
+    const arquivo = input.files && input.files[0];
+    if (!arquivo) return;
+    if (!arquivo.type.startsWith('audio/')) {
+        input.value = '';
+        return alert('Escolha um arquivo de áudio válido.');
+    }
+    if (arquivo.size > 1500000) {
+        input.value = '';
+        return alert('O áudio deve ter no máximo 1,5 MB para ser salvo neste navegador.');
+    }
+    const leitor = new FileReader();
+    leitor.onload = () => { document.getElementById(targetId).value = leitor.result; };
+    leitor.onerror = () => alert('Não foi possível ler esse arquivo de áudio.');
+    leitor.readAsDataURL(arquivo);
+}
+
+function salvarConfiguracoesAudio() {
+    const novas = {
+        critUrl: document.getElementById('audio-crit-url').value.trim() || AUDIO_DEFAULTS.critUrl,
+        failUrl: document.getElementById('audio-fail-url').value.trim() || AUDIO_DEFAULTS.failUrl,
+        ouvirCriticosAlheios: document.getElementById('audio-ouvir-alheios').checked
+    };
+    try {
+        localStorage.setItem(AUDIO_CONFIG_KEY, JSON.stringify(novas));
+        configuracoesAudio = novas;
+        fecharConfiguracoesAudio();
+        tocarSom('click');
+    } catch (erro) {
+        console.error('Erro ao salvar as configurações de áudio.', erro);
+        alert('Não foi possível salvar. Tente arquivos de áudio menores ou use links.');
+    }
+}
+
+function resetarConfiguracoesAudio() {
+    configuracoesAudio = { ...AUDIO_DEFAULTS };
+    localStorage.setItem(AUDIO_CONFIG_KEY, JSON.stringify(configuracoesAudio));
+    document.getElementById('audio-crit-url').value = configuracoesAudio.critUrl;
+    document.getElementById('audio-fail-url').value = configuracoesAudio.failUrl;
+    document.getElementById('audio-ouvir-alheios').checked = true;
 }
     /* SISTEMA DE TEMAS (Personalização de cores e degradê por slot) */
     function toggleThemePanel() {
@@ -2856,6 +3716,7 @@ function tocarSom(tipo) {
         mudarCor('--bg-gradient-top', '#050507');
         mudarCor('--bg-gradient-bottom', '#12071c');
         mudarCor('--bg-dark', '#050507');
+        mudarCor('--container-bg', '#0f0e12');
         mudarCor('--primary-purple', '#7b1fa2');
         mudarCor('--light-purple', '#bc4ed8');
         mudarCor('--text-gold', '#d4af37');
@@ -2867,25 +3728,29 @@ function tocarSom(tipo) {
         const cores = {
             '--bg-gradient-top': 'picker-bg-top',
             '--bg-gradient-bottom': 'picker-bg-bottom',
+            '--container-bg': 'picker-container',
             '--primary-purple': 'picker-prim',
             '--light-purple': 'picker-light',
             '--text-gold': 'picker-gold'
         };
-        
-        // Se a ficha não tiver tema salvo ainda, ignora
-        if (!sheet.tema) return; 
+
+        const padroes = {
+            '--bg-gradient-top': '#050507',
+            '--bg-gradient-bottom': '#12071c',
+            '--container-bg': '#0f0e12',
+            '--primary-purple': '#7b1fa2',
+            '--light-purple': '#bc4ed8',
+            '--text-gold': '#d4af37'
+        };
+        if (!sheet.tema) sheet.tema = {};
 
         for (let varName in cores) {
-            let val = sheet.tema[varName];
-            if (val) {
-                // Aplica a cor na página
-                document.documentElement.style.setProperty(varName, val);
-                if (varName === '--bg-gradient-top') document.documentElement.style.setProperty('--bg-dark', val);
-                
-                // Atualiza a bolinha de cor no painel visual
-                let input = document.getElementById(cores[varName]);
-                if (input && val.startsWith('#')) input.value = val;
-            }
+            const val = sheet.tema[varName] || padroes[varName];
+            document.documentElement.style.setProperty(varName, val);
+            if (varName === '--bg-gradient-top') document.documentElement.style.setProperty('--bg-dark', val);
+
+            const input = document.getElementById(cores[varName]);
+            if (input && val.startsWith('#')) input.value = val;
         }
     }
 
@@ -2937,6 +3802,7 @@ function tocarSom(tipo) {
             rds: [],
             notas: [],
             dificuldade: 'normal',
+            rolagemConfig: { quantidade: 1, desvantagem: false },
             recursosFinos: { pv_temp: 0, sa_temp: 0 },
             limiteCarga: 20,
             nivel: 0,
@@ -2955,6 +3821,7 @@ function tocarSom(tipo) {
             tema: {
                 '--bg-gradient-top': '#050507',
                 '--bg-gradient-bottom': '#12071c',
+                '--container-bg': '#0f0e12',
                 '--primary-purple': '#7b1fa2',
                 '--light-purple': '#bc4ed8',
                 '--text-gold': '#d4af37'
@@ -3066,7 +3933,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     const targetListPericias = periciasDados.map(p => p.n);
     const targetListAtributos = ["FOR", "AGI", "INT", "CON", "POD"];
     const targetListStatus = [
-        {k:"pv_max", n:"Vida Máxima"}, {k:"pv_atual", n:"Vida Atual"},
+        {k:"pv_max", n:"PV Máximo"}, {k:"pv_atual", n:"PV Atual"},
         {k:"sa_max", n:"Sanidade Máx."}, {k:"sa_atual", n:"Sanidade Atual"},
         {k:"pa_max", n:"PA Máximo"}, {k:"pa_atual", n:"PA Atual"},
         {k:"defesa", n:"Defesa"}, {k:"bloqueio", n:"Bloqueio"},
@@ -3333,6 +4200,259 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
 };
 
+    const SLOT_FOLDER_DEFAULT = 'folder_default';
+    let slotManagerState = criarConfiguracaoPadraoSlots();
+
+    function criarConfiguracaoPadraoSlots() {
+        const slots = {};
+        for (let numero = 1; numero <= 10; numero += 1) {
+            slots[String(numero)] = {
+                id: String(numero),
+                name: `Slot ${numero}`,
+                folderId: SLOT_FOLDER_DEFAULT,
+                order: numero
+            };
+        }
+        return {
+            version: 1,
+            folders: {
+                [SLOT_FOLDER_DEFAULT]: { id: SLOT_FOLDER_DEFAULT, name: 'Fichas', order: 1 }
+            },
+            slots
+        };
+    }
+
+    function normalizarConfiguracaoSlots(configuracao, slotsRemotos = {}) {
+        const padrao = criarConfiguracaoPadraoSlots();
+        if (!configuracao || typeof configuracao !== 'object') configuracao = padrao;
+
+        const folders = {};
+        Object.entries(configuracao.folders || {}).forEach(([chave, pasta], index) => {
+            if (!pasta || typeof pasta !== 'object') return;
+            const id = String(pasta.id || chave);
+            folders[id] = {
+                id,
+                name: String(pasta.name || `Pasta ${index + 1}`),
+                order: Number(pasta.order) || index + 1
+            };
+        });
+        if (!Object.keys(folders).length) folders[SLOT_FOLDER_DEFAULT] = padrao.folders[SLOT_FOLDER_DEFAULT];
+        const pastaFallback = folders[SLOT_FOLDER_DEFAULT] ? SLOT_FOLDER_DEFAULT : Object.keys(folders)[0];
+
+        const slots = {};
+        Object.entries(configuracao.slots || {}).forEach(([chave, slot], index) => {
+            if (!slot || typeof slot !== 'object') return;
+            const id = String(slot.id || chave);
+            slots[id] = {
+                id,
+                name: String(slot.name || `Slot ${index + 1}`),
+                folderId: folders[slot.folderId] ? String(slot.folderId) : pastaFallback,
+                order: Number(slot.order) || index + 1
+            };
+        });
+
+        Object.keys(slotsRemotos || {}).forEach((id, index) => {
+            if (slots[id]) return;
+            slots[id] = {
+                id: String(id),
+                name: /^\d+$/.test(String(id)) ? `Slot ${id}` : `Ficha ${index + 1}`,
+                folderId: pastaFallback,
+                order: Object.keys(slots).length + 1
+            };
+        });
+        if (!Object.keys(slots).length) Object.assign(slots, padrao.slots);
+
+        return { version: 1, folders, slots };
+    }
+
+    function slotsOrdenados() {
+        return Object.values(slotManagerState.slots || {}).sort((a, b) =>
+            (Number(a.order) || 0) - (Number(b.order) || 0) || String(a.name).localeCompare(String(b.name), 'pt-BR')
+        );
+    }
+
+    function pastasOrdenadas() {
+        return Object.values(slotManagerState.folders || {}).sort((a, b) =>
+            (Number(a.order) || 0) - (Number(b.order) || 0) || String(a.name).localeCompare(String(b.name), 'pt-BR')
+        );
+    }
+
+    function preencherSeletorSlots(select, valorPreferido = '') {
+        if (!select) return;
+        const valorAnterior = String(valorPreferido || select.value || '');
+        select.innerHTML = '';
+        pastasOrdenadas().forEach(pasta => {
+            const slotsDaPasta = slotsOrdenados().filter(slot => slot.folderId === pasta.id);
+            if (!slotsDaPasta.length) return;
+            const grupo = document.createElement('optgroup');
+            grupo.label = pasta.name;
+            slotsDaPasta.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot.id;
+                option.textContent = slot.name;
+                grupo.appendChild(option);
+            });
+            select.appendChild(grupo);
+        });
+        if (!select.options.length) {
+            const option = document.createElement('option');
+            option.value = '1';
+            option.textContent = 'Slot 1';
+            select.appendChild(option);
+        }
+        const existe = [...select.options].some(option => option.value === valorAnterior);
+        select.value = existe ? valorAnterior : select.options[0].value;
+        const selecionado = slotManagerState.slots?.[select.value];
+        if (selecionado) select.title = selecionado.name;
+    }
+
+    function renderizarSeletoresSlots(valorPreferido = '') {
+        const seletorPrincipal = document.getElementById('save-slot');
+        const atualPrincipal = valorPreferido || seletorPrincipal?.value;
+        preencherSeletorSlots(seletorPrincipal, atualPrincipal);
+        preencherSeletorSlots(document.getElementById('campaign-character-slot'), atualPrincipal);
+    }
+
+    function nomeDoSlot(id) {
+        return slotManagerState.slots?.[String(id)]?.name || `Slot ${id}`;
+    }
+
+    async function inicializarSistemaSlots() {
+        if (!currentUser) {
+            slotManagerState = criarConfiguracaoPadraoSlots();
+            renderizarSeletoresSlots('1');
+            return;
+        }
+        const uid = currentUser.uid;
+        const [configSnapshot, slotsSnapshot] = await Promise.all([
+            database.ref(`users/${uid}/slotConfig`).once('value'),
+            database.ref(`users/${uid}/slots`).once('value')
+        ]);
+        if (!currentUser || currentUser.uid !== uid) return;
+        slotManagerState = normalizarConfiguracaoSlots(configSnapshot.val(), slotsSnapshot.val() || {});
+        renderizarSeletoresSlots(document.getElementById('save-slot')?.value || '1');
+        await database.ref(`users/${uid}/slotConfig`).set(slotManagerState).catch(error => {
+            console.warn('A organização dos slots não pôde ser sincronizada.', error);
+        });
+    }
+
+    async function salvarConfiguracaoSlots() {
+        if (!currentUser) return;
+        await database.ref(`users/${currentUser.uid}/slotConfig`).set(slotManagerState).catch(error => {
+            console.error('Erro ao salvar a organização dos slots:', error);
+            alert('Não foi possível sincronizar a organização das fichas agora.');
+        });
+        renderizarSeletoresSlots(document.getElementById('save-slot')?.value);
+    }
+
+    function abrirGerenciadorSlots() {
+        if (!currentUser) {
+            alert('Faça login com o Google para criar e organizar fichas.');
+            return;
+        }
+        renderizarGerenciadorSlots();
+        document.getElementById('modal-slot-manager').style.display = 'block';
+    }
+
+    function fecharGerenciadorSlots() {
+        document.getElementById('modal-slot-manager').style.display = 'none';
+    }
+
+    function opcoesPastasHtml(selecionada = '') {
+        return pastasOrdenadas().map(pasta =>
+            `<option value="${escapeCampaignHtml(pasta.id)}" ${pasta.id === selecionada ? 'selected' : ''}>${escapeCampaignHtml(pasta.name)}</option>`
+        ).join('');
+    }
+
+    function renderizarGerenciadorSlots() {
+        const seletorNovaPasta = document.getElementById('new-slot-folder');
+        if (seletorNovaPasta) seletorNovaPasta.innerHTML = opcoesPastasHtml();
+        const lista = document.getElementById('slot-manager-list');
+        if (!lista) return;
+        lista.innerHTML = pastasOrdenadas().map(pasta => {
+            const slots = slotsOrdenados().filter(slot => slot.folderId === pasta.id);
+            return `
+                <section class="slot-folder-card">
+                    <div class="slot-folder-header">
+                        <span>▾</span>
+                        <input value="${escapeCampaignHtml(pasta.name)}" data-folder-id="${escapeCampaignHtml(pasta.id)}" onchange="renomearPastaSlot(this.dataset.folderId, this.value)" aria-label="Nome da pasta">
+                        <small>${slots.length} ${slots.length === 1 ? 'ficha' : 'fichas'}</small>
+                    </div>
+                    <div class="slot-folder-rows">
+                        ${slots.length ? slots.map(slot => `
+                            <div class="slot-row">
+                                <input value="${escapeCampaignHtml(slot.name)}" data-slot-id="${escapeCampaignHtml(slot.id)}" onchange="renomearSlot(this.dataset.slotId, this.value)" aria-label="Nome do slot">
+                                <select data-slot-id="${escapeCampaignHtml(slot.id)}" onchange="moverSlotParaPasta(this.dataset.slotId, this.value)" aria-label="Pasta do slot">${opcoesPastasHtml(slot.folderId)}</select>
+                                <button type="button" data-slot-id="${escapeCampaignHtml(slot.id)}" onclick="selecionarSlotGerenciado(this.dataset.slotId)">Abrir</button>
+                            </div>`).join('') : '<div class="slot-folder-empty">Esta pasta ainda não possui fichas.</div>'}
+                    </div>
+                </section>`;
+        }).join('');
+    }
+
+    async function criarPastaSlot(event) {
+        event.preventDefault();
+        const input = document.getElementById('new-slot-folder-name');
+        const nome = input.value.trim();
+        if (!nome) return input.focus();
+        const id = `folder_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+        slotManagerState.folders[id] = { id, name: nome, order: Date.now() };
+        input.value = '';
+        await salvarConfiguracaoSlots();
+        renderizarGerenciadorSlots();
+    }
+
+    async function criarNovoSlot(event) {
+        event.preventDefault();
+        const input = document.getElementById('new-slot-name');
+        const folderId = document.getElementById('new-slot-folder').value;
+        const id = `slot_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+        slotManagerState.slots[id] = {
+            id,
+            name: input.value.trim() || 'Nova ficha',
+            folderId: slotManagerState.folders[folderId] ? folderId : pastasOrdenadas()[0].id,
+            order: Date.now()
+        };
+        input.value = '';
+        await salvarConfiguracaoSlots();
+        renderizarGerenciadorSlots();
+    }
+
+    async function renomearPastaSlot(id, nome) {
+        if (!slotManagerState.folders[id]) return;
+        const nomeLimpo = nome.trim();
+        if (!nomeLimpo) return renderizarGerenciadorSlots();
+        slotManagerState.folders[id].name = nomeLimpo;
+        await salvarConfiguracaoSlots();
+        renderizarGerenciadorSlots();
+    }
+
+    async function renomearSlot(id, nome) {
+        if (!slotManagerState.slots[id]) return;
+        const nomeLimpo = nome.trim();
+        if (!nomeLimpo) return renderizarGerenciadorSlots();
+        slotManagerState.slots[id].name = nomeLimpo;
+        await salvarConfiguracaoSlots();
+        renderizarGerenciadorSlots();
+    }
+
+    async function moverSlotParaPasta(id, folderId) {
+        if (!slotManagerState.slots[id] || !slotManagerState.folders[folderId]) return;
+        slotManagerState.slots[id].folderId = folderId;
+        await salvarConfiguracaoSlots();
+        renderizarGerenciadorSlots();
+    }
+
+    function selecionarSlotGerenciado(id) {
+        if (!slotManagerState.slots[id]) return;
+        const seletor = document.getElementById('save-slot');
+        renderizarSeletoresSlots(id);
+        seletor.value = id;
+        seletor.title = nomeDoSlot(id);
+        fecharGerenciadorSlots();
+        carregarDaNuvem();
+    }
+
     let currentUser = null;
 
     firebase.auth().onAuthStateChanged((user) => {
@@ -3341,12 +4461,20 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (user) {
             btnLogin.innerText = "🔓";
             btnLogin.title = "Sair (" + user.displayName + ")";
-            carregarDaNuvem(); 
-            aplicarTemaDaFicha();
+            inicializarSistemaSlots()
+                .then(() => carregarDaNuvem())
+                .catch(error => {
+                    console.error('Erro ao preparar os slots:', error);
+                    slotManagerState = criarConfiguracaoPadraoSlots();
+                    renderizarSeletoresSlots('1');
+                    carregarDaNuvem();
+                });
             atualizarAutenticacaoCampanhas(user);
         } else {
             btnLogin.innerText = "👤";
             btnLogin.title = "Login Google";
+            slotManagerState = criarConfiguracaoPadraoSlots();
+            renderizarSeletoresSlots('1');
             sheet = getFichaZerada();
             atualizarVisuaisDaFicha();
             atualizarAutenticacaoCampanhas(null);
@@ -3373,7 +4501,31 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         document.getElementById('btn-log').classList.toggle('active');
     }
 
-    function enviarRolagemParaServidor(titulo, subtitulo, total, corStatus, txtStatus, detalhes) {
+    const rolagensQuery = database.ref('rolagens').limitToLast(50);
+    const chavesRolagensIniciais = new Set();
+    let historicoRolagensCarregado = false;
+    rolagensQuery.once('value').then(snapshot => {
+        snapshot.forEach(child => chavesRolagensIniciais.add(child.key));
+    }).catch(error => {
+        console.warn('Não foi possível preparar o histórico de rolagens.', error);
+    }).finally(() => {
+        historicoRolagensCarregado = true;
+    });
+
+    const clienteSessaoId = (() => {
+        try {
+            let id = sessionStorage.getItem('abyssClienteSessaoId');
+            if (!id) {
+                id = `abyss-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+                sessionStorage.setItem('abyssClienteSessaoId', id);
+            }
+            return id;
+        } catch (erro) {
+            return `abyss-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        }
+    })();
+
+    function enviarRolagemParaServidor(titulo, subtitulo, total, corStatus, txtStatus, detalhes, eventoSom = null, natural = null) {
         if (modoSecreto) return; 
         const nick = document.getElementById('user-nickname').value || "Viajante Desconhecido";
         const novaRolagemRef = database.ref('rolagens').push();
@@ -3385,11 +4537,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             cor: corStatus,
             status: txtStatus,
             detalhes: detalhes,
+            eventoSom: eventoSom,
+            natural: natural,
+            clienteSessaoId: clienteSessaoId,
             timestamp: firebase.database.ServerValue.TIMESTAMP
         });
     }
 
-    database.ref('rolagens').limitToLast(50).on('child_added', (snapshot) => {
+    rolagensQuery.on('child_added', (snapshot) => {
         const data = snapshot.val();
         const logContainer = document.getElementById('log-messages');
         const msg = document.createElement('div');
@@ -3404,6 +4559,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         `;
         logContainer.appendChild(msg);
         logContainer.scrollTop = logContainer.scrollHeight; 
+
+        const eventoCompartilhado = data.eventoSom === 'crit' || data.eventoSom === 'fail';
+        const eventoNovo = historicoRolagensCarregado && !chavesRolagensIniciais.has(snapshot.key);
+        const veioDeOutroCliente = !data.clienteSessaoId || data.clienteSessaoId !== clienteSessaoId;
+        if (eventoCompartilhado && eventoNovo && veioDeOutroCliente && configuracoesAudio.ouvirCriticosAlheios !== false) {
+            tocarSom(data.eventoSom);
+        }
+        chavesRolagensIniciais.delete(snapshot.key);
     });
 
     function rolarDadosAvancado(formula) {
@@ -3413,6 +4576,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             let total = 0;
             let textParts = [];
             let allRolls = [];
+            let d20Rolls = [];
             
             parts.forEach(p => {
                 if (!p) return;
@@ -3429,6 +4593,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                         let r = Math.floor(Math.random()*faces)+1;
                         rolagens.push(r);
                         allRolls.push(r);
+                        if (faces === 20) d20Rolls.push(r);
                         subTotal += r;
                     }
                     total += isNegative ? -subTotal : subTotal;
@@ -3441,16 +4606,23 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     textParts.push(`${prefix}${val}`);
                 }
             });
-            return { total: total, text: textParts.join(' '), rolls: allRolls };
-        } catch(e) { return { total: 0, text: 'Erro', rolls: [] }; }
+            return { total: total, text: textParts.join(' '), rolls: allRolls, d20Rolls };
+        } catch(e) { return { total: 0, text: 'Erro', rolls: [], d20Rolls: [] }; }
+    }
+
+    function obterEventoNaturalD20(rolagens) {
+        if ((rolagens || []).includes(20)) return 'crit';
+        if ((rolagens || []).includes(1)) return 'fail';
+        return null;
     }
 
     function acionarRolagemGlobal(titulo, subtitulo, formula, cor, txtStatus) {
-        tocarSom('roll');
         let res = rolarDadosAvancado(formula);
+        const eventoSom = obterEventoNaturalD20(res.d20Rolls);
+        tocarSom(eventoSom || 'roll');
         let detalhes = `Fórmula: ${formula}<br>Dados: ${res.text}`;
         spawnPopup(titulo, subtitulo, res.total, cor, txtStatus, detalhes);
-        enviarRolagemParaServidor(titulo, subtitulo, res.total, cor, txtStatus, detalhes);
+        enviarRolagemParaServidor(titulo, subtitulo, res.total, cor, txtStatus, detalhes, eventoSom, eventoSom ? (eventoSom === 'crit' ? 20 : 1) : null);
     }
 
     function rolarHabilidadeComOuSemCrit(nome, danoBase, temCrit, critMargem, critDano) {
@@ -3461,7 +4633,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             isCrit = resPrincipal.rolls.some(r => r >= critMargem);
         }
 
-        if (isCrit) tocarSom('crit');
+        const eventoNatural = obterEventoNaturalD20(resPrincipal.d20Rolls);
+        if (eventoNatural) tocarSom(eventoNatural);
+        else if (isCrit) tocarSom('crit');
         else tocarSom('roll');
 
         let formulaFinal = danoBase;
@@ -3481,7 +4655,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                               : `Fórmula: ${formulaFinal}<br>Soma: ${resFinalText}`;
         
         spawnPopup(nome, isCrit ? `CRÍTICO ATIVADO!` : `Rolagem de Dano`, resFinalTotal, cor, status, detalhe);
-        enviarRolagemParaServidor(nome, isCrit ? `Ativou!` : `Dano`, resFinalTotal, cor, status, detalhe.replace(/<[^>]+>/g, ' | '));
+        enviarRolagemParaServidor(nome, isCrit ? `Ativou!` : `Dano`, resFinalTotal, cor, status, detalhe.replace(/<[^>]+>/g, ' | '), eventoNatural, eventoNatural ? (eventoNatural === 'crit' ? 20 : 1) : null);
     }
 
     function abrirInfoPericia(nome) {
@@ -3518,13 +4692,64 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     document.getElementById('modal-skill').style.display = 'block';
 }
 
-    function mudarAvatar() {
-        let url = prompt("Cole o link (URL) da imagem do seu personagem:");
-        if (url !== null) {
-            sheet.avatar = url;
-            atualizarAvatarUI();
-            marcarAlteracao();
+    function atualizarPreviewImagem(inputId, previewId) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        if (!input || !preview) return;
+        const fonte = input.value.trim();
+        if (!fonte) {
+            preview.removeAttribute('src');
+            preview.style.display = 'none';
+            return;
         }
+        preview.onload = () => { preview.style.display = 'block'; };
+        preview.onerror = () => { preview.style.display = 'none'; };
+        preview.src = fonte;
+    }
+
+    function carregarImagemLocal(input, targetId, previewId) {
+        const arquivo = input.files && input.files[0];
+        if (!arquivo) return;
+        if (!arquivo.type.startsWith('image/')) {
+            input.value = '';
+            return alert('Escolha um arquivo de imagem válido.');
+        }
+        if (arquivo.size > 2500000) {
+            input.value = '';
+            return alert('A imagem deve ter no máximo 2,5 MB para manter a ficha leve.');
+        }
+        const leitor = new FileReader();
+        leitor.onload = () => {
+            document.getElementById(targetId).value = leitor.result;
+            atualizarPreviewImagem(targetId, previewId);
+            input.value = '';
+        };
+        leitor.onerror = () => alert('Não foi possível ler essa imagem.');
+        leitor.readAsDataURL(arquivo);
+    }
+
+    function limparImagemCampo(inputId, previewId) {
+        const input = document.getElementById(inputId);
+        if (input) input.value = '';
+        atualizarPreviewImagem(inputId, previewId);
+    }
+
+    function mudarAvatar() {
+        tocarSom('click');
+        document.getElementById('avatar-url').value = sheet.avatar || '';
+        atualizarPreviewImagem('avatar-url', 'avatar-editor-preview');
+        document.getElementById('modal-avatar').style.display = 'block';
+    }
+
+    function fecharEditorAvatar() {
+        document.getElementById('modal-avatar').style.display = 'none';
+    }
+
+    function salvarAvatar() {
+        sheet.avatar = document.getElementById('avatar-url').value.trim();
+        atualizarAvatarUI();
+        marcarAlteracao();
+        fecharEditorAvatar();
     }
 
     function atualizarAvatarUI() {
@@ -3564,6 +4789,21 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         return total;
     }
 
+    function nomeAlvoModificador(mod) {
+        if (mod.tipo === 'atributo') return `Atributo ${mod.alvo}`;
+        if (mod.tipo === 'pericia') return `Perícia ${mod.alvo}`;
+        const status = targetListStatus.find(item => item.k === mod.alvo);
+        return status?.n || mod.alvo;
+    }
+
+    function renderResumoModificadores(mods, ativo) {
+        if (!Array.isArray(mods) || !mods.length) return '';
+        return `<div class="modifier-summary ${ativo ? 'active' : ''}">${mods.map(mod => {
+            const valor = parseInt(mod.valor) || 0;
+            return `<span class="modifier-chip">${escapeCampaignHtml(nomeAlvoModificador(mod))} ${valor >= 0 ? '+' : ''}${valor}</span>`;
+        }).join('')}</div>`;
+    }
+
     function renderIndicadorMod(idElemento, val) {
         const el = document.getElementById(idElemento);
         if(!el) return;
@@ -3571,15 +4811,26 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         else el.innerText = "";
     }
 
+    function renderIndicadorRecurso(idElemento, modMaximo, modAtual) {
+        const el = document.getElementById(idElemento);
+        if (!el) return;
+        const partes = [];
+        if (modMaximo) partes.push(`MÁX ${modMaximo > 0 ? '+' : ''}${modMaximo}`);
+        if (modAtual) partes.push(`ATUAL ${modAtual > 0 ? '+' : ''}${modAtual}`);
+        el.innerText = partes.join(' · ');
+        el.title = partes.length ? 'Modificadores ativos neste recurso' : '';
+    }
+
     function calcularStatusClasse() {
-        if (!sheet.classe) return;
-        
-        let con = parseInt(sheet.atributos['CON']) || 0;
-        let pod = parseInt(sheet.atributos['POD']) || 0;
-        let agi = parseInt(sheet.atributos['AGI']) || 0;
-        let nivel = parseInt(sheet.nivel) || 0;
+        if (!sheet.recursosFinos) sheet.recursosFinos = { pv_temp: 0, sa_temp: 0 };
+        const recursos = sheet.recursosFinos;
+        const con = (parseInt(sheet.atributos['CON']) || 0) + getMods('atributo', 'CON');
+        const pod = (parseInt(sheet.atributos['POD']) || 0) + getMods('atributo', 'POD');
+        const agi = (parseInt(sheet.atributos['AGI']) || 0) + getMods('atributo', 'AGI');
+        const nivel = parseInt(sheet.nivel) || 0;
 
         let maxPV = 0, maxPA = 0, maxSA = 0, def = 0;
+        let temClasse = true;
 
         if (sheet.classe === 'arcanista') {
             maxPV = (15 + con) + (nivel * (15 + con));
@@ -3601,43 +4852,71 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             maxSA = 12 + (nivel * 10);
             maxPA = (12 + con + pod) + (nivel * (9 + con + pod));
             def = 14 + agi;
+        } else {
+            temClasse = false;
+            maxPV = parseInt(recursos.pv_base_max ?? recursos.pv_max ?? document.getElementById('max-pv')?.value) || 0;
+            maxPA = parseInt(recursos.pa_base_max ?? recursos.pa_max ?? document.getElementById('max-pa')?.value) || 0;
+            maxSA = parseInt(recursos.sa_base_max ?? recursos.sa_max ?? document.getElementById('max-sa')?.value) || 0;
         }
 
-        let modPV = getMods('status', 'pv_max');
-        let modSA = getMods('status', 'sa_max');
-        let modPA = getMods('status', 'pa_max');
-        let modDef = getMods('status', 'defesa');
-        let modBloq = getMods('status', 'bloqueio');
-        let modCarga = getMods('status', 'carga');
-        let modDesloc = getMods('status', 'deslocamento');
+        const modPV = getMods('status', 'pv_max');
+        const modPVAtual = getMods('status', 'pv_atual');
+        const modSA = getMods('status', 'sa_max');
+        const modSAAtual = getMods('status', 'sa_atual');
+        const modPA = getMods('status', 'pa_max');
+        const modPAAtual = getMods('status', 'pa_atual');
+        const modDef = getMods('status', 'defesa');
+        const modBloq = getMods('status', 'bloqueio');
+        const modCarga = getMods('status', 'carga');
+        const modDesloc = getMods('status', 'deslocamento');
 
-        document.getElementById('max-pv').value = maxPV + modPV;
-        document.getElementById('max-pa').value = maxPA + modPA;
-        document.getElementById('max-sa').value = maxSA + modSA;
-        document.getElementById('val-defesa').value = def + modDef;
+        const aplicarRecurso = (id, maximoBase, modMaximo, modAtual) => {
+            const maximoFinal = Math.max(0, maximoBase + modMaximo);
+            const chaveBaseAtual = `${id}_base_atual`;
+            let atualBase;
+            if (recursos[chaveBaseAtual] !== undefined) atualBase = parseInt(recursos[chaveBaseAtual]) || 0;
+            else if (recursos[`${id}_atual`] !== undefined) atualBase = parseInt(recursos[`${id}_atual`]) || 0;
+            else atualBase = parseInt(document.getElementById(`curr-${id}`)?.value) || 0;
+
+            const atualFinal = Math.min(atualBase + modAtual, maximoFinal);
+            recursos[`${id}_base_max`] = maximoBase;
+            recursos[chaveBaseAtual] = atualBase;
+            recursos[`${id}_max`] = maximoFinal;
+            recursos[`${id}_atual`] = atualFinal;
+            document.getElementById(`max-${id}`).value = maximoFinal;
+            document.getElementById(`curr-${id}`).value = atualFinal;
+        };
+
+        const suspensaoAnterior = suspendResourceCapture;
+        suspendResourceCapture = true;
+        aplicarRecurso('pv', maxPV, modPV, modPVAtual);
+        aplicarRecurso('pa', maxPA, modPA, modPAAtual);
+        aplicarRecurso('sa', maxSA, modSA, modSAAtual);
+
+        const inputDefesa = document.getElementById('val-defesa');
+        if (temClasse) {
+            recursos.defesa_base = def;
+            inputDefesa.value = def + modDef;
+        } else {
+            if (recursos.defesa_base === undefined) recursos.defesa_base = (parseInt(inputDefesa.value) || 0) - modDef;
+            inputDefesa.value = (parseInt(recursos.defesa_base) || 0) + modDef;
+        }
         
-        let bloqueioBase = sheet.bloqueioBase !== undefined ? sheet.bloqueioBase : 0;
+        const bloqueioBase = sheet.bloqueioBase !== undefined ? sheet.bloqueioBase : 0;
         document.getElementById('val-bloqueio').value = bloqueioBase + modBloq;
         
         sheet.limiteCarga = (sheet.cargaBase !== undefined ? sheet.cargaBase : 20) + modCarga;
 
-        renderIndicadorMod('mod-ind-pv', modPV);
-        renderIndicadorMod('mod-ind-sa', modSA);
-        renderIndicadorMod('mod-ind-pa', modPA);
+        renderIndicadorRecurso('mod-ind-pv', modPV, modPVAtual);
+        renderIndicadorRecurso('mod-ind-sa', modSA, modSAAtual);
+        renderIndicadorRecurso('mod-ind-pa', modPA, modPAAtual);
         renderIndicadorMod('mod-ind-def', modDef);
         renderIndicadorMod('mod-ind-bloq', modBloq);
         renderIndicadorMod('mod-ind-carga', modCarga);
         renderIndicadorMod('mod-ind-desloc', modDesloc);
 
-        let currPV = parseInt(document.getElementById('curr-pv').value) || 0;
-        let currPA = parseInt(document.getElementById('curr-pa').value) || 0;
-        let currSA = parseInt(document.getElementById('curr-sa').value) || 0;
-        
-        if(currPV > (maxPV + modPV)) document.getElementById('curr-pv').value = (maxPV + modPV);
-        if(currPA > (maxPA + modPA)) document.getElementById('curr-pa').value = (maxPA + modPA);
-        if(currSA > (maxSA + modSA)) document.getElementById('curr-sa').value = (maxSA + modSA);
-
         updateBar('pv'); updateBar('pa'); updateBar('sa');
+        suspendResourceCapture = suspensaoAnterior;
     }
 
     function selecionarClasse(classe) {
@@ -3656,7 +4935,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         else if(sheet.classe === 'erudito') base = 3;
         else if(sheet.classe === 'projetante') base = 1;
         else if(sheet.classe === 'combatente') base = 0;
-        return base + (parseInt(sheet.atributos['INT']) || 0) + getMods('status', 'sabedoria');
+        return base + (parseInt(sheet.atributos['INT']) || 0) + getMods('atributo', 'INT') + getMods('status', 'sabedoria');
     }
 
     function aplicarModificador(tipo) {
@@ -3666,7 +4945,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (isNaN(valorMod)) return;
 
         let curr = parseInt(document.getElementById(`curr-${tipo}`).value) || 0;
-        let max = parseInt(document.getElementById(`max-${tipo}`).value) || 1;
+        let max = Math.max(0, parseInt(document.getElementById(`max-${tipo}`).value) || 0);
 
         if (valorMod < 0) {
             let danoPuro = Math.abs(valorMod);
@@ -3713,16 +4992,19 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function updateBar(id) {
         const current = parseInt(document.getElementById(`curr-${id}`).value) || 0;
-        const max = parseInt(document.getElementById(`max-${id}`).value) || 1;
+        const max = Math.max(0, parseInt(document.getElementById(`max-${id}`).value) || 0);
         if (!suspendResourceCapture) {
             if (!sheet.recursosFinos) sheet.recursosFinos = { pv_temp: 0, sa_temp: 0 };
+            sheet.recursosFinos[`${id}_base_atual`] = current - getMods('status', `${id}_atual`);
+            sheet.recursosFinos[`${id}_base_max`] = max - getMods('status', `${id}_max`);
             sheet.recursosFinos[`${id}_atual`] = current;
             sheet.recursosFinos[`${id}_max`] = max;
         }
         
-        let percentage = Math.min(Math.max((current / max) * 100, 0), 100);
+        let percentage = Math.min(Math.max((current / Math.max(max, 1)) * 100, 0), 100);
         const bar = document.getElementById(`bar-${id}`);
         const badge = document.getElementById(`badge-${id}`);
+        bar.style.backgroundColor = '';
         
         badge.className = "status-condition-text condition-badge";
 
@@ -3772,7 +5054,20 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function changeStat(id, amount) {
         tocarSom('click');
         const input = document.getElementById(`curr-${id}`);
-        input.value = parseInt(input.value) + amount;
+        input.value = (parseInt(input.value) || 0) + amount;
+        updateBar(id);
+        marcarAlteracao();
+    }
+
+    function definirRecursoExtremo(id, encher) {
+        tocarSom('click');
+        const atual = document.getElementById(`curr-${id}`);
+        const maximo = Math.max(0, parseInt(document.getElementById(`max-${id}`).value) || 0);
+        if (!atual) return;
+        atual.value = encher ? maximo : 0;
+        if (!sheet.recursosFinos) sheet.recursosFinos = { pv_temp: 0, sa_temp: 0 };
+        if (id === 'pv') sheet.recursosFinos.pv_temp = 0;
+        if (id === 'sa') sheet.recursosFinos.sa_temp = 0;
         updateBar(id);
         marcarAlteracao();
     }
@@ -3826,7 +5121,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             <select class="modal-input mod-tipo" style="width:40%; padding:5px; margin:0;" onchange="updateModTarget(this)">
                 <option value="pericia" ${mod.tipo==='pericia'?'selected':''}>Perícia</option>
                 <option value="atributo" ${mod.tipo==='atributo'?'selected':''}>Atributo</option>
-                <option value="status" ${mod.tipo==='status'?'selected':''}>Status (Vida, PA, etc)</option>
+                <option value="status" ${mod.tipo==='status'?'selected':''}>Status (PV, PA, etc)</option>
             </select>
             <select class="modal-input mod-alvo" style="width:40%; padding:5px; margin:0;" data-value="${mod.alvo||''}"></select>
             <input type="number" class="modal-input mod-valor" value="${mod.valor||0}" style="width:20%; padding:5px; margin:0;">
@@ -3853,9 +5148,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (idxEdicao !== null) {
             const h = sheet.habilidades[idxEdicao];
             document.getElementById('hab-id-edicao').value = idxEdicao;
-            document.getElementById('hab-nome').value = h.nome;
-            document.getElementById('hab-dano').value = h.dano;
-            document.getElementById('hab-desc').value = h.desc;
+            document.getElementById('hab-nome').value = h.nome || '';
+            document.getElementById('hab-is-separator').checked = Boolean(h.isSeparator);
+            document.getElementById('hab-dano').value = h.dano || '';
+            document.getElementById('hab-desc').value = h.desc || '';
             document.getElementById('hab-img').value = h.img || "";
             
             if (h.temCrit) {
@@ -3883,6 +5179,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         } else {
             document.getElementById('hab-id-edicao').value = "";
             document.getElementById('hab-nome').value = "";
+            document.getElementById('hab-is-separator').checked = false;
             document.getElementById('hab-dano').value = "";
             document.getElementById('hab-desc').value = "";
             document.getElementById('hab-img').value = "";
@@ -3891,8 +5188,33 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             document.getElementById('hab-tem-mod').checked = false;
             document.getElementById('hab-mod-container').style.display = 'none';
         }
+        document.getElementById('hab-img-file').value = '';
+        atualizarPreviewImagem('hab-img', 'hab-img-preview');
         document.getElementById('modal-hab').style.display = 'block'; 
         switchTab('tab-info');
+        atualizarModoSeparadorHab();
+        requestAnimationFrame(() => autoAjustarTextarea(document.getElementById('hab-desc')));
+    }
+
+    function atualizarPreviewSeparadorHab() {
+        const preview = document.querySelector('#hab-separator-preview span');
+        if (preview) preview.textContent = document.getElementById('hab-nome').value.trim() || 'LINHA DE SEPARAÇÃO';
+    }
+
+    function atualizarModoSeparadorHab() {
+        const separador = document.getElementById('hab-is-separator').checked;
+        document.getElementById('hab-detail-fields').style.display = separador ? 'none' : 'block';
+        document.getElementById('hab-media-tab').style.display = separador ? 'none' : '';
+        document.getElementById('hab-separator-preview').style.display = separador ? 'flex' : 'none';
+        if (separador) switchTab('tab-info');
+        atualizarPreviewSeparadorHab();
+    }
+
+    function abrirEditorSeparador(tipo) {
+        abrirEditorHab(tipo);
+        document.getElementById('hab-is-separator').checked = true;
+        atualizarModoSeparadorHab();
+        document.getElementById('hab-nome').focus();
     }
 
     function addInputRolagem(valor = "") {
@@ -3904,9 +5226,22 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function salvarHabilidade() {
         tocarSom('click');
         const idEdicao = document.getElementById('hab-id-edicao').value;
-        const h = {
+        const isSeparator = document.getElementById('hab-is-separator').checked;
+        const h = isSeparator ? {
+            tipo: document.getElementById('hab-tipo').value,
+            nome: document.getElementById('hab-nome').value.trim() || 'Separador',
+            isSeparator: true,
+            dano: '',
+            desc: '',
+            img: '',
+            temCrit: false,
+            mods: [],
+            extras: [],
+            ativa: false
+        } : {
             tipo: document.getElementById('hab-tipo').value,
             nome: document.getElementById('hab-nome').value,
+            isSeparator: false,
             dano: document.getElementById('hab-dano').value,
             desc: document.getElementById('hab-desc').value,
             img: document.getElementById('hab-img').value,
@@ -3979,6 +5314,24 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
         sheet.habilidades.forEach((h, i) => {
             const listas = { ataque: 'ataques-lista', habilidade: 'habilidades-lista', feitico: 'feiticos-lista' };
+            const containerAlvo = document.getElementById(listas[h.tipo]);
+            if (!containerAlvo) return;
+
+            if (h.isSeparator) {
+                const separador = document.createElement('div');
+                separador.className = 'ability-separator';
+                separador.innerHTML = `
+                    <span class="ability-separator-title">${escapeCampaignHtml(h.nome || 'Separador')}</span>
+                    <span class="ability-separator-actions">
+                        <button onclick="moverHabVisuais(${i}, -1)" title="Subir">▲</button>
+                        <button onclick="moverHabVisuais(${i}, 1)" title="Descer">▼</button>
+                        <button onclick="abrirEditorHab('${h.tipo}', ${i})" title="Editar">✎</button>
+                        <button onclick="removerHab(${i})" title="Remover" style="color:#ff6464">✕</button>
+                    </span>`;
+                containerAlvo.appendChild(separador);
+                return;
+            }
+
             const card = document.createElement('div');
             card.className = `hab-card ${h.ativa ? 'active-mod' : ''}`;
             
@@ -4006,23 +5359,22 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 <div style="margin-top:10px; padding-top:8px; border-top:1px dashed #333; display:flex; align-items:center; gap:6px;">
                     <input type="checkbox" id="chk-hab-${i}" onchange="alternarAtivarHab(${i})" ${h.ativa ? 'checked' : ''}>
                     <label for="chk-hab-${i}" style="font-size:0.75rem; color:var(--text-gold); cursor:pointer;">Ativar Modificadores da Habilidade</label>
-                </div>`;
+                </div>${renderResumoModificadores(h.mods, h.ativa)}`;
             }
 
             let nomeRoll = h.nome ? h.nome.replace(/'/g, "\\'") : '';
             card.innerHTML = `
-                <div style="position:absolute; right:10px; top:10px; display:flex; gap:2px; align-items:center;">
-                    ${htmlControles}
+                <div class="adaptive-card-header">
+                    <h3 class="adaptive-card-title" style="font-family:Cinzel; color:var(--text-gold);">${h.nome}</h3>
+                    <div class="adaptive-card-actions">${htmlControles}</div>
                 </div>
-                <h3 style="font-family:Cinzel; color:var(--text-gold); margin:0; padding-right: 150px;">${h.nome}</h3>
                 <div class="hab-desc-render">${renderMarkdown(h.desc || '')}</div>
-                ${h.img ? `<img src="${h.img}" style="max-width:100%; display:block; margin:10px 0; border-radius:4px;">` : ''}
+                ${h.img ? `<img src="${h.img}" class="content-card-image" alt="Imagem de ${h.nome || 'habilidade'}">` : ''}
                 ${h.dano ? `<button class="btn-roll" style="color:#ff4444; border-color:#ff4444;" onclick="rolarHabilidadeComOuSemCrit('${nomeRoll}', '${h.dano}', ${h.temCrit ? 'true' : 'false'}, ${h.critMargem || 20}, '${h.critDano || ''}')">⚔️ ${h.dano}</button>` : ''}
                 ${h.extras ? h.extras.map(ex => `<button class="btn-roll" style="color:var(--light-purple); border-color:var(--light-purple);" onclick="acionarRolagemGlobal('${nomeRoll}', 'Rolagem Extra', '${ex}', 'var(--light-purple)', 'BÔNUS')">🎲 ${ex}</button>`).join('') : ''}
                 ${chkMod}
             `;
-            const containerAlvo = document.getElementById(listas[h.tipo]);
-            if (containerAlvo) containerAlvo.appendChild(card);
+            containerAlvo.appendChild(card);
         });
     }
 
@@ -4035,6 +5387,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             const item = sheet.itens[idxEdicao];
             document.getElementById('item-id-edicao').value = idxEdicao;
             document.getElementById('item-nome').value = item.nome;
+            document.getElementById('item-img').value = item.img || '';
             document.getElementById('item-peso').value = item.peso;
             document.getElementById('item-desc').value = item.desc || '';
             
@@ -4063,6 +5416,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         } else {
             document.getElementById('item-id-edicao').value = "";
             document.getElementById('item-nome').value = "";
+            document.getElementById('item-img').value = "";
             document.getElementById('item-peso').value = "1";
             document.getElementById('item-desc').value = "";
             
@@ -4071,7 +5425,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             document.getElementById('item-tem-mod').checked = false;
             document.getElementById('item-mod-container').style.display = 'none';
         }
+        document.getElementById('item-img-file').value = '';
+        atualizarPreviewImagem('item-img', 'item-img-preview');
         document.getElementById('modal-item').style.display = 'block';
+        requestAnimationFrame(() => autoAjustarTextarea(document.getElementById('item-desc')));
     }
 
     function addInputRolagemItem(valor = "") {
@@ -4093,6 +5450,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
         const item = {
             nome: document.getElementById('item-nome').value || "Item Desconhecido",
+            img: document.getElementById('item-img').value.trim(),
             peso: parseInt(document.getElementById('item-peso').value) || 0,
             desc: document.getElementById('item-desc').value || "",
             equipado: wasEquipped,
@@ -4115,6 +5473,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 nome: item.nome,
                 dano: item.weapDano,
                 desc: item.desc,
+                img: item.img || '',
                 temCrit: true,
                 critMargem: item.weapCritMargem,
                 critDano: item.weapCritDano,
@@ -4144,6 +5503,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     nome: item.nome,
                     dano: item.weapDano,
                     desc: item.desc,
+                    img: item.img || '',
                     temCrit: true,
                     critMargem: item.weapCritMargem || 20,
                     critDano: item.weapCritDano || "",
@@ -4192,13 +5552,17 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             const card = document.createElement('div');
             card.className = `item-card ${item.equipado ? 'equipped' : ''}`;
             card.innerHTML = `
-                <div style="position:absolute; right:10px; top:10px;">
-                    <button class="btn-action-card" onclick="alternarEquiparItem(${i})">${item.equipado ? '🛡️ Unarm' : '⚔️ Equip'}</button>
-                    <button class="btn-action-card" onclick="abrirEditorItem(${i})">✏️</button>
-                    <button class="btn-action-card" onclick="removerItem(${i})" style="color:#ff5252;">✕</button>
+                <div class="adaptive-card-header">
+                    <h4 class="adaptive-card-title" style="font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${item.nome}</h4>
+                    <div class="adaptive-card-actions">
+                        <button class="btn-action-card" onclick="alternarEquiparItem(${i})">${item.equipado ? '🛡️ Unarm' : '⚔️ Equip'}</button>
+                        <button class="btn-action-card" onclick="abrirEditorItem(${i})">✏️</button>
+                        <button class="btn-action-card" onclick="removerItem(${i})" style="color:#ff5252;">✕</button>
+                    </div>
                 </div>
-                <h4 style="margin:0; font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${item.nome}</h4>
+                ${item.img ? `<img src="${item.img}" class="content-card-image" alt="Imagem de ${item.nome || 'item'}">` : ''}
                 <div class="hab-desc-render" style="font-size:0.8rem; margin:5px 0;">${renderMarkdown(item.desc || '')}</div>
+                ${renderResumoModificadores(item.mods, item.equipado)}
                 <div class="item-footer-controls">
                     <span class="item-weight-indicator">📦 Ocupa: <b>${item.peso}</b> slots</span>
                     <div style="display:flex; gap:4px;">
@@ -4261,13 +5625,62 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         window.popTimer = setTimeout(fecharPopup, 6000);
     }
 
-    function rolarD20(qtd) {
+    function normalizarConfigRolagem() {
+        if (!sheet.rolagemConfig || typeof sheet.rolagemConfig !== 'object') {
+            sheet.rolagemConfig = { quantidade: 1, desvantagem: false };
+        }
+        sheet.rolagemConfig.quantidade = Math.min(20, Math.max(1, parseInt(sheet.rolagemConfig.quantidade) || 1));
+        sheet.rolagemConfig.desvantagem = sheet.rolagemConfig.desvantagem === true;
+        return sheet.rolagemConfig;
+    }
+
+    function atualizarConfigRolagem(campo, valor) {
+        const config = normalizarConfigRolagem();
+        if (campo === 'quantidade') config.quantidade = Math.min(20, Math.max(1, parseInt(valor) || 1));
+        if (campo === 'desvantagem') config.desvantagem = valor === true;
+        atualizarVisualConfigRolagem();
+        marcarAlteracao();
+    }
+
+    function atualizarVisualConfigRolagem() {
+        const config = normalizarConfigRolagem();
+        const inputQuantidade = document.getElementById('roll-qtd-dados');
+        const inputDesvantagem = document.getElementById('roll-desvantagem');
+        const controle = document.querySelector('.roll-mode-control');
+        if (!inputQuantidade || !inputDesvantagem || !controle) return;
+
+        inputQuantidade.value = config.quantidade;
+        inputDesvantagem.checked = config.desvantagem;
+        controle.classList.toggle('is-disadvantage', config.desvantagem);
+
+        const label = document.getElementById('roll-mode-label');
+        const ajuda = document.getElementById('roll-mode-help');
+        if (config.desvantagem) {
+            label.textContent = 'DESVANTAGEM';
+            ajuda.textContent = `Rola ${config.quantidade}d20 e mantém o pior.`;
+        } else if (config.quantidade > 1) {
+            label.textContent = 'VANTAGEM';
+            ajuda.textContent = `Rola ${config.quantidade}d20 e mantém o melhor.`;
+        } else {
+            label.textContent = 'ROLAGEM NORMAL';
+            ajuda.textContent = 'Rola 1d20.';
+        }
+    }
+
+    function rolarD20(qtd = 1, forcarDesvantagem = null) {
         let rolagens = [];
         let keepLowest = false;
         let dadosRolar = 1;
 
-        if (qtd >= 1) { dadosRolar = qtd; } 
-        else if (qtd < 0) { keepLowest = true; dadosRolar = Math.abs(qtd) + 1; }
+        if (typeof forcarDesvantagem === 'boolean') {
+            dadosRolar = Math.min(20, Math.max(1, Math.abs(parseInt(qtd) || 1)));
+            keepLowest = forcarDesvantagem;
+        } else if (qtd >= 1) {
+            dadosRolar = qtd;
+        } else if (qtd < 0) {
+            keepLowest = true;
+            dadosRolar = Math.abs(qtd) + 1;
+        }
 
         for(let i = 0; i < dadosRolar; i++) {
             rolagens.push(Math.floor(Math.random() * 20) + 1);
@@ -4275,6 +5688,11 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
         let final = keepLowest ? Math.min(...rolagens) : Math.max(...rolagens);
         return { final, rolagens, keepLowest };
+    }
+
+    function rolarD20Configurado() {
+        const config = normalizarConfigRolagem();
+        return rolarD20(config.quantidade, config.desvantagem);
     }
 
     function realizarRolagem(attrNome, bonusManual, nomeDisplay, isPericia = false, periciaNome = "") {
@@ -4294,18 +5712,20 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             qtdDados = attrValor + modAtributo; 
         }
 
-        let rolar = rolarD20(qtdDados);
+        let rolar = rolarD20Configurado();
         let final = rolar.final;
         const total = final + bonusTotal;
         const res = getNivelSucesso(final, total);
         
         tocarSom(res.sound);
         
-        let textoDados = rolar.keepLowest ? `<span style="color:#ff5252">Desvantagem</span> [${rolar.rolagens.join(', ')}]` : `[${rolar.rolagens.join(', ')}]`;
+        const modoDados = rolar.keepLowest ? '<span style="color:#ff5252">Desvantagem</span>' : (rolar.rolagens.length > 1 ? '<span style="color:#8bd66f">Vantagem</span>' : 'Rolagem');
+        let textoDados = `${modoDados} [${rolar.rolagens.join(', ')}]`;
         let detalheTxt = `Dados Rolados: ${textoDados}<br>Soma: ${final} + ${bonusTotal}`;
         
         spawnPopup(nomeDisplay.toUpperCase(), `Dado Base: [${final}]`, total, res.cor, res.txt, detalheTxt);
-        enviarRolagemParaServidor(nomeDisplay.toUpperCase(), `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt.replace(/<br>/g, ' | ').replace(/<[^>]+>/g, ''));
+        const eventoSom = res.sound === 'crit' || res.sound === 'fail' ? res.sound : null;
+        enviarRolagemParaServidor(nomeDisplay.toUpperCase(), `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt.replace(/<br>/g, ' | ').replace(/<[^>]+>/g, ''), eventoSom, final);
     }
 
     function rolarEspecial(tipo) {
@@ -4339,7 +5759,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             bonusBase = pod + percMod;
         }
 
-        let rolar = rolarD20(qtdDados);
+        let rolar = rolarD20Configurado();
         let final = rolar.final;
         let bonusTotal = bonusBase + modManual;
 
@@ -4348,15 +5768,17 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         
         tocarSom(res.sound);
         
-        let textoDados = rolar.keepLowest ? `<span style="color:#ff5252">Desv.</span> [${rolar.rolagens.join(', ')}]` : `[${rolar.rolagens.join(', ')}]`;
+        const modoDados = rolar.keepLowest ? '<span style="color:#ff5252">Desvantagem</span>' : (rolar.rolagens.length > 1 ? '<span style="color:#8bd66f">Vantagem</span>' : 'Rolagem');
+        let textoDados = `${modoDados} [${rolar.rolagens.join(', ')}]`;
         let detalheTxt = `Dados: ${textoDados}<br>Soma: ${final} + ${bonusBase} + ${modManual}`;
         
         spawnPopup(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt);
-        enviarRolagemParaServidor(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt.replace(/<br>/g, ' | ').replace(/<[^>]+>/g, ''));
+        const eventoSom = res.sound === 'crit' || res.sound === 'fail' ? res.sound : null;
+        enviarRolagemParaServidor(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt.replace(/<br>/g, ' | ').replace(/<[^>]+>/g, ''), eventoSom, final);
     }
 
     function calcularVelocidade() {
-        let agi = parseInt(sheet.atributos['AGI']) || 0;
+        let agi = (parseInt(sheet.atributos['AGI']) || 0) + getMods('atributo', 'AGI');
         let vel = agi >= 1 ? 6 + ((agi - 1) * 2) : 6 + (agi - 1);
         let modDesloc = getMods('status', 'deslocamento');
         
@@ -4365,6 +5787,19 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         let inputDesloc = document.getElementById('val-desloc');
         if (inputDesloc) inputDesloc.value = vel + modDesloc;
     }
+
+    function autoAjustarTextarea(area) {
+        if (!area) return;
+        const maxAltura = 480;
+        area.style.height = 'auto';
+        const novaAltura = Math.min(Math.max(area.scrollHeight, 108), maxAltura);
+        area.style.height = `${novaAltura}px`;
+        area.style.overflowY = area.scrollHeight > maxAltura ? 'auto' : 'hidden';
+    }
+
+    document.addEventListener('input', event => {
+        if (event.target.matches('textarea[data-auto-grow]')) autoAjustarTextarea(event.target);
+    });
 
     function formatText(tagStart, tagEnd = tagStart, areaId = 'hab-desc') {
         const area = document.getElementById(areaId);
@@ -4376,6 +5811,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         area.focus();
         area.selectionStart = start + tagStart.length;
         area.selectionEnd = end + tagStart.length;
+        autoAjustarTextarea(area);
     }
 
     function renderMarkdown(t) { return t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>').replace(/~~(.*?)~~/g, '<s>$1</s>').replace(/<u>(.*?)<\/u>/g, '<u>$1</u>'); }
@@ -4399,6 +5835,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         document.getElementById('area-'+a).classList.add('active');
         document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('btn-'+a).classList.add('active');
+        if (a === 'notas') {
+            requestAnimationFrame(() => document.querySelectorAll('#notas-container textarea[data-auto-grow]').forEach(autoAjustarTextarea));
+        }
     }
     
     function atualizarPericia(nome, campo, valor) {
@@ -4451,12 +5890,15 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function renderNotas() {
         const container = document.getElementById('notas-container');
         container.innerHTML = sheet.notas.map((nota, i) => `
-            <div class="hab-card" style="border-left-color: var(--text-gold); padding: 25px 20px 20px;">
-                <input type="text" value="${nota.titulo}" onchange="atualizarNota(${i}, 'titulo', this.value)" class="modal-input" style="font-size: 1.1rem; margin-bottom: 15px; width: calc(100% - 40px); background: rgba(0,0,0,0.5);" placeholder="Título (Ex: História)">
-                <button onclick="removerNota(${i})" style="position: absolute; right: 15px; top: 15px; background: none; border: none; color: #ff5252; cursor: pointer; font-size: 1.2rem; transition: 0.2s;">✕</button>
-                <textarea rows="6" class="modal-input" onchange="atualizarNota(${i}, 'conteudo', this.value)" placeholder="Escreva suas anotações aqui..." style="resize: vertical; margin-bottom: 0;">${nota.conteudo}</textarea>
+            <div class="hab-card" style="border-left-color: var(--text-gold); padding: 20px;">
+                <div class="adaptive-note-header">
+                    <input type="text" value="${nota.titulo}" oninput="atualizarNota(${i}, 'titulo', this.value)" class="modal-input adaptive-note-title" style="font-size: 1.1rem; background: rgba(0,0,0,0.5);" placeholder="Título (Ex: História)">
+                    <button class="adaptive-note-remove" onclick="removerNota(${i})" title="Remover anotação">✕</button>
+                </div>
+                <textarea rows="6" class="modal-input" data-auto-grow oninput="atualizarNota(${i}, 'conteudo', this.value); autoAjustarTextarea(this)" placeholder="Escreva suas anotações aqui..." style="margin-bottom: 0;">${nota.conteudo}</textarea>
             </div>
         `).join('');
+        requestAnimationFrame(() => container.querySelectorAll('textarea[data-auto-grow]').forEach(autoAjustarTextarea));
     }
 
     function adicionarNota() {
@@ -4484,6 +5926,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         render();
         calcularStatusClasse();
         calcularVelocidade();
+        atualizarPainelInventario();
         renderEspeciais();
     }
 
@@ -4567,7 +6010,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             .then(() => {
                 tocarSom('click');
                 alteracoesNaoSalvas = false; // Reseta o rastreador
-                spawnPopup("SISTEMA", `Slot ${slot} Atualizado`, "SALVO", "#00ff88", "PROGRESSO SALVO", "Sua ficha está segura na nuvem!");
+                spawnPopup("SISTEMA", `${nomeDoSlot(slot)} atualizado`, "SALVO", "#00ff88", "PROGRESSO SALVO", "Sua ficha está segura na nuvem!");
             })
             .catch(e => {
                 tocarSom('click');
@@ -4579,6 +6022,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function carregarDaNuvem() {
         if(!currentUser) return;
         const slot = document.getElementById('save-slot').value;
+        document.getElementById('save-slot').title = nomeDoSlot(slot);
         database.ref(`users/${currentUser.uid}/slots/${slot}`).once('value').then(snapshot => {
             const data = snapshot.val();
             if(data) {
@@ -4595,6 +6039,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function atualizarVisuaisDaFicha() {
     suspendResourceCapture = true;
     aplicarTemaDaFicha(); // <- Adicione esta linha para puxar a cor do slot automaticamente
+    atualizarVisualConfigRolagem();
     atualizarVisuaisClasse();
     calcularStatusClasse();
     calcularVelocidade();
@@ -4614,62 +6059,28 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     document.getElementById('curr-pv').value = sheet.recursosFinos?.pv_atual ?? document.getElementById('max-pv').value;
     document.getElementById('curr-pa').value = sheet.recursosFinos?.pa_atual ?? document.getElementById('max-pa').value;
     document.getElementById('curr-sa').value = sheet.recursosFinos?.sa_atual ?? document.getElementById('max-sa').value;
-    suspendResourceCapture = false;
     updateBar('pv'); updateBar('pa'); updateBar('sa');
+    suspendResourceCapture = false;
 }
 
     window.onload = () => {
         aplicarTemaDaFicha();
+        atualizarVisualConfigRolagem();
         render();
         renderEspeciais();
     };
 
     // --- SISTEMA DE DTs (Classes de Dificuldade) ---
 
-function adicionarNovaDT() {
-    tocarSom('click');
-    if (!sheet.dts) sheet.dts = [];
-    sheet.dts.push({ nome: "Nova DT", valor: 0 });
-    renderizarDTs();
-    marcarAlteracao();
-}
-
-function removerDT(index) {
-    tocarSom('click');
-    if (!sheet.dts) return;
-    sheet.dts.splice(index, 1);
-    renderizarDTs();
-    marcarAlteracao();
-}
-
-function renderizarDTs() {
-    const lista = document.getElementById('dt-dinamicas-lista');
-    if (!lista) return;
-    lista.innerHTML = '';
-    
-    // Atualiza os inputs das DTs fixas de acordo com a ficha carregada
-    document.getElementById('val-dt-feiticos').value = sheet.dtFeiticos || 0;
-    document.getElementById('val-dt-habilidades').value = sheet.dtHabilidades || 0;
-
-    // Renderiza as DTs extras geradas pelo usuário
-    if (!sheet.dts) sheet.dts = [];
-    sheet.dts.forEach((dt, idx) => {
-        const row = document.createElement('div');
-        row.className = 'rd-item-row';
-        row.innerHTML = `
-            <button onclick="removerDT(${idx})" style="background: none; border: none; color: #ff1744; cursor: pointer; font-size: 1rem; font-weight: bold; margin-right: 5px; margin-top: 2px;" title="Remover DT">✕</button>
-            <input type="text" class="rd-name-input" value="${dt.nome}" placeholder="Nome da DT" onchange="sheet.dts[${idx}].nome = this.value; marcarAlteracao();">
-            <input type="number" class="mini-stat-input" value="${dt.valor}" style="width: 40px; height: 25px; font-size: 0.85rem;" onchange="sheet.dts[${idx}].valor = parseInt(this.value)||0; marcarAlteracao();">
-        `;
-        lista.appendChild(row);
-    });
-}
-
 function atualizarVisuaisDTs() {
     // Garante inicialização caso a ficha carregada seja de uma versão anterior
     if (sheet.dtFeiticos === undefined) sheet.dtFeiticos = 0;
     if (sheet.dtHabilidades === undefined) sheet.dtHabilidades = 0;
     if (!Array.isArray(sheet.dts)) sheet.dts = [];
+    sheet.dts = sheet.dts.map((dt, index) => ({
+        ...dt,
+        id: dt.id || (Date.now() + index)
+    }));
 
     // Preenche os inputs fixos com os valores da ficha atual
     const inputFeiticos = document.getElementById('val-dt-feiticos');
@@ -5411,8 +6822,16 @@ function capturarRecursosDaTela() {
     ['pv', 'pa', 'sa'].forEach(id => {
         const current = document.getElementById(`curr-${id}`);
         const max = document.getElementById(`max-${id}`);
-        if (current) sheet.recursosFinos[`${id}_atual`] = parseInt(current.value) || 0;
-        if (max) sheet.recursosFinos[`${id}_max`] = parseInt(max.value) || 0;
+        if (current) {
+            const valorAtual = parseInt(current.value) || 0;
+            sheet.recursosFinos[`${id}_atual`] = valorAtual;
+            sheet.recursosFinos[`${id}_base_atual`] = valorAtual - getMods('status', `${id}_atual`);
+        }
+        if (max) {
+            const valorMaximo = parseInt(max.value) || 0;
+            sheet.recursosFinos[`${id}_max`] = valorMaximo;
+            sheet.recursosFinos[`${id}_base_max`] = valorMaximo - getMods('status', `${id}_max`);
+        }
     });
 }
 
@@ -5857,9 +7276,14 @@ function dadosIniciativaDaFicha(characterSheet) {
     const skillMod = modificadoresDaFicha(characterSheet, 'pericia', 'Iniciativa');
     const training = parseInt(skill.t) || 0;
     const manual = parseInt(skill.m) || 0;
-    const dice = skill.d !== undefined ? (parseInt(skill.d) || 0) : (agi + attrMod);
+    const rollConfig = characterSheet?.rolagemConfig;
+    const usaConfigNova = rollConfig && typeof rollConfig === 'object';
+    const dice = usaConfigNova
+        ? Math.min(20, Math.max(1, parseInt(rollConfig.quantidade) || 1))
+        : (skill.d !== undefined ? (parseInt(skill.d) || 0) : (agi + attrMod));
     return {
         dice,
+        disadvantage: usaConfigNova ? rollConfig.desvantagem === true : null,
         bonus: agi + attrMod + training + manual + skillMod,
         agi,
         training,
@@ -5880,6 +7304,7 @@ function participanteDePersonagem(characterId, character) {
         initiative: null,
         requested: true,
         initiativeDice: initiativeData.dice,
+        initiativeDisadvantage: initiativeData.disadvantage,
         initiativeBonus: initiativeData.bonus,
         initiativeData,
         requestedAt: firebase.database.ServerValue.TIMESTAMP
@@ -5926,8 +7351,11 @@ function processarPedidosIniciativa() {
     const campaignName = campaignState.campaigns.find(item => item.id === request.campaignId)?.name || 'Campanha';
     document.getElementById('initiative-request-text').textContent = `${campaignName}: o Mestre selecionou ${participant.name} para o combate.`;
     const data = participant.initiativeData || {};
+    const modoIniciativa = participant.initiativeDisadvantage === true
+        ? ' • desvantagem (mantém o pior)'
+        : ((parseInt(participant.initiativeDice) || 1) > 1 ? ' • vantagem (mantém o melhor)' : '');
     document.getElementById('initiative-request-formula').textContent =
-        `Dados: ${participant.initiativeDice || 1}d20 • Bônus total: ${Number(participant.initiativeBonus) >= 0 ? '+' : ''}${participant.initiativeBonus || 0} (AGI ${data.agi || 0}, treino ${data.training || 0})`;
+        `Dados: ${participant.initiativeDice || 1}d20${modoIniciativa} • Bônus total: ${Number(participant.initiativeBonus) >= 0 ? '+' : ''}${participant.initiativeBonus || 0} (AGI ${data.agi || 0}, treino ${data.training || 0})`;
     document.getElementById('initiative-request-result').textContent = '';
     const button = document.getElementById('initiative-roll-btn');
     button.disabled = false;
@@ -5943,9 +7371,18 @@ async function rolarIniciativaSolicitada() {
     if (!participant || participant.ownerUid !== currentUser?.uid) return;
     const button = document.getElementById('initiative-roll-btn');
     button.disabled = true;
-    const roll = rolarD20(parseInt(participant.initiativeDice) || 0);
+    const dadosIniciativa = parseInt(participant.initiativeDice) || 0;
+    const roll = typeof participant.initiativeDisadvantage === 'boolean'
+        ? rolarD20(dadosIniciativa, participant.initiativeDisadvantage)
+        : rolarD20(dadosIniciativa);
     const bonus = parseInt(participant.initiativeBonus) || 0;
     const total = roll.final + bonus;
+    const eventoSom = roll.final === 20 ? 'crit' : (roll.final === 1 ? 'fail' : null);
+    tocarSom(eventoSom || 'roll');
+    if (eventoSom) {
+        const nomePersonagem = participant.name || 'Personagem';
+        enviarRolagemParaServidor('INICIATIVA', `${nomePersonagem}: [${roll.final}]`, total, eventoSom === 'crit' ? '#32cd32' : '#800020', eventoSom === 'crit' ? 'SUCESSO EXTREMO' : 'FALHA CRÍTICA', `Dados: [${roll.rolagens.join(', ')}] | Bônus: ${bonus}`, eventoSom, roll.final);
+    }
     document.getElementById('initiative-request-result').textContent = `${roll.rolagens.join(', ')} → Total ${total}`;
     button.textContent = 'Resultado enviado';
     try {
@@ -6302,6 +7739,7 @@ async function adicionarNpcAoCombate(event) {
     });
     nameInput.value = '';
     avatarInput.value = '';
+    atualizarPreviewImagem('combat-npc-avatar', 'combat-npc-avatar-preview');
     initiativeInput.value = '0';
     document.getElementById('combat-add-panel').classList.remove('active');
 }
