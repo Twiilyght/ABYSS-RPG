@@ -2361,7 +2361,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         tocarSom(res.sound);
         
         let textoDados = rolar.keepLowest ? `<span style="color:#ff5252">Desv.</span> [${rolar.rolagens.join(', ')}]` : `[${rolar.rolagens.join(', ')}]`;
-        let detalheTxt = `Dados: ${textoDados}<br>Soma: ${final} + ${bonusBase}(Percepção + Pod) + ${modManual}(Mod)`;
+        let detalheTxt = `Dados: ${textoDados}<br>Soma: ${final} + ${bonusBase} + ${modManual}`;
         
         spawnPopup(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt);
         enviarRolagemParaServidor(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt.replace(/<br>/g, ' | ').replace(/<[^>]+>/g, ''));
