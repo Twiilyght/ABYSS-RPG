@@ -2576,6 +2576,57 @@ textarea[data-auto-grow] { min-height: 108px; overflow-y: hidden; resize: vertic
     color: #aeefff;
     border-color: color-mix(in srgb, #00e5ff 32%, var(--flat-line));
 }
+.damage-attribute-select { margin-bottom: 4px; }
+.damage-attribute-help {
+    display: block;
+    margin: 0 0 13px;
+    color: var(--flat-muted);
+    font: .64rem/1.45 Arial, sans-serif;
+}
+.card-collapse-toggle {
+    display: inline-grid;
+    place-items: center;
+    width: 27px;
+    height: 25px;
+    margin: 0;
+    padding: 0;
+    color: var(--text-gold);
+    border: 1px solid var(--flat-line);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--container-bg) 86%, #000);
+    cursor: pointer;
+    font-size: .72rem;
+}
+.card-collapse-toggle:hover { color: #fff; border-color: var(--light-purple); }
+.collapsible-card-body[hidden] { display: none !important; }
+.hab-card.is-collapsed,
+.item-card.is-collapsed { padding-top: 10px; padding-bottom: 10px; }
+.hab-card.is-collapsed .adaptive-card-header,
+.item-card.is-collapsed .adaptive-card-header { align-items: center; }
+.damage-attribute-badge {
+    display: inline-block;
+    margin-left: 5px;
+    padding: 2px 5px;
+    color: #d7d1da;
+    border: 1px solid var(--flat-line);
+    border-radius: 3px;
+    font: .56rem Arial, sans-serif;
+    vertical-align: middle;
+}
+.equipment-origin-label {
+    color: var(--flat-muted);
+    font-size: .58rem;
+    letter-spacing: .6px;
+}
+.item-weapon-summary {
+    margin: 8px 0;
+    padding: 7px 8px;
+    color: #ff7a7a;
+    border: 1px solid color-mix(in srgb, #ff5252 28%, var(--flat-line));
+    border-radius: 3px;
+    background: color-mix(in srgb, #ff5252 5%, var(--container-bg));
+    font: .68rem Arial, sans-serif;
+}
 
 /* Os containers principais e as campanhas obedecem à mesma cor escolhida. */
 .sheet-hero,
@@ -3413,6 +3464,17 @@ textarea[data-auto-grow] { min-height: 108px; overflow-y: hidden; resize: vertic
         <label style="color:var(--text-gold); font-size:0.8rem">DANO / ROLAGEM PRINCIPAL (Ex: 2d10 + 5)</label>
         <input type="text" id="hab-dano" class="modal-input" placeholder="Ex: 2d10 + 5">
 
+        <label style="color:var(--text-gold); font-size:0.8rem" for="hab-dano-atributo">ATRIBUTO SOMADO AO DANO</label>
+        <select id="hab-dano-atributo" class="modal-input damage-attribute-select">
+            <option value="">Nenhum atributo</option>
+            <option value="FOR">FOR — Força</option>
+            <option value="AGI">AGI — Agilidade</option>
+            <option value="INT">INT — Intelecto</option>
+            <option value="CON">CON — Constituição</option>
+            <option value="POD">POD — Poder</option>
+        </select>
+        <small class="damage-attribute-help">O valor atual do atributo, incluindo modificadores ativos, será somado no momento da rolagem.</small>
+
         <label style="color:var(--text-gold); font-size:0.8rem; display:flex; align-items:center; gap:5px; margin-top:5px; margin-bottom: 10px;">
             <input type="checkbox" id="hab-tem-crit" onchange="document.getElementById('hab-crit-container').style.display = this.checked ? 'block' : 'none'">
             Adicionar Crítico
@@ -3483,6 +3545,17 @@ textarea[data-auto-grow] { min-height: 108px; overflow-y: hidden; resize: vertic
     <div id="item-weapon-container" style="display:none; margin-bottom:15px; padding:15px; border:1px solid var(--border-color); background:rgba(0,0,0,0.4); border-radius:4px;">
         <label style="color:var(--text-gold); font-size:0.7rem">DANO PRINCIPAL</label>
         <input type="text" id="item-weap-dano" class="modal-input" placeholder="Ex: 1d8 + 2">
+
+        <label style="color:var(--text-gold); font-size:0.7rem" for="item-weap-atributo">ATRIBUTO SOMADO AO DANO</label>
+        <select id="item-weap-atributo" class="modal-input damage-attribute-select">
+            <option value="">Nenhum atributo</option>
+            <option value="FOR">FOR — Força</option>
+            <option value="AGI">AGI — Agilidade</option>
+            <option value="INT">INT — Intelecto</option>
+            <option value="CON">CON — Constituição</option>
+            <option value="POD">POD — Poder</option>
+        </select>
+        <small class="damage-attribute-help">Ex.: uma arma corpo a corpo pode usar FOR; o bônus é calculado ao rolar.</small>
         
         <label style="color:var(--text-gold); font-size:0.7rem">DANOS SECUNDÁRIOS (Opcional, separados por vírgula)</label>
         <input type="text" id="item-weap-sec" class="modal-input" placeholder="Ex: 1d4 Fogo, 1d6 Veneno">
@@ -4570,44 +4643,112 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     });
 
     function rolarDadosAvancado(formula) {
-        try {
-            const clean = formula.toLowerCase().replace(/\s/g, '');
-            const parts = clean.replace(/-/g, '+-').split('+');
-            let total = 0;
-            let textParts = [];
-            let allRolls = [];
-            let d20Rolls = [];
-            
-            parts.forEach(p => {
-                if (!p) return;
-                let isNegative = p.startsWith('-');
-                if (isNegative) p = p.substring(1);
-                
-                if (p.includes('d')) {
-                    const [qtdStr, facesStr] = p.split('d');
-                    let qtd = parseInt(qtdStr) || 1;
-                    let faces = parseInt(facesStr);
-                    let rolagens = [];
-                    let subTotal = 0;
-                    for(let j=0; j<qtd; j++) {
-                        let r = Math.floor(Math.random()*faces)+1;
-                        rolagens.push(r);
-                        allRolls.push(r);
-                        if (faces === 20) d20Rolls.push(r);
-                        subTotal += r;
-                    }
-                    total += isNegative ? -subTotal : subTotal;
-                    let prefix = isNegative ? '-' : (textParts.length > 0 ? '+' : '');
-                    textParts.push(`${prefix}[${rolagens.join(', ')}]`);
-                } else {
-                    let val = parseInt(p) || 0;
-                    total += isNegative ? -val : val;
-                    let prefix = isNegative ? '-' : (textParts.length > 0 ? '+' : '');
-                    textParts.push(`${prefix}${val}`);
+        const original = String(formula ?? '').trim();
+        const erro = mensagem => ({ total: 0, text: 'Erro', rolls: [], d20Rolls: [], erro: mensagem });
+        if (!original) return erro('Informe uma fórmula, como 1d10+5.');
+        const expressaoEncontrada = original.replace(/[–—−]/g, '-').match(/^([+-]?\s*(?:\d*d\d+|\d+)(?:\s*[+-]\s*(?:\d*d\d+|\d+))*)/i);
+        if (!expressaoEncontrada) return erro(`Fórmula inválida: ${original}`);
+        const restante = original.slice(expressaoEncontrada[0].length).trim();
+        if (/^[+-]/.test(restante) || /[+-]\s*(?:\d|d)/i.test(restante)) {
+            return erro('Coloque todos os bônus antes da descrição. Ex.: 1d6+2 Fogo.');
+        }
+        const clean = expressaoEncontrada[1].toLowerCase().replace(/\s+/g, '');
+
+        const partes = clean.match(/[+-]?[^+-]+/g) || [];
+        if (!partes.length || partes.join('') !== clean) return erro(`Fórmula inválida: ${original}`);
+
+        let total = 0;
+        const textParts = [];
+        const allRolls = [];
+        const d20Rolls = [];
+
+        for (const parteCompleta of partes) {
+            let parte = parteCompleta;
+            let sinal = 1;
+            if (parte.startsWith('+')) parte = parte.slice(1);
+            else if (parte.startsWith('-')) {
+                sinal = -1;
+                parte = parte.slice(1);
+            }
+            if (!parte) return erro(`Fórmula inválida: ${original}`);
+
+            const dado = parte.match(/^(\d*)d(\d+)$/);
+            let textoParte = '';
+            if (dado) {
+                const quantidade = dado[1] === '' ? 1 : parseInt(dado[1], 10);
+                const faces = parseInt(dado[2], 10);
+                if (!Number.isInteger(quantidade) || quantidade < 1 || quantidade > 100 || !Number.isInteger(faces) || faces < 1) {
+                    return erro(`Dado inválido em "${parteCompleta}".`);
                 }
-            });
-            return { total: total, text: textParts.join(' '), rolls: allRolls, d20Rolls };
-        } catch(e) { return { total: 0, text: 'Erro', rolls: [], d20Rolls: [] }; }
+                const rolagens = [];
+                let subtotal = 0;
+                for (let indice = 0; indice < quantidade; indice += 1) {
+                    const resultado = Math.floor(Math.random() * faces) + 1;
+                    rolagens.push(resultado);
+                    allRolls.push(resultado);
+                    if (faces === 20) d20Rolls.push(resultado);
+                    subtotal += resultado;
+                }
+                total += sinal * subtotal;
+                textoParte = `[${rolagens.join(', ')}]`;
+            } else if (/^\d+$/.test(parte)) {
+                const fixo = parseInt(parte, 10);
+                total += sinal * fixo;
+                textoParte = String(fixo);
+            } else {
+                return erro(`Não foi possível reconhecer "${parteCompleta}". Use formatos como 1d10+5 ou 2d6-1.`);
+            }
+
+            const prefixo = sinal < 0 ? '-' : (textParts.length ? '+' : '');
+            textParts.push(`${prefixo}${textoParte}`);
+        }
+
+        return { total, text: textParts.join(' '), rolls: allRolls, d20Rolls, erro: null };
+    }
+
+    function valorAtributoDano(codigo) {
+        if (!targetListAtributos.includes(codigo)) return 0;
+        return (parseInt(sheet.atributos?.[codigo]) || 0) + getMods('atributo', codigo);
+    }
+
+    function montarFormulaDano(formulaBase, atributo) {
+        const base = String(formulaBase || '').trim();
+        if (!atributo) return base;
+        const bonus = valorAtributoDano(atributo);
+        if (!base) return String(bonus);
+        return `${base}${bonus >= 0 ? '+' : ''}${bonus}`;
+    }
+
+    function badgeAtributoDano(atributo) {
+        if (!atributo) return '';
+        const bonus = valorAtributoDano(atributo);
+        return `<span class="damage-attribute-badge">${atributo} ${bonus >= 0 ? '+' : ''}${bonus}</span>`;
+    }
+
+    function rolarHabilidadePorIndice(indice) {
+        const habilidade = sheet.habilidades?.[indice];
+        if (!habilidade || !habilidade.dano) return;
+        rolarHabilidadeComOuSemCrit(
+            habilidade.nome || 'Rolagem de dano',
+            montarFormulaDano(habilidade.dano, habilidade.danoAtributo),
+            Boolean(habilidade.temCrit),
+            parseInt(habilidade.critMargem) || 20,
+            habilidade.critDano || ''
+        );
+    }
+
+    function rolarExtraHabilidadePorIndice(indiceHabilidade, indiceRolagem) {
+        const habilidade = sheet.habilidades?.[indiceHabilidade];
+        const formula = habilidade?.extras?.[indiceRolagem];
+        if (!formula) return;
+        acionarRolagemGlobal(habilidade.nome || 'Habilidade', 'Rolagem Extra', formula, 'var(--light-purple)', 'BÔNUS');
+    }
+
+    function rolarExtraItemPorIndice(indiceItem, indiceRolagem) {
+        const item = sheet.itens?.[indiceItem];
+        const formula = item?.extras?.[indiceRolagem];
+        if (!formula) return;
+        acionarRolagemGlobal(item.nome || 'Item', 'Rolagem', formula, 'var(--text-gold)', 'RESULTADO');
     }
 
     function obterEventoNaturalD20(rolagens) {
@@ -4618,6 +4759,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function acionarRolagemGlobal(titulo, subtitulo, formula, cor, txtStatus) {
         let res = rolarDadosAvancado(formula);
+        if (res.erro) {
+            alert(res.erro);
+            return;
+        }
         const eventoSom = obterEventoNaturalD20(res.d20Rolls);
         tocarSom(eventoSom || 'roll');
         let detalhes = `Fórmula: ${formula}<br>Dados: ${res.text}`;
@@ -4627,6 +4772,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function rolarHabilidadeComOuSemCrit(nome, danoBase, temCrit, critMargem, critDano) {
         let resPrincipal = rolarDadosAvancado(danoBase);
+        if (resPrincipal.erro) {
+            alert(resPrincipal.erro);
+            return;
+        }
         let isCrit = false;
 
         if (temCrit) {
@@ -4645,6 +4794,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (isCrit && critDano && critDano.trim() !== '') {
             formulaFinal += ' + ' + critDano;
             let resCrit = rolarDadosAvancado(critDano);
+            if (resCrit.erro) {
+                alert(`O dano principal foi reconhecido, mas o dano crítico não: ${resCrit.erro}`);
+                return;
+            }
             resFinalTotal += resCrit.total;
             resFinalText += ' + <span style="color:#ff1744">' + resCrit.text + '</span>';
         }
@@ -5151,6 +5304,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             document.getElementById('hab-nome').value = h.nome || '';
             document.getElementById('hab-is-separator').checked = Boolean(h.isSeparator);
             document.getElementById('hab-dano').value = h.dano || '';
+            document.getElementById('hab-dano-atributo').value = h.danoAtributo || '';
             document.getElementById('hab-desc').value = h.desc || '';
             document.getElementById('hab-img').value = h.img || "";
             
@@ -5181,6 +5335,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             document.getElementById('hab-nome').value = "";
             document.getElementById('hab-is-separator').checked = false;
             document.getElementById('hab-dano').value = "";
+            document.getElementById('hab-dano-atributo').value = "";
             document.getElementById('hab-desc').value = "";
             document.getElementById('hab-img').value = "";
             document.getElementById('hab-tem-crit').checked = false;
@@ -5226,6 +5381,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function salvarHabilidade() {
         tocarSom('click');
         const idEdicao = document.getElementById('hab-id-edicao').value;
+        const habilidadeAnterior = idEdicao !== "" ? sheet.habilidades[parseInt(idEdicao)] : null;
         const isSeparator = document.getElementById('hab-is-separator').checked;
         const h = isSeparator ? {
             tipo: document.getElementById('hab-tipo').value,
@@ -5237,12 +5393,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             temCrit: false,
             mods: [],
             extras: [],
-            ativa: false
+            ativa: false,
+            recolhido: false
         } : {
             tipo: document.getElementById('hab-tipo').value,
             nome: document.getElementById('hab-nome').value,
             isSeparator: false,
             dano: document.getElementById('hab-dano').value,
+            danoAtributo: document.getElementById('hab-dano-atributo').value,
             desc: document.getElementById('hab-desc').value,
             img: document.getElementById('hab-img').value,
             temCrit: document.getElementById('hab-tem-crit').checked,
@@ -5250,7 +5408,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             critDano: document.getElementById('hab-crit-dano').value,
             mods: document.getElementById('hab-tem-mod').checked ? getModsFromDOM('hab') : [],
             extras: Array.from(document.querySelectorAll('.extra-roll')).map(i => i.value).filter(v => v),
-            ativa: idEdicao !== "" ? sheet.habilidades[parseInt(idEdicao)].ativa : false
+            ativa: habilidadeAnterior?.ativa || false,
+            recolhido: habilidadeAnterior?.recolhido || false
         };
         if (idEdicao !== "") sheet.habilidades[parseInt(idEdicao)] = h;
         else sheet.habilidades.push(h);
@@ -5306,6 +5465,37 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         marcarAlteracao();
     }
 
+    function alternarCartaoHabilidade(indice) {
+        const habilidade = sheet.habilidades?.[indice];
+        if (!habilidade || habilidade.isSeparator) return;
+        tocarSom('click');
+        habilidade.recolhido = !habilidade.recolhido;
+        if (habilidade.geradoPorItem && habilidade.itemIdRef) {
+            const item = sheet.itens.find(itemAtual => itemAtual.idUnico === habilidade.itemIdRef);
+            if (item) item.ataqueRecolhido = habilidade.recolhido;
+        }
+        renderAbilities();
+        marcarAlteracao();
+    }
+
+    function alternarCartaoItem(indice) {
+        const item = sheet.itens?.[indice];
+        if (!item) return;
+        tocarSom('click');
+        item.recolhido = !item.recolhido;
+        atualizarPainelInventario();
+        marcarAlteracao();
+    }
+
+    function abrirEditorItemPorReferencia(itemId) {
+        const indice = sheet.itens.findIndex(item => item.idUnico === itemId);
+        if (indice < 0) {
+            alert('O equipamento original não foi encontrado no inventário.');
+            return;
+        }
+        abrirEditorItem(indice);
+    }
+
     function renderAbilities() {
         ['ataques-lista', 'habilidades-lista', 'feiticos-lista'].forEach(id => {
             const el = document.getElementById(id);
@@ -5333,13 +5523,19 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             }
 
             const card = document.createElement('div');
-            card.className = `hab-card ${h.ativa ? 'active-mod' : ''}`;
+            const recolhido = h.recolhido === true;
+            card.className = `hab-card ${h.ativa ? 'active-mod' : ''} ${recolhido ? 'is-collapsed' : ''}`;
+            const botaoRecolher = `<button class="card-collapse-toggle" onclick="alternarCartaoHabilidade(${i})" title="${recolhido ? 'Abrir conteúdo' : 'Recolher conteúdo'}" aria-expanded="${!recolhido}">${recolhido ? '▸' : '▾'}</button>`;
             
             let htmlControles = '';
             if (h.geradoPorItem) {
-                htmlControles = `<span style="color:#aaa; font-size:0.7rem; margin-right:10px;">[Equipamento]</span>`;
+                htmlControles = `
+                    ${botaoRecolher}
+                    <span class="equipment-origin-label">EQUIPAMENTO</span>
+                    <button class="btn-action-card" onclick="abrirEditorItemPorReferencia('${escapeCampaignHtml(h.itemIdRef || '')}')" title="Editar equipamento no inventário">✏️</button>`;
             } else {
                 htmlControles = `
+                    ${botaoRecolher}
                     <button class="btn-action-card" onclick="moverHabVisuais(${i}, -1)" title="Subir">🔼</button>
                     <button class="btn-action-card" onclick="moverHabVisuais(${i}, 1)" title="Descer">🔽</button>
                     <select onchange="transferirHab(${i}, this.value)" style="background:transparent; border:1px solid #444; color:#888; font-size:0.7rem; border-radius:3px; margin:0 5px; height:20px; outline:none; font-family:'Cinzel', serif;">
@@ -5362,17 +5558,18 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 </div>${renderResumoModificadores(h.mods, h.ativa)}`;
             }
 
-            let nomeRoll = h.nome ? h.nome.replace(/'/g, "\\'") : '';
             card.innerHTML = `
                 <div class="adaptive-card-header">
-                    <h3 class="adaptive-card-title" style="font-family:Cinzel; color:var(--text-gold);">${h.nome}</h3>
+                    <h3 class="adaptive-card-title" style="font-family:Cinzel; color:var(--text-gold);">${escapeCampaignHtml(h.nome || 'Sem nome')}</h3>
                     <div class="adaptive-card-actions">${htmlControles}</div>
                 </div>
+                <div class="collapsible-card-body" ${recolhido ? 'hidden' : ''}>
                 <div class="hab-desc-render">${renderMarkdown(h.desc || '')}</div>
                 ${h.img ? `<img src="${h.img}" class="content-card-image" alt="Imagem de ${h.nome || 'habilidade'}">` : ''}
-                ${h.dano ? `<button class="btn-roll" style="color:#ff4444; border-color:#ff4444;" onclick="rolarHabilidadeComOuSemCrit('${nomeRoll}', '${h.dano}', ${h.temCrit ? 'true' : 'false'}, ${h.critMargem || 20}, '${h.critDano || ''}')">⚔️ ${h.dano}</button>` : ''}
-                ${h.extras ? h.extras.map(ex => `<button class="btn-roll" style="color:var(--light-purple); border-color:var(--light-purple);" onclick="acionarRolagemGlobal('${nomeRoll}', 'Rolagem Extra', '${ex}', 'var(--light-purple)', 'BÔNUS')">🎲 ${ex}</button>`).join('') : ''}
+                ${h.dano ? `<button class="btn-roll" style="color:#ff4444; border-color:#ff4444;" onclick="rolarHabilidadePorIndice(${i})">⚔️ ${escapeCampaignHtml(h.dano)} ${badgeAtributoDano(h.danoAtributo)}</button>` : ''}
+                ${h.extras ? h.extras.map((ex, indiceExtra) => `<button class="btn-roll" style="color:var(--light-purple); border-color:var(--light-purple);" onclick="rolarExtraHabilidadePorIndice(${i}, ${indiceExtra})">🎲 ${escapeCampaignHtml(ex)}</button>`).join('') : ''}
                 ${chkMod}
+                </div>
             `;
             containerAlvo.appendChild(card);
         });
@@ -5395,12 +5592,18 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 document.getElementById('item-is-weapon').checked = true;
                 document.getElementById('item-weapon-container').style.display = 'block';
                 document.getElementById('item-weap-dano').value = item.weapDano || '';
+                document.getElementById('item-weap-atributo').value = item.weapAtributo || '';
                 document.getElementById('item-weap-sec').value = item.weapSec || '';
                 document.getElementById('item-weap-crit-margem').value = item.weapCritMargem || 20;
                 document.getElementById('item-weap-crit-dano').value = item.weapCritDano || '';
             } else {
                 document.getElementById('item-is-weapon').checked = false;
                 document.getElementById('item-weapon-container').style.display = 'none';
+                document.getElementById('item-weap-dano').value = '';
+                document.getElementById('item-weap-atributo').value = '';
+                document.getElementById('item-weap-sec').value = '';
+                document.getElementById('item-weap-crit-margem').value = '20';
+                document.getElementById('item-weap-crit-dano').value = '';
             }
 
             if (item.mods && item.mods.length > 0) {
@@ -5422,6 +5625,11 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             
             document.getElementById('item-is-weapon').checked = false;
             document.getElementById('item-weapon-container').style.display = 'none';
+            document.getElementById('item-weap-dano').value = '';
+            document.getElementById('item-weap-atributo').value = '';
+            document.getElementById('item-weap-sec').value = '';
+            document.getElementById('item-weap-crit-margem').value = '20';
+            document.getElementById('item-weap-crit-dano').value = '';
             document.getElementById('item-tem-mod').checked = false;
             document.getElementById('item-mod-container').style.display = 'none';
         }
@@ -5443,6 +5651,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const isEditing = idEdicao !== "";
         const originalItem = isEditing ? sheet.itens[parseInt(idEdicao)] : null;
         const wasEquipped = originalItem ? originalItem.equipado : false;
+        const ataqueAnterior = originalItem?.idUnico
+            ? sheet.habilidades.find(h => h.itemIdRef === originalItem.idUnico)
+            : null;
+        const ataqueRecolhido = ataqueAnterior?.recolhido ?? originalItem?.ataqueRecolhido ?? false;
 
         if (originalItem && originalItem.idUnico) {
              sheet.habilidades = sheet.habilidades.filter(h => h.itemIdRef !== originalItem.idUnico);
@@ -5454,14 +5666,17 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             peso: parseInt(document.getElementById('item-peso').value) || 0,
             desc: document.getElementById('item-desc').value || "",
             equipado: wasEquipped,
+            recolhido: originalItem?.recolhido || false,
+            ataqueRecolhido,
             extras: Array.from(document.querySelectorAll('.item-extra-roll')).map(i => i.value).filter(v => v),
             mods: document.getElementById('item-tem-mod').checked ? getModsFromDOM('item') : [],
             isWeapon: document.getElementById('item-is-weapon').checked,
             weapDano: document.getElementById('item-weap-dano').value,
+            weapAtributo: document.getElementById('item-weap-atributo').value,
             weapSec: document.getElementById('item-weap-sec').value,
             weapCritMargem: parseInt(document.getElementById('item-weap-crit-margem').value) || 20,
             weapCritDano: document.getElementById('item-weap-crit-dano').value,
-            idUnico: originalItem ? originalItem.idUnico : Date.now() + Math.random().toString(36).substr(2, 9)
+            idUnico: originalItem?.idUnico || Date.now() + Math.random().toString(36).substr(2, 9)
         };
 
         if (isEditing) sheet.itens[parseInt(idEdicao)] = item;
@@ -5472,6 +5687,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 tipo: 'ataque',
                 nome: item.nome,
                 dano: item.weapDano,
+                danoAtributo: item.weapAtributo || '',
                 desc: item.desc,
                 img: item.img || '',
                 temCrit: true,
@@ -5479,7 +5695,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 critDano: item.weapCritDano,
                 extras: item.weapSec ? item.weapSec.split(',').map(s => s.trim()).filter(s=>s) : [],
                 geradoPorItem: true,
-                itemIdRef: item.idUnico
+                itemIdRef: item.idUnico,
+                recolhido: item.ataqueRecolhido || false
             });
         }
 
@@ -5502,6 +5719,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     tipo: 'ataque',
                     nome: item.nome,
                     dano: item.weapDano,
+                    danoAtributo: item.weapAtributo || '',
                     desc: item.desc,
                     img: item.img || '',
                     temCrit: true,
@@ -5509,7 +5727,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     critDano: item.weapCritDano || "",
                     extras: item.weapSec ? item.weapSec.split(',').map(s => s.trim()).filter(s=>s) : [],
                     geradoPorItem: true,
-                    itemIdRef: item.idUnico
+                    itemIdRef: item.idUnico,
+                    recolhido: item.ataqueRecolhido || false
                 });
             } else {
                 if (item.idUnico) sheet.habilidades = sheet.habilidades.filter(h => h.itemIdRef !== item.idUnico);
@@ -5550,24 +5769,29 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         sheet.itens.forEach((item, i) => {
             pesoTotal += item.peso;
             const card = document.createElement('div');
-            card.className = `item-card ${item.equipado ? 'equipped' : ''}`;
+            const recolhido = item.recolhido === true;
+            card.className = `item-card ${item.equipado ? 'equipped' : ''} ${recolhido ? 'is-collapsed' : ''}`;
             card.innerHTML = `
                 <div class="adaptive-card-header">
-                    <h4 class="adaptive-card-title" style="font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${item.nome}</h4>
+                    <h4 class="adaptive-card-title" style="font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${escapeCampaignHtml(item.nome || 'Item sem nome')}</h4>
                     <div class="adaptive-card-actions">
+                        <button class="card-collapse-toggle" onclick="alternarCartaoItem(${i})" title="${recolhido ? 'Abrir conteúdo' : 'Recolher conteúdo'}" aria-expanded="${!recolhido}">${recolhido ? '▸' : '▾'}</button>
                         <button class="btn-action-card" onclick="alternarEquiparItem(${i})">${item.equipado ? '🛡️ Unarm' : '⚔️ Equip'}</button>
                         <button class="btn-action-card" onclick="abrirEditorItem(${i})">✏️</button>
                         <button class="btn-action-card" onclick="removerItem(${i})" style="color:#ff5252;">✕</button>
                     </div>
                 </div>
+                <div class="collapsible-card-body" ${recolhido ? 'hidden' : ''}>
                 ${item.img ? `<img src="${item.img}" class="content-card-image" alt="Imagem de ${item.nome || 'item'}">` : ''}
                 <div class="hab-desc-render" style="font-size:0.8rem; margin:5px 0;">${renderMarkdown(item.desc || '')}</div>
+                ${item.isWeapon && item.weapDano ? `<div class="item-weapon-summary">⚔️ ${escapeCampaignHtml(item.weapDano)} ${badgeAtributoDano(item.weapAtributo)}</div>` : ''}
                 ${renderResumoModificadores(item.mods, item.equipado)}
                 <div class="item-footer-controls">
                     <span class="item-weight-indicator">📦 Ocupa: <b>${item.peso}</b> slots</span>
                     <div style="display:flex; gap:4px;">
-                        ${item.extras ? item.extras.map(ex => `<button class="btn-roll" style="color:var(--text-gold); border-color:var(--text-gold); padding:2px 6px; font-size:0.7rem; margin:0;" onclick="acionarRolagemGlobal('${item.nome.replace(/'/g, "\\'")}', 'Rolagem', '${ex}', 'var(--text-gold)', 'RESULTADO')">🎲 ${ex}</button>`).join('') : ''}
+                        ${item.extras ? item.extras.map((ex, indiceExtra) => `<button class="btn-roll" style="color:var(--text-gold); border-color:var(--text-gold); padding:2px 6px; font-size:0.7rem; margin:0;" onclick="rolarExtraItemPorIndice(${i}, ${indiceExtra})">🎲 ${escapeCampaignHtml(ex)}</button>`).join('') : ''}
                     </div>
+                </div>
                 </div>
             `;
             grid.appendChild(card);
