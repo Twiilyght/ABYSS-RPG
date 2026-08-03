@@ -570,6 +570,14 @@
 .campaign-card:hover, .campaign-field input:focus, .campaign-field textarea:focus, .campaign-field select:focus { border-color: var(--light-purple); }
 .campaign-code { border-color: color-mix(in srgb, var(--text-gold) 55%, transparent); background: color-mix(in srgb, var(--text-gold) 8%, transparent); color: var(--text-gold); }
 
+.banner-crop-dialog { max-width: 1000px; }
+.banner-crop-stage { position: relative; overflow: hidden; border: 2px solid var(--text-gold); border-radius: 9px; background: #020203; box-shadow: inset 0 0 30px rgba(0,0,0,.8); }
+#banner-crop-canvas { display: block; width: 100%; height: auto; aspect-ratio: 3 / 1; cursor: grab; touch-action: none; user-select: none; }
+#banner-crop-canvas.dragging { cursor: grabbing; }
+.banner-crop-guide { position: absolute; inset: 12px; border: 1px dashed rgba(255,255,255,.5); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; color: rgba(255,255,255,.65); pointer-events: none; font-size: .58rem; letter-spacing: 2px; text-shadow: 0 1px 3px #000; }
+.banner-crop-controls { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; margin-top: 17px; color: var(--text-gold); font-size: .65rem; letter-spacing: 1px; }
+.banner-crop-controls input[type=range] { width: 100%; accent-color: var(--primary-purple); }
+
 .campaign-character-mini { position: relative; }
 .campaign-character-mini-actions { margin-left: auto; display: flex; align-items: center; gap: 7px; }
 .campaign-icon-action { width: 30px; height: 30px; border-radius: 6px; border: 1px solid #403649; color: #9d94a5; background: rgba(0,0,0,.28); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
@@ -628,6 +636,12 @@
 .combat-order-item .campaign-avatar { width: 43px; height: 43px; flex-basis: 43px; }
 .combat-order-name strong { display: block; color: #eee; font-size: .68rem; }
 .combat-order-name small { color: #756e7b; font-family: Arial,sans-serif; font-size: .62rem; }
+.combat-mini-resources { display: grid; grid-template-columns: repeat(3,minmax(44px,1fr)); gap: 4px; margin-top: 6px; }
+.combat-mini-resource { padding: 3px 4px; border: 1px solid #352e3c; border-radius: 4px; background: rgba(0,0,0,.34); color: #918998; font-family: Arial,sans-serif; font-size: .53rem; white-space: nowrap; text-align: center; }
+.combat-mini-resource strong { display: inline; color: #ddd; font-family: 'Oswald',sans-serif; font-size: .62rem; }
+.combat-mini-resource.pv { border-bottom-color:#ff1744; }
+.combat-mini-resource.pa { border-bottom-color:#ffca28; }
+.combat-mini-resource.sa { border-bottom-color:#00e5ff; }
 .combat-initiative-value { color: var(--text-gold); font-family: 'Oswald',sans-serif; font-size: 1.05rem; text-align: center; min-width: 30px; }
 .combat-reorder { display: flex; flex-direction: column; gap: 2px; }
 .combat-reorder button { width: 24px; height: 20px; padding: 0; background: none; border: 1px solid #3b3243; color: #8b8292; cursor: pointer; border-radius: 3px; font-size: .55rem; }
@@ -635,6 +649,10 @@
 .combat-current-card .campaign-avatar { width: 150px; height: 150px; flex-basis: 150px; border-radius: 50%; border: 3px solid var(--text-gold); box-shadow: 0 0 25px color-mix(in srgb, var(--primary-purple) 55%, transparent); margin-bottom: 20px; }
 .combat-current-card h2 { margin: 0 0 7px; color: #fff; letter-spacing: 3px; font-size: 1.45rem; }
 .combat-current-card p { margin: 0 0 22px; color: #8e8695; font-family: Arial,sans-serif; }
+.combat-current-resources { width: min(520px,100%); padding: 16px; margin: 0 0 22px; border: 1px solid var(--border-color); border-radius: 9px; background: rgba(0,0,0,.38); }
+.combat-current-resources .shield-resource-row { grid-template-columns: 92px 1fr; }
+.combat-current-resources .shield-resource-track { height: 14px; }
+.combat-current-resources .shield-resource-label { text-align:left; }
 .combat-current-initiative { position: absolute; top: 16px; right: 16px; color: var(--text-gold); border: 1px solid var(--text-gold); padding: 7px 9px; border-radius: 6px; font-family: 'Oswald',sans-serif; }
 .combat-add-panel { display: none; margin-top: 18px; border-top: 1px solid #302838; padding-top: 18px; }
 .combat-add-panel.active { display: block; animation: popIn .2s ease-out; }
@@ -660,6 +678,7 @@
     .combat-select-grid { grid-template-columns: 1fr; }
     .combat-current-card { min-height: 330px; padding: 25px 14px; }
     .combat-current-card .campaign-avatar { width: 115px; height: 115px; flex-basis: 115px; }
+    .banner-crop-controls { grid-template-columns: 1fr; }
 }
 
 #campaign-edit-bar { display: none; position: fixed; z-index: 11000; top: 13px; left: 50%; transform: translateX(-50%); max-width: calc(100vw - 210px); min-width: 430px; align-items: center; justify-content: space-between; gap: 20px; padding: 10px 12px 10px 17px; background: rgba(9,7,14,.96); border: 1px solid #9b4dff; border-radius: 9px; box-shadow: 0 0 28px rgba(155,77,255,.45); }
@@ -999,7 +1018,7 @@
                         <label>BANNER DA CAMPANHA</label>
                         <div id="campaign-banner-preview" class="campaign-banner-picker">
                             <span>CLIQUE OU ARRASTE UMA IMAGEM<br><small>JPG, PNG ou WEBP • até 5 MB</small></span>
-                            <input id="campaign-banner-file" type="file" accept="image/jpeg,image/png,image/webp" onchange="preverBannerCampanha(this)">
+                            <input id="campaign-banner-file" type="file" accept="image/jpeg,image/png,image/webp" onchange="abrirRecorteBanner(this, 'create')">
                         </div>
                     </div>
                     <div class="campaign-form-actions">
@@ -1039,6 +1058,7 @@
             <div class="campaign-detail-top">
                 <button class="campaign-back-btn" onclick="voltarParaListaCampanhas()">← Todas as campanhas</button>
                 <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                    <button id="campaign-edit-campaign-btn" class="campaign-ghost-btn" style="display:none;" onclick="abrirEditorCampanha()">✎ Editar campanha</button>
                     <button id="campaign-start-combat-btn" class="campaign-submit-btn" style="display:none;" onclick="abrirPreparacaoCombate()">⚔ Iniciar combate</button>
                     <button class="gm-shield-btn" onclick="abrirEscudoMestre()">🛡 Escudo do mestre</button>
                 </div>
@@ -1143,6 +1163,68 @@
                 <button class="campaign-ghost-btn" onclick="fecharVisualizadorPersonagem()">Fechar ✕</button>
             </div>
             <div id="campaign-viewer-content"></div>
+        </div>
+    </div>
+
+    <div id="campaign-edit-overlay" class="campaign-viewer-overlay" onclick="fecharEditorCampanha(event)">
+        <div class="campaign-viewer" style="max-width:760px;" onclick="event.stopPropagation()">
+            <div class="campaign-shield-header">
+                <div>
+                    <h2>✎ EDITAR CAMPANHA</h2>
+                    <p>Altere o nome, a descrição ou reposicione o banner.</p>
+                </div>
+                <button class="campaign-ghost-btn" onclick="fecharEditorCampanha()">Fechar ✕</button>
+            </div>
+            <form id="campaign-edit-form" onsubmit="salvarEdicaoCampanha(event)">
+                <div class="campaign-field">
+                    <label for="campaign-edit-name">NOME DA CAMPANHA</label>
+                    <input id="campaign-edit-name" maxlength="60" required>
+                </div>
+                <div class="campaign-field">
+                    <label for="campaign-edit-description">DESCRIÇÃO</label>
+                    <textarea id="campaign-edit-description" maxlength="1200" required></textarea>
+                </div>
+                <div class="campaign-field">
+                    <label>BANNER DA CAMPANHA</label>
+                    <div id="campaign-edit-banner-preview" class="campaign-banner-picker">
+                        <span>ESCOLHER E RECORTAR NOVO BANNER</span>
+                        <input id="campaign-edit-banner-file" type="file" accept="image/jpeg,image/png,image/webp" onchange="abrirRecorteBanner(this, 'edit')">
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button type="button" class="campaign-ghost-btn" onclick="recortarBannerAtual()">Recortar banner atual</button>
+                        <button type="button" class="campaign-ghost-btn" style="color:#ff7180; border-color:#6c3038;" onclick="removerBannerEdicao()">Remover banner</button>
+                    </div>
+                </div>
+                <div class="campaign-form-actions">
+                    <button type="button" class="campaign-ghost-btn" onclick="fecharEditorCampanha()">Cancelar</button>
+                    <button id="campaign-edit-submit" type="submit" class="campaign-submit-btn">Salvar alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="campaign-crop-overlay" class="campaign-viewer-overlay" onclick="fecharRecorteBanner(event)">
+        <div class="campaign-viewer banner-crop-dialog" onclick="event.stopPropagation()">
+            <div class="campaign-shield-header">
+                <div>
+                    <h2>RECORTAR BANNER</h2>
+                    <p>Arraste a imagem para posicioná-la e use o zoom para ajustar o enquadramento.</p>
+                </div>
+                <button class="campaign-ghost-btn" onclick="fecharRecorteBanner()">Fechar ✕</button>
+            </div>
+            <div class="banner-crop-stage">
+                <canvas id="banner-crop-canvas" width="1200" height="400"></canvas>
+                <div class="banner-crop-guide">ÁREA VISÍVEL DO BANNER</div>
+            </div>
+            <div class="banner-crop-controls">
+                <label for="banner-crop-zoom">ZOOM</label>
+                <input id="banner-crop-zoom" type="range" min="1" max="3" step="0.01" value="1" oninput="atualizarZoomRecorte(this.value)">
+                <button class="campaign-ghost-btn" onclick="centralizarRecorteBanner()">Centralizar</button>
+            </div>
+            <div class="campaign-form-actions">
+                <button class="campaign-ghost-btn" onclick="fecharRecorteBanner()">Cancelar</button>
+                <button class="campaign-submit-btn" onclick="confirmarRecorteBanner()">Usar este recorte</button>
+            </div>
         </div>
     </div>
 </div>
@@ -1304,7 +1386,13 @@
     </div>
 
     <label style="color:var(--text-gold); font-size:0.8rem">DESCRIÇÃO DOS EFEITOS</label>
-    <textarea id="item-desc" class="modal-input" rows="4" placeholder="Propriedades do item..."></textarea>
+    <div class="editor-toolbar">
+        <button type="button" class="toolbar-btn" onclick="formatText('**', '**', 'item-desc')"><b>B</b></button>
+        <button type="button" class="toolbar-btn" onclick="formatText('*', '*', 'item-desc')"><i>I</i></button>
+        <button type="button" class="toolbar-btn" onclick="formatText('<u>', '</u>', 'item-desc')"><u>U</u></button>
+        <button type="button" class="toolbar-btn" onclick="formatText('~~', '~~', 'item-desc')"><s>S</s></button>
+    </div>
+    <textarea id="item-desc" class="modal-input" rows="6" placeholder="Propriedades do item..."></textarea>
     
     <div id="item-rolagens-container"></div>
     <button onclick="addInputRolagemItem()" style="background:none; border:1px solid var(--primary-purple); color:var(--light-purple); cursor:pointer; padding:5px; margin-bottom:15px; width:100%; font-family: 'Cinzel', serif;">+ Adicionar Rolagem Opcional ao Item</button>
@@ -2597,7 +2685,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             document.getElementById('item-id-edicao').value = idxEdicao;
             document.getElementById('item-nome').value = item.nome;
             document.getElementById('item-peso').value = item.peso;
-            document.getElementById('item-desc').value = item.desc;
+            document.getElementById('item-desc').value = item.desc || '';
             
             if (item.isWeapon) {
                 document.getElementById('item-is-weapon').checked = true;
@@ -2759,7 +2847,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     <button class="btn-action-card" onclick="removerItem(${i})" style="color:#ff5252;">✕</button>
                 </div>
                 <h4 style="margin:0; font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${item.nome}</h4>
-                <p style="font-size:0.8rem; color:#aaa; margin:5px 0; font-family:'Cinzel';">${item.desc}</p>
+                <div class="hab-desc-render" style="font-size:0.8rem; margin:5px 0;">${renderMarkdown(item.desc || '')}</div>
                 <div class="item-footer-controls">
                     <span class="item-weight-indicator">📦 Ocupa: <b>${item.peso}</b> slots</span>
                     <div style="display:flex; gap:4px;">
@@ -2927,12 +3015,16 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (inputDesloc) inputDesloc.value = vel + modDesloc;
     }
 
-    function formatText(tagStart, tagEnd = tagStart) {
-        const area = document.getElementById('hab-desc');
+    function formatText(tagStart, tagEnd = tagStart, areaId = 'hab-desc') {
+        const area = document.getElementById(areaId);
+        if (!area) return;
         const start = area.selectionStart;
         const end = area.selectionEnd;
         const text = area.value;
         area.value = text.substring(0, start) + tagStart + text.substring(start, end) + tagEnd + text.substring(end);
+        area.focus();
+        area.selectionStart = start + tagStart.length;
+        area.selectionEnd = end + tagStart.length;
     }
 
     function renderMarkdown(t) { return t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>').replace(/~~(.*?)~~/g, '<s>$1</s>').replace(/<u>(.*?)<\/u>/g, '<u>$1</u>'); }
@@ -3291,6 +3383,20 @@ function renderizarDTsDinamicas() {
 // --- CENTRAL DE CAMPANHAS ---
 const campaignState = {
     pendingBanner: '',
+    pendingEditBanner: '',
+    bannerCrop: {
+        image: null,
+        target: 'create',
+        zoom: 1,
+        offsetX: 0,
+        offsetY: 0,
+        dragging: false,
+        pointerId: null,
+        startX: 0,
+        startY: 0,
+        startOffsetX: 0,
+        startOffsetY: 0
+    },
     campaigns: [],
     activeId: null,
     activeCampaign: null,
@@ -3451,28 +3557,7 @@ function renderizarListaCampanhas() {
 }
 
 async function preverBannerCampanha(input) {
-    const file = input.files?.[0];
-    const preview = document.getElementById('campaign-banner-preview');
-    if (!file) {
-        campaignState.pendingBanner = '';
-        preview.classList.remove('has-image');
-        preview.style.backgroundImage = '';
-        return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-        alert('A imagem deve ter no máximo 5 MB.');
-        input.value = '';
-        return;
-    }
-    try {
-        campaignState.pendingBanner = await comprimirBannerCampanha(file);
-        preview.style.backgroundImage = `url("${campaignState.pendingBanner}")`;
-        preview.classList.add('has-image');
-    } catch (error) {
-        console.error('Erro ao preparar banner:', error);
-        alert('Não foi possível ler essa imagem.');
-        input.value = '';
-    }
+    return abrirRecorteBanner(input, 'create');
 }
 
 function comprimirBannerCampanha(file) {
@@ -3501,6 +3586,227 @@ function comprimirBannerCampanha(file) {
         };
         reader.readAsDataURL(file);
     });
+}
+
+function abrirEditorCampanha() {
+    if (campaignState.role !== 'mestre' || !campaignState.activeCampaign?.meta) {
+        alert('Somente o Mestre pode editar a campanha.');
+        return;
+    }
+    const meta = campaignState.activeCampaign.meta;
+    document.getElementById('campaign-edit-name').value = meta.name || '';
+    document.getElementById('campaign-edit-description').value = meta.description || '';
+    campaignState.pendingEditBanner = meta.banner || '';
+    atualizarPreviewBannerEdicao();
+    document.getElementById('campaign-edit-overlay').classList.add('active');
+}
+
+function fecharEditorCampanha() {
+    document.getElementById('campaign-edit-overlay')?.classList.remove('active');
+    const fileInput = document.getElementById('campaign-edit-banner-file');
+    if (fileInput) fileInput.value = '';
+}
+
+function atualizarPreviewBannerEdicao() {
+    const preview = document.getElementById('campaign-edit-banner-preview');
+    if (!preview) return;
+    if (campaignState.pendingEditBanner) {
+        preview.style.backgroundImage = `url("${campaignState.pendingEditBanner}")`;
+        preview.classList.add('has-image');
+    } else {
+        preview.style.backgroundImage = '';
+        preview.classList.remove('has-image');
+    }
+}
+
+function removerBannerEdicao() {
+    campaignState.pendingEditBanner = '';
+    atualizarPreviewBannerEdicao();
+}
+
+function recortarBannerAtual() {
+    const source = campaignState.pendingEditBanner || campaignState.activeCampaign?.meta?.banner;
+    if (!source) {
+        alert('Escolha uma imagem antes de abrir o recorte.');
+        return;
+    }
+    carregarImagemNoRecortador(source, 'edit');
+}
+
+async function salvarEdicaoCampanha(event) {
+    event.preventDefault();
+    if (campaignState.role !== 'mestre' || !campaignState.activeId) return;
+    const name = document.getElementById('campaign-edit-name').value.trim();
+    const description = document.getElementById('campaign-edit-description').value.trim();
+    if (!name || !description) return;
+    const submit = document.getElementById('campaign-edit-submit');
+    submit.disabled = true;
+    submit.textContent = 'Salvando...';
+    try {
+        const values = {
+            name,
+            description,
+            banner: campaignState.pendingEditBanner || '',
+            updatedAt: firebase.database.ServerValue.TIMESTAMP
+        };
+        await database.ref(`campaigns/${campaignState.activeId}/meta`).update(values);
+        if (campaignState.activeCampaign?.meta) Object.assign(campaignState.activeCampaign.meta, values);
+        const listItem = campaignState.campaigns.find(item => item.id === campaignState.activeId);
+        if (listItem) Object.assign(listItem, values);
+        renderizarListaCampanhas();
+        renderizarDetalheCampanha();
+        fecharEditorCampanha();
+    } catch (error) {
+        console.error('Erro ao editar campanha:', error);
+        alert('Não foi possível salvar as alterações da campanha.');
+    } finally {
+        submit.disabled = false;
+        submit.textContent = 'Salvar alterações';
+    }
+}
+
+async function abrirRecorteBanner(input, target = 'create') {
+    const file = input?.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+        alert('A imagem deve ter no máximo 5 MB.');
+        input.value = '';
+        return;
+    }
+    try {
+        const source = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onerror = reject;
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+        });
+        await carregarImagemNoRecortador(source, target);
+    } catch (error) {
+        console.error('Erro ao abrir recortador:', error);
+        alert('Não foi possível ler essa imagem.');
+    } finally {
+        input.value = '';
+    }
+}
+
+function carregarImagemNoRecortador(source, target) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onerror = reject;
+        image.onload = () => {
+            const crop = campaignState.bannerCrop;
+            crop.image = image;
+            crop.target = target;
+            crop.zoom = 1;
+            crop.offsetX = 0;
+            crop.offsetY = 0;
+            crop.dragging = false;
+            document.getElementById('banner-crop-zoom').value = '1';
+            document.getElementById('campaign-crop-overlay').classList.add('active');
+            desenharRecorteBanner();
+            resolve();
+        };
+        image.src = source;
+    });
+}
+
+function limitarPosicaoRecorte() {
+    const crop = campaignState.bannerCrop;
+    const canvas = document.getElementById('banner-crop-canvas');
+    if (!crop.image || !canvas) return;
+    const baseScale = Math.max(canvas.width / crop.image.width, canvas.height / crop.image.height);
+    const scale = baseScale * crop.zoom;
+    const maxX = Math.max(0, (crop.image.width * scale - canvas.width) / 2);
+    const maxY = Math.max(0, (crop.image.height * scale - canvas.height) / 2);
+    crop.offsetX = Math.max(-maxX, Math.min(maxX, crop.offsetX));
+    crop.offsetY = Math.max(-maxY, Math.min(maxY, crop.offsetY));
+}
+
+function desenharRecorteBanner() {
+    const crop = campaignState.bannerCrop;
+    const canvas = document.getElementById('banner-crop-canvas');
+    if (!crop.image || !canvas) return;
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    limitarPosicaoRecorte();
+    const baseScale = Math.max(canvas.width / crop.image.width, canvas.height / crop.image.height);
+    const scale = baseScale * crop.zoom;
+    const width = crop.image.width * scale;
+    const height = crop.image.height * scale;
+    const x = (canvas.width - width) / 2 + crop.offsetX;
+    const y = (canvas.height - height) / 2 + crop.offsetY;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(crop.image, x, y, width, height);
+}
+
+function atualizarZoomRecorte(value) {
+    campaignState.bannerCrop.zoom = Math.max(1, Math.min(3, parseFloat(value) || 1));
+    desenharRecorteBanner();
+}
+
+function centralizarRecorteBanner() {
+    campaignState.bannerCrop.offsetX = 0;
+    campaignState.bannerCrop.offsetY = 0;
+    desenharRecorteBanner();
+}
+
+function fecharRecorteBanner() {
+    document.getElementById('campaign-crop-overlay')?.classList.remove('active');
+    campaignState.bannerCrop.dragging = false;
+}
+
+function confirmarRecorteBanner() {
+    const canvas = document.getElementById('banner-crop-canvas');
+    if (!canvas || !campaignState.bannerCrop.image) return;
+    const data = canvas.toDataURL('image/jpeg', .82);
+    if (campaignState.bannerCrop.target === 'edit') {
+        campaignState.pendingEditBanner = data;
+        atualizarPreviewBannerEdicao();
+    } else {
+        campaignState.pendingBanner = data;
+        const preview = document.getElementById('campaign-banner-preview');
+        preview.style.backgroundImage = `url("${data}")`;
+        preview.classList.add('has-image');
+    }
+    fecharRecorteBanner();
+}
+
+function inicializarRecortadorBanner() {
+    const canvas = document.getElementById('banner-crop-canvas');
+    if (!canvas || canvas.dataset.ready === 'true') return;
+    canvas.dataset.ready = 'true';
+    const endDrag = event => {
+        const crop = campaignState.bannerCrop;
+        if (!crop.dragging) return;
+        crop.dragging = false;
+        crop.pointerId = null;
+        canvas.classList.remove('dragging');
+        if (event?.pointerId !== undefined && canvas.hasPointerCapture?.(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+    };
+    canvas.addEventListener('pointerdown', event => {
+        const crop = campaignState.bannerCrop;
+        if (!crop.image) return;
+        crop.dragging = true;
+        crop.pointerId = event.pointerId;
+        crop.startX = event.clientX;
+        crop.startY = event.clientY;
+        crop.startOffsetX = crop.offsetX;
+        crop.startOffsetY = crop.offsetY;
+        canvas.classList.add('dragging');
+        canvas.setPointerCapture?.(event.pointerId);
+    });
+    canvas.addEventListener('pointermove', event => {
+        const crop = campaignState.bannerCrop;
+        if (!crop.dragging || crop.pointerId !== event.pointerId) return;
+        const rect = canvas.getBoundingClientRect();
+        const factorX = canvas.width / Math.max(rect.width, 1);
+        const factorY = canvas.height / Math.max(rect.height, 1);
+        crop.offsetX = crop.startOffsetX + (event.clientX - crop.startX) * factorX;
+        crop.offsetY = crop.startOffsetY + (event.clientY - crop.startY) * factorY;
+        desenharRecorteBanner();
+    });
+    canvas.addEventListener('pointerup', endDrag);
+    canvas.addEventListener('pointercancel', endDrag);
 }
 
 async function gerarCodigoCampanha() {
@@ -3671,6 +3977,7 @@ function renderizarDetalheCampanha() {
     if (!campaign?.meta) return;
     const meta = campaign.meta;
     const isMaster = campaignState.role === 'mestre';
+    document.getElementById('campaign-edit-campaign-btn').style.display = isMaster ? 'inline-flex' : 'none';
     const activeCombat = campaign.combat && campaign.combat.phase;
     const combatButton = document.getElementById('campaign-start-combat-btn');
     combatButton.style.display = (isMaster || activeCombat) ? 'inline-flex' : 'none';
@@ -3691,7 +3998,7 @@ function renderizarDetalheCampanha() {
         ? characters
         : characters.filter(character => character.ownerUid === currentUser.uid || character.visibleToPlayers !== false);
     document.getElementById('campaign-character-preview').innerHTML = visibleCharacters.length
-        ? visibleCharacters.map(character => renderizarPersonagemMini(character, false)).join('')
+        ? visibleCharacters.map(character => renderizarPersonagemMini(character, false, isMaster)).join('')
         : '<div class="campaign-empty" style="padding:24px 12px;">Nenhum personagem foi colocado nesta campanha.</div>';
     document.getElementById('campaign-own-character-list').innerHTML = ownCharacters.length
         ? ownCharacters.map(character => renderizarPersonagemMini(character, true)).join('')
@@ -3702,7 +4009,7 @@ function renderizarDetalheCampanha() {
     document.getElementById('campaign-character-slot').value = document.getElementById('save-slot').value;
 }
 
-function renderizarPersonagemMini(character, showOwnerControls = false) {
+function renderizarPersonagemMini(character, showOwnerControls = false, showMasterRemove = false) {
     const name = character.name || character.sheet?.nickname || 'Personagem sem nome';
     const owner = character.ownerName || 'Jogador';
     const visible = character.visibleToPlayers !== false;
@@ -3724,7 +4031,11 @@ function renderizarPersonagemMini(character, showOwnerControls = false) {
                     </label>
                     <button class="campaign-icon-action danger" title="Remover personagem" onclick="removerPersonagemCampanha('${escapeCampaignHtml(character.id)}')">✕</button>
                 </div>
-            ` : ''}
+            ` : (showMasterRemove ? `
+                <div class="campaign-character-mini-actions">
+                    <button class="campaign-icon-action danger" title="Remover este personagem da campanha" onclick="removerPersonagemCampanha('${escapeCampaignHtml(character.id)}')">✕</button>
+                </div>
+            ` : '')}
         </div>
     `;
 }
@@ -4214,12 +4525,23 @@ function participanteDePersonagem(characterId, character) {
         ownerName: character.ownerName || 'Jogador',
         name: character.name || character.sheet?.nickname || 'Personagem sem nome',
         avatar: character.avatar || character.sheet?.avatar || '',
+        resources: JSON.parse(JSON.stringify(character.sheet?.recursosFinos || {})),
         initiative: null,
         requested: true,
         initiativeDice: initiativeData.dice,
         initiativeBonus: initiativeData.bonus,
         initiativeData,
         requestedAt: firebase.database.ServerValue.TIMESTAMP
+    };
+}
+
+function recursoParticipante(participant, id) {
+    const liveCharacter = campaignState.activeCampaign?.characters?.[participant?.characterId];
+    if (liveCharacter) return recursoPersonagem(liveCharacter, id);
+    const resources = participant?.resources || {};
+    return {
+        current: resources[`${id}_atual`] ?? '—',
+        max: resources[`${id}_max`] ?? '—'
     };
 }
 
@@ -4491,6 +4813,9 @@ function renderizarCombateAtivo(combat) {
     document.getElementById('combat-master-tools').style.display = isMaster ? 'block' : 'none';
     document.getElementById('combat-order-list').innerHTML = order.map((id, index) => {
         const participant = combat.participants[id];
+        const pv = recursoParticipante(participant, 'pv');
+        const pa = recursoParticipante(participant, 'pa');
+        const sa = recursoParticipante(participant, 'sa');
         return `
             <div class="combat-order-item ${index === currentIndex ? 'current' : ''}">
                 <span class="combat-order-position">${index + 1}</span>
@@ -4498,6 +4823,11 @@ function renderizarCombateAtivo(combat) {
                 <span class="combat-order-name">
                     <strong>${escapeCampaignHtml(participant.name || 'Personagem')}</strong>
                     <small>${index === currentIndex ? 'Turno atual' : escapeCampaignHtml(participant.ownerName || '')}</small>
+                    <span class="combat-mini-resources">
+                        <span class="combat-mini-resource pv">PV <strong>${escapeCampaignHtml(pv.current)}/${escapeCampaignHtml(pv.max)}</strong></span>
+                        <span class="combat-mini-resource pa">PA <strong>${escapeCampaignHtml(pa.current)}/${escapeCampaignHtml(pa.max)}</strong></span>
+                        <span class="combat-mini-resource sa">SAN <strong>${escapeCampaignHtml(sa.current)}/${escapeCampaignHtml(sa.max)}</strong></span>
+                    </span>
                 </span>
                 <span class="combat-initiative-value">${escapeCampaignHtml(participant.initiative)}</span>
                 ${isMaster ? `<span class="combat-reorder"><button onclick="moverCombatente('${escapeCampaignHtml(id)}', -1)">▲</button><button onclick="moverCombatente('${escapeCampaignHtml(id)}', 1)">▼</button></span>` : ''}
@@ -4510,11 +4840,19 @@ function renderizarCombateAtivo(combat) {
         return;
     }
     const isOwnTurn = current.ownerUid === currentUser?.uid;
+    const currentPv = recursoParticipante(current, 'pv');
+    const currentPa = recursoParticipante(current, 'pa');
+    const currentSa = recursoParticipante(current, 'sa');
     currentCard.innerHTML = `
         <span class="combat-current-initiative">INICIATIVA ${escapeCampaignHtml(current.initiative)}</span>
         ${avatarCampanhaHtml(current)}
         <h2>${escapeCampaignHtml(current.name || 'Personagem')}</h2>
         <p>${isOwnTurn ? 'É a sua vez!' : `Turno de ${escapeCampaignHtml(current.ownerName || 'combatente')}`}</p>
+        <div class="combat-current-resources">
+            ${barraRecursoEscudo('PV', 'pv', currentPv)}
+            ${barraRecursoEscudo('PA', 'pa', currentPa)}
+            ${barraRecursoEscudo('SANIDADE', 'sa', currentSa)}
+        </div>
         ${isMaster
             ? '<button class="campaign-submit-btn" onclick="pularTurnoCombate()">Pular turno →</button>'
             : '<span style="color:#706977; font-size:.7rem;">Aguardando o Mestre avançar o turno</span>'}
@@ -4633,6 +4971,7 @@ document.addEventListener('keydown', event => {
 
 // Roda assim que a página termina de carregar
 document.addEventListener('DOMContentLoaded', () => {
+    inicializarRecortadorBanner();
     const statusSalvo = localStorage.getItem('estadoModoSecreto');
     const btn = document.getElementById('btn-secreto');
     
