@@ -730,7 +730,7 @@ body::before {
 #campaign-edit-bar.active { display: flex; }
 #campaign-edit-bar strong { display: block; color: #fff; font-size: .72rem; letter-spacing: 1px; }
 #campaign-edit-bar small { color: #8f8498; font-family: Arial,sans-serif; font-size: .68rem; }
-.campaign-editing .sidebar > button[onclick="confirmarSalvar()"], .campaign-editing #save-slot { display: none; }
+.campaign-editing .sidebar button[onclick="confirmarSalvar()"], .campaign-editing #save-slot { display: none; }
 
 @media (max-width: 900px) {
     .campaign-detail-grid { grid-template-columns: 1fr; }
@@ -3018,26 +3018,378 @@ option,
     font-family: var(--font-reading) !important;
 }
 
+/* NAVEGAÇÃO RETRÁTIL E REFINO DE INTERAÇÕES */
+:root {
+    --control-surface: color-mix(in srgb, var(--container-bg) 88%, #fff);
+    --control-surface-hover: color-mix(in srgb, var(--container-bg) 81%, var(--primary-purple));
+    --control-border: color-mix(in srgb, var(--flat-line) 82%, #fff);
+    --control-focus: color-mix(in srgb, var(--light-purple) 70%, #fff);
+    --topbar-height: 64px;
+    --sidebar-width: 82px;
+}
+
+.top-utility-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: var(--sidebar-width);
+    z-index: 1150;
+    height: var(--topbar-height);
+    border-bottom: 1px solid var(--flat-line);
+    background: color-mix(in srgb, var(--container-bg) 94%, #000);
+    transition: height .22s ease, left .22s ease, background-color .18s ease;
+}
+.topbar-content {
+    display: grid;
+    grid-template-columns: minmax(145px, .34fr) minmax(0, 1.66fr);
+    align-items: center;
+    width: min(100%, 1420px);
+    height: 100%;
+    margin: 0 auto;
+    padding: 8px 22px;
+    gap: 18px;
+    opacity: 1;
+    transition: opacity .14s ease, transform .22s ease;
+}
+.topbar-heading { display: grid; gap: 2px; min-width: 0; }
+.topbar-heading strong { overflow: hidden; color: #eee9f0; font-size: .8rem; letter-spacing: .6px; text-overflow: ellipsis; white-space: nowrap; }
+.topbar-kicker { color: var(--text-gold); font-size: .49rem; letter-spacing: 1.8px; }
+.topbar-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 0;
+    gap: 7px;
+}
+.topbar-action,
+.topbar-slot-manager {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    gap: 7px;
+    padding: 7px 11px;
+    color: #b8b0bc;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    font-family: 'Cinzel', serif;
+    font-size: .58rem;
+    letter-spacing: .45px;
+    white-space: nowrap;
+}
+.topbar-action-icon { font-size: 1rem; line-height: 1; }
+.topbar-action:hover,
+.topbar-slot-manager:hover {
+    color: #fff;
+    border-color: var(--control-border);
+    background: var(--control-surface);
+    transform: translateY(-1px);
+}
+.topbar-action.active {
+    color: var(--text-gold);
+    border-color: color-mix(in srgb, var(--primary-purple) 65%, var(--flat-line));
+    background: color-mix(in srgb, var(--primary-purple) 10%, var(--container-bg));
+}
+.topbar-slot-control {
+    display: grid;
+    grid-template-columns: auto minmax(92px, 150px) auto;
+    align-items: center;
+    min-width: 0;
+    gap: 7px;
+    padding-left: 10px;
+    border-left: 1px solid var(--flat-line);
+}
+.topbar-slot-control > label { color: #766f7a; font-size: .5rem; letter-spacing: 1px; text-transform: uppercase; }
+.topbar-slot-select {
+    min-width: 0;
+    height: 36px;
+    padding: 0 28px 0 10px;
+    color: #f0ebf2;
+    border: 1px solid var(--control-border);
+    border-radius: 7px;
+    background: var(--control-surface);
+    cursor: pointer;
+}
+.topbar-slot-manager { min-width: 0; }
+.topbar-collapse-toggle {
+    position: absolute;
+    right: 14px;
+    bottom: -10px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 20px;
+    padding: 0;
+    color: var(--text-gold);
+    border: 1px solid var(--flat-line);
+    border-radius: 0 0 7px 7px;
+    background: #0b0a0d;
+    font: 700 .75rem Arial, sans-serif;
+    cursor: pointer;
+}
+.top-utility-bar.is-collapsed { height: 18px; background: color-mix(in srgb, var(--container-bg) 90%, #000); }
+.top-utility-bar.is-collapsed .topbar-content { opacity: 0; pointer-events: none; transform: translateY(-18px); }
+
+.sidebar {
+    width: var(--sidebar-width);
+    padding: 0;
+    overflow: visible;
+    transition: width .22s ease, border-color .18s ease;
+}
+.sidebar-nav-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 26px 0 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    opacity: 1;
+    scrollbar-width: none;
+    transition: opacity .14s ease, transform .22s ease;
+}
+.sidebar-nav-items::-webkit-scrollbar { display: none; }
+.sidebar-collapse-toggle {
+    position: absolute;
+    top: 13px;
+    right: -13px;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 30px;
+    padding: 0;
+    color: var(--text-gold);
+    border: 1px solid var(--flat-line);
+    border-radius: 0 7px 7px 0;
+    background: #0b0a0d;
+    font: 700 1rem Arial, sans-serif;
+    cursor: pointer;
+}
+.sidebar.is-collapsed { width: 24px; border-color: #27222b; }
+.sidebar.is-collapsed .sidebar-nav-items { opacity: 0; pointer-events: none; transform: translateX(-34px); }
+.sidebar.is-collapsed .sidebar-collapse-toggle { right: -18px; }
+
+.container {
+    width: calc(100% - 100px);
+    margin-left: 100px;
+    padding-top: 92px;
+    transition: margin-left .22s ease, width .22s ease, padding-top .22s ease;
+}
+body.sidebar-collapsed .container { width: calc(100% - 42px); margin-left: 42px; }
+body.sidebar-collapsed .top-utility-bar { left: 24px; }
+body.topbar-collapsed .container { padding-top: 46px; }
+
+/* Uma única faixa compacta para todos os atributos-chave. */
+.key-attribute-panel {
+    display: grid;
+    grid-template-columns: minmax(170px, 1.35fr) repeat(5, minmax(82px, .7fr));
+    align-items: stretch;
+    min-height: 46px;
+    margin-top: 11px;
+    overflow: hidden;
+    border: 1px solid var(--flat-line);
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--container-bg) 88%, #000);
+}
+.key-attribute-heading {
+    display: grid;
+    align-content: center;
+    gap: 2px;
+    min-width: 0;
+    padding: 6px 12px;
+    background: color-mix(in srgb, var(--primary-purple) 7%, transparent);
+}
+.key-attribute-heading > span { color: var(--text-gold); font-size: .53rem; letter-spacing: 1.25px; }
+.key-attribute-heading > small { overflow: hidden; color: #77717d; font-size: .57rem; text-overflow: ellipsis; white-space: nowrap; }
+.key-attribute-field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 46px;
+    align-items: center;
+    min-width: 0;
+    gap: 5px;
+    padding: 5px 8px;
+    border-left: 1px solid var(--flat-line-soft);
+}
+.key-attribute-field > span { overflow: hidden; color: #a8a0ac; font-size: .55rem; letter-spacing: .55px; text-overflow: ellipsis; white-space: nowrap; }
+.key-attribute-field select {
+    width: 46px;
+    height: 30px;
+    padding: 0 4px;
+    color: #f4eef5;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--container-bg) 72%, #fff);
+    font-family: 'Oswald', sans-serif !important;
+    font-size: .72rem;
+    text-align: center;
+    cursor: pointer;
+}
+.key-attribute-field select:hover { border-color: var(--control-border); background: var(--control-surface-hover); }
+.key-resource-pv > span { color: #ff6685; }
+.key-resource-pa > span { color: #ffd24f; }
+.key-resource-sa > span { color: #35d8e9; }
+
+.sheet-dashboard-panel .mini-stat-item.calculated-mini-stat {
+    grid-template-columns: 34px minmax(0, 1fr) minmax(102px, auto);
+}
+.mini-stat-calc.mini-stat-calc-summary {
+    display: grid;
+    grid-template-columns: 44px 12px minmax(42px, 1fr);
+    align-items: center;
+    width: 104px;
+    gap: 3px;
+}
+.mini-stat-calc-summary > span { text-align: center; }
+.mini-stat-calc-summary > strong {
+    min-width: 0;
+    padding: 5px 3px;
+    border: 0;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--text-gold) 7%, transparent);
+}
+
+/* Controles planos, claros e com resposta visual curta. */
+button,
+input,
+select,
+textarea {
+    transition: color .16s ease, border-color .16s ease, background-color .16s ease, opacity .16s ease, transform .16s ease !important;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+    outline: 2px solid var(--control-focus);
+    outline-offset: 2px;
+}
+.btn-forge,
+.campaign-submit-btn,
+.campaign-primary-btn,
+.campaign-ghost-btn,
+.action-cost-use {
+    border: 1px solid color-mix(in srgb, var(--primary-purple) 62%, var(--flat-line));
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--primary-purple) 24%, var(--container-bg));
+}
+.btn-forge:hover,
+.campaign-submit-btn:hover,
+.campaign-primary-btn:hover,
+.campaign-ghost-btn:hover,
+.action-cost-use:hover {
+    border-color: var(--light-purple);
+    background: color-mix(in srgb, var(--primary-purple) 34%, var(--container-bg));
+    transform: translateY(-1px);
+}
+.modal-input,
+.search-bar,
+textarea,
+select,
+input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]) {
+    border-radius: 6px;
+}
+.hab-card,
+.item-card,
+.note-card,
+.defense-panel,
+.creation-block,
+.repeatable-editor,
+.slot-folder-card {
+    border-color: var(--control-border);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--container-bg) 91%, #fff);
+}
+.hab-card:hover,
+.item-card:hover,
+.note-card:hover {
+    border-color: color-mix(in srgb, var(--light-purple) 45%, var(--control-border));
+    transform: translateY(-1px);
+}
+
+@media (max-width: 1040px) {
+    .topbar-content { grid-template-columns: 1fr; }
+    .topbar-heading { display: none; }
+    .topbar-actions { justify-content: flex-start; overflow-x: auto; scrollbar-width: thin; }
+    .key-attribute-panel { grid-template-columns: minmax(140px, 1.1fr) repeat(5, minmax(74px, .7fr)); }
+    .key-attribute-field { grid-template-columns: 1fr; justify-items: center; gap: 2px; }
+}
+@media (max-width: 760px) {
+    .topbar-content { padding-right: 48px; padding-left: 15px; }
+    .topbar-actions { padding-bottom: 2px; }
+    .topbar-action > span:last-child,
+    .topbar-slot-manager > span:last-child { display: none; }
+    .topbar-action { min-width: 38px; padding: 6px; }
+    .topbar-slot-control { grid-template-columns: minmax(92px, 138px) 38px; padding-left: 7px; }
+    .topbar-slot-control > label { display: none; }
+    .topbar-slot-manager { width: 38px; padding: 6px; }
+    .key-attribute-panel { grid-template-columns: repeat(5, minmax(58px, 1fr)); }
+    .key-attribute-heading { grid-column: 1 / -1; min-height: 38px; text-align: center; }
+    .key-attribute-field { border-top: 1px solid var(--flat-line-soft); }
+    .key-attribute-field:first-of-type { border-left: 0; }
+}
+@media (max-width: 560px) {
+    :root { --sidebar-width: 70px; }
+    .sidebar-btn { width: 46px; }
+    .container { width: calc(100% - 82px); margin-left: 82px; padding-right: 10px; padding-left: 10px; }
+    body.sidebar-collapsed .container { width: calc(100% - 34px); margin-left: 34px; }
+    .key-attribute-panel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .key-attribute-heading { grid-column: 1 / -1; }
+    .key-attribute-field { grid-template-columns: minmax(0, 1fr) 48px; justify-items: stretch; min-height: 42px; }
+    .key-attribute-field:last-child { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <button class="sidebar-btn" id="btn-login" onclick="toggleLogin()" title="Login Google">👤</button>
-    <button class="sidebar-btn" id="btn-log" onclick="toggleLog()" title="Log do Servidor">🌍</button>
-    <button class="sidebar-btn active" id="btn-ficha" onclick="mudarArea('ficha')">📜</button>
-    <button class="sidebar-btn" id="btn-combate" onclick="mudarArea('combate')">⚔️</button>
-    <button class="sidebar-btn" id="btn-inventario" onclick="mudarArea('inventario')">🎒</button>
-    <button class="sidebar-btn" id="btn-notas" onclick="mudarArea('notas')" title="Anotações">📚</button>
-    <button class="sidebar-btn" id="btn-perfil" onclick="mudarArea('perfil')" title="Perfil público">🪪</button>
-    <button class="sidebar-btn" onclick="confirmarSalvar()" title="Salvar na Nuvem">💾</button>
-    <button class="sidebar-btn" id="btn-configuracoes" onclick="abrirConfiguracoesAudio()" title="Configurações de áudio">⚙️</button>
-    <button class="sidebar-btn" id="btn-historico" onclick="abrirHistoricoAcoes()" title="Histórico e desfazer">🕘</button>
-    <select id="save-slot" class="sidebar-btn slot-select" onchange="carregarDaNuvem()" title="Mudar ficha">
-        <option value="1">Slot 1</option>
-    </select>
-    <button class="sidebar-btn" id="btn-slot-manager" onclick="abrirGerenciadorSlots()" title="Organizar fichas e pastas">🗃️</button>
-</div>
+<header class="top-utility-bar" id="top-utility-bar" aria-label="Ações da conta e da ficha">
+    <div class="topbar-content">
+        <div class="topbar-heading" aria-hidden="true">
+            <span class="topbar-kicker">CENTRAL DO JOGADOR</span>
+            <strong>Conta e fichas</strong>
+        </div>
+        <nav class="topbar-actions" aria-label="Perfil, opções, histórico e personagens">
+            <button class="topbar-action area-nav-btn" id="btn-perfil" type="button" onclick="mudarArea('perfil')" title="Abrir perfil público">
+                <span class="topbar-action-icon" aria-hidden="true">🪪</span><span>Perfil</span>
+            </button>
+            <button class="topbar-action" id="btn-configuracoes" type="button" onclick="abrirConfiguracoesAudio()" title="Abrir opções e configurações">
+                <span class="topbar-action-icon" aria-hidden="true">⚙️</span><span>Opções</span>
+            </button>
+            <button class="topbar-action" id="btn-historico" type="button" onclick="abrirHistoricoAcoes()" title="Abrir histórico e desfazer ações">
+                <span class="topbar-action-icon" aria-hidden="true">🕘</span><span>Histórico / Desfazer</span>
+            </button>
+            <div class="topbar-slot-control">
+                <label for="save-slot">Personagem</label>
+                <select id="save-slot" class="topbar-slot-select slot-select" onchange="carregarDaNuvem()" title="Mudar ficha">
+                    <option value="1">Slot 1</option>
+                </select>
+                <button class="topbar-slot-manager" id="btn-slot-manager" type="button" onclick="abrirGerenciadorSlots()" title="Organizar fichas e pastas">
+                    <span aria-hidden="true">🗃️</span><span>Organizar</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+    <button class="topbar-collapse-toggle" id="topbar-collapse-toggle" type="button" onclick="alternarBarraSuperior()" aria-expanded="true" aria-controls="top-utility-bar" title="Recolher barra superior">⌃</button>
+</header>
+
+<aside class="sidebar" id="main-sidebar" aria-label="Navegação principal">
+    <button class="sidebar-collapse-toggle" id="sidebar-collapse-toggle" type="button" onclick="alternarBarraLateral()" aria-expanded="true" aria-controls="sidebar-nav-items" title="Recolher barra lateral">‹</button>
+    <div class="sidebar-nav-items" id="sidebar-nav-items">
+        <button class="sidebar-btn" id="btn-login" onclick="toggleLogin()" title="Login Google">👤</button>
+        <button class="sidebar-btn" id="btn-log" onclick="toggleLog()" title="Log do Servidor">🌍</button>
+        <button class="sidebar-btn area-nav-btn active" id="btn-ficha" onclick="mudarArea('ficha')" title="Ficha">📜</button>
+        <button class="sidebar-btn area-nav-btn" id="btn-combate" onclick="mudarArea('combate')" title="Combate">⚔️</button>
+        <button class="sidebar-btn area-nav-btn" id="btn-inventario" onclick="mudarArea('inventario')" title="Inventário">🎒</button>
+        <button class="sidebar-btn area-nav-btn" id="btn-notas" onclick="mudarArea('notas')" title="Anotações">📚</button>
+        <button class="sidebar-btn" onclick="confirmarSalvar()" title="Salvar na Nuvem">💾</button>
+    </div>
+</aside>
 
 <div class="container">
     <div id="area-ficha" class="page-area active">
@@ -3151,15 +3503,36 @@ option,
             <div class="status-condition-text" id="badge-sa"></div>
         </div>
     </div>
-        
+
+    <div class="key-attribute-panel" aria-label="Atributos-chave dos cálculos da ficha">
+        <div class="key-attribute-heading">
+            <span>ATRIBUTOS-CHAVE</span>
+            <small>Escolha a base de cada cálculo</small>
+        </div>
+        <label class="key-attribute-field" for="attr-defesa-calculo"><span>Defesa</span>
+            <select id="attr-defesa-calculo" onchange="atualizarCalculoStatus('defesa', 'atributo', this.value)"><option>FOR</option><option selected>AGI</option><option>INT</option><option>CON</option><option>POD</option></select>
+        </label>
+        <label class="key-attribute-field" for="attr-desloc-calculo"><span>Desloc.</span>
+            <select id="attr-desloc-calculo" onchange="atualizarCalculoStatus('deslocamento', 'atributo', this.value)"><option>FOR</option><option selected>AGI</option><option>INT</option><option>CON</option><option>POD</option></select>
+        </label>
+        <label class="key-attribute-field key-resource-pv" for="attr-pv-calculo" title="Substitui a Constituição na fórmula de PV da classe"><span>PV</span>
+            <select id="attr-pv-calculo" onchange="atualizarCalculoStatus('pv', 'atributo', this.value)"><option>FOR</option><option>AGI</option><option>INT</option><option selected>CON</option><option>POD</option></select>
+        </label>
+        <label class="key-attribute-field key-resource-pa" for="attr-pa-calculo" title="Define o atributo-chave somado à Constituição na fórmula de PA"><span>PA</span>
+            <select id="attr-pa-calculo" onchange="atualizarCalculoStatus('pa', 'atributo', this.value)"><option>FOR</option><option>AGI</option><option>INT</option><option>CON</option><option selected>POD</option></select>
+        </label>
+        <label class="key-attribute-field key-resource-sa" for="attr-sa-calculo" title="Define o atributo somado à fórmula de Sanidade da classe"><span>Sanidade</span>
+            <select id="attr-sa-calculo" onchange="atualizarCalculoStatus('sa', 'atributo', this.value)"><option>FOR</option><option>AGI</option><option>INT</option><option>CON</option><option selected>POD</option></select>
+        </label>
+    </div>
+
     <div class="mini-stats-overlay">
-        <div class="mini-stat-item">
+        <div class="mini-stat-item calculated-mini-stat">
             <span class="mini-stat-icon">◇</span>
             <span class="mini-stat-label">DEFESA <span id="mod-ind-def" style="color:#00e5ff;"></span></span>
-            <div class="mini-stat-calc">
+            <div class="mini-stat-calc mini-stat-calc-summary">
                 <input type="number" id="val-defesa" class="mini-stat-input" value="10" aria-label="Base personalizada da Defesa" onchange="atualizarCalculoStatus('defesa', 'base', this.value)">
-                <span>+</span>
-                <select id="attr-defesa-calculo" class="mini-stat-input" aria-label="Atributo da Defesa" onchange="atualizarCalculoStatus('defesa', 'atributo', this.value)"><option>FOR</option><option selected>AGI</option><option>INT</option><option>CON</option><option>POD</option></select>
+                <span aria-hidden="true">→</span>
                 <strong id="total-defesa">10</strong>
             </div>
         </div>
@@ -3180,13 +3553,12 @@ option,
             <span class="mini-stat-label">PA/TURNO</span>
             <input type="number" id="val-pa-turno" class="mini-stat-input" value="0" onchange="sheet.paTurno=parseInt(this.value)||0; marcarAlteracao();">
         </div>
-        <div class="mini-stat-item">
+        <div class="mini-stat-item calculated-mini-stat">
             <span class="mini-stat-icon">➤</span>
             <span class="mini-stat-label">DESLOC <span id="mod-ind-desloc" style="color:#00e5ff;"></span></span>
-            <div class="mini-stat-calc">
+            <div class="mini-stat-calc mini-stat-calc-summary">
                 <input type="number" id="val-desloc" class="mini-stat-input" value="4" aria-label="Base personalizada do Deslocamento" onchange="atualizarCalculoStatus('deslocamento', 'base', this.value)">
-                <span>+</span>
-                <select id="attr-desloc-calculo" class="mini-stat-input" aria-label="Atributo do Deslocamento" onchange="atualizarCalculoStatus('deslocamento', 'atributo', this.value)"><option>FOR</option><option selected>AGI</option><option>INT</option><option>CON</option><option>POD</option></select>
+                <span aria-hidden="true">→</span>
                 <strong id="total-desloc">6q</strong>
             </div>
         </div>
@@ -4380,7 +4752,10 @@ function resetarConfiguracoesAudio() {
             cargaBase: 20,
             calculos: {
                 defesa: { atributo: 'AGI', base: 10, customizado: false },
-                deslocamento: { atributo: 'AGI', base: 4, customizado: false }
+                deslocamento: { atributo: 'AGI', base: 4, customizado: false },
+                pv: { atributo: 'CON' },
+                pa: { atributo: 'POD' },
+                sa: { atributo: 'POD' }
             },
             nickname: "",
             antecedencia: "",
@@ -6031,15 +6406,42 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function normalizarCalculosStatus() {
         if (!sheet.calculos || typeof sheet.calculos !== 'object') sheet.calculos = {};
-        const criar = (chave, basePadrao) => {
+        const atributosValidos = ['FOR', 'AGI', 'INT', 'CON', 'POD'];
+        const criarComBase = (chave, basePadrao, atributoPadrao) => {
             if (!sheet.calculos[chave] || typeof sheet.calculos[chave] !== 'object') sheet.calculos[chave] = {};
             const atual = sheet.calculos[chave];
-            atual.atributo = ['FOR', 'AGI', 'INT', 'CON', 'POD'].includes(atual.atributo) ? atual.atributo : 'AGI';
+            atual.atributo = atributosValidos.includes(atual.atributo) ? atual.atributo : atributoPadrao;
             atual.base = Number.isFinite(Number(atual.base)) ? Number(atual.base) : basePadrao;
             atual.customizado = atual.customizado === true;
             return atual;
         };
-        return { defesa: criar('defesa', 10), deslocamento: criar('deslocamento', 4) };
+        const criarRecurso = (chave, atributoPadrao) => {
+            if (!sheet.calculos[chave] || typeof sheet.calculos[chave] !== 'object') sheet.calculos[chave] = {};
+            const atual = sheet.calculos[chave];
+            atual.atributo = atributosValidos.includes(atual.atributo) ? atual.atributo : atributoPadrao;
+            return atual;
+        };
+        return {
+            defesa: criarComBase('defesa', 10, 'AGI'),
+            deslocamento: criarComBase('deslocamento', 4, 'AGI'),
+            pv: criarRecurso('pv', 'CON'),
+            pa: criarRecurso('pa', 'POD'),
+            sa: criarRecurso('sa', 'POD')
+        };
+    }
+
+    function sincronizarPainelAtributosChave(calculos = normalizarCalculosStatus()) {
+        const campos = {
+            defesa: 'attr-defesa-calculo',
+            deslocamento: 'attr-desloc-calculo',
+            pv: 'attr-pv-calculo',
+            pa: 'attr-pa-calculo',
+            sa: 'attr-sa-calculo'
+        };
+        Object.entries(campos).forEach(([chave, id]) => {
+            const seletor = document.getElementById(id);
+            if (seletor && calculos[chave]) seletor.value = calculos[chave].atributo;
+        });
     }
 
     function valorAtributoCalculado(codigo) {
@@ -6055,6 +6457,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             config.base = parseInt(valor) || 0;
             config.customizado = true;
         }
+        sincronizarPainelAtributosChave(calculos);
         calcularStatusClasse();
         calcularVelocidade();
         marcarAlteracao();
@@ -6063,33 +6466,35 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function calcularStatusClasse() {
         if (!sheet.recursosFinos) sheet.recursosFinos = { pv_temp: 0, sa_temp: 0 };
         const recursos = sheet.recursosFinos;
+        const calculos = normalizarCalculosStatus();
         const con = (parseInt(sheet.atributos['CON']) || 0) + getMods('atributo', 'CON');
-        const pod = (parseInt(sheet.atributos['POD']) || 0) + getMods('atributo', 'POD');
-        const agi = (parseInt(sheet.atributos['AGI']) || 0) + getMods('atributo', 'AGI');
+        const atributoPV = valorAtributoCalculado(calculos.pv.atributo);
+        const atributoPA = valorAtributoCalculado(calculos.pa.atributo);
+        const atributoSA = valorAtributoCalculado(calculos.sa.atributo);
         const nivel = parseInt(sheet.nivel) || 0;
 
         let maxPV = 0, maxPA = 0, maxSA = 0, def = 0;
         let temClasse = true;
 
         if (sheet.classe === 'arcanista') {
-            maxPV = (15 + con) + (nivel * (15 + con));
-            maxSA = 20 + (nivel * 10);
-            maxPA = (15 + con + pod) + (Math.min(nivel, 4) * (12 + con + pod));
+            maxPV = (15 + atributoPV) + (nivel * (15 + atributoPV));
+            maxSA = 20 + atributoSA + (nivel * 10);
+            maxPA = (15 + con + atributoPA) + (Math.min(nivel, 4) * (12 + con + atributoPA));
             def = 11;
         } else if (sheet.classe === 'combatente') {
-            maxPV = (20 + con) + (nivel * (20 + con));
-            maxSA = 10 + (nivel * 10);
-            maxPA = (10 + con + pod) + (nivel * (8 + con + pod));
+            maxPV = (20 + atributoPV) + (nivel * (20 + atributoPV));
+            maxSA = 10 + atributoSA + (nivel * 10);
+            maxPA = (10 + con + atributoPA) + (nivel * (8 + con + atributoPA));
             def = 13;
         } else if (sheet.classe === 'erudito') {
-            maxPV = (15 + con) + (nivel * (16 + con));
-            maxSA = 15 + (nivel * 10);
-            maxPA = (13 + con + pod) + (nivel * (10 + con + pod));
+            maxPV = (15 + atributoPV) + (nivel * (16 + atributoPV));
+            maxSA = 15 + atributoSA + (nivel * 10);
+            maxPA = (13 + con + atributoPA) + (nivel * (10 + con + atributoPA));
             def = 15;
         } else if (sheet.classe === 'projetante') {
-            maxPV = (17 + con) + (nivel * (16 + con));
-            maxSA = 12 + (nivel * 10);
-            maxPA = (12 + con + pod) + (nivel * (9 + con + pod));
+            maxPV = (17 + atributoPV) + (nivel * (16 + atributoPV));
+            maxSA = 12 + atributoSA + (nivel * 10);
+            maxPA = (12 + con + atributoPA) + (nivel * (9 + con + atributoPA));
             def = 14;
         } else {
             temClasse = false;
@@ -6132,7 +6537,6 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         aplicarRecurso('pa', maxPA, modPA, modPAAtual);
         aplicarRecurso('sa', maxSA, modSA, modSAAtual);
 
-        const calculos = normalizarCalculosStatus();
         if (temClasse && !calculos.defesa.customizado) calculos.defesa.base = def;
         const valorAttrDefesa = valorAtributoCalculado(calculos.defesa.atributo);
         const defesaTotal = (parseInt(calculos.defesa.base) || 0) + valorAttrDefesa + modDef;
@@ -6160,6 +6564,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         renderIndicadorMod('mod-ind-bloq', modBloq);
         renderIndicadorMod('mod-ind-carga', modCarga);
         renderIndicadorMod('mod-ind-desloc', modDesloc);
+        sincronizarPainelAtributosChave(calculos);
 
         updateBar('pv'); updateBar('pa'); updateBar('sa');
         suspendResourceCapture = suspensaoAnterior;
@@ -7244,13 +7649,71 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         document.getElementById('df-'+v).classList.add('active'); 
         marcarAlteracao();
     }
+
+    const NAV_TOPBAR_STORAGE_KEY = 'abyssTopbarRecolhida';
+    const NAV_SIDEBAR_STORAGE_KEY = 'abyssSidebarRecolhida';
+
+    function definirBarraSuperiorRecolhida(recolhida, persistir = true) {
+        const barra = document.getElementById('top-utility-bar');
+        const botao = document.getElementById('topbar-collapse-toggle');
+        if (!barra || !botao) return;
+        const estaRecolhida = Boolean(recolhida);
+        barra.classList.toggle('is-collapsed', estaRecolhida);
+        document.body.classList.toggle('topbar-collapsed', estaRecolhida);
+        botao.textContent = estaRecolhida ? '⌄' : '⌃';
+        botao.setAttribute('aria-expanded', String(!estaRecolhida));
+        botao.title = estaRecolhida ? 'Expandir barra superior' : 'Recolher barra superior';
+        if (persistir) {
+            try { localStorage.setItem(NAV_TOPBAR_STORAGE_KEY, estaRecolhida ? '1' : '0'); } catch (_) {}
+        }
+    }
+
+    function definirBarraLateralRecolhida(recolhida, persistir = true) {
+        const barra = document.getElementById('main-sidebar');
+        const itens = document.getElementById('sidebar-nav-items');
+        const botao = document.getElementById('sidebar-collapse-toggle');
+        if (!barra || !botao) return;
+        const estaRecolhida = Boolean(recolhida);
+        barra.classList.toggle('is-collapsed', estaRecolhida);
+        document.body.classList.toggle('sidebar-collapsed', estaRecolhida);
+        botao.textContent = estaRecolhida ? '›' : '‹';
+        botao.setAttribute('aria-expanded', String(!estaRecolhida));
+        botao.title = estaRecolhida ? 'Expandir barra lateral' : 'Recolher barra lateral';
+        if (itens) itens.setAttribute('aria-hidden', String(estaRecolhida));
+        if (persistir) {
+            try { localStorage.setItem(NAV_SIDEBAR_STORAGE_KEY, estaRecolhida ? '1' : '0'); } catch (_) {}
+        }
+    }
+
+    function alternarBarraSuperior() {
+        const barra = document.getElementById('top-utility-bar');
+        definirBarraSuperiorRecolhida(!barra?.classList.contains('is-collapsed'));
+    }
+
+    function alternarBarraLateral() {
+        const barra = document.getElementById('main-sidebar');
+        definirBarraLateralRecolhida(!barra?.classList.contains('is-collapsed'));
+    }
+
+    function restaurarEstadoNavegacao() {
+        let topoRecolhido = false;
+        let lateralRecolhida = false;
+        try {
+            topoRecolhido = localStorage.getItem(NAV_TOPBAR_STORAGE_KEY) === '1';
+            lateralRecolhida = localStorage.getItem(NAV_SIDEBAR_STORAGE_KEY) === '1';
+        } catch (_) {}
+        definirBarraSuperiorRecolhida(topoRecolhido, false);
+        definirBarraLateralRecolhida(lateralRecolhida, false);
+    }
     
     function mudarArea(a) { 
         tocarSom('click');
         document.querySelectorAll('.page-area').forEach(e => e.classList.remove('active'));
-        document.getElementById('area-'+a).classList.add('active');
-        document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-'+a).classList.add('active');
+        const area = document.getElementById('area-'+a);
+        if (!area) return;
+        area.classList.add('active');
+        document.querySelectorAll('.area-nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-'+a)?.classList.add('active');
         if (a === 'notas') {
             requestAnimationFrame(() => document.querySelectorAll('#notas-container textarea[data-auto-grow]').forEach(autoAjustarTextarea));
         }
@@ -9323,6 +9786,7 @@ document.addEventListener('keydown', event => {
 
 // Roda assim que a página termina de carregar
 document.addEventListener('DOMContentLoaded', () => {
+    restaurarEstadoNavegacao();
     inicializarRecortadorBanner();
     const statusSalvo = localStorage.getItem('estadoModoSecreto');
     const btn = document.getElementById('btn-secreto');
