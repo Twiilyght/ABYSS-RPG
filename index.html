@@ -6536,7 +6536,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function enviarRolagemParaServidor(titulo, subtitulo, total, corStatus, txtStatus, detalhes, eventoSom = null, natural = null) {
         if (modoSecreto) return; 
-        const nick = nomeExibicaoAtual() || document.getElementById('user-nickname').value || "Viajante Desconhecido";
+        const nick = String(document.getElementById('user-nickname')?.value || sheet?.nickname || '').trim() || "Personagem sem nome";
         const novaRolagemRef = database.ref('rolagens').push();
         novaRolagemRef.set({
             jogador: nick,
