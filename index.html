@@ -3344,6 +3344,226 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
 
+/* MODELOS PESSOAIS E RESULTADOS DE ROLAGEM */
+.ability-create-actions {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: stretch;
+}
+.btn-template-library {
+    min-width: 94px;
+    padding: 0 13px;
+    color: #d9d1dd;
+    border: 1px solid var(--control-border);
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--container-bg) 93%, #fff);
+    font: 600 .58rem 'Cinzel', serif;
+    letter-spacing: .55px;
+    cursor: pointer;
+}
+.btn-template-library:hover {
+    color: var(--text-gold);
+    border-color: color-mix(in srgb, var(--text-gold) 58%, var(--control-border));
+    background: color-mix(in srgb, var(--text-gold) 8%, var(--container-bg));
+    transform: translateY(-1px);
+}
+.btn-card-template { color: color-mix(in srgb, var(--text-gold) 72%, #777); }
+.template-library-modal {
+    width: min(900px, calc(100vw - 28px));
+    max-height: min(780px, calc(100vh - 32px));
+    padding: 0 24px 24px;
+    overflow: auto;
+}
+.template-library-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(155px, 215px);
+    gap: 10px;
+    margin: 16px 0 9px;
+}
+.template-library-toolbar .modal-input { margin: 0; }
+.template-library-sync-note {
+    min-height: 18px;
+    margin-bottom: 10px;
+    color: #7f7784;
+    font-size: .72rem;
+}
+.template-library-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+    min-height: 130px;
+}
+.template-library-card {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 12px;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--control-border);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--container-bg) 92%, #fff);
+}
+.template-library-card:hover { border-color: color-mix(in srgb, var(--light-purple) 45%, var(--control-border)); }
+.template-library-thumb {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    overflow: hidden;
+    color: #77717c;
+    border: 1px solid var(--flat-line);
+    border-radius: 6px;
+    background: #08070a;
+    font-size: 1.35rem;
+}
+.template-library-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.template-library-card-main { display: grid; align-content: start; min-width: 0; gap: 4px; }
+.template-library-card-head { display: flex; align-items: center; min-width: 0; gap: 7px; }
+.template-library-card-head strong {
+    overflow: hidden;
+    color: #f1edf2;
+    font: 700 .84rem 'Cinzel', serif;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.template-kind-badge {
+    flex: 0 0 auto;
+    padding: 3px 5px;
+    color: var(--text-gold);
+    border: 1px solid color-mix(in srgb, var(--text-gold) 36%, transparent);
+    border-radius: 4px;
+    font: .48rem 'Cinzel', serif;
+    letter-spacing: .55px;
+}
+.template-library-summary {
+    overflow: hidden;
+    color: #8d8592;
+    font-size: .72rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.template-library-actions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+.template-library-actions button {
+    min-height: 28px;
+    padding: 4px 8px;
+    color: #bbb3bf;
+    border: 1px solid var(--flat-line);
+    border-radius: 5px;
+    background: transparent;
+    font-size: .68rem;
+    cursor: pointer;
+}
+.template-library-actions button:first-child {
+    color: #fff;
+    border-color: color-mix(in srgb, var(--primary-purple) 58%, var(--flat-line));
+    background: color-mix(in srgb, var(--primary-purple) 24%, var(--container-bg));
+}
+.template-library-actions button:hover { color: #fff; border-color: var(--light-purple); transform: translateY(-1px); }
+.template-library-empty {
+    grid-column: 1 / -1;
+    display: grid;
+    place-items: center;
+    min-height: 150px;
+    padding: 26px;
+    color: #837b88;
+    border: 1px dashed var(--flat-line);
+    border-radius: 8px;
+    text-align: center;
+}
+
+#central-popup {
+    --popup-status-color: var(--text-gold);
+    width: min(390px, calc(100vw - 28px));
+    padding: 18px 20px 16px;
+    border: 1px solid var(--flat-line);
+    border-top: 3px solid var(--popup-status-color);
+    border-left: 1px solid var(--flat-line);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--container-bg) 97%, #000);
+    box-shadow: none !important;
+    text-align: left;
+    transform: translateY(12px);
+    transition: opacity .18s ease, transform .18s ease;
+}
+#central-popup.active { transform: translateY(0); }
+#central-popup.roll-popup-mode { width: min(430px, calc(100vw - 28px)); padding: 22px 24px 21px; }
+#central-popup .pop-close-btn {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    display: grid;
+    place-items: center;
+    width: 27px;
+    height: 27px;
+    padding: 0;
+    color: #837b88;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    font: 700 .68rem Arial, sans-serif;
+    cursor: pointer;
+}
+#central-popup .pop-close-btn:hover { color: #fff; background: rgba(255,255,255,.055); }
+.roll-popup-title {
+    padding: 0 24px;
+    color: #f4eff5;
+    font: 700 clamp(.76rem, 2vw, .94rem) 'Cinzel', serif;
+    letter-spacing: .75px;
+    text-align: center;
+    text-transform: uppercase;
+}
+.roll-popup-rule {
+    width: 100%;
+    height: 1px;
+    margin: 11px 0 13px;
+    background: linear-gradient(90deg, transparent, var(--popup-status-color) 12%, var(--popup-status-color) 88%, transparent);
+    opacity: .82;
+}
+.roll-popup-status {
+    color: var(--popup-status-color);
+    font: 700 .73rem 'Cinzel', serif;
+    letter-spacing: 1.2px;
+    text-align: center;
+    text-transform: uppercase;
+}
+.roll-popup-value {
+    margin: 8px 0 13px;
+    color: #fff;
+    font: 700 clamp(2.7rem, 10vw, 4rem) 'Cinzel', serif;
+    line-height: 1;
+    text-align: center;
+}
+.roll-popup-formula {
+    padding-top: 13px;
+    border-top: 1px solid var(--flat-line-soft);
+    color: #aaa2ae;
+    line-height: 1.45;
+    text-align: center;
+}
+.roll-popup-formula-label {
+    margin-bottom: 5px;
+    color: color-mix(in srgb, var(--text-gold) 70%, #77717c);
+    font: 700 .52rem 'Cinzel', serif;
+    letter-spacing: 1.25px;
+}
+.roll-popup-formula-lead { color: #dad4dd; font-size: .84rem; overflow-wrap: anywhere; }
+.roll-popup-formula-detail { margin-top: 5px; color: #77717c; font-size: .72rem; overflow-wrap: anywhere; }
+.roll-popup-formula-lead,
+.roll-popup-formula-detail,
+.system-popup-subtitle,
+.system-popup-detail { font-family: var(--font-reading); }
+.system-popup-title { padding-right: 24px; color: #bda9d3; font: 700 .74rem 'Cinzel', serif; letter-spacing: 1px; }
+.system-popup-subtitle { margin-top: 7px; color: #d4ced7; font-size: .86rem; }
+.system-popup-status { margin-top: 7px; color: var(--popup-status-color); font: 700 .68rem 'Cinzel', serif; letter-spacing: .8px; }
+.system-popup-value { margin-top: 4px; color: #f2edf3; font: 700 1.2rem 'Cinzel', serif; overflow-wrap: anywhere; }
+.system-popup-detail { margin-top: 5px; color: #77717c; font-size: .72rem; line-height: 1.4; }
+
+@media (max-width: 680px) {
+    .ability-create-actions { grid-template-columns: minmax(0, 1fr) auto; }
+    .ability-create-actions .btn-template-library { grid-column: 1 / -1; min-height: 36px; }
+    .template-library-toolbar, .template-library-grid { grid-template-columns: 1fr; }
+    #central-popup { right: 14px; bottom: 14px; }
+}
+
     </style>
 </head>
 <body>
@@ -3662,6 +3882,7 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
             <div class="section-title">Ataques</div>
             <div class="ability-create-actions">
                 <button class="btn-forge" onclick="abrirEditorHab('ataque')">+ Forjar Novo Ataque</button>
+                <button class="btn-template-library" onclick="abrirModelosPessoais('ataque')">☆ Modelos</button>
                 <button class="btn-separator-create" onclick="abrirEditorSeparador('ataque')">— Separador</button>
             </div>
             <!-- NOVA BARRA DE PESQUISA AQUI -->
@@ -3673,6 +3894,7 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
             <div class="section-title">Habilidades</div>
             <div class="ability-create-actions">
                 <button class="btn-forge" onclick="abrirEditorHab('habilidade')">+ Forjar Nova Habilidade</button>
+                <button class="btn-template-library" onclick="abrirModelosPessoais('habilidade')">☆ Modelos</button>
                 <button class="btn-separator-create" onclick="abrirEditorSeparador('habilidade')">— Separador</button>
             </div>
             <!-- NOVA BARRA DE PESQUISA AQUI -->
@@ -3685,6 +3907,7 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
         <div class="section-title">Feitiços</div>
         <div class="ability-create-actions">
             <button class="btn-forge" onclick="abrirEditorHab('feitico')">+ Forjar Novo Feitiço</button>
+            <button class="btn-template-library" onclick="abrirModelosPessoais('feitico')">☆ Modelos</button>
             <button class="btn-separator-create" onclick="abrirEditorSeparador('feitico')">— Separador</button>
         </div>
         <!-- NOVA BARRA DE PESQUISA AQUI -->
@@ -3707,6 +3930,7 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
             </div>
             <div class="ability-create-actions" style="margin:0;">
                 <button class="btn-forge" onclick="abrirEditorItem()" style="width: auto; margin-bottom: 0; padding: 8px 15px;">+ Forjar Novo Item</button>
+                <button class="btn-template-library" onclick="abrirModelosPessoais('item')">☆ Modelos</button>
                 <button class="btn-separator-create" onclick="adicionarSeparadorInventario()">— Separador</button>
             </div>
         </div>
@@ -4200,8 +4424,32 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
 <div id="central-popup" role="status" aria-live="polite" aria-atomic="true">
     <div class="ornament tl"></div><div class="ornament tr"></div>
     <div class="ornament bl"></div><div class="ornament br"></div>
-    <span class="pop-close-btn" onclick="fecharPopup()">✕</span>
+    <button type="button" class="pop-close-btn" onclick="fecharPopup()" aria-label="Fechar resultado">✕</button>
     <div id="pop-content"></div>
+</div>
+
+<div id="modal-personal-templates" class="modal template-library-modal" role="dialog" aria-modal="true" aria-labelledby="template-library-heading">
+    <div class="settings-modal-header">
+        <div>
+            <span class="settings-eyebrow">BIBLIOTECA PESSOAL</span>
+            <h3 id="template-library-heading">Modelos reutilizáveis</h3>
+        </div>
+        <button type="button" class="settings-close" onclick="fecharModelosPessoais()" aria-label="Fechar modelos">✕</button>
+    </div>
+    <p class="settings-intro">Use configurações salvas em qualquer personagem. Estados como “equipado”, “ativado” e “recolhido” nunca são transportados.</p>
+    <div class="template-library-toolbar">
+        <input type="search" id="template-library-search" class="modal-input" placeholder="Pesquisar modelos..." oninput="renderizarModelosPessoais()">
+        <select id="template-library-filter" class="modal-input" onchange="renderizarModelosPessoais()" aria-label="Filtrar modelos por tipo">
+            <option value="">Todos os tipos</option>
+            <option value="ataque">Ataques</option>
+            <option value="habilidade">Habilidades</option>
+            <option value="feitico">Feitiços</option>
+            <option value="item">Equipamentos</option>
+        </select>
+    </div>
+    <div id="template-library-sync-note" class="template-library-sync-note"></div>
+    <div id="template-library-list" class="template-library-grid"></div>
+    <div class="settings-actions"><button type="button" class="settings-secondary" onclick="fecharModelosPessoais()">Fechar</button></div>
 </div>
 
 <div id="modal-hab" class="modal creation-modal" role="dialog" aria-modal="true" aria-labelledby="hab-modal-heading">
@@ -5024,6 +5272,7 @@ function resetarConfiguracoesAudio() {
         if (!confirm(`Desfazer "${entrada.titulo}" e restaurar o estado anterior?`)) return;
         let concluido = false;
         let inventarioAlterado = false;
+        let habilidadesAlteradas = false;
         historicoSuspenso = true;
         try {
             const undo = entrada.undo;
@@ -5050,6 +5299,12 @@ function resetarConfiguracoesAudio() {
                 const posicoes = new Map(undo.ordem.map((id, indice) => [id, indice]));
                 sheet.itens.sort((a, b) => (posicoes.get(a.idUnico) ?? 99999) - (posicoes.get(b.idUnico) ?? 99999));
                 concluido = inventarioAlterado = true;
+            } else if (undo.tipo === 'habilidade-remover' && undo.idUnico) {
+                const indice = sheet.habilidades.findIndex(habilidade => habilidade.idUnico === undo.idUnico);
+                if (indice >= 0) {
+                    sheet.habilidades.splice(indice, 1);
+                    concluido = habilidadesAlteradas = true;
+                }
             }
         } finally {
             historicoSuspenso = false;
@@ -5063,6 +5318,7 @@ function resetarConfiguracoesAudio() {
             atualizarPainelInventario();
             renderAbilities();
         }
+        if (habilidadesAlteradas) renderAbilities();
         const autor = autorAtualHistorico();
         entrada.desfeito = true;
         entrada.desfeitoEm = Date.now();
@@ -5692,6 +5948,391 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     })();
     let currentUser = null;
 
+    const PERSONAL_TEMPLATES_PREFIX = 'abyssPersonalTemplatesV1:';
+    const PERSONAL_TEMPLATES_MIGRATION_PREFIX = 'abyssPersonalTemplatesMigratedV1:';
+    const PERSONAL_TEMPLATE_IMAGE_LIMIT = 360000;
+    const PERSONAL_TEMPLATE_TYPES = new Set(['ataque', 'habilidade', 'feitico', 'item']);
+    let modelosPessoais = [];
+
+    function chaveLocalModelosPessoais(user = currentUser) {
+        return `${PERSONAL_TEMPLATES_PREFIX}${user?.uid || 'local'}`;
+    }
+
+    function gerarIdModeloPessoal() {
+        return `tpl_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+    }
+
+    function gerarIdConteudoFicha(prefixo = 'entry') {
+        return `${prefixo}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    }
+
+    function normalizarModeloPessoal(valor, idFallback = '') {
+        if (!valor || typeof valor !== 'object') return null;
+        const subtype = PERSONAL_TEMPLATE_TYPES.has(valor.subtype) ? valor.subtype : '';
+        if (!subtype || !valor.data || typeof valor.data !== 'object') return null;
+        const id = String(valor.id || idFallback || gerarIdModeloPessoal()).replace(/[^a-zA-Z0-9_-]/g, '_');
+        const kind = subtype === 'item' ? 'item' : 'action';
+        return {
+            id,
+            kind,
+            subtype,
+            name: String(valor.name || valor.data.nome || 'Modelo sem nome').trim() || 'Modelo sem nome',
+            data: clonarParaHistorico(valor.data),
+            imageOmitted: valor.imageOmitted === true,
+            createdAt: Number(valor.createdAt) || Date.now(),
+            updatedAt: Number(valor.updatedAt) || Number(valor.createdAt) || Date.now(),
+            schemaVersion: 1
+        };
+    }
+
+    function normalizarModelosPessoais(raw) {
+        const entradas = Array.isArray(raw)
+            ? raw.map((valor, indice) => [valor?.id || `legacy_${indice}`, valor])
+            : Object.entries(raw && typeof raw === 'object' ? raw : {});
+        return entradas
+            .map(([id, valor]) => normalizarModeloPessoal(valor, id))
+            .filter(Boolean)
+            .sort((a, b) => b.updatedAt - a.updatedAt);
+    }
+
+    function lerModelosPessoaisLocais(user = currentUser) {
+        try {
+            return normalizarModelosPessoais(JSON.parse(localStorage.getItem(chaveLocalModelosPessoais(user)) || '[]'));
+        } catch (erro) {
+            console.warn('Não foi possível ler os modelos pessoais locais.', erro);
+            return [];
+        }
+    }
+
+    function salvarModelosPessoaisLocais(user = currentUser) {
+        localStorage.setItem(chaveLocalModelosPessoais(user), JSON.stringify(modelosPessoais));
+    }
+
+    function mapaModelosPessoais() {
+        return modelosPessoais.reduce((mapa, modelo) => {
+            mapa[modelo.id] = modelo;
+            return mapa;
+        }, {});
+    }
+
+    function atualizarNotaSincronizacaoModelos() {
+        const nota = document.getElementById('template-library-sync-note');
+        if (!nota) return;
+        nota.textContent = currentUser
+            ? `${modelosPessoais.length} ${modelosPessoais.length === 1 ? 'modelo sincronizado' : 'modelos sincronizados'} com sua conta.`
+            : `${modelosPessoais.length} ${modelosPessoais.length === 1 ? 'modelo salvo' : 'modelos salvos'} neste navegador. Entre com o Google para sincronizar.`;
+    }
+
+    async function persistirModelosPessoais() {
+        modelosPessoais = normalizarModelosPessoais(modelosPessoais);
+        salvarModelosPessoaisLocais();
+        atualizarNotaSincronizacaoModelos();
+        if (currentUser) {
+            try {
+                await database.ref(`users/${currentUser.uid}/personalTemplates`).set(mapaModelosPessoais());
+            } catch (erro) {
+                console.warn('O modelo foi salvo neste navegador, mas a sincronização ficou pendente.', erro);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    async function carregarModelosPessoais(user = currentUser) {
+        const uidEsperado = user?.uid || '';
+        const locais = lerModelosPessoaisLocais(user);
+        if (!user) {
+            modelosPessoais = locais;
+            atualizarNotaSincronizacaoModelos();
+            if (document.getElementById('modal-personal-templates')?.style.display === 'block') renderizarModelosPessoais();
+            return;
+        }
+        try {
+            const snapshot = await database.ref(`users/${user.uid}/personalTemplates`).once('value');
+            if (currentUser?.uid !== uidEsperado) return;
+            const remotos = normalizarModelosPessoais(snapshot.val());
+            const chaveMigracao = `${PERSONAL_TEMPLATES_MIGRATION_PREFIX}${user.uid}`;
+            const anonimos = localStorage.getItem(chaveMigracao) ? [] : lerModelosPessoaisLocais(null);
+            const mesclados = new Map();
+            [...locais, ...anonimos, ...remotos].forEach(modelo => {
+                const anterior = mesclados.get(modelo.id);
+                if (!anterior || modelo.updatedAt >= anterior.updatedAt) mesclados.set(modelo.id, modelo);
+            });
+            modelosPessoais = normalizarModelosPessoais([...mesclados.values()]);
+            salvarModelosPessoaisLocais(user);
+            localStorage.setItem(chaveMigracao, '1');
+            database.ref(`users/${user.uid}/personalTemplates`).set(mapaModelosPessoais())
+                .catch(erro => console.warn('A biblioteca foi carregada, mas a atualização remota ficou pendente.', erro));
+        } catch (erro) {
+            if (currentUser?.uid === uidEsperado) modelosPessoais = locais;
+            console.warn('Não foi possível sincronizar os modelos pessoais.', erro);
+        }
+        atualizarNotaSincronizacaoModelos();
+        if (document.getElementById('modal-personal-templates')?.style.display === 'block') renderizarModelosPessoais();
+    }
+
+    function imagemSeguraParaModelo(dados) {
+        const copia = clonarParaHistorico(dados || {});
+        const imagem = typeof copia.img === 'string' ? copia.img : '';
+        const imageOmitted = imagem.startsWith('data:') && imagem.length > PERSONAL_TEMPLATE_IMAGE_LIMIT;
+        if (imageOmitted) copia.img = '';
+        return { data: copia, imageOmitted };
+    }
+
+    function prepararAcaoReutilizavel(origem) {
+        const copia = clonarParaHistorico(origem || {});
+        delete copia.geradoPorItem;
+        delete copia.itemIdRef;
+        delete copia.idUnico;
+        copia.tipo = PERSONAL_TEMPLATE_TYPES.has(copia.tipo) && copia.tipo !== 'item' ? copia.tipo : 'habilidade';
+        copia.ativa = false;
+        copia.recolhido = false;
+        copia.isSeparator = false;
+        return copia;
+    }
+
+    function prepararItemReutilizavel(origem) {
+        const copia = clonarParaHistorico(origem || {});
+        delete copia.idUnico;
+        copia.isSeparator = false;
+        copia.equipado = false;
+        copia.recolhido = false;
+        copia.ataqueRecolhido = false;
+        return copia;
+    }
+
+    function nomeCopiaDisponivel(nomeOriginal, colecao) {
+        const raiz = String(nomeOriginal || 'Sem nome').replace(/\s+— Cópia(?: \d+)?$/i, '').trim() || 'Sem nome';
+        const usados = new Set((colecao || []).map(item => String(item?.nome || '').trim().toLocaleLowerCase('pt-BR')));
+        let tentativa = `${raiz} — Cópia`;
+        let numero = 2;
+        while (usados.has(tentativa.toLocaleLowerCase('pt-BR'))) tentativa = `${raiz} — Cópia ${numero++}`;
+        return tentativa;
+    }
+
+    function duplicarHabilidade(indice) {
+        tocarSom('click');
+        const original = sheet.habilidades[indice];
+        if (!original || original.isSeparator) return;
+        const copia = prepararAcaoReutilizavel(original);
+        copia.nome = nomeCopiaDisponivel(original.nome, sheet.habilidades);
+        copia.idUnico = gerarIdConteudoFicha('action');
+        sheet.habilidades.splice(indice + 1, 0, copia);
+        renderAbilities();
+        registrarHistoricoAcao({
+            categoria: 'conteudo',
+            titulo: `Conteúdo duplicado: ${copia.nome}`,
+            detalhes: copia.tipo === 'feitico' ? 'Feitiço duplicado' : (copia.tipo === 'ataque' ? 'Ataque duplicado' : 'Habilidade duplicada'),
+            undo: { tipo: 'habilidade-remover', idUnico: copia.idUnico }
+        });
+        marcarAlteracao();
+    }
+
+    function duplicarItem(indice) {
+        tocarSom('click');
+        const original = sheet.itens[indice];
+        if (!original || original.isSeparator) return;
+        const copia = prepararItemReutilizavel(original);
+        copia.nome = nomeCopiaDisponivel(original.nome, sheet.itens);
+        copia.idUnico = gerarIdConteudoFicha('item');
+        sheet.itens.splice(indice + 1, 0, copia);
+        atualizarVisualModificadoresGlobais();
+        atualizarPainelInventario();
+        registrarHistoricoItemCriado(copia, indice + 1);
+        marcarAlteracao();
+    }
+
+    async function salvarHabilidadeComoModelo(indice) {
+        tocarSom('click');
+        const origem = sheet.habilidades[indice];
+        if (!origem || origem.isSeparator) return;
+        const imagem = imagemSeguraParaModelo(prepararAcaoReutilizavel(origem));
+        const subtype = PERSONAL_TEMPLATE_TYPES.has(origem.tipo) && origem.tipo !== 'item' ? origem.tipo : 'habilidade';
+        const agora = Date.now();
+        const modelo = {
+            id: gerarIdModeloPessoal(),
+            kind: 'action',
+            subtype,
+            name: String(origem.nome || 'Modelo sem nome'),
+            data: imagem.data,
+            imageOmitted: imagem.imageOmitted,
+            createdAt: agora,
+            updatedAt: agora,
+            schemaVersion: 1
+        };
+        modelosPessoais.unshift(modelo);
+        try {
+            const sincronizado = await persistirModelosPessoais();
+            renderizarModelosPessoais();
+            const detalheImagem = imagem.imageOmitted ? 'A configuração foi salva sem a imagem embutida, que era grande demais.' : 'Disponível para seus outros personagens.';
+            spawnPopup('MODELO PESSOAL', modelo.name, 'SALVO', '#d4af37', 'PRONTO PARA REUTILIZAR', sincronizado ? detalheImagem : `${detalheImagem} A sincronização com a conta ficou pendente.`);
+        } catch (erro) {
+            modelosPessoais = modelosPessoais.filter(item => item.id !== modelo.id);
+            console.error('Erro ao salvar modelo pessoal:', erro);
+            alert('Não foi possível salvar este modelo. Tente usar uma imagem menor.');
+        }
+    }
+
+    async function salvarItemComoModelo(indice) {
+        tocarSom('click');
+        const origem = sheet.itens[indice];
+        if (!origem || origem.isSeparator) return;
+        const imagem = imagemSeguraParaModelo(prepararItemReutilizavel(origem));
+        const agora = Date.now();
+        const modelo = {
+            id: gerarIdModeloPessoal(),
+            kind: 'item',
+            subtype: 'item',
+            name: String(origem.nome || 'Equipamento sem nome'),
+            data: imagem.data,
+            imageOmitted: imagem.imageOmitted,
+            createdAt: agora,
+            updatedAt: agora,
+            schemaVersion: 1
+        };
+        modelosPessoais.unshift(modelo);
+        try {
+            const sincronizado = await persistirModelosPessoais();
+            renderizarModelosPessoais();
+            const detalheImagem = imagem.imageOmitted ? 'A configuração foi salva sem a imagem embutida, que era grande demais.' : 'Disponível para seus outros personagens.';
+            spawnPopup('MODELO PESSOAL', modelo.name, 'SALVO', '#d4af37', 'PRONTO PARA REUTILIZAR', sincronizado ? detalheImagem : `${detalheImagem} A sincronização com a conta ficou pendente.`);
+        } catch (erro) {
+            modelosPessoais = modelosPessoais.filter(item => item.id !== modelo.id);
+            console.error('Erro ao salvar modelo pessoal:', erro);
+            alert('Não foi possível salvar este modelo. Tente usar uma imagem menor.');
+        }
+    }
+
+    function abrirModelosPessoais(tipo = '') {
+        tocarSom('click');
+        const filtro = document.getElementById('template-library-filter');
+        const busca = document.getElementById('template-library-search');
+        if (filtro) filtro.value = PERSONAL_TEMPLATE_TYPES.has(tipo) ? tipo : '';
+        if (busca) busca.value = '';
+        renderizarModelosPessoais();
+        document.getElementById('modal-personal-templates').style.display = 'block';
+        requestAnimationFrame(() => busca?.focus());
+    }
+
+    function fecharModelosPessoais() {
+        tocarSom('click');
+        document.getElementById('modal-personal-templates').style.display = 'none';
+    }
+
+    function nomeTipoModelo(tipo) {
+        return ({ ataque: 'ATAQUE', habilidade: 'HABILIDADE', feitico: 'FEITIÇO', item: 'EQUIPAMENTO' })[tipo] || 'MODELO';
+    }
+
+    function resumoModeloPessoal(modelo) {
+        const dados = modelo.data || {};
+        const rolagens = normalizarRolagensPrincipais(dados, modelo.subtype === 'item' && dados.isWeapon);
+        const formulas = rolagens.map(rolagem => `${rolagem.nome}: ${rolagem.formula}${rolagem.atributo ? ` +${rolagem.atributo}` : ''}`);
+        if (formulas.length) return formulas.slice(0, 2).join(' • ');
+        const custos = normalizarCustosAcao(dados).map(custo => `${custo.valor} ${String(custo.tipo || '').toUpperCase()}`);
+        if (custos.length) return `Gastos: ${custos.join(' • ')}`;
+        return String(dados.desc || (modelo.subtype === 'item' ? 'Equipamento reutilizável' : 'Conteúdo reutilizável')).replace(/\s+/g, ' ').trim();
+    }
+
+    function renderizarModelosPessoais() {
+        const lista = document.getElementById('template-library-list');
+        if (!lista) return;
+        const filtro = document.getElementById('template-library-filter')?.value || '';
+        const busca = (document.getElementById('template-library-search')?.value || '').trim().toLocaleLowerCase('pt-BR');
+        const visiveis = modelosPessoais.filter(modelo => {
+            if (filtro && modelo.subtype !== filtro) return false;
+            const alvo = `${modelo.name} ${nomeTipoModelo(modelo.subtype)} ${resumoModeloPessoal(modelo)}`.toLocaleLowerCase('pt-BR');
+            return !busca || alvo.includes(busca);
+        });
+        atualizarNotaSincronizacaoModelos();
+        if (!visiveis.length) {
+            lista.innerHTML = `<div class="template-library-empty">${modelosPessoais.length ? 'Nenhum modelo corresponde a esta pesquisa.' : 'Você ainda não salvou modelos. Use o botão ☆ nos cartões de ataques, habilidades, feitiços ou equipamentos.'}</div>`;
+            return;
+        }
+        const icones = { ataque: '⚔', habilidade: '✦', feitico: '✧', item: '◆' };
+        lista.innerHTML = visiveis.map(modelo => {
+            const imagem = modelo.data?.img
+                ? `<img src="${escapeCampaignHtml(modelo.data.img)}" alt="">`
+                : `<span aria-hidden="true">${icones[modelo.subtype] || '☆'}</span>`;
+            const avisoImagem = modelo.imageOmitted ? ' • imagem omitida' : '';
+            return `<article class="template-library-card">
+                <div class="template-library-thumb">${imagem}</div>
+                <div class="template-library-card-main">
+                    <div class="template-library-card-head"><span class="template-kind-badge">${nomeTipoModelo(modelo.subtype)}</span><strong title="${escapeCampaignHtml(modelo.name)}">${escapeCampaignHtml(modelo.name)}</strong></div>
+                    <div class="template-library-summary" title="${escapeCampaignHtml(resumoModeloPessoal(modelo))}">${escapeCampaignHtml(resumoModeloPessoal(modelo))}${avisoImagem}</div>
+                    <div class="template-library-actions">
+                        <button type="button" onclick="usarModeloPessoal('${escapeCampaignHtml(modelo.id)}')">+ Usar neste personagem</button>
+                        <button type="button" onclick="renomearModeloPessoal('${escapeCampaignHtml(modelo.id)}')">Renomear</button>
+                        <button type="button" onclick="excluirModeloPessoal('${escapeCampaignHtml(modelo.id)}')">Excluir</button>
+                    </div>
+                </div>
+            </article>`;
+        }).join('');
+    }
+
+    function usarModeloPessoal(id) {
+        tocarSom('click');
+        const modelo = modelosPessoais.find(item => item.id === id);
+        if (!modelo) return;
+        if (modelo.kind === 'item') {
+            const item = prepararItemReutilizavel(modelo.data);
+            item.idUnico = gerarIdConteudoFicha('item');
+            sheet.itens.push(item);
+            atualizarVisualModificadoresGlobais();
+            atualizarPainelInventario();
+            registrarHistoricoItemCriado(item, sheet.itens.length - 1);
+        } else {
+            const acao = prepararAcaoReutilizavel(modelo.data);
+            acao.tipo = modelo.subtype;
+            acao.idUnico = gerarIdConteudoFicha('action');
+            sheet.habilidades.push(acao);
+            renderAbilities();
+            registrarHistoricoAcao({
+                categoria: 'conteudo',
+                titulo: `Modelo usado: ${acao.nome || modelo.name}`,
+                detalhes: `${nomeTipoModelo(modelo.subtype)} adicionado à ficha`,
+                undo: { tipo: 'habilidade-remover', idUnico: acao.idUnico }
+            });
+        }
+        marcarAlteracao();
+        fecharModelosPessoais();
+        spawnPopup('MODELO APLICADO', modelo.name, '✓', '#00c875', 'ADICIONADO À FICHA', 'O modelo original permanece disponível na biblioteca.');
+    }
+
+    async function renomearModeloPessoal(id) {
+        tocarSom('click');
+        const modelo = modelosPessoais.find(item => item.id === id);
+        if (!modelo) return;
+        const nome = prompt('Nome deste modelo pessoal:', modelo.name);
+        if (nome === null || !nome.trim()) return;
+        const anterior = modelo.name;
+        modelo.name = nome.trim();
+        modelo.updatedAt = Date.now();
+        try {
+            await persistirModelosPessoais();
+            renderizarModelosPessoais();
+        } catch (erro) {
+            modelo.name = anterior;
+            console.error('Erro ao renomear modelo:', erro);
+            alert('Não foi possível sincronizar o novo nome agora.');
+        }
+    }
+
+    async function excluirModeloPessoal(id) {
+        tocarSom('click');
+        const modelo = modelosPessoais.find(item => item.id === id);
+        if (!modelo || !confirm(`Excluir o modelo pessoal “${modelo.name}”?`)) return;
+        const anteriores = modelosPessoais.slice();
+        modelosPessoais = modelosPessoais.filter(item => item.id !== id);
+        try {
+            await persistirModelosPessoais();
+            renderizarModelosPessoais();
+        } catch (erro) {
+            modelosPessoais = anteriores;
+            console.error('Erro ao excluir modelo:', erro);
+            alert('Não foi possível excluir este modelo agora.');
+        }
+    }
+
     function nomeExibicaoAtual() {
         return String(perfilPublico.nickname || currentUser?.displayName || currentUser?.email || sheet?.nickname || 'Jogador').trim();
     }
@@ -5784,6 +6425,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (user) {
             btnLogin.innerText = "🔓";
             btnLogin.title = "Sair (" + nomeExibicaoAtual() + ")";
+            carregarModelosPessoais(user).catch(erro => console.warn('Não foi possível preparar os modelos pessoais.', erro));
             carregarPerfilPublico(user)
                 .then(() => {
                     btnLogin.title = "Sair (" + nomeExibicaoAtual() + ")";
@@ -5802,6 +6444,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         } else {
             btnLogin.innerText = "👤";
             btnLogin.title = "Login Google";
+            carregarModelosPessoais(null);
             slotManagerState = criarConfiguracaoPadraoSlots();
             renderizarSeletoresSlots('1');
             sheet = getFichaZerada();
@@ -7088,6 +7731,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 htmlControles = `
                     ${botaoRecolher}
                     <span class="equipment-origin-label">EQUIPAMENTO</span>
+                    <button class="btn-action-card" onclick="duplicarHabilidade(${i})" title="Duplicar como ataque independente">⧉</button>
+                    <button class="btn-action-card btn-card-template" onclick="salvarHabilidadeComoModelo(${i})" title="Salvar como modelo pessoal">☆</button>
                     <button class="btn-action-card" onclick="abrirEditorItemPorReferencia('${escapeCampaignHtml(h.itemIdRef || '')}')" title="Editar equipamento no inventário">✏️</button>`;
             } else {
                 htmlControles = `
@@ -7100,8 +7745,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                         <option value="habilidade">Habilidade</option>
                         <option value="feitico">Feitiço</option>
                     </select>
-                    <button class="btn-action-card" onclick="abrirEditorHab('${h.tipo}', ${i})">✏️</button>
-                    <button class="btn-action-card" onclick="removerHab(${i})" style="color:#ff5252;">✕</button>
+                    <button class="btn-action-card" onclick="duplicarHabilidade(${i})" title="Duplicar">⧉</button>
+                    <button class="btn-action-card btn-card-template" onclick="salvarHabilidadeComoModelo(${i})" title="Salvar como modelo pessoal">☆</button>
+                    <button class="btn-action-card" onclick="abrirEditorHab('${h.tipo}', ${i})" title="Editar">✏️</button>
+                    <button class="btn-action-card" onclick="removerHab(${i})" title="Remover" style="color:#ff5252;">✕</button>
                 `;
             }
 
@@ -7364,8 +8011,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                         <span class="inventory-order-actions"><button onclick="moverItemInventario(${i}, -1)" title="Mover para cima">↑</button><button onclick="moverItemInventario(${i}, 1)" title="Mover para baixo">↓</button></span>
                         <button class="card-collapse-toggle" onclick="alternarCartaoItem(${i})" title="${recolhido ? 'Abrir conteúdo' : 'Recolher conteúdo'}" aria-expanded="${!recolhido}">${recolhido ? '▸' : '▾'}</button>
                         <button class="btn-action-card" onclick="alternarEquiparItem(${i})">${item.equipado ? '🛡️ Unarm' : '⚔️ Equip'}</button>
-                        <button class="btn-action-card" onclick="abrirEditorItem(${i})">✏️</button>
-                        <button class="btn-action-card" onclick="removerItem(${i})" style="color:#ff5252;">✕</button>
+                        <button class="btn-action-card" onclick="duplicarItem(${i})" title="Duplicar equipamento">⧉</button>
+                        <button class="btn-action-card btn-card-template" onclick="salvarItemComoModelo(${i})" title="Salvar como modelo pessoal">☆</button>
+                        <button class="btn-action-card" onclick="abrirEditorItem(${i})" title="Editar">✏️</button>
+                        <button class="btn-action-card" onclick="removerItem(${i})" title="Remover" style="color:#ff5252;">✕</button>
                     </div>
                 </div>
                 <div class="collapsible-card-body" ${recolhido ? 'hidden' : ''}>
@@ -7423,18 +8072,37 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 }
 
     function spawnPopup(titulo, subtitulo, total, corStatus, txtStatus, detalhes = "") {
-        document.getElementById('pop-content').innerHTML = `
-            <div style="font-size: 0.9rem; color: #a385cc; letter-spacing: 1px;">${titulo}</div>
-            <div style="height:1px; background:linear-gradient(90deg, transparent, var(--text-gold), transparent); margin: 8px 0;"></div>
-            <div class="pop-detail-text">${subtitulo}</div>
-            <div class="pop-status-text" style="color:${corStatus}">${txtStatus}</div>
-            <div class="pop-total-text">${total}</div>
-            <div style="font-size:0.75rem; color:#666; margin-top:3px; font-family:'Cinzel'; line-height: 1.4;">${detalhes}</div>`;
-        
         const pop = document.getElementById('central-popup');
+        const conteudo = document.getElementById('pop-content');
+        const totalTexto = String(total ?? '').trim();
+        const resultadoNumerico = totalTexto !== '' && Number.isFinite(Number(totalTexto));
+        pop.style.setProperty('--popup-status-color', corStatus || 'var(--text-gold)');
+        pop.classList.toggle('roll-popup-mode', resultadoNumerico);
+        pop.classList.toggle('system-popup-mode', !resultadoNumerico);
+
+        if (resultadoNumerico) {
+            conteudo.innerHTML = `
+                <div class="roll-popup-title">${titulo}</div>
+                <div class="roll-popup-rule" aria-hidden="true"></div>
+                <div class="roll-popup-status">${txtStatus}</div>
+                <div class="roll-popup-value">${totalTexto}</div>
+                <div class="roll-popup-formula">
+                    <div class="roll-popup-formula-label">CÁLCULO / FÓRMULA</div>
+                    <div class="roll-popup-formula-lead">${subtitulo}</div>
+                    ${detalhes ? `<div class="roll-popup-formula-detail">${detalhes}</div>` : ''}
+                </div>`;
+        } else {
+            conteudo.innerHTML = `
+                <div class="system-popup-title">${titulo}</div>
+                <div class="system-popup-subtitle">${subtitulo}</div>
+                <div class="system-popup-status">${txtStatus}</div>
+                <div class="system-popup-value">${totalTexto}</div>
+                ${detalhes ? `<div class="system-popup-detail">${detalhes}</div>` : ''}`;
+        }
+
         pop.classList.add('active');
         clearTimeout(window.popTimer);
-        window.popTimer = setTimeout(fecharPopup, 6000);
+        window.popTimer = setTimeout(fecharPopup, resultadoNumerico ? 7500 : 6000);
     }
 
     function normalizarConfigRolagem() {
