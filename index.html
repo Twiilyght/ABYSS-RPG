@@ -15,6 +15,7 @@
             --primary-purple: #7b1fa2;
             --light-purple: #bc4ed8;
             --text-gold: #d4af37;
+            --roll-popup-border: #d4af37;
             --text-light: #f0f0f0;
             --border-color: #4a3427;
             --skill-glow-2: #00ff88;
@@ -3472,11 +3473,9 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
 
 #central-popup {
     --popup-status-color: var(--text-gold);
-    width: min(390px, calc(100vw - 28px));
-    padding: 18px 20px 16px;
-    border: 1px solid var(--flat-line);
-    border-top: 3px solid var(--popup-status-color);
-    border-left: 1px solid var(--flat-line);
+    width: min(310px, calc(100vw - 28px));
+    padding: 14px 16px 13px;
+    border: 1px solid var(--roll-popup-border, #d4af37);
     border-radius: 6px;
     background: color-mix(in srgb, var(--container-bg) 97%, #000);
     box-shadow: none !important;
@@ -3485,7 +3484,7 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
     transition: opacity .18s ease, transform .18s ease;
 }
 #central-popup.active { transform: translateY(0); }
-#central-popup.roll-popup-mode { width: min(430px, calc(100vw - 28px)); padding: 22px 24px 21px; }
+#central-popup.roll-popup-mode { width: min(340px, calc(100vw - 28px)); padding: 16px 18px 15px; }
 #central-popup .pop-close-btn {
     position: absolute;
     top: 7px;
@@ -3506,47 +3505,47 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
 .roll-popup-title {
     padding: 0 24px;
     color: #f4eff5;
-    font: 700 clamp(.76rem, 2vw, .94rem) 'Cinzel', serif;
-    letter-spacing: .75px;
+    font: 700 clamp(.68rem, 1.8vw, .82rem) 'Cinzel', serif;
+    letter-spacing: .65px;
     text-align: center;
     text-transform: uppercase;
 }
 .roll-popup-rule {
     width: 100%;
     height: 1px;
-    margin: 11px 0 13px;
-    background: linear-gradient(90deg, transparent, var(--popup-status-color) 12%, var(--popup-status-color) 88%, transparent);
+    margin: 8px 0 9px;
+    background: linear-gradient(90deg, transparent, var(--roll-popup-border, #d4af37) 12%, var(--roll-popup-border, #d4af37) 88%, transparent);
     opacity: .82;
 }
 .roll-popup-status {
     color: var(--popup-status-color);
-    font: 700 .73rem 'Cinzel', serif;
-    letter-spacing: 1.2px;
+    font: 700 .64rem 'Cinzel', serif;
+    letter-spacing: 1px;
     text-align: center;
     text-transform: uppercase;
 }
 .roll-popup-value {
-    margin: 8px 0 13px;
+    margin: 6px 0 9px;
     color: #fff;
-    font: 700 clamp(2.7rem, 10vw, 4rem) 'Cinzel', serif;
+    font: 700 clamp(2.05rem, 8vw, 2.8rem) 'Cinzel', serif;
     line-height: 1;
     text-align: center;
 }
 .roll-popup-formula {
-    padding-top: 13px;
+    padding-top: 9px;
     border-top: 1px solid var(--flat-line-soft);
     color: #aaa2ae;
     line-height: 1.45;
     text-align: center;
 }
 .roll-popup-formula-label {
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     color: color-mix(in srgb, var(--text-gold) 70%, #77717c);
-    font: 700 .52rem 'Cinzel', serif;
-    letter-spacing: 1.25px;
+    font: 700 .47rem 'Cinzel', serif;
+    letter-spacing: 1.05px;
 }
-.roll-popup-formula-lead { color: #dad4dd; font-size: .84rem; overflow-wrap: anywhere; }
-.roll-popup-formula-detail { margin-top: 5px; color: #77717c; font-size: .72rem; overflow-wrap: anywhere; }
+.roll-popup-formula-lead { color: #dad4dd; font-size: .75rem; overflow-wrap: anywhere; }
+.roll-popup-formula-detail { max-height: 72px; margin-top: 3px; overflow: auto; color: #77717c; font-size: .66rem; overflow-wrap: anywhere; scrollbar-width: thin; }
 .roll-popup-formula-lead,
 .roll-popup-formula-detail,
 .system-popup-subtitle,
@@ -3556,6 +3555,31 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
 .system-popup-status { margin-top: 7px; color: var(--popup-status-color); font: 700 .68rem 'Cinzel', serif; letter-spacing: .8px; }
 .system-popup-value { margin-top: 4px; color: #f2edf3; font: 700 1.2rem 'Cinzel', serif; overflow-wrap: anywhere; }
 .system-popup-detail { margin-top: 5px; color: #77717c; font-size: .72rem; line-height: 1.4; }
+
+.class-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; }
+.class-title-row h2 { margin-right: 1px; }
+.mundane-mode-toggle {
+    min-height: 25px;
+    padding: 4px 9px;
+    color: #968f9b;
+    border: 1px solid var(--flat-line);
+    border-radius: 5px;
+    background: transparent;
+    font: 700 .52rem 'Cinzel', serif;
+    letter-spacing: .7px;
+    cursor: pointer;
+}
+.mundane-mode-toggle:hover {
+    color: #fff;
+    border-color: var(--text-gold);
+    background: color-mix(in srgb, var(--text-gold) 7%, var(--container-bg));
+}
+.mundane-mode-toggle.active,
+.mundane-mode-toggle[aria-pressed="true"] {
+    color: var(--text-gold);
+    border-color: var(--text-gold);
+    background: color-mix(in srgb, var(--text-gold) 10%, var(--container-bg));
+}
 
 @media (max-width: 680px) {
     .ability-create-actions { grid-template-columns: minmax(0, 1fr) auto; }
@@ -3644,7 +3668,10 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
         <div class="class-selector-header">
             <div>
                 <span class="dashboard-eyebrow">CAMINHO DO PERSONAGEM</span>
-                <h2>Escolha sua classe</h2>
+                <div class="class-title-row">
+                    <h2>Escolha sua classe</h2>
+                    <button type="button" id="btn-mundano" class="mundane-mode-toggle" aria-pressed="false" onclick="alternarModoMundano()" title="Usa os valores mundanos da classe e ignora progressão de recursos por nível">Mundano</button>
+                </div>
             </div>
             <span class="class-selector-note">A classe define seus recursos e sua forma de encarar o Abismo.</span>
         </div>
@@ -4277,6 +4304,10 @@ input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="
         <input type="color" id="picker-gold" oninput="mudarCor('--text-gold', this.value)">
     </div>
     <div class="theme-row">
+        <span>Borda do popup:</span>
+        <input type="color" id="picker-roll-popup-border" oninput="mudarCor('--roll-popup-border', this.value)">
+    </div>
+    <div class="theme-row">
         <span>Caixas / Containers:</span>
         <input type="color" id="picker-container" oninput="mudarCor('--container-bg', this.value)">
     </div>
@@ -4877,6 +4908,7 @@ function resetarConfiguracoesAudio() {
         mudarCor('--primary-purple', '#7b1fa2');
         mudarCor('--light-purple', '#bc4ed8');
         mudarCor('--text-gold', '#d4af37');
+        mudarCor('--roll-popup-border', '#d4af37');
         mudarCor('--skill-glow-2', '#00ff88');
         mudarCor('--skill-glow-4', '#d4af37');
         limparImagemFundo();
@@ -4895,6 +4927,7 @@ function resetarConfiguracoesAudio() {
             '--primary-purple': 'picker-prim',
             '--light-purple': 'picker-light',
             '--text-gold': 'picker-gold',
+            '--roll-popup-border': 'picker-roll-popup-border',
             '--skill-glow-2': 'picker-skill-2',
             '--skill-glow-4': 'picker-skill-4'
         };
@@ -4906,6 +4939,7 @@ function resetarConfiguracoesAudio() {
             '--primary-purple': '#7b1fa2',
             '--light-purple': '#bc4ed8',
             '--text-gold': '#d4af37',
+            '--roll-popup-border': '#d4af37',
             '--skill-glow-2': '#00ff88',
             '--skill-glow-4': '#d4af37'
         };
@@ -4994,6 +5028,7 @@ function resetarConfiguracoesAudio() {
             limiteCarga: 20,
             nivel: 0,
             classe: null,
+            mundano: false,
             avatar: "",
             paTurno: 0,
             bloqueioBase: 0,
@@ -5019,6 +5054,7 @@ function resetarConfiguracoesAudio() {
                 '--primary-purple': '#7b1fa2',
                 '--light-purple': '#bc4ed8',
                 '--text-gold': '#d4af37',
+                '--roll-popup-border': '#d4af37',
                 '--skill-glow-2': '#00ff88',
                 '--skill-glow-4': '#d4af37',
                 backgroundImage: '',
@@ -6997,6 +7033,15 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             let btn = document.getElementById('btn-class-' + sheet.classe);
             if(btn) btn.classList.add('active');
         }
+        const btnMundano = document.getElementById('btn-mundano');
+        if (btnMundano) {
+            const ativo = sheet.mundano === true;
+            btnMundano.classList.toggle('active', ativo);
+            btnMundano.setAttribute('aria-pressed', String(ativo));
+            btnMundano.title = ativo
+                ? 'Modo Mundano ativo: os recursos não recebem progressão por nível'
+                : 'Usa os valores mundanos da classe e ignora progressão de recursos por nível';
+        }
     }
 
     /* MODIFICADORES AGREGADOS (Itens E Habilidades Ativadas) */
@@ -7119,7 +7164,19 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         let maxPV = 0, maxPA = 0, maxSA = 0, def = 0;
         let temClasse = true;
 
-        if (sheet.classe === 'arcanista') {
+        if (sheet.mundano === true) {
+            const basesMundanas = {
+                arcanista: { pv: 10, sa: 20, pa: 13, defesa: 7 },
+                combatente: { pv: 16, sa: 10, pa: 10, defesa: 10 },
+                erudito: { pv: 12, sa: 15, pa: 11, defesa: 12 },
+                mundano: { pv: 13, sa: 12, pa: 10, defesa: 11 }
+            };
+            const base = basesMundanas[sheet.classe] || basesMundanas.mundano;
+            maxPV = base.pv + atributoPV;
+            maxSA = base.sa;
+            maxPA = base.pa + atributoPA;
+            def = base.defesa;
+        } else if (sheet.classe === 'arcanista') {
             maxPV = (15 + atributoPV) + (nivel * (15 + atributoPV));
             maxSA = 20 + atributoSA + (nivel * 10);
             maxPA = (15 + con + atributoPA) + (Math.min(nivel, 4) * (12 + con + atributoPA));
@@ -8315,6 +8372,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         sheet.dificuldade = v; 
         document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active')); 
         document.getElementById('df-'+v).classList.add('active'); 
+        marcarAlteracao();
+    }
+
+    function alternarModoMundano() {
+        tocarSom('click');
+        sheet.mundano = sheet.mundano !== true;
+        atualizarVisuaisClasse();
+        calcularStatusClasse();
         marcarAlteracao();
     }
 
