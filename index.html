@@ -6955,6 +6955,67 @@ body.theme-umbral .startup-slot-card { border-color: var(--umbral-purple-line); 
 body.theme-umbral .startup-slot-card:hover,
 body.theme-umbral .startup-slot-card:focus-visible { border-color: var(--umbral-bronze); border-left-color: var(--umbral-bronze-bright); }
 
+.slot-select-data { display: none !important; }
+.topbar-slot-label {
+    color: #766f7a;
+    font-size: .5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.topbar-slot-switcher {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 0;
+    gap: 8px;
+    color: #f0ebf2;
+    font-family: 'Cinzel', serif;
+    font-size: .58rem;
+    text-align: left;
+    cursor: pointer;
+}
+.topbar-slot-switcher > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.topbar-slot-switcher > span:last-child { flex: 0 0 auto; color: var(--text-gold); }
+.topbar-slot-switcher:hover,
+.topbar-slot-switcher.active { border-color: var(--light-purple); background: var(--control-surface-hover); }
+.campaign-editing #slot-switcher-button { display: none !important; }
+.startup-slot-card.is-current {
+    border-color: var(--text-gold);
+    border-left-color: var(--text-gold);
+    background: color-mix(in srgb, var(--text-gold) 7%, var(--container-bg));
+}
+body.theme-umbral .topbar-slot-label { color: var(--umbral-paper-muted); font-size: .54rem; }
+body.theme-umbral .startup-slot-card.is-current { border-color: var(--umbral-bronze-bright); border-left-color: var(--umbral-bronze-bright); }
+
+.custom-skills-collapsible { padding-top: 25px; }
+.custom-skills-collapse-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 46px;
+    gap: 16px;
+    padding: 8px 10px;
+    color: #ddd;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--primary-purple);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--container-bg) 88%, #000);
+    text-align: left;
+    cursor: pointer;
+}
+.custom-skills-collapse-toggle:hover,
+.custom-skills-collapse-toggle:focus-visible { color: #fff; border-color: var(--light-purple); outline: none; }
+.custom-skills-toggle-copy { display: grid; min-width: 0; gap: 3px; }
+.custom-skills-toggle-copy strong { font: 600 .66rem 'Cinzel', serif; letter-spacing: 1px; }
+.custom-skills-toggle-copy small { color: #8d8792; font-family: var(--font-reading); font-size: .78rem; }
+.custom-skills-collapse-icon { color: var(--text-gold); transition: transform .18s ease; }
+.custom-skills-collapsible:not(.is-collapsed) .custom-skills-collapse-icon { transform: rotate(180deg); }
+.custom-skills-content { padding-top: 20px; }
+body.theme-umbral .custom-skills-collapse-toggle { border-color: var(--umbral-purple-line); border-left-color: var(--umbral-purple); background: rgba(8,6,9,.68); }
+body.theme-umbral .custom-skills-collapse-toggle:hover,
+body.theme-umbral .custom-skills-collapse-toggle:focus-visible { border-color: var(--umbral-bronze); border-left-color: var(--umbral-bronze-bright); }
+
 @media (max-width: 620px) {
     .startup-slot-grid,
     .startup-slot-create-form { grid-template-columns: 1fr; }
@@ -7091,8 +7152,11 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
                 <span class="topbar-action-icon" aria-hidden="true">🕘</span><span>Histórico / Desfazer</span>
             </button>
             <div class="topbar-slot-control">
-                <label for="save-slot">Personagem</label>
-                <select id="save-slot" class="topbar-slot-select slot-select" onchange="carregarDaNuvem()" title="Mudar ficha">
+                <span class="topbar-slot-label">Personagem</span>
+                <button type="button" class="topbar-slot-select topbar-slot-switcher" id="slot-switcher-button" onclick="abrirSeletorTrocaFichas()" title="Escolher outra ficha">
+                    <span id="slot-switcher-label">Slot 1</span><span aria-hidden="true">⌄</span>
+                </button>
+                <select id="save-slot" class="slot-select slot-select-data" aria-hidden="true" tabindex="-1" title="Ficha ativa">
                     <option value="1">Slot 1</option>
                 </select>
                 <button class="topbar-slot-manager" id="btn-slot-manager" type="button" onclick="abrirGerenciadorSlots()" title="Organizar fichas e pastas">
@@ -7391,9 +7455,14 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
             <div id="skills-container" class="skills-list"></div>
         </section>
 
-        <section class="section-box" id="custom-skills-section">
+        <section class="section-box custom-skills-collapsible is-collapsed" id="custom-skills-section">
             <div class="section-title">Criar Perícias</div>
-            <div class="custom-skill-workshop">
+            <button type="button" class="custom-skills-collapse-toggle" id="custom-skills-toggle" aria-expanded="false" aria-controls="custom-skills-content" onclick="alternarCriacaoPericias()">
+                <span class="custom-skills-toggle-copy"><strong>OFICINA DE PERÍCIAS</strong><small id="custom-skills-toggle-summary">Abra para criar e organizar perícias personalizadas.</small></span>
+                <span class="custom-skills-collapse-icon" aria-hidden="true">⌄</span>
+            </button>
+            <div class="custom-skills-content" id="custom-skills-content" hidden>
+              <div class="custom-skill-workshop">
                 <form id="custom-skill-form" class="custom-skill-form" onsubmit="salvarPericiaCustomizada(event)">
                     <input type="hidden" id="custom-skill-id">
                     <div class="custom-skill-fields">
@@ -7437,6 +7506,7 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
                     </div>
                     <div id="custom-skills-manager" class="skills-list"></div>
                 </div>
+              </div>
             </div>
         </section>
 
@@ -7970,12 +8040,13 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
     <div id="history-list" class="history-list"></div>
 </div>
 
-<div id="modal-startup-slot" class="modal startup-slot-modal" data-focus-persistent="true" role="dialog" aria-modal="true" aria-labelledby="startup-slot-heading" aria-describedby="startup-slot-intro">
+<div id="modal-startup-slot" class="modal startup-slot-modal" data-focus-persistent="true" data-slot-mode="initial" role="dialog" aria-modal="true" aria-labelledby="startup-slot-heading" aria-describedby="startup-slot-intro">
     <div class="settings-modal-header">
         <div>
             <span class="settings-eyebrow">ARQUIVO DOS REENCARNADOS</span>
             <h3 id="startup-slot-heading">Qual ficha deseja abrir?</h3>
         </div>
+        <button type="button" class="settings-close" id="startup-slot-close" onclick="fecharSeletorFichas()" title="Fechar seletor de fichas" hidden>✕</button>
     </div>
     <p class="settings-intro" id="startup-slot-intro">Escolha seu personagem antes de entrar no códice. Nenhuma ficha é carregada até você selecionar uma opção.</p>
     <div id="startup-slot-list" class="startup-slot-list"></div>
@@ -8257,6 +8328,7 @@ function atualizarGatilhosSuperficieFoco(elemento = null) {
         'modal-audio-settings': 'btn-configuracoes',
         'modal-history': 'btn-historico',
         'modal-slot-manager': 'btn-slot-manager',
+        'modal-startup-slot': 'slot-switcher-button',
         'theme-panel': 'theme-float-btn',
         'log-panel': 'btn-log'
     };
@@ -8995,6 +9067,7 @@ function resetarConfiguracoesAudio() {
         const id = decodeURIComponent(idCodificado);
         const pericia = obterPericiaPorReferencia(id);
         if (!pericia?.custom) return;
+        alternarCriacaoPericias(true);
         document.getElementById('custom-skill-id').value = pericia.id;
         document.getElementById('custom-skill-name').value = pericia.n;
         document.getElementById('custom-skill-attribute').value = pericia.a;
@@ -9024,11 +9097,15 @@ function resetarConfiguracoesAudio() {
     function renderizarGerenciadorPericiasCustomizadas() {
         const container = document.getElementById('custom-skills-manager');
         const contador = document.getElementById('custom-skills-counter');
+        const resumo = document.getElementById('custom-skills-toggle-summary');
         if (!container || !contador) return;
         garantirEditorPericiasCustomizadas();
         const personalizadas = normalizarPericiasDaFicha().filter(pericia => pericia.custom)
             .sort((a, b) => a.n.localeCompare(b.n, 'pt-BR'));
         contador.textContent = `${personalizadas.length} ${personalizadas.length === 1 ? 'perícia' : 'perícias'}`;
+        if (resumo) resumo.textContent = personalizadas.length
+            ? `${personalizadas.length} ${personalizadas.length === 1 ? 'perícia criada' : 'perícias criadas'} • clique para abrir.`
+            : 'Abra para criar e organizar perícias personalizadas.';
         if (!personalizadas.length) {
             container.innerHTML = '<div class="skills-empty">As perícias criadas aparecerão aqui e também na lista principal.</div>';
             return;
@@ -9708,6 +9785,13 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         alternarSecaoRetratil('slot-manager-create-section', 'slot-manager-create-content', 'slot-manager-create-toggle');
     }
 
+    function alternarCriacaoPericias(forcarAberto = null) {
+        alternarSecaoRetratil('custom-skills-section', 'custom-skills-content', 'custom-skills-toggle', forcarAberto);
+        if (!document.getElementById('custom-skills-content')?.hidden && forcarAberto !== true) {
+            document.getElementById('custom-skill-name')?.focus();
+        }
+    }
+
     function atualizarPreviewsSlots(slotsRemotos = {}) {
         slotPreviewState = Object.entries(slotsRemotos || {}).reduce((previews, [id, dados]) => {
             if (!dados || typeof dados !== 'object') return previews;
@@ -9830,10 +9914,23 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const atualPrincipal = valorPreferido || seletorPrincipal?.value;
         preencherSeletorSlots(seletorPrincipal, atualPrincipal);
         preencherSeletorSlots(document.getElementById('campaign-character-slot'), atualPrincipal);
+        atualizarBotaoTrocaFicha();
     }
 
     function nomeDoSlot(id) {
         return slotManagerState.slots?.[String(id)]?.name || `Slot ${id}`;
+    }
+
+    function atualizarBotaoTrocaFicha() {
+        const seletor = document.getElementById('save-slot');
+        const rotulo = document.getElementById('slot-switcher-label');
+        const botao = document.getElementById('slot-switcher-button');
+        if (!seletor || !rotulo || !botao) return;
+        const slotId = String(seletor.value || '1');
+        const nomeSlot = nomeDoSlot(slotId);
+        const nomePersonagem = slotPreviewState[slotId]?.nickname || nomeSlot;
+        rotulo.textContent = nomePersonagem;
+        botao.title = `Trocar ficha • ${nomeSlot}`;
     }
 
     function avatarSeletorInicialHtml(slot, preview) {
@@ -9850,6 +9947,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const seletorPasta = document.getElementById('startup-new-slot-folder');
         if (seletorPasta) seletorPasta.innerHTML = opcoesPastasHtml();
         if (!lista) return;
+        const modal = document.getElementById('modal-startup-slot');
+        const modoTroca = modal?.dataset.slotMode === 'switch';
+        const slotAtual = String(document.getElementById('save-slot')?.value || '');
 
         const grupos = pastasOrdenadas().map(pasta => {
             const slots = slotsOrdenados().filter(slot => slot.folderId === pasta.id);
@@ -9863,10 +9963,11 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 else if (preview.classe) detalhes.push(preview.classe);
                 if (!preview.existe) detalhes.push('Ficha vazia');
                 const slotId = escapeCampaignHtml(slot.id);
-                return `<button type="button" class="startup-slot-card" data-slot-id="${slotId}" onclick="selecionarFichaInicial(this.dataset.slotId)" aria-label="Abrir ${escapeCampaignHtml(nomePersonagem)}">
+                const atual = modoTroca && String(slot.id) === slotAtual;
+                return `<button type="button" class="startup-slot-card ${atual ? 'is-current' : ''}" data-slot-id="${slotId}" onclick="selecionarFichaInicial(this.dataset.slotId)" aria-label="Abrir ${escapeCampaignHtml(nomePersonagem)}" ${atual ? 'aria-current="true"' : ''}>
                     ${avatarSeletorInicialHtml(slot, preview)}
                     <span class="startup-slot-copy"><strong>${escapeCampaignHtml(nomePersonagem)}</strong><small>${escapeCampaignHtml(detalhes.join(' • ') || slot.name)}</small></span>
-                    <span class="startup-slot-arrow" aria-hidden="true">›</span>
+                    <span class="startup-slot-arrow" aria-hidden="true">${atual ? '✓' : '›'}</span>
                 </button>`;
             }).join('');
             return `<section class="startup-slot-folder"><h4 class="startup-slot-folder-title">${escapeCampaignHtml(pasta.name)}</h4><div class="startup-slot-grid">${cards}</div></section>`;
@@ -9874,23 +9975,67 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         lista.innerHTML = grupos.join('') || '<div class="startup-slot-empty">Nenhuma ficha disponível. Crie uma nova ficha abaixo.</div>';
     }
 
+    function configurarModoSeletorFichas(modo = 'initial') {
+        const modal = document.getElementById('modal-startup-slot');
+        const titulo = document.getElementById('startup-slot-heading');
+        const introducao = document.getElementById('startup-slot-intro');
+        const fechar = document.getElementById('startup-slot-close');
+        if (!modal || !titulo || !introducao || !fechar) return;
+        const inicial = modo === 'initial';
+        modal.dataset.slotMode = inicial ? 'initial' : 'switch';
+        modal.dataset.focusPersistent = inicial ? 'true' : 'false';
+        titulo.textContent = inicial ? 'Qual ficha deseja abrir?' : 'Trocar de ficha';
+        introducao.textContent = inicial
+            ? 'Escolha seu personagem antes de entrar no códice. Nenhuma ficha é carregada até você selecionar uma opção.'
+            : 'Escolha outro personagem usando o mesmo arquivo de fichas. A troca só acontece depois do seu clique.';
+        fechar.hidden = inicial;
+    }
+
     function abrirSeletorInicialFichas() {
         if (!currentUser || seletorInicialConcluidoParaUid === currentUser.uid) return;
+        configurarModoSeletorFichas('initial');
         renderizarSeletorInicialFichas();
         alternarSecaoRetratil('startup-slot-create-section', 'startup-slot-create-content', 'startup-slot-create-toggle', false);
         abrirSuperficieFoco('#modal-startup-slot');
         requestAnimationFrame(() => document.querySelector('#startup-slot-list .startup-slot-card')?.focus());
     }
 
+    function abrirSeletorTrocaFichas() {
+        if (!currentUser) {
+            alert('Faça login com o Google para acessar suas fichas.');
+            return;
+        }
+        configurarModoSeletorFichas('switch');
+        renderizarSeletorInicialFichas();
+        alternarSecaoRetratil('startup-slot-create-section', 'startup-slot-create-content', 'startup-slot-create-toggle', false);
+        abrirSuperficieFoco('#modal-startup-slot');
+        requestAnimationFrame(() => (document.querySelector('#startup-slot-list .startup-slot-card.is-current') || document.querySelector('#startup-slot-list .startup-slot-card'))?.focus());
+    }
+
+    function fecharSeletorFichas() {
+        const modal = document.getElementById('modal-startup-slot');
+        if (!modal || modal.dataset.focusPersistent === 'true') return;
+        fecharSuperficieFoco(modal);
+    }
+
     async function selecionarFichaInicial(id) {
         const slotId = String(id || '');
         if (!currentUser || !slotManagerState.slots?.[slotId]) return;
+        const modal = document.getElementById('modal-startup-slot');
+        const modoTroca = modal?.dataset.slotMode === 'switch';
+        const seletor = document.getElementById('save-slot');
+        const slotAtual = String(seletor.value || '');
+        if (modoTroca && slotId === slotAtual) {
+            fecharSuperficieFoco(modal);
+            return;
+        }
+        if (modoTroca && alteracoesNaoSalvas && !confirm('Trocar de ficha sem salvar as alterações atuais?')) return;
         const uid = currentUser.uid;
         seletorInicialConcluidoParaUid = uid;
         renderizarSeletoresSlots(slotId);
-        const seletor = document.getElementById('save-slot');
         seletor.value = slotId;
         seletor.title = nomeDoSlot(slotId);
+        atualizarBotaoTrocaFicha();
         fecharSuperficieFoco('#modal-startup-slot');
         await carregarDaNuvem();
     }
@@ -12782,6 +12927,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     classe: String(sheet.classe || '').trim()
                 };
                 renderizarSeletorInicialFichas();
+                atualizarBotaoTrocaFicha();
                 if (!silencioso) {
                     tocarSom('click');
                     spawnPopup("SISTEMA", `${nomeDoSlot(slot)} atualizado`, "SALVO", "#00ff88", "PROGRESSO SALVO", "Sua ficha está segura na nuvem!");
@@ -12817,6 +12963,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             }
             atualizarVisuaisDaFicha();
             renderizarSeletorInicialFichas();
+            atualizarBotaoTrocaFicha();
             document.getElementById('val-nivel').value = sheet.nivel || 0;
             alteracoesNaoSalvas = false; // Carregou, então está limpo
         }).catch(e => console.error("Erro ao carregar:", e));
