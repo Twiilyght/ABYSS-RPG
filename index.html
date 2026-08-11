@@ -6808,7 +6808,7 @@ body.theme-umbral .combat-wait-card .combat-initiative-editor { justify-content:
     visibility: hidden;
     pointer-events: none;
     background: rgba(2, 1, 4, .72);
-    backdrop-filter: blur(2px);
+    backdrop-filter: none;
     transition: opacity .18s ease, visibility .18s ease;
 }
 body.ui-focus-open #ui-focus-backdrop {
@@ -6817,13 +6817,149 @@ body.ui-focus-open #ui-focus-backdrop {
     pointer-events: auto;
 }
 body.ui-focus-open { overflow: hidden; }
+/* A .container original cria um contexto de empilhamento. Durante o foco, ele
+   precisa ser liberado para que seus modais fixed fiquem acima do backdrop. */
+body.ui-focus-open .container { z-index: auto; }
 body.ui-focus-open .top-utility-bar { z-index: 20000; }
+body.ui-focus-required .top-utility-bar { z-index: 1150; }
 .modal.ui-focus-surface,
 #theme-panel.ui-focus-surface,
-#log-panel.ui-focus-surface { z-index: 20020 !important; }
+#log-panel.ui-focus-surface {
+    z-index: 20020 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    isolation: isolate;
+    filter: none !important;
+}
+#log-panel.ui-focus-surface { transform: translateX(0) !important; }
 body.ui-focus-open .campaign-shield-overlay.active,
 body.ui-focus-open .campaign-viewer-overlay.active,
 body.ui-focus-open #initiative-request-overlay.active { z-index: 20060; }
+
+/* Escolha inicial de personagem e criação recolhível de fichas. */
+.startup-slot-modal { width: min(640px, calc(100vw - 30px)) !important; padding-bottom: 24px !important; }
+.startup-slot-modal .settings-modal-header { margin-bottom: 8px; }
+.startup-slot-list {
+    display: grid;
+    gap: 14px;
+    max-height: 48vh;
+    margin-top: 17px;
+    padding-right: 5px;
+    overflow-y: auto;
+}
+.startup-slot-folder { display: grid; gap: 7px; }
+.startup-slot-folder-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    color: var(--text-gold);
+    font: 600 .57rem 'Cinzel', serif;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+.startup-slot-folder-title::after { content: ''; height: 1px; flex: 1; background: var(--border-color); }
+.startup-slot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+.startup-slot-card {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 60px;
+    padding: 8px 10px;
+    color: #ddd;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--primary-purple);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--container-bg) 88%, #000);
+    text-align: left;
+    cursor: pointer;
+}
+.startup-slot-card:hover,
+.startup-slot-card:focus-visible {
+    color: #fff;
+    border-color: var(--light-purple);
+    border-left-color: var(--text-gold);
+    background: color-mix(in srgb, var(--primary-purple) 13%, var(--container-bg));
+    outline: none;
+}
+.startup-slot-avatar {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    overflow: hidden;
+    color: var(--text-gold);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    background: #08070a;
+    font: 600 .82rem 'Cinzel', serif;
+}
+.startup-slot-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.startup-slot-copy { display: grid; min-width: 0; gap: 3px; }
+.startup-slot-copy strong { overflow: hidden; color: inherit; font-size: .67rem; text-overflow: ellipsis; white-space: nowrap; }
+.startup-slot-copy small { overflow: hidden; color: #8d8792; font-family: var(--font-reading); font-size: .76rem; text-overflow: ellipsis; white-space: nowrap; }
+.startup-slot-arrow { color: var(--text-gold); font-size: .85rem; }
+.startup-slot-create,
+.slot-manager-create-section {
+    margin: 17px 0 15px;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+.startup-slot-create-toggle,
+.slot-manager-create-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 3px;
+    color: var(--text-gold);
+    border: 0;
+    background: transparent;
+    font: 600 .59rem 'Cinzel', serif;
+    letter-spacing: 1.15px;
+    cursor: pointer;
+}
+.startup-slot-create-toggle span:last-child,
+.slot-manager-create-toggle span:last-child { transition: transform .18s ease; }
+.startup-slot-create:not(.is-collapsed) .startup-slot-create-toggle span:last-child,
+.slot-manager-create-section:not(.is-collapsed) .slot-manager-create-toggle span:last-child { transform: rotate(180deg); }
+.startup-slot-create-content,
+.slot-manager-create-content { padding: 2px 0 14px; }
+.startup-slot-create-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(150px, .7fr) auto;
+    gap: 8px;
+    align-items: stretch;
+}
+.startup-slot-create-form .modal-input { min-width: 0; margin: 0; }
+.startup-slot-create-form button {
+    padding: 0 14px;
+    color: #fff;
+    border: 1px solid var(--primary-purple);
+    border-radius: 4px;
+    background: var(--primary-purple);
+    font: 600 .59rem 'Cinzel', serif;
+    cursor: pointer;
+}
+.startup-slot-empty { padding: 18px; color: #8d8792; border: 1px dashed var(--border-color); text-align: center; }
+.slot-manager-create-section .slot-manager-create-grid { margin: 0; }
+
+body.theme-umbral .startup-slot-folder-title::after,
+body.theme-umbral .startup-slot-create,
+body.theme-umbral .slot-manager-create-section { border-color: var(--umbral-line); }
+body.theme-umbral .startup-slot-card { border-color: var(--umbral-purple-line); border-left-color: var(--umbral-purple); background: rgba(8,6,9,.68); }
+body.theme-umbral .startup-slot-card:hover,
+body.theme-umbral .startup-slot-card:focus-visible { border-color: var(--umbral-bronze); border-left-color: var(--umbral-bronze-bright); }
+
+@media (max-width: 620px) {
+    .startup-slot-grid,
+    .startup-slot-create-form { grid-template-columns: 1fr; }
+    .startup-slot-create-form button { min-height: 40px; }
+}
 
 /* Oficina de perícias: usa os mesmos controles, proporções e cartões da lista-base. */
 .custom-skill-workshop {
@@ -7834,6 +7970,29 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
     <div id="history-list" class="history-list"></div>
 </div>
 
+<div id="modal-startup-slot" class="modal startup-slot-modal" data-focus-persistent="true" role="dialog" aria-modal="true" aria-labelledby="startup-slot-heading" aria-describedby="startup-slot-intro">
+    <div class="settings-modal-header">
+        <div>
+            <span class="settings-eyebrow">ARQUIVO DOS REENCARNADOS</span>
+            <h3 id="startup-slot-heading">Qual ficha deseja abrir?</h3>
+        </div>
+    </div>
+    <p class="settings-intro" id="startup-slot-intro">Escolha seu personagem antes de entrar no códice. Nenhuma ficha é carregada até você selecionar uma opção.</p>
+    <div id="startup-slot-list" class="startup-slot-list"></div>
+    <section class="startup-slot-create is-collapsed" id="startup-slot-create-section">
+        <button type="button" class="startup-slot-create-toggle" id="startup-slot-create-toggle" aria-expanded="false" aria-controls="startup-slot-create-content" onclick="alternarCriacaoFichaInicial()">
+            <span>+ Criar uma nova ficha</span><span aria-hidden="true">⌄</span>
+        </button>
+        <div class="startup-slot-create-content" id="startup-slot-create-content" hidden>
+            <form class="startup-slot-create-form" onsubmit="criarFichaPeloSeletorInicial(event)">
+                <input id="startup-new-slot-name" class="modal-input" maxlength="45" placeholder="Nome do slot ou personagem" required>
+                <select id="startup-new-slot-folder" class="modal-input" aria-label="Pasta da nova ficha"></select>
+                <button type="submit">Criar e abrir</button>
+            </form>
+        </div>
+    </section>
+</div>
+
 <div id="modal-slot-manager" class="modal slot-manager-modal">
     <div class="settings-modal-header">
         <div>
@@ -7843,18 +8002,25 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
         <button type="button" class="settings-close" onclick="fecharGerenciadorSlots()" title="Fechar">✕</button>
     </div>
     <p class="settings-intro">Crie quantas fichas precisar, dê nomes a elas e organize tudo em pastas.</p>
-    <div class="slot-manager-create-grid">
-        <form class="slot-create-card" onsubmit="criarPastaSlot(event)">
-            <label for="new-slot-folder-name">NOVA PASTA</label>
-            <div><input id="new-slot-folder-name" class="modal-input" maxlength="45" placeholder="Ex: Mesa de sexta"><button type="submit">Criar</button></div>
-        </form>
-        <form class="slot-create-card" onsubmit="criarNovoSlot(event)">
-            <label for="new-slot-name">NOVO SLOT</label>
-            <input id="new-slot-name" class="modal-input" maxlength="45" placeholder="Nome da ficha">
-            <select id="new-slot-folder" class="modal-input"></select>
-            <button type="submit">Criar ficha</button>
-        </form>
-    </div>
+    <section class="slot-manager-create-section is-collapsed" id="slot-manager-create-section">
+        <button type="button" class="slot-manager-create-toggle" id="slot-manager-create-toggle" aria-expanded="false" aria-controls="slot-manager-create-content" onclick="alternarCriacaoFichasGerenciador()">
+            <span>CRIAR PASTA OU FICHA</span><span aria-hidden="true">⌄</span>
+        </button>
+        <div class="slot-manager-create-content" id="slot-manager-create-content" hidden>
+            <div class="slot-manager-create-grid">
+                <form class="slot-create-card" onsubmit="criarPastaSlot(event)">
+                    <label for="new-slot-folder-name">NOVA PASTA</label>
+                    <div><input id="new-slot-folder-name" class="modal-input" maxlength="45" placeholder="Ex: Mesa de sexta"><button type="submit">Criar</button></div>
+                </form>
+                <form class="slot-create-card" onsubmit="criarNovoSlot(event)">
+                    <label for="new-slot-name">NOVO SLOT</label>
+                    <input id="new-slot-name" class="modal-input" maxlength="45" placeholder="Nome da ficha">
+                    <select id="new-slot-folder" class="modal-input"></select>
+                    <button type="submit">Criar ficha</button>
+                </form>
+            </div>
+        </div>
+    </section>
     <div id="slot-manager-list" class="slot-manager-list"></div>
 </div>
 
@@ -8082,6 +8248,10 @@ function superficieFocoEstaAberta(elemento) {
     return window.getComputedStyle(elemento).display !== 'none';
 }
 
+function superficieFocoExigeEscolha(elemento = superficieFocoAtiva) {
+    return elemento?.dataset?.focusPersistent === 'true';
+}
+
 function atualizarGatilhosSuperficieFoco(elemento = null) {
     const mapa = {
         'modal-audio-settings': 'btn-configuracoes',
@@ -8107,7 +8277,7 @@ function finalizarFocoSeNecessario() {
     if (superficieFocoAtiva && superficieFocoEstaAberta(superficieFocoAtiva)) return;
     superficieFocoAtiva?.classList.remove('ui-focus-surface');
     superficieFocoAtiva = null;
-    document.body.classList.remove('ui-focus-open');
+    document.body.classList.remove('ui-focus-open', 'ui-focus-required');
     document.getElementById('ui-focus-backdrop')?.setAttribute('aria-hidden', 'true');
     atualizarGatilhosSuperficieFoco();
 }
@@ -8116,6 +8286,10 @@ function abrirSuperficieFoco(alvo) {
     const elemento = typeof alvo === 'string' ? document.querySelector(alvo) : alvo;
     if (!elemento) return;
     if (superficieFocoAtiva === elemento && superficieFocoEstaAberta(elemento)) return;
+    if (superficieFocoExigeEscolha() && superficieFocoAtiva !== elemento) {
+        ocultarSuperficieFoco(elemento);
+        return;
+    }
 
     sincronizandoSuperficiesFoco = true;
     document.querySelectorAll(UI_FOCUS_SELECTOR).forEach(superficie => {
@@ -8127,6 +8301,7 @@ function abrirSuperficieFoco(alvo) {
     elemento.setAttribute('aria-hidden', 'false');
     superficieFocoAtiva = elemento;
     document.body.classList.add('ui-focus-open');
+    document.body.classList.toggle('ui-focus-required', superficieFocoExigeEscolha(elemento));
     document.getElementById('ui-focus-backdrop')?.setAttribute('aria-hidden', 'false');
     atualizarGatilhosSuperficieFoco(elemento);
     sincronizandoSuperficiesFoco = false;
@@ -8150,11 +8325,14 @@ function fecharTodasSuperficiesFoco() {
     finalizarFocoSeNecessario();
 }
 
-document.getElementById('ui-focus-backdrop')?.addEventListener('click', () => fecharSuperficieFoco());
+document.getElementById('ui-focus-backdrop')?.addEventListener('click', () => {
+    if (!superficieFocoExigeEscolha()) fecharSuperficieFoco();
+});
 
 document.addEventListener('keydown', event => {
     if (event.key !== 'Escape' || !superficieFocoAtiva) return;
     if (document.querySelector('.campaign-viewer-overlay.active, .campaign-shield-overlay.active, #initiative-request-overlay.active')) return;
+    if (superficieFocoExigeEscolha()) return;
     event.preventDefault();
     event.stopImmediatePropagation();
     fecharSuperficieFoco();
@@ -9505,6 +9683,44 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     const SLOT_FOLDER_DEFAULT = 'folder_default';
     let slotManagerState = criarConfiguracaoPadraoSlots();
+    let slotPreviewState = {};
+    let seletorInicialConcluidoParaUid = null;
+
+    function alternarSecaoRetratil(sectionId, contentId, toggleId, forcarAberto = null) {
+        const section = document.getElementById(sectionId);
+        const content = document.getElementById(contentId);
+        const toggle = document.getElementById(toggleId);
+        if (!section || !content || !toggle) return;
+        const abrir = typeof forcarAberto === 'boolean' ? forcarAberto : section.classList.contains('is-collapsed');
+        section.classList.toggle('is-collapsed', !abrir);
+        content.hidden = !abrir;
+        toggle.setAttribute('aria-expanded', String(abrir));
+    }
+
+    function alternarCriacaoFichaInicial() {
+        alternarSecaoRetratil('startup-slot-create-section', 'startup-slot-create-content', 'startup-slot-create-toggle');
+        if (!document.getElementById('startup-slot-create-content')?.hidden) {
+            document.getElementById('startup-new-slot-name')?.focus();
+        }
+    }
+
+    function alternarCriacaoFichasGerenciador() {
+        alternarSecaoRetratil('slot-manager-create-section', 'slot-manager-create-content', 'slot-manager-create-toggle');
+    }
+
+    function atualizarPreviewsSlots(slotsRemotos = {}) {
+        slotPreviewState = Object.entries(slotsRemotos || {}).reduce((previews, [id, dados]) => {
+            if (!dados || typeof dados !== 'object') return previews;
+            previews[String(id)] = {
+                existe: true,
+                nickname: String(dados.nickname || '').trim(),
+                antecedencia: String(dados.antecedencia || '').trim(),
+                avatar: String(dados.avatar || '').trim(),
+                classe: String(dados.classe || '').trim()
+            };
+            return previews;
+        }, {});
+    }
 
     function criarConfiguracaoPadraoSlots() {
         const slots = {};
@@ -9620,9 +9836,88 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         return slotManagerState.slots?.[String(id)]?.name || `Slot ${id}`;
     }
 
+    function avatarSeletorInicialHtml(slot, preview) {
+        if (preview?.avatar) {
+            return `<span class="startup-slot-avatar"><img src="${escapeCampaignHtml(preview.avatar)}" alt=""></span>`;
+        }
+        const nome = preview?.nickname || slot.name || 'Ficha';
+        const inicial = Array.from(String(nome).trim())[0]?.toUpperCase() || '✦';
+        return `<span class="startup-slot-avatar" aria-hidden="true">${escapeCampaignHtml(inicial)}</span>`;
+    }
+
+    function renderizarSeletorInicialFichas() {
+        const lista = document.getElementById('startup-slot-list');
+        const seletorPasta = document.getElementById('startup-new-slot-folder');
+        if (seletorPasta) seletorPasta.innerHTML = opcoesPastasHtml();
+        if (!lista) return;
+
+        const grupos = pastasOrdenadas().map(pasta => {
+            const slots = slotsOrdenados().filter(slot => slot.folderId === pasta.id);
+            if (!slots.length) return '';
+            const cards = slots.map(slot => {
+                const preview = slotPreviewState[String(slot.id)] || { existe: false };
+                const nomePersonagem = preview.nickname || slot.name;
+                const detalhes = [];
+                if (preview.nickname && preview.nickname !== slot.name) detalhes.push(slot.name);
+                if (preview.antecedencia) detalhes.push(preview.antecedencia);
+                else if (preview.classe) detalhes.push(preview.classe);
+                if (!preview.existe) detalhes.push('Ficha vazia');
+                const slotId = escapeCampaignHtml(slot.id);
+                return `<button type="button" class="startup-slot-card" data-slot-id="${slotId}" onclick="selecionarFichaInicial(this.dataset.slotId)" aria-label="Abrir ${escapeCampaignHtml(nomePersonagem)}">
+                    ${avatarSeletorInicialHtml(slot, preview)}
+                    <span class="startup-slot-copy"><strong>${escapeCampaignHtml(nomePersonagem)}</strong><small>${escapeCampaignHtml(detalhes.join(' • ') || slot.name)}</small></span>
+                    <span class="startup-slot-arrow" aria-hidden="true">›</span>
+                </button>`;
+            }).join('');
+            return `<section class="startup-slot-folder"><h4 class="startup-slot-folder-title">${escapeCampaignHtml(pasta.name)}</h4><div class="startup-slot-grid">${cards}</div></section>`;
+        }).filter(Boolean);
+        lista.innerHTML = grupos.join('') || '<div class="startup-slot-empty">Nenhuma ficha disponível. Crie uma nova ficha abaixo.</div>';
+    }
+
+    function abrirSeletorInicialFichas() {
+        if (!currentUser || seletorInicialConcluidoParaUid === currentUser.uid) return;
+        renderizarSeletorInicialFichas();
+        alternarSecaoRetratil('startup-slot-create-section', 'startup-slot-create-content', 'startup-slot-create-toggle', false);
+        abrirSuperficieFoco('#modal-startup-slot');
+        requestAnimationFrame(() => document.querySelector('#startup-slot-list .startup-slot-card')?.focus());
+    }
+
+    async function selecionarFichaInicial(id) {
+        const slotId = String(id || '');
+        if (!currentUser || !slotManagerState.slots?.[slotId]) return;
+        const uid = currentUser.uid;
+        seletorInicialConcluidoParaUid = uid;
+        renderizarSeletoresSlots(slotId);
+        const seletor = document.getElementById('save-slot');
+        seletor.value = slotId;
+        seletor.title = nomeDoSlot(slotId);
+        fecharSuperficieFoco('#modal-startup-slot');
+        await carregarDaNuvem();
+    }
+
+    async function criarFichaPeloSeletorInicial(event) {
+        event.preventDefault();
+        if (!currentUser) return;
+        const input = document.getElementById('startup-new-slot-name');
+        const seletorPasta = document.getElementById('startup-new-slot-folder');
+        const nome = input.value.trim();
+        if (!nome) return input.focus();
+        const pastas = pastasOrdenadas();
+        const folderId = slotManagerState.folders[seletorPasta.value] ? seletorPasta.value : pastas[0]?.id;
+        if (!folderId) return;
+        const id = `slot_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+        slotManagerState.slots[id] = { id, name: nome, folderId, order: Date.now() };
+        slotPreviewState[id] = { existe: false, nickname: '', antecedencia: '', avatar: '', classe: '' };
+        input.value = '';
+        await salvarConfiguracaoSlots();
+        renderizarSeletorInicialFichas();
+        await selecionarFichaInicial(id);
+    }
+
     async function inicializarSistemaSlots() {
         if (!currentUser) {
             slotManagerState = criarConfiguracaoPadraoSlots();
+            slotPreviewState = {};
             renderizarSeletoresSlots('1');
             return;
         }
@@ -9632,7 +9927,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             database.ref(`users/${uid}/slots`).once('value')
         ]);
         if (!currentUser || currentUser.uid !== uid) return;
-        slotManagerState = normalizarConfiguracaoSlots(configSnapshot.val(), slotsSnapshot.val() || {});
+        const slotsRemotos = slotsSnapshot.val() || {};
+        slotManagerState = normalizarConfiguracaoSlots(configSnapshot.val(), slotsRemotos);
+        atualizarPreviewsSlots(slotsRemotos);
         renderizarSeletoresSlots(document.getElementById('save-slot')?.value || '1');
         await database.ref(`users/${uid}/slotConfig`).set(slotManagerState).catch(error => {
             console.warn('A organização dos slots não pôde ser sincronizada.', error);
@@ -9646,6 +9943,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             alert('Não foi possível sincronizar a organização das fichas agora.');
         });
         renderizarSeletoresSlots(document.getElementById('save-slot')?.value);
+        renderizarSeletorInicialFichas();
     }
 
     function abrirGerenciadorSlots() {
@@ -9670,6 +9968,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function renderizarGerenciadorSlots() {
         const seletorNovaPasta = document.getElementById('new-slot-folder');
         if (seletorNovaPasta) seletorNovaPasta.innerHTML = opcoesPastasHtml();
+        const seletorPastaInicial = document.getElementById('startup-new-slot-folder');
+        if (seletorPastaInicial) seletorPastaInicial.innerHTML = opcoesPastasHtml();
         const lista = document.getElementById('slot-manager-list');
         if (!lista) return;
         lista.innerHTML = pastasOrdenadas().map(pasta => {
@@ -10235,9 +10535,11 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     }
 
     firebase.auth().onAuthStateChanged((user) => {
+        const uidAnterior = currentUser?.uid || null;
         currentUser = user;
         const btnLogin = document.getElementById('btn-login');
         if (user) {
+            if (uidAnterior !== user.uid) seletorInicialConcluidoParaUid = null;
             btnLogin.innerText = "🔓";
             btnLogin.title = "Sair (" + nomeExibicaoAtual() + ")";
             carregarModelosPessoais(user).catch(erro => console.warn('Não foi possível preparar os modelos pessoais.', erro));
@@ -10248,19 +10550,23 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 })
                 .catch(erro => console.warn('Não foi possível publicar o perfil de áudio no login.', erro));
             inicializarSistemaSlots()
-                .then(() => carregarDaNuvem())
+                .then(() => abrirSeletorInicialFichas())
                 .catch(error => {
                     console.error('Erro ao preparar os slots:', error);
                     slotManagerState = criarConfiguracaoPadraoSlots();
+                    slotPreviewState = {};
                     renderizarSeletoresSlots('1');
-                    carregarDaNuvem();
+                    abrirSeletorInicialFichas();
                 });
             atualizarAutenticacaoCampanhas(user);
         } else {
+            seletorInicialConcluidoParaUid = null;
+            fecharSuperficieFoco('#modal-startup-slot');
             btnLogin.innerText = "👤";
             btnLogin.title = "Login Google";
             carregarModelosPessoais(null);
             slotManagerState = criarConfiguracaoPadraoSlots();
+            slotPreviewState = {};
             renderizarSeletoresSlots('1');
             sheet = getFichaZerada();
             atualizarVisuaisDaFicha();
@@ -12468,6 +12774,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         database.ref(`users/${currentUser.uid}/slots/${slot}`).set(sheet)
             .then(() => {
                 alteracoesNaoSalvas = false; // Reseta o rastreador
+                slotPreviewState[String(slot)] = {
+                    existe: true,
+                    nickname: String(sheet.nickname || '').trim(),
+                    antecedencia: String(sheet.antecedencia || '').trim(),
+                    avatar: String(sheet.avatar || '').trim(),
+                    classe: String(sheet.classe || '').trim()
+                };
+                renderizarSeletorInicialFichas();
                 if (!silencioso) {
                     tocarSom('click');
                     spawnPopup("SISTEMA", `${nomeDoSlot(slot)} atualizado`, "SALVO", "#00ff88", "PROGRESSO SALVO", "Sua ficha está segura na nuvem!");
@@ -12483,17 +12797,26 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     }
 
     function carregarDaNuvem() {
-        if(!currentUser) return;
+        if(!currentUser) return Promise.resolve();
         const slot = document.getElementById('save-slot').value;
         document.getElementById('save-slot').title = nomeDoSlot(slot);
-        database.ref(`users/${currentUser.uid}/slots/${slot}`).once('value').then(snapshot => {
+        return database.ref(`users/${currentUser.uid}/slots/${slot}`).once('value').then(snapshot => {
             const data = snapshot.val();
             if(data) {
                 sheet = Object.assign(getFichaZerada(), data); 
+                slotPreviewState[String(slot)] = {
+                    existe: true,
+                    nickname: String(data.nickname || '').trim(),
+                    antecedencia: String(data.antecedencia || '').trim(),
+                    avatar: String(data.avatar || '').trim(),
+                    classe: String(data.classe || '').trim()
+                };
             } else {
                 sheet = getFichaZerada(); 
+                slotPreviewState[String(slot)] = { existe: false, nickname: '', antecedencia: '', avatar: '', classe: '' };
             }
             atualizarVisuaisDaFicha();
+            renderizarSeletorInicialFichas();
             document.getElementById('val-nivel').value = sheet.nivel || 0;
             alteracoesNaoSalvas = false; // Carregou, então está limpo
         }).catch(e => console.error("Erro ao carregar:", e));
