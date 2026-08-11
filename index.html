@@ -6649,6 +6649,161 @@ body.theme-umbral .combat-mini-resource.pv { border-bottom-color: var(--abyss-pv
 body.theme-umbral .combat-mini-resource.pa { border-bottom-color: var(--abyss-pa); }
 body.theme-umbral .combat-mini-resource.sa { border-bottom-color: var(--abyss-sa); }
 
+/* Ajustes de edição limpa, classes retangulares e iniciativa em linha. */
+body.theme-umbral .character-name-input,
+body.theme-umbral .character-origin-input,
+body.theme-umbral .character-name-input:not(:focus),
+body.theme-umbral .character-origin-input:not(:focus) {
+    border-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+body.theme-umbral .character-name-input,
+body.theme-umbral .character-origin-input {
+    border-bottom: 1px solid transparent !important;
+    cursor: text;
+    transition: color .16s ease, border-color .16s ease, background-color .16s ease !important;
+}
+body.theme-umbral .character-name-input:focus,
+body.theme-umbral .character-origin-input:focus {
+    border-bottom-color: var(--umbral-bronze) !important;
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--umbral-purple) 9%, transparent)) !important;
+    box-shadow: none !important;
+    outline: none;
+}
+
+body.theme-umbral .sheet-dashboard-panel .class-btn {
+    isolation: isolate;
+    contain: paint;
+    min-height: 132px;
+    padding: 70px 16px 16px 19px;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    filter: none !important;
+    transform: translateZ(0);
+    transition: transform .2s cubic-bezier(.2,.72,.25,1), border-color .2s ease, background-color .2s ease !important;
+}
+body.theme-umbral .sheet-dashboard-panel .class-btn::before,
+body.theme-umbral .sheet-dashboard-panel .class-btn:hover::before,
+body.theme-umbral .sheet-dashboard-panel .class-btn.active::before {
+    pointer-events: none;
+    border-radius: 7px;
+    transform: translateZ(0);
+    transition: none !important;
+}
+body.theme-umbral .sheet-dashboard-panel .class-btn::after {
+    top: auto;
+    right: 12px;
+    bottom: 0;
+    left: 12px;
+    width: auto;
+    height: 2px;
+    border: 0;
+    background: linear-gradient(90deg, transparent, var(--class-accent), transparent);
+    opacity: .74;
+}
+body.theme-umbral .sheet-dashboard-panel .class-btn:hover {
+    border-color: var(--class-accent);
+    box-shadow: none !important;
+    filter: none !important;
+    transform: translate3d(0, -3px, 0);
+}
+body.theme-umbral .sheet-dashboard-panel .class-btn.active {
+    border-color: var(--class-accent);
+    box-shadow: inset 0 -2px 0 var(--class-accent) !important;
+    filter: none !important;
+    transform: translate3d(0, -2px, 0);
+}
+
+body.theme-umbral .attr-value-input,
+body.theme-umbral .attr-value-input:not(:focus),
+body.theme-umbral .attr-value-input:focus,
+body.theme-umbral .attr-hexagon-inner .attr-value-input {
+    min-height: 0;
+    padding: 0;
+    color: var(--umbral-parchment);
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: 0;
+    caret-color: var(--umbral-bronze-bright);
+    text-shadow: 0 1px 12px rgba(0,0,0,.45);
+}
+body.theme-umbral .mini-stat-item .mini-stat-input,
+body.theme-umbral .mini-stat-calc .mini-stat-input {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+body.theme-umbral .combat-current-card h2 { margin-bottom: 4px; }
+body.theme-umbral .combat-current-initiative {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 2px 0 13px;
+    padding: 5px 11px;
+    color: var(--umbral-bronze-bright);
+    border: 1px solid var(--umbral-line);
+    border-radius: 999px;
+    background: rgba(0,0,0,.2);
+    font: 600 .58rem "Cinzel", serif;
+    letter-spacing: 1.1px;
+}
+body.theme-umbral .combat-current-initiative strong {
+    color: var(--umbral-parchment);
+    font: 600 1rem "Oswald", sans-serif;
+    letter-spacing: 0;
+}
+body.theme-umbral .combat-initiative-editor {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 0;
+    color: var(--umbral-paper-muted);
+    font: 600 .5rem "Cinzel", serif;
+    letter-spacing: .8px;
+    white-space: nowrap;
+}
+body.theme-umbral .combat-initiative-editor input,
+body.theme-umbral .combat-initiative-editor input:focus {
+    width: 54px;
+    height: 30px;
+    padding: 0 4px;
+    color: var(--umbral-bronze-bright);
+    border: 0 !important;
+    border-bottom: 1px solid var(--umbral-bronze-dark) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font: 600 1rem "Oswald", sans-serif;
+    text-align: center;
+    outline: none;
+}
+body.theme-umbral .combat-initiative-editor input:hover,
+body.theme-umbral .combat-initiative-editor input:focus { border-bottom-color: var(--umbral-bronze-bright) !important; }
+body.theme-umbral .combat-initiative-editor.current {
+    margin: 2px 0 13px;
+    padding: 5px 11px;
+    border: 1px solid var(--umbral-line);
+    border-radius: 999px;
+    background: rgba(0,0,0,.2);
+}
+body.theme-umbral .combat-initiative-editor.current input { width: 62px; }
+body.theme-umbral .combat-order-item .combat-initiative-editor { margin-left: auto; }
+body.theme-umbral .combat-order-item .combat-initiative-editor > span { display: none; }
+body.theme-umbral .combat-wait-card .combat-initiative-editor { justify-content: flex-start; margin-top: 5px; }
+
+@media (max-width: 680px) {
+    body.theme-umbral .sheet-dashboard-panel .class-btn { min-height: 116px; padding-top: 60px; border-radius: 7px !important; }
+    body.theme-umbral .combat-order-item .combat-initiative-editor > span { display: none; }
+}
+
     </style>
 </head>
 <body class="theme-umbral">
@@ -6709,8 +6864,8 @@ body.theme-umbral .combat-mini-resource.sa { border-bottom-color: var(--abyss-sa
             <div class="character-profile-main">
                 <div class="character-identity">
                     <span class="character-field-label">IDENTIDADE DO PERSONAGEM</span>
-                    <input type="text" id="user-nickname" class="character-name-input" placeholder="Nome do personagem" onchange="sheet.nickname = this.value; marcarAlteracao();">
-                    <input type="text" id="user-sub" class="character-origin-input" placeholder="Antecedência" onchange="sheet.antecedencia = this.value; marcarAlteracao();">
+                    <input type="text" id="user-nickname" class="character-name-input" aria-label="Nome do personagem" placeholder="Nome do personagem" onchange="sheet.nickname = this.value; marcarAlteracao();">
+                    <input type="text" id="user-sub" class="character-origin-input" aria-label="Antecedência do personagem" placeholder="Antecedência" onchange="sheet.antecedencia = this.value; marcarAlteracao();">
                 </div>
                 <div class="character-avatar-frame" onclick="mudarAvatar()" title="Alterar Avatar">
                     <img id="char-avatar-img" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
@@ -6753,7 +6908,7 @@ body.theme-umbral .combat-mini-resource.sa { border-bottom-color: var(--abyss-sa
     <div class="resource-section-header">
         <div>
             <span class="dashboard-eyebrow">CONDIÇÃO DO PERSONAGEM</span>
-            <h2>Controle seus recursos</h2>
+            <h2>Monitore seu estado</h2>
         </div>
         <div class="section-wordmark resource-wordmark"><span>ESTATÍSTICAS</span></div>
     </div>
@@ -13147,6 +13302,68 @@ function participanteTemIniciativa(participant) {
     return participant?.initiative !== null && participant?.initiative !== '' && participant?.initiative !== undefined && Number.isFinite(Number(participant.initiative));
 }
 
+function podeEditarIniciativaCombate(participant) {
+    if (!currentUser || !participant) return false;
+    return campaignState.role === 'mestre' || participant.ownerUid === currentUser.uid;
+}
+
+function controleIniciativaCombate(characterId, participant, variant = 'compact') {
+    const valor = participanteTemIniciativa(participant) ? Number(participant.initiative) : '';
+    const valorExibido = valor === '' ? '—' : escapeCampaignHtml(valor);
+    if (!podeEditarIniciativaCombate(participant)) {
+        if (variant === 'current') {
+            return `<span class="combat-current-initiative"><span>INICIATIVA</span><strong>${valorExibido}</strong></span>`;
+        }
+        return `<span class="combat-initiative-value" title="Iniciativa">${valorExibido}</span>`;
+    }
+    const classe = variant === 'current' ? ' current' : (variant === 'waiting' ? ' waiting' : '');
+    return `
+        <label class="combat-initiative-editor${classe}" title="Alterar iniciativa">
+            <span>INICIATIVA</span>
+            <input type="number" inputmode="numeric" value="${escapeCampaignHtml(valor)}" aria-label="Iniciativa de ${escapeCampaignHtml(participant.name || 'personagem')}" placeholder="—"
+                onclick="event.stopPropagation()"
+                onkeydown="if(event.key === 'Enter'){ event.preventDefault(); this.blur(); }"
+                onchange="alterarIniciativaCombate('${escapeCampaignHtml(characterId)}', this.value, this)">
+        </label>
+    `;
+}
+
+async function alterarIniciativaCombate(characterId, rawValue, inputElement = null) {
+    const combat = combateAtivoDaCampanha();
+    const participant = combat?.participants?.[characterId];
+    const valorAnterior = participanteTemIniciativa(participant) ? Number(participant.initiative) : '';
+    const restaurarCampo = () => {
+        if (inputElement) inputElement.value = valorAnterior === '' ? '' : valorAnterior;
+    };
+    if (!participant || !podeEditarIniciativaCombate(participant) || !campaignState.activeId) {
+        restaurarCampo();
+        return;
+    }
+    const texto = String(rawValue ?? '').trim();
+    const numero = Number(texto);
+    if (!texto || !Number.isFinite(numero)) {
+        restaurarCampo();
+        return;
+    }
+    const initiative = Math.trunc(numero);
+    if (inputElement) inputElement.disabled = true;
+    try {
+        await database.ref(`campaigns/${campaignState.activeId}/combat/participants/${characterId}`).update({
+            initiative,
+            requested: false,
+            initiativeAdjustedBy: currentUser.uid,
+            initiativeAdjustedAt: firebase.database.ServerValue.TIMESTAMP
+        });
+        tocarSom('click');
+    } catch (error) {
+        console.error('Erro ao alterar Iniciativa:', error);
+        restaurarCampo();
+        alert('Não foi possível alterar a Iniciativa agora.');
+    } finally {
+        if (inputElement) inputElement.disabled = false;
+    }
+}
+
 function processarAlertaTurno(campaignId, combat) {
     if (!currentUser || !combat || combat.phase !== 'active') {
         if (!combat) delete campaignState.turnAlertKeys[campaignId];
@@ -13301,7 +13518,9 @@ function coordenarCombateComoMestre(campaignId, combat) {
     const readyIds = ordenarParticipantesPorIniciativa(participants);
     const missing = readyIds.filter(id => !currentOrder.includes(id));
     const removed = currentOrder.filter(id => !participants[id]);
-    if (!missing.length && !removed.length) return;
+    const autoOrderChanged = combat.orderCustomized !== true
+        && (readyIds.length !== currentOrder.length || readyIds.some((id, index) => currentOrder[index] !== id));
+    if (!missing.length && !removed.length && !autoOrderChanged) return;
     const currentId = currentOrder[Number(combat.currentIndex) || 0];
     let nextOrder = currentOrder.filter(id => participants[id]);
     if (combat.orderCustomized) nextOrder.push(...missing);
@@ -13433,7 +13652,9 @@ function renderizarEsperaIniciativa(combat) {
                 ${avatarCampanhaHtml(participant)}
                 <div>
                     <strong>${escapeCampaignHtml(participant.name || 'Personagem')}</strong>
-                    <span>${rolled ? `Iniciativa ${escapeCampaignHtml(participant.initiative)}` : 'Aguardando rolagem...'}</span>
+                    ${podeEditarIniciativaCombate(participant)
+                        ? controleIniciativaCombate(id, participant, 'waiting')
+                        : `<span>${rolled ? `Iniciativa ${escapeCampaignHtml(participant.initiative)}` : 'Aguardando rolagem...'}</span>`}
                 </div>
             </div>
         `;
@@ -13469,7 +13690,7 @@ function renderizarCombateAtivo(combat) {
                         <span class="combat-mini-resource sa">SAN <strong>${escapeCampaignHtml(sa.current)}/${escapeCampaignHtml(sa.max)}</strong></span>
                     </span>
                 </span>
-                <span class="combat-initiative-value">${escapeCampaignHtml(participant.initiative)}</span>
+                ${controleIniciativaCombate(id, participant, 'compact')}
                 ${isMaster ? `<span class="combat-reorder"><button onclick="moverCombatente('${escapeCampaignHtml(id)}', -1)">▲</button><button onclick="moverCombatente('${escapeCampaignHtml(id)}', 1)">▼</button></span>` : ''}
             </div>
         `;
@@ -13484,9 +13705,9 @@ function renderizarCombateAtivo(combat) {
     const currentPa = recursoParticipante(current, 'pa');
     const currentSa = recursoParticipante(current, 'sa');
     currentCard.innerHTML = `
-        <span class="combat-current-initiative">INICIATIVA ${escapeCampaignHtml(current.initiative)}</span>
         ${avatarCampanhaHtml(current)}
         <h2>${escapeCampaignHtml(current.name || 'Personagem')}</h2>
+        ${controleIniciativaCombate(currentId, current, 'current')}
         <p>${isOwnTurn ? 'É a sua vez!' : `Turno de ${escapeCampaignHtml(current.ownerName || 'combatente')}`}</p>
         <div class="combat-current-resources">
             ${barraRecursoEscudo('PV', 'pv', currentPv)}
