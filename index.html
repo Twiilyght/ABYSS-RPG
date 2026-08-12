@@ -7203,6 +7203,30 @@ body.theme-umbral .custom-skills-collapse-toggle:focus-visible { border-color: v
 }
 .combat-quick-tab:hover { color: #ddd; }
 .combat-quick-tab.active { color: var(--text-gold); border-bottom-color: var(--text-gold); }
+.combat-quick-filter-toolbar {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(145px, .45fr) auto;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+}
+.combat-quick-filter-toolbar.skills { grid-template-columns: minmax(180px, 1fr) minmax(125px, .38fr) minmax(145px, .44fr) auto; }
+.combat-quick-filter-toolbar[hidden] { display: none !important; }
+.combat-quick-filter-toolbar .search-bar,
+.combat-quick-filter-toolbar .modal-input { width: 100%; min-width: 0; height: 38px; margin: 0; padding: 0 11px; }
+.combat-quick-select-all {
+    min-height: 38px;
+    padding: 0 13px;
+    border: 1px solid color-mix(in srgb, var(--text-gold) 45%, var(--border-color));
+    background: rgba(0,0,0,.2);
+    color: var(--text-gold);
+    cursor: pointer;
+    font: 600 .55rem 'Cinzel', serif;
+    letter-spacing: .6px;
+    white-space: nowrap;
+}
+.combat-quick-select-all:hover { color: #fff; border-color: var(--light-purple); }
+.combat-quick-select-all:disabled { opacity: .38; cursor: default; }
 .combat-quick-picker {
     display: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -7252,6 +7276,15 @@ body.theme-umbral .custom-skills-collapse-toggle:focus-visible { border-color: v
 .combat-quick-rolls .combat-quick-damage-roll:hover { color: #fff !important; border-color: #ff6878 !important; background: rgba(118,30,44,.28) !important; }
 .combat-quick-damage-group { display: flex; flex: 1 1 100%; flex-wrap: wrap; align-items: center; gap: 6px; }
 .combat-quick-damage-label { flex: 1 1 100%; color: #a77c81; font: 600 .52rem 'Cinzel', serif; letter-spacing: 1px; }
+.combat-quick-damage-empty {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 6px 9px;
+    color: #8e7c80;
+    border: 1px dashed #563b42;
+    font-size: .65rem;
+}
 .combat-quick-skill-main { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; margin-top: 12px; }
 .combat-quick-skill-meta { color: #9a93a0; font-size: .7rem; line-height: 1.45; }
 .combat-quick-skill-roll {
@@ -7315,6 +7348,55 @@ body.theme-umbral .custom-skills-collapse-toggle:focus-visible { border-color: v
 .combat-roll-history-controls span { min-width: 52px; color: #77717c; font-size: .62rem; text-align: center; }
 .combat-roll-history-controls .combat-roll-delete { margin-left: 8px; color: #e07782; border-color: #63323a; }
 
+/* Recursos editáveis diretamente na ordem e no cartão do turno. */
+.combat-mini-resource.can-edit { padding: 3px; }
+.combat-mini-resource-editor { display: inline-flex; align-items: center; justify-content: center; gap: 2px; }
+.combat-mini-resource-editor input {
+    width: 31px;
+    height: 21px;
+    min-width: 0;
+    padding: 0 2px;
+    border: 0;
+    border-bottom: 1px solid currentColor;
+    border-radius: 0;
+    background: transparent;
+    color: #fff;
+    font: 600 .68rem 'Oswald', sans-serif;
+    text-align: center;
+    outline: none;
+}
+.combat-mini-resource-editor input:focus { border-bottom-color: #fff; background: rgba(255,255,255,.05); }
+.combat-mini-resource-editor em { color: #6f6874; font-style: normal; }
+.combat-current-resource-row {
+    --combat-resource-color: #aaa;
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 7px 0;
+}
+.combat-current-resource-row + .combat-current-resource-row { border-top: 1px solid rgba(255,255,255,.055); }
+.combat-current-resource-copy { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 7px; color: var(--combat-resource-color); text-align: left; }
+.combat-current-resource-copy > span { font: 600 .56rem 'Cinzel', serif; letter-spacing: .8px; }
+.combat-current-resource-values { display: inline-flex; align-items: center; gap: 4px; color: #6e6872; }
+.combat-current-resource-values input {
+    width: 48px;
+    height: 29px;
+    padding: 0 3px;
+    border: 1px solid color-mix(in srgb, var(--combat-resource-color) 48%, #302a34);
+    border-radius: 3px;
+    background: #08070a;
+    color: #fff;
+    font: 600 .85rem 'Oswald', sans-serif;
+    text-align: center;
+    outline: none;
+}
+.combat-current-resource-values input:focus { border-color: var(--combat-resource-color); }
+.combat-current-resource-values em { color: #6e6872; font-style: normal; }
+.combat-current-resource-values strong { color: #ddd; font: 600 .82rem 'Oswald', sans-serif; }
+.combat-current-resource-row .shield-resource-track { height: 12px; }
+.combat-resource-saving { opacity: .5; pointer-events: none; }
+
 body.theme-umbral .favorite-skill-card,
 body.theme-umbral .combat-quick-access-panel,
 body.theme-umbral .combat-quick-picker,
@@ -7326,6 +7408,11 @@ body.theme-umbral .combat-quick-card.is-item { border-left-color: var(--umbral-b
 body.theme-umbral .combat-quick-card.is-skill { border-left-color: #477f9f; }
 body.theme-umbral .combat-quick-tab.active { color: var(--umbral-bronze-bright); border-bottom-color: var(--umbral-bronze); }
 body.theme-umbral .combat-featured-roll { border-color: var(--umbral-line); border-left-color: var(--featured-roll-color, var(--umbral-bronze)); background: rgba(7,5,8,.82); }
+body.theme-umbral .combat-quick-filter-toolbar .search-bar,
+body.theme-umbral .combat-quick-filter-toolbar .modal-input { border-color: var(--umbral-line); background: #080705; }
+body.theme-umbral .combat-mini-resource-editor input,
+body.theme-umbral .combat-current-resource-values input { border-color: var(--umbral-line); border-bottom-color: currentColor; border-radius: 0; background: #080705; }
+body.theme-umbral .combat-current-resource-row + .combat-current-resource-row { border-top-color: var(--umbral-line-soft); }
 
 body.theme-umbral .custom-skill-form { border-right-color: var(--umbral-line); }
 body.theme-umbral .custom-skill-use-heading,
@@ -7344,6 +7431,8 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
     .combat-quick-picker,
     .combat-quick-grid { grid-template-columns: 1fr; }
     .combat-quick-access-head { align-items: flex-start; flex-direction: column; }
+    .combat-quick-filter-toolbar,
+    .combat-quick-filter-toolbar.skills { grid-template-columns: 1fr; }
     .combat-featured-roll-head { grid-template-columns: 38px minmax(0, 1fr) auto; }
     .combat-featured-roll-avatar { width: 38px; height: 38px; }
     .combat-featured-roll-total { font-size: 1.6rem; }
@@ -8047,6 +8136,29 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
                     <div class="combat-quick-tabs" role="tablist" aria-label="Tipo de acesso rápido">
                         <button type="button" class="combat-quick-tab active" id="combat-quick-tab-actions" role="tab" aria-selected="true" onclick="mudarAbaAcessoRapidoCombate('acoes')">ITENS &amp; HABILIDADES</button>
                         <button type="button" class="combat-quick-tab" id="combat-quick-tab-skills" role="tab" aria-selected="false" onclick="mudarAbaAcessoRapidoCombate('pericias')">PERÍCIAS</button>
+                    </div>
+                    <div id="combat-quick-filters-actions" class="combat-quick-filter-toolbar" aria-label="Filtros de itens e habilidades">
+                        <input type="search" class="search-bar" id="combat-quick-action-search" placeholder="Pesquisar item, ataque, habilidade ou feitiço..." oninput="atualizarFiltroAcessoRapidoCombate('busca', this.value)">
+                        <select class="modal-input" id="combat-quick-action-type" aria-label="Filtrar tipo de conteúdo" onchange="atualizarFiltroAcessoRapidoCombate('tipo', this.value)">
+                            <option value="">Todos os tipos</option>
+                            <option value="item">Itens</option>
+                            <option value="ataque">Ataques</option>
+                            <option value="habilidade">Habilidades</option>
+                            <option value="feitico">Feitiços</option>
+                        </select>
+                        <button type="button" class="combat-quick-select-all" id="combat-quick-select-all-actions" onclick="alternarTodosAcessoRapidoCombate()">✓ Escolher todos</button>
+                    </div>
+                    <div id="combat-quick-filters-skills" class="combat-quick-filter-toolbar skills" aria-label="Filtros de perícias" hidden>
+                        <input type="search" class="search-bar" id="combat-quick-skill-search" placeholder="Pesquisar perícia..." oninput="atualizarFiltroAcessoRapidoCombate('busca', this.value)">
+                        <select class="modal-input" id="combat-quick-skill-attribute" aria-label="Filtrar perícias por atributo" onchange="atualizarFiltroAcessoRapidoCombate('atributo', this.value)">
+                            <option value="">Todos os atributos</option>
+                            <option value="FOR">FOR — Força</option><option value="AGI">AGI — Agilidade</option><option value="INT">INT — Intelecto</option><option value="CON">CON — Constituição</option><option value="POD">POD — Poder</option>
+                        </select>
+                        <select class="modal-input" id="combat-quick-skill-training" aria-label="Filtrar perícias por treinamento" onchange="atualizarFiltroAcessoRapidoCombate('treino', this.value)">
+                            <option value="">Todo treinamento</option>
+                            <option value="trained">Treinadas</option><option value="untrained">Não treinadas</option><option value="2">Bônus +2</option><option value="4">Bônus +4</option>
+                        </select>
+                        <button type="button" class="combat-quick-select-all" id="combat-quick-select-all-skills" onclick="alternarTodosAcessoRapidoCombate()">✓ Escolher todos</button>
                     </div>
                     <div id="combat-quick-picker" class="combat-quick-picker"></div>
                     <div id="combat-quick-grid" class="combat-quick-grid"></div>
@@ -11399,25 +11511,39 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     }
 
     function normalizarRolagensPrincipais(acao, origemItem = false) {
-        if (Array.isArray(acao?.rolagensPrincipais) && acao.rolagensPrincipais.length) {
-            return acao.rolagensPrincipais.map((rolagem, indice) => ({
-                nome: String(rolagem.nome || `Dano ${indice + 1}`),
-                formula: String(rolagem.formula || ''),
-                atributo: targetListAtributos.includes(rolagem.atributo) ? rolagem.atributo : '',
-                temCrit: rolagem.temCrit === true,
-                critMargem: Math.max(1, parseInt(rolagem.critMargem) || 20),
-                critDano: String(rolagem.critDano || '')
-            })).filter(rolagem => rolagem.formula);
+        const rolagensSalvas = Array.isArray(acao?.rolagensPrincipais)
+            ? acao.rolagensPrincipais
+            : (acao?.rolagensPrincipais && typeof acao.rolagensPrincipais === 'object' ? Object.values(acao.rolagensPrincipais) : []);
+        if (rolagensSalvas.length) {
+            const normalizadas = rolagensSalvas.map((rolagem, indice) => {
+                const formula = typeof rolagem === 'string' || typeof rolagem === 'number'
+                    ? rolagem
+                    : (rolagem?.formula ?? rolagem?.dano ?? rolagem?.damage ?? rolagem?.valor ?? rolagem?.expressao ?? rolagem?.formulaDano ?? rolagem?.dados ?? '');
+                const atributoBruto = String(rolagem?.atributo || rolagem?.danoAtributo || rolagem?.attribute || '').toUpperCase();
+                return {
+                    nome: String(rolagem?.nome || rolagem?.label || rolagem?.titulo || `Dano ${indice + 1}`),
+                    formula: String(formula || '').trim(),
+                    atributo: targetListAtributos.includes(atributoBruto) ? atributoBruto : '',
+                    temCrit: rolagem?.temCrit === true || rolagem?.temCrit === 'true' || rolagem?.crit === true || rolagem?.crit === 'true',
+                    critMargem: Math.max(1, parseInt(rolagem?.critMargem || rolagem?.margemCrit) || 20),
+                    critDano: String(rolagem?.critDano || rolagem?.danoCritico || '')
+                };
+            }).filter(rolagem => rolagem.formula);
+            if (normalizadas.length) return normalizadas;
         }
-        const formula = origemItem ? acao?.weapDano : acao?.dano;
+        const candidatos = origemItem
+            ? [acao?.weapDano, acao?.dano, acao?.damage, acao?.danoBase, acao?.formulaDano, acao?.dadosDano, acao?.formula, acao?.dados]
+            : [acao?.dano, acao?.weapDano, acao?.damage, acao?.danoBase, acao?.formulaDano, acao?.dadosDano, acao?.formula, acao?.dados];
+        const formula = candidatos.find(valor => String(valor ?? '').trim());
         if (!formula) return [];
+        const atributoBruto = String((origemItem ? (acao?.weapAtributo || acao?.danoAtributo) : (acao?.danoAtributo || acao?.weapAtributo)) || '').toUpperCase();
         return [{
             nome: origemItem ? 'Dano da arma' : 'Dano principal',
-            formula: String(formula),
-            atributo: (origemItem ? acao?.weapAtributo : acao?.danoAtributo) || '',
-            temCrit: origemItem ? true : acao?.temCrit === true,
-            critMargem: Math.max(1, parseInt(origemItem ? acao?.weapCritMargem : acao?.critMargem) || 20),
-            critDano: String(origemItem ? acao?.weapCritDano : acao?.critDano || '')
+            formula: String(formula).trim(),
+            atributo: targetListAtributos.includes(atributoBruto) ? atributoBruto : '',
+            temCrit: origemItem ? Boolean(acao?.weapCritDano || acao?.temCrit || acao?.weapCritMargem) : acao?.temCrit === true,
+            critMargem: Math.max(1, parseInt(origemItem ? (acao?.weapCritMargem || acao?.critMargem) : (acao?.critMargem || acao?.weapCritMargem)) || 20),
+            critDano: String(origemItem ? (acao?.weapCritDano || acao?.critDano || '') : (acao?.critDano || acao?.weapCritDano || ''))
         }];
     }
 
@@ -11455,8 +11581,15 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     }
 
     function normalizarRolagensExtras(acao) {
-        if (Array.isArray(acao?.rolagensExtras) && acao.rolagensExtras.length) {
-            return acao.rolagensExtras.map((rolagem, indice) => ({ nome: rolagem.nome || `Rolagem ${indice + 1}`, formula: rolagem.formula || '' })).filter(r => r.formula);
+        const salvas = Array.isArray(acao?.rolagensExtras)
+            ? acao.rolagensExtras
+            : (acao?.rolagensExtras && typeof acao.rolagensExtras === 'object' ? Object.values(acao.rolagensExtras) : []);
+        if (salvas.length) {
+            const normalizadas = salvas.map((rolagem, indice) => ({
+                nome: typeof rolagem === 'object' && rolagem?.nome ? rolagem.nome : `Rolagem ${indice + 1}`,
+                formula: typeof rolagem === 'string' || typeof rolagem === 'number' ? String(rolagem) : String(rolagem?.formula || rolagem?.dados || '')
+            })).filter(rolagem => rolagem.formula.trim());
+            if (normalizadas.length) return normalizadas;
         }
         return (Array.isArray(acao?.extras) ? acao.extras : []).map((formula, indice) => ({ nome: `Rolagem ${indice + 1}`, formula }));
     }
@@ -14819,8 +14952,128 @@ function recursoParticipante(participant, id) {
     };
 }
 
+function podeEditarRecursosCombate(participant) {
+    return Boolean(currentUser && participant && (
+        campaignState.role === 'mestre' || participant.ownerUid === currentUser.uid
+    ));
+}
+
+function valorRecursoParaInput(valor) {
+    const numero = Number(valor);
+    return Number.isFinite(numero) ? String(Math.trunc(numero)) : '';
+}
+
+function recursoMiniCombateHtml(characterId, participant, label, id, resource) {
+    if (!podeEditarRecursosCombate(participant)) {
+        return `<span class="combat-mini-resource ${id}">${label} <strong>${escapeCampaignHtml(resource.current)}/${escapeCampaignHtml(resource.max)}</strong></span>`;
+    }
+    return `
+        <label class="combat-mini-resource ${id} can-edit" title="Editar ${escapeCampaignHtml(label)} atual">
+            ${escapeCampaignHtml(label)}
+            <span class="combat-mini-resource-editor">
+                <input type="number" inputmode="numeric" value="${escapeCampaignHtml(valorRecursoParaInput(resource.current))}" placeholder="—" aria-label="${escapeCampaignHtml(label)} atual de ${escapeCampaignHtml(participant.name || 'personagem')}" onchange="alterarRecursoCombate('${escapeCampaignHtml(characterId)}', '${id}', this.value, this)" onkeydown="if(event.key === 'Enter') this.blur()">
+                <em>/</em><strong>${escapeCampaignHtml(resource.max)}</strong>
+            </span>
+        </label>`;
+}
+
+function barraRecursoCombateHtml(characterId, participant, label, type, resource) {
+    if (!podeEditarRecursosCombate(participant)) return barraRecursoEscudo(label, type, resource);
+    const cores = { pv: '#ff1744', pa: '#ffca28', sa: '#00e5ff' };
+    return `
+        <div class="combat-current-resource-row" style="--combat-resource-color:${cores[type] || '#aaa'}">
+            <label class="combat-current-resource-copy">
+                <span>${escapeCampaignHtml(label)}</span>
+                <span class="combat-current-resource-values">
+                    <input type="number" inputmode="numeric" value="${escapeCampaignHtml(valorRecursoParaInput(resource.current))}" placeholder="—" aria-label="${escapeCampaignHtml(label)} atual de ${escapeCampaignHtml(participant.name || 'personagem')}" onchange="alterarRecursoCombate('${escapeCampaignHtml(characterId)}', '${type}', this.value, this)" onkeydown="if(event.key === 'Enter') this.blur()">
+                    <em>/</em><strong>${escapeCampaignHtml(resource.max)}</strong>
+                </span>
+            </label>
+            <div class="shield-resource-track"><span class="shield-resource-fill ${type}" style="width:${percentualRecurso(resource)}%"></span></div>
+        </div>`;
+}
+
+async function alterarRecursoCombate(characterId, recursoId, valorBruto, input = null) {
+    const recursosPermitidos = new Set(['pv', 'pa', 'sa']);
+    const combat = combateAtivoDaCampanha();
+    const participant = combat?.participants?.[characterId];
+    if (!recursosPermitidos.has(recursoId) || !participant || !podeEditarRecursosCombate(participant)) {
+        alert('Você só pode alterar os recursos dos seus personagens. O Mestre pode alterar todos.');
+        renderizarTelaCombate();
+        return;
+    }
+    const numero = Number(valorBruto);
+    if (!Number.isFinite(numero)) {
+        renderizarTelaCombate();
+        return;
+    }
+    const valor = Math.trunc(numero);
+    const liveCharacter = campaignState.activeCampaign?.characters?.[participant.characterId];
+    const characterSheet = liveCharacter?.sheet || {};
+    const chaveAtual = `${recursoId}_atual`;
+    const chaveBase = `${recursoId}_base_atual`;
+    const modificador = modificadoresDaFicha(characterSheet, 'status', chaveAtual);
+    const valorBase = valor - modificador;
+    const updates = {};
+    const campaignId = campaignState.activeId;
+    const baseCombate = `campaigns/${campaignId}/combat/participants/${characterId}/resources`;
+    updates[`${baseCombate}/${chaveAtual}`] = valor;
+    updates[`${baseCombate}/${chaveBase}`] = valorBase;
+
+    if (liveCharacter) {
+        const basePersonagem = `campaigns/${campaignId}/characters/${participant.characterId}`;
+        updates[`${basePersonagem}/sheet/recursosFinos/${chaveAtual}`] = valor;
+        updates[`${basePersonagem}/sheet/recursosFinos/${chaveBase}`] = valorBase;
+        updates[`${basePersonagem}/updatedBy`] = currentUser.uid;
+        updates[`${basePersonagem}/updatedAt`] = firebase.database.ServerValue.TIMESTAMP;
+        if (liveCharacter.ownerUid === currentUser.uid && liveCharacter.slot !== undefined && liveCharacter.slot !== null) {
+            const baseSlot = `users/${currentUser.uid}/slots/${liveCharacter.slot}/recursosFinos`;
+            updates[`${baseSlot}/${chaveAtual}`] = valor;
+            updates[`${baseSlot}/${chaveBase}`] = valorBase;
+        }
+    }
+
+    const elementoEstado = input?.closest('.combat-mini-resource, .combat-current-resource-row');
+    if (input) input.value = valor;
+    if (elementoEstado) elementoEstado.classList.add('combat-resource-saving');
+    try {
+        await database.ref().update(updates);
+        if (!participant.resources) participant.resources = {};
+        participant.resources[chaveAtual] = valor;
+        participant.resources[chaveBase] = valorBase;
+        if (liveCharacter) {
+            if (!liveCharacter.sheet) liveCharacter.sheet = {};
+            if (!liveCharacter.sheet.recursosFinos) liveCharacter.sheet.recursosFinos = {};
+            liveCharacter.sheet.recursosFinos[chaveAtual] = valor;
+            liveCharacter.sheet.recursosFinos[chaveBase] = valorBase;
+            if (liveCharacter.ownerUid === currentUser.uid && String(document.getElementById('save-slot')?.value || '') === String(liveCharacter.slot)) {
+                if (!sheet.recursosFinos) sheet.recursosFinos = { pv_temp: 0, sa_temp: 0 };
+                sheet.recursosFinos[chaveAtual] = valor;
+                sheet.recursosFinos[chaveBase] = valorBase;
+                const inputFicha = document.getElementById(`curr-${recursoId}`);
+                const suspensaoAnterior = suspendResourceCapture;
+                suspendResourceCapture = true;
+                if (inputFicha) inputFicha.value = valor;
+                if (inputFicha) updateBar(recursoId);
+                suspendResourceCapture = suspensaoAnterior;
+            }
+        }
+        renderizarTelaCombate();
+    } catch (error) {
+        console.error('Erro ao alterar recurso no combate:', error);
+        alert('Não foi possível atualizar esse recurso. Verifique sua conexão e tente novamente.');
+        renderizarTelaCombate();
+    } finally {
+        if (elementoEstado) elementoEstado.classList.remove('combat-resource-saving');
+    }
+}
+
 let seletorAcessoRapidoCombateAberto = false;
 let abaAcessoRapidoCombate = 'acoes';
+const filtrosAcessoRapidoCombate = {
+    acoes: { busca: '', tipo: '' },
+    pericias: { busca: '', atributo: '', treino: '' }
+};
 
 function garantirIdsConteudoAcessoRapido() {
     if (!Array.isArray(sheet.habilidades)) sheet.habilidades = [];
@@ -14869,6 +15122,92 @@ function conteudosDisponiveisAcessoRapido(aba = abaAcessoRapidoCombate) {
         ...sheet.habilidades.map((conteudo, indice) => ({ kind: 'habilidade', conteudo, indice })).filter(entrada => !entrada.conteudo.isSeparator),
         ...sheet.itens.map((conteudo, indice) => ({ kind: 'item', conteudo, indice })).filter(entrada => !entrada.conteudo.isSeparator)
     ];
+}
+
+function tipoConteudoAcessoRapido(entrada) {
+    if (entrada?.kind === 'item') return 'item';
+    if (entrada?.kind === 'pericia') return 'pericia';
+    return ['ataque', 'habilidade', 'feitico'].includes(entrada?.conteudo?.tipo) ? entrada.conteudo.tipo : 'habilidade';
+}
+
+function textoPesquisaConteudoAcessoRapido(entrada) {
+    const conteudo = entrada?.conteudo || {};
+    if (entrada?.kind === 'pericia') {
+        const detalhes = detalhesDaPericia(conteudo) || {};
+        return normalizarTextoFiltro([
+            conteudo.n,
+            conteudo.a,
+            detalhes.descricao || '',
+            ...(detalhes.usos || []).flatMap(uso => [uso.titulo || '', uso.texto || ''])
+        ].join(' '));
+    }
+    return normalizarTextoFiltro([
+        conteudo.nome,
+        conteudo.desc,
+        tipoConteudoAcessoRapido(entrada),
+        ...normalizarRolagensPrincipais(conteudo, entrada.kind === 'item').flatMap(rolagem => [rolagem.nome, rolagem.formula, rolagem.atributo]),
+        ...normalizarRolagensExtras(conteudo).flatMap(rolagem => [rolagem.nome, rolagem.formula]),
+        ...normalizarCustosAcao(conteudo).map(custo => custo.nome)
+    ].join(' '));
+}
+
+function filtrarConteudosAcessoRapido(entradas, aba = abaAcessoRapidoCombate) {
+    const filtro = filtrosAcessoRapidoCombate[aba === 'pericias' ? 'pericias' : 'acoes'];
+    const busca = normalizarTextoFiltro(filtro.busca);
+    return (entradas || []).filter(entrada => {
+        if (busca && !textoPesquisaConteudoAcessoRapido(entrada).includes(busca)) return false;
+        if (aba === 'pericias') {
+            const pericia = entrada.conteudo || {};
+            if (filtro.atributo && pericia.a !== filtro.atributo) return false;
+            const treino = parseInt(pericia.t) || 0;
+            if (filtro.treino === 'trained' && treino <= 0) return false;
+            if (filtro.treino === 'untrained' && treino > 0) return false;
+            if ((filtro.treino === '2' || filtro.treino === '4') && treino !== Number(filtro.treino)) return false;
+        } else if (filtro.tipo && tipoConteudoAcessoRapido(entrada) !== filtro.tipo) return false;
+        return true;
+    });
+}
+
+function atualizarFiltroAcessoRapidoCombate(campo, valor) {
+    const aba = abaAcessoRapidoCombate === 'pericias' ? 'pericias' : 'acoes';
+    if (Object.prototype.hasOwnProperty.call(filtrosAcessoRapidoCombate[aba], campo)) {
+        filtrosAcessoRapidoCombate[aba][campo] = String(valor || '');
+        renderizarAcessoRapidoCombate();
+    }
+}
+
+function referenciaEntradaAcessoRapido(entrada) {
+    if (entrada?.kind === 'pericia') return String(entrada.conteudo?.id || entrada.conteudo?.n || '');
+    return String(entrada?.conteudo?.idUnico || '');
+}
+
+function chaveEntradaAcessoRapido(entrada) {
+    return `${entrada?.kind}:${referenciaEntradaAcessoRapido(entrada)}`;
+}
+
+function alternarTodosAcessoRapidoCombate() {
+    tocarSom('click');
+    const visiveis = filtrarConteudosAcessoRapido(conteudosDisponiveisAcessoRapido(abaAcessoRapidoCombate), abaAcessoRapidoCombate);
+    if (!visiveis.length) return;
+    const atuais = normalizarAcessoRapidoCombate();
+    const chavesAtuais = new Set(atuais.map(entrada => `${entrada.kind}:${entrada.id}`));
+    const chavesVisiveis = new Set(visiveis.map(chaveEntradaAcessoRapido));
+    const todosEscolhidos = [...chavesVisiveis].every(chave => chavesAtuais.has(chave));
+    if (todosEscolhidos) {
+        sheet.combatQuickAccess = atuais.filter(entrada => !chavesVisiveis.has(`${entrada.kind}:${entrada.id}`));
+    } else {
+        sheet.combatQuickAccess = [...atuais];
+        visiveis.forEach(entrada => {
+            const id = referenciaEntradaAcessoRapido(entrada);
+            const chave = `${entrada.kind}:${id}`;
+            if (id && !chavesAtuais.has(chave)) {
+                sheet.combatQuickAccess.push({ kind: entrada.kind, id });
+                chavesAtuais.add(chave);
+            }
+        });
+    }
+    marcarAlteracao();
+    renderizarAcessoRapidoCombate();
 }
 
 function mudarAbaAcessoRapidoCombate(aba) {
@@ -14922,6 +15261,21 @@ function rolagensDanoItemAcessoRapido(item) {
     return rolagens.filter(rolagem => String(rolagem.formula || '').trim());
 }
 
+function rolagensExtrasItemAcessoRapido(item) {
+    const secundarias = String(item?.weapSec || '')
+        .split(',')
+        .map((formula, indice) => ({ nome: `Dano secundário ${indice + 1}`, formula: formula.trim() }))
+        .filter(rolagem => rolagem.formula);
+    const extras = normalizarRolagensExtras(item);
+    const vistos = new Set();
+    return [...secundarias, ...extras].filter(rolagem => {
+        const chave = `${String(rolagem.nome || '').trim()}::${String(rolagem.formula || '').trim()}`;
+        if (!rolagem.formula || vistos.has(chave)) return false;
+        vistos.add(chave);
+        return true;
+    });
+}
+
 function rolarItemPrincipalPorIndice(indice, indiceRolagem = 0) {
     const item = sheet.itens?.[indice];
     const rolagem = rolagensDanoItemAcessoRapido(item)[indiceRolagem];
@@ -14933,6 +15287,13 @@ function rolarItemPrincipalPorIndice(indice, indiceRolagem = 0) {
         parseInt(rolagem.critMargem) || 20,
         rolagem.critDano || ''
     );
+}
+
+function rolarExtraItemAcessoRapidoPorIndice(indiceItem, indiceRolagem) {
+    const item = sheet.itens?.[indiceItem];
+    const rolagem = rolagensExtrasItemAcessoRapido(item)[indiceRolagem];
+    if (!rolagem?.formula) return;
+    acionarRolagemGlobal(item.nome || 'Item', rolagem.nome || 'Rolagem', rolagem.formula, 'var(--text-gold)', 'RESULTADO');
 }
 
 function rolarPericiaAcessoRapido(idCodificado) {
@@ -14982,7 +15343,8 @@ function cardAcessoRapidoCombate(entrada) {
             : `abrirEditorHab('${escapeCampaignHtml(conteudo.tipo || 'habilidade')}', ${indice})`);
     const dadosPrincipais = isItem ? rolagensDanoItemAcessoRapido(conteudo) : normalizarRolagensPrincipais(conteudo);
     const rolagensPrincipais = dadosPrincipais.map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll combat-quick-damage-roll" onclick="${isItem ? 'rolarItemPrincipalPorIndice' : 'rolarHabilidadePorIndice'}(${indice}, ${indiceRolagem})">⚔ ${escapeCampaignHtml(rolagem.nome || 'Dano')} · ${escapeCampaignHtml(rolagem.formula)} ${badgeAtributoDano(rolagem.atributo)}</button>`).join('');
-    const rolagensExtras = normalizarRolagensExtras(conteudo).map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="${isItem ? 'rolarExtraItemPorIndice' : 'rolarExtraHabilidadePorIndice'}(${indice}, ${indiceRolagem})">🎲 ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)}</button>`).join('');
+    const dadosExtras = isItem ? rolagensExtrasItemAcessoRapido(conteudo) : normalizarRolagensExtras(conteudo);
+    const rolagensExtras = dadosExtras.map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="${isItem ? 'rolarExtraItemAcessoRapidoPorIndice' : 'rolarExtraHabilidadePorIndice'}(${indice}, ${indiceRolagem})">🎲 ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)}</button>`).join('');
     return `
         <article class="combat-quick-card ${isItem ? 'is-item' : ''}">
             <header class="combat-quick-card-head">
@@ -14999,7 +15361,10 @@ function cardAcessoRapidoCombate(entrada) {
             ${conteudo.desc ? `<div class="combat-quick-description">${renderMarkdown(conteudo.desc)}</div>` : ''}
             <div class="combat-quick-rolls">
                 ${botaoCustoAcao(conteudo, isItem ? 'item' : 'habilidade', indice)}
-                ${rolagensPrincipais ? `<span class="combat-quick-damage-group"><span class="combat-quick-damage-label">ROLAGEM DE DANO</span>${rolagensPrincipais}</span>` : ''}
+                <span class="combat-quick-damage-group">
+                    <span class="combat-quick-damage-label">ROLAGEM DE DANO</span>
+                    ${rolagensPrincipais || '<span class="combat-quick-damage-empty">Sem fórmula de dano. Use ✎ para configurar.</span>'}
+                </span>
                 ${rolagensExtras}
             </div>
         </article>`;
@@ -15012,19 +15377,36 @@ function renderizarAcessoRapidoCombate() {
     const toggle = document.getElementById('combat-quick-picker-toggle');
     const tabAcoes = document.getElementById('combat-quick-tab-actions');
     const tabPericias = document.getElementById('combat-quick-tab-skills');
+    const filtrosAcoes = document.getElementById('combat-quick-filters-actions');
+    const filtrosPericias = document.getElementById('combat-quick-filters-skills');
+    const selecionarTodosAcoes = document.getElementById('combat-quick-select-all-actions');
+    const selecionarTodasPericias = document.getElementById('combat-quick-select-all-skills');
     if (!painel || !picker || !grid || !toggle || !tabAcoes || !tabPericias) return;
 
     const selecionados = normalizarAcessoRapidoCombate();
     const selecionadosSet = new Set(selecionados.map(entrada => `${entrada.kind}:${entrada.id}`));
-    const disponiveis = conteudosDisponiveisAcessoRapido(abaAcessoRapidoCombate);
     const mostrandoPericias = abaAcessoRapidoCombate === 'pericias';
+    const todosDisponiveis = conteudosDisponiveisAcessoRapido(abaAcessoRapidoCombate);
+    const disponiveis = filtrarConteudosAcessoRapido(todosDisponiveis, abaAcessoRapidoCombate);
+    const filtroAtual = filtrosAcessoRapidoCombate[mostrandoPericias ? 'pericias' : 'acoes'];
+    const filtroAtivo = Object.values(filtroAtual).some(valor => String(valor || '').trim());
     tabAcoes.classList.toggle('active', !mostrandoPericias);
     tabAcoes.setAttribute('aria-selected', String(!mostrandoPericias));
     tabPericias.classList.toggle('active', mostrandoPericias);
     tabPericias.setAttribute('aria-selected', String(mostrandoPericias));
+    if (filtrosAcoes) filtrosAcoes.hidden = mostrandoPericias;
+    if (filtrosPericias) filtrosPericias.hidden = !mostrandoPericias;
     picker.classList.toggle('active', seletorAcessoRapidoCombateAberto);
     toggle.setAttribute('aria-expanded', String(seletorAcessoRapidoCombateAberto));
     toggle.textContent = seletorAcessoRapidoCombateAberto ? 'Concluir seleção' : (mostrandoPericias ? '+ Escolher perícias' : '+ Escolher itens e habilidades');
+    const botaoSelecionarTodos = mostrandoPericias ? selecionarTodasPericias : selecionarTodosAcoes;
+    const chavesVisiveis = disponiveis.map(chaveEntradaAcessoRapido);
+    const todosVisiveisSelecionados = chavesVisiveis.length > 0 && chavesVisiveis.every(chave => selecionadosSet.has(chave));
+    if (botaoSelecionarTodos) {
+        botaoSelecionarTodos.disabled = !chavesVisiveis.length;
+        botaoSelecionarTodos.textContent = todosVisiveisSelecionados ? '✕ Limpar todos' : '✓ Escolher todos';
+        botaoSelecionarTodos.title = filtroAtivo ? 'Aplica-se aos resultados visíveis' : 'Aplica-se a todos desta aba';
+    }
     picker.innerHTML = disponiveis.length ? disponiveis.map(({ kind, conteudo }) => {
         const referencia = kind === 'pericia' ? (conteudo.id || conteudo.n) : conteudo.idUnico;
         const idCodificado = codificarValorInline(referencia);
@@ -15034,14 +15416,14 @@ function renderizarAcessoRapidoCombate() {
             <input type="checkbox" ${selecionadosSet.has(chaveSelecao) ? 'checked' : ''} onchange="alternarConteudoAcessoRapido('${kind}', '${idCodificado}', this.checked)">
             <span><strong>${escapeCampaignHtml(kind === 'pericia' ? conteudo.n : (conteudo.nome || 'Sem nome'))}</strong><small>${escapeCampaignHtml(tipo)}</small></span>
         </label>`;
-    }).join('') : `<div class="combat-quick-empty">${mostrandoPericias ? 'Nenhuma perícia disponível nesta ficha.' : 'Crie itens, ataques, feitiços ou habilidades na ficha para adicioná-los aqui.'}</div>`;
+    }).join('') : `<div class="combat-quick-empty">${filtroAtivo ? 'Nenhum resultado corresponde à pesquisa e aos filtros.' : (mostrandoPericias ? 'Nenhuma perícia disponível nesta ficha.' : 'Crie itens, ataques, feitiços ou habilidades na ficha para adicioná-los aqui.')}</div>`;
 
     const porChave = new Map(disponiveis.map(entrada => [`${entrada.kind}:${entrada.kind === 'pericia' ? (entrada.conteudo.id || entrada.conteudo.n) : entrada.conteudo.idUnico}`, entrada]));
     const tiposDaAba = mostrandoPericias ? new Set(['pericia']) : new Set(['item', 'habilidade']);
     const cards = selecionados.filter(entrada => tiposDaAba.has(entrada.kind)).map(entrada => porChave.get(`${entrada.kind}:${entrada.id}`)).filter(Boolean);
     grid.innerHTML = cards.length
         ? cards.map(entrada => entrada.kind === 'pericia' ? cardPericiaAcessoRapido(entrada.conteudo) : cardAcessoRapidoCombate(entrada)).join('')
-        : `<div class="combat-quick-empty">${mostrandoPericias ? 'Nenhuma perícia no acesso rápido. Use “Escolher perícias” para adicionar.' : 'Nenhum item ou habilidade no acesso rápido. Use o botão acima para montar seu painel.'}</div>`;
+        : `<div class="combat-quick-empty">${filtroAtivo ? 'Nenhum atalho selecionado corresponde aos filtros atuais.' : (mostrandoPericias ? 'Nenhuma perícia no acesso rápido. Use “Escolher perícias” para adicionar.' : 'Nenhum item ou habilidade no acesso rápido. Use o botão acima para montar seu painel.')}</div>`;
 }
 
 function chaveTurnoCombate(combat) {
@@ -15580,9 +15962,9 @@ function renderizarCombateAtivo(combat) {
                     <strong>${escapeCampaignHtml(participant.name || 'Personagem')}</strong>
                     <small>${index === currentIndex ? 'Turno atual' : escapeCampaignHtml(participant.ownerName || '')}</small>
                     <span class="combat-mini-resources">
-                        <span class="combat-mini-resource pv">PV <strong>${escapeCampaignHtml(pv.current)}/${escapeCampaignHtml(pv.max)}</strong></span>
-                        <span class="combat-mini-resource pa">PA <strong>${escapeCampaignHtml(pa.current)}/${escapeCampaignHtml(pa.max)}</strong></span>
-                        <span class="combat-mini-resource sa">SAN <strong>${escapeCampaignHtml(sa.current)}/${escapeCampaignHtml(sa.max)}</strong></span>
+                        ${recursoMiniCombateHtml(id, participant, 'PV', 'pv', pv)}
+                        ${recursoMiniCombateHtml(id, participant, 'PA', 'pa', pa)}
+                        ${recursoMiniCombateHtml(id, participant, 'SAN', 'sa', sa)}
                     </span>
                 </span>
                 ${controleIniciativaCombate(id, participant, 'compact')}
@@ -15606,9 +15988,9 @@ function renderizarCombateAtivo(combat) {
         <p>${isOwnTurn ? 'É a sua vez!' : `Turno de ${escapeCampaignHtml(current.ownerName || 'combatente')}`}</p>
         ${renderizarRolagemDestaqueCombate(combat)}
         <div class="combat-current-resources">
-            ${barraRecursoEscudo('PV', 'pv', currentPv)}
-            ${barraRecursoEscudo('PA', 'pa', currentPa)}
-            ${barraRecursoEscudo('SANIDADE', 'sa', currentSa)}
+            ${barraRecursoCombateHtml(currentId, current, 'PV', 'pv', currentPv)}
+            ${barraRecursoCombateHtml(currentId, current, 'PA', 'pa', currentPa)}
+            ${barraRecursoCombateHtml(currentId, current, 'SANIDADE', 'sa', currentSa)}
         </div>
         ${isMaster
             ? '<button class="campaign-submit-btn" onclick="pularTurnoCombate()">Pular turno →</button>'
