@@ -7189,6 +7189,20 @@ body.theme-umbral .custom-skills-collapse-toggle:focus-visible { border-color: v
 .combat-quick-access-title { min-width: 0; }
 .combat-quick-access-title span { display: block; color: var(--text-gold); font: 600 .62rem 'Cinzel', serif; letter-spacing: 1.8px; }
 .combat-quick-access-title small { display: block; margin-top: 4px; color: #8d8792; font-size: .72rem; }
+.combat-quick-tabs { display: flex; gap: 4px; margin-top: 15px; border-bottom: 1px solid var(--border-color); }
+.combat-quick-tab {
+    min-height: 36px;
+    padding: 0 15px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: #77717d;
+    cursor: pointer;
+    font: 600 .58rem 'Cinzel', serif;
+    letter-spacing: 1.1px;
+}
+.combat-quick-tab:hover { color: #ddd; }
+.combat-quick-tab.active { color: var(--text-gold); border-bottom-color: var(--text-gold); }
 .combat-quick-picker {
     display: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -7211,6 +7225,7 @@ body.theme-umbral .custom-skills-collapse-toggle:focus-visible { border-color: v
 .combat-quick-empty { grid-column: 1 / -1; padding: 25px 15px; color: #7e7784; border: 1px dashed #332d38; text-align: center; font-size: .78rem; }
 .combat-quick-card { min-width: 0; padding: 14px; border: 1px solid #332d38; border-left: 3px solid var(--light-purple); background: rgba(10,8,13,.72); }
 .combat-quick-card.is-item { border-left-color: var(--text-gold); }
+.combat-quick-card.is-skill { border-left-color: #43a8ff; }
 .combat-quick-card-head { display: grid; grid-template-columns: 45px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
 .combat-quick-card-image { display: grid; place-items: center; width: 45px; height: 45px; overflow: hidden; border: 1px solid #39313f; background: #0b0910; color: #756c7e; font-size: 1rem; }
 .combat-quick-card-image img { width: 100%; height: 100%; object-fit: cover; }
@@ -7224,6 +7239,81 @@ body.theme-umbral .custom-skills-collapse-toggle:focus-visible { border-color: v
 .combat-quick-rolls { display: flex; flex-wrap: wrap; gap: 6px; }
 .combat-quick-rolls .btn-roll,
 .combat-quick-card .action-cost-use { width: auto; max-width: 100%; margin: 0; padding: 6px 9px; font-size: .62rem; }
+.combat-quick-rolls .combat-quick-damage-roll {
+    display: inline-flex !important;
+    align-items: center;
+    min-height: 34px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: #ff8790 !important;
+    border-color: #86404a !important;
+    background: rgba(92,24,35,.17) !important;
+}
+.combat-quick-rolls .combat-quick-damage-roll:hover { color: #fff !important; border-color: #ff6878 !important; background: rgba(118,30,44,.28) !important; }
+.combat-quick-damage-group { display: flex; flex: 1 1 100%; flex-wrap: wrap; align-items: center; gap: 6px; }
+.combat-quick-damage-label { flex: 1 1 100%; color: #a77c81; font: 600 .52rem 'Cinzel', serif; letter-spacing: 1px; }
+.combat-quick-skill-main { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; margin-top: 12px; }
+.combat-quick-skill-meta { color: #9a93a0; font-size: .7rem; line-height: 1.45; }
+.combat-quick-skill-roll {
+    min-height: 34px;
+    padding: 0 13px;
+    border: 1px solid #376f99;
+    background: rgba(29,86,126,.16);
+    color: #8dceff;
+    cursor: pointer;
+    font: 600 .58rem 'Cinzel', serif;
+}
+.combat-quick-skill-roll:hover { color: #fff; border-color: #5bb9ff; }
+
+/* Resultado compartilhado do turno: persiste até uma nova rolagem ou avanço. */
+.combat-featured-roll {
+    width: min(560px, 100%);
+    margin: 4px 0 22px;
+    padding: 15px 17px;
+    border: 1px solid color-mix(in srgb, var(--featured-roll-color, var(--text-gold)) 54%, #332d38);
+    border-left: 3px solid var(--featured-roll-color, var(--text-gold));
+    background: linear-gradient(90deg, color-mix(in srgb, var(--featured-roll-color, var(--text-gold)) 10%, rgba(6,5,8,.88)), rgba(6,5,8,.78));
+    text-align: left;
+    animation: combatRollReveal .2s ease-out;
+}
+@keyframes combatRollReveal { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.combat-featured-roll-head { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; align-items: center; gap: 10px; }
+.combat-featured-roll-avatar {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    overflow: hidden;
+    border: 1px solid var(--featured-roll-color, var(--text-gold));
+    border-radius: 50%;
+    background: #0c0a0e;
+    color: var(--featured-roll-color, var(--text-gold));
+    font: 600 .76rem 'Cinzel', serif;
+}
+.combat-featured-roll-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.combat-featured-roll-copy { display: grid; min-width: 0; gap: 2px; }
+.combat-featured-roll-copy small { color: #8e8793; font-size: .62rem; }
+.combat-featured-roll-copy strong { overflow: hidden; color: #eee; font: 600 .72rem 'Cinzel', serif; text-overflow: ellipsis; white-space: nowrap; }
+.combat-featured-roll-total { color: var(--featured-roll-color, var(--text-gold)); font: 600 2rem 'Oswald', sans-serif; line-height: 1; }
+.combat-featured-roll-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 11px; padding-top: 9px; border-top: 1px solid #302a33; }
+.combat-featured-roll-status strong { color: var(--featured-roll-color, var(--text-gold)); font: 600 .58rem 'Cinzel', serif; letter-spacing: 1px; }
+.combat-featured-roll-status span { color: #a59eaa; font-size: .68rem; text-align: right; }
+.combat-featured-roll-detail { margin: 8px 0 0; color: #827b87; font-size: .64rem; line-height: 1.45; overflow-wrap: anywhere; }
+.combat-roll-history-controls { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 11px; padding-top: 10px; border-top: 1px dashed #302a33; }
+.combat-roll-history-controls button {
+    min-width: 31px;
+    height: 29px;
+    padding: 0 8px;
+    border: 1px solid #3a333f;
+    background: transparent;
+    color: #aaa;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+}
+.combat-roll-history-controls button:hover:not(:disabled) { color: #fff; border-color: var(--light-purple); }
+.combat-roll-history-controls button:disabled { opacity: .28; cursor: default; }
+.combat-roll-history-controls span { min-width: 52px; color: #77717c; font-size: .62rem; text-align: center; }
+.combat-roll-history-controls .combat-roll-delete { margin-left: 8px; color: #e07782; border-color: #63323a; }
 
 body.theme-umbral .favorite-skill-card,
 body.theme-umbral .combat-quick-access-panel,
@@ -7233,6 +7323,9 @@ body.theme-umbral .favorite-skill-card { border-left-color: var(--umbral-bronze)
 body.theme-umbral .combat-quick-access-panel { border-top-color: var(--umbral-bronze); }
 body.theme-umbral .combat-quick-card { border-left-color: var(--umbral-purple); }
 body.theme-umbral .combat-quick-card.is-item { border-left-color: var(--umbral-bronze); }
+body.theme-umbral .combat-quick-card.is-skill { border-left-color: #477f9f; }
+body.theme-umbral .combat-quick-tab.active { color: var(--umbral-bronze-bright); border-bottom-color: var(--umbral-bronze); }
+body.theme-umbral .combat-featured-roll { border-color: var(--umbral-line); border-left-color: var(--featured-roll-color, var(--umbral-bronze)); background: rgba(7,5,8,.82); }
 
 body.theme-umbral .custom-skill-form { border-right-color: var(--umbral-line); }
 body.theme-umbral .custom-skill-use-heading,
@@ -7251,6 +7344,9 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
     .combat-quick-picker,
     .combat-quick-grid { grid-template-columns: 1fr; }
     .combat-quick-access-head { align-items: flex-start; flex-direction: column; }
+    .combat-featured-roll-head { grid-template-columns: 38px minmax(0, 1fr) auto; }
+    .combat-featured-roll-avatar { width: 38px; height: 38px; }
+    .combat-featured-roll-total { font-size: 1.6rem; }
 }
 
 @media (max-width: 680px) {
@@ -7944,9 +8040,13 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
                     <div class="combat-quick-access-head">
                         <div class="combat-quick-access-title">
                             <span>ACESSO RÁPIDO</span>
-                            <small>Leia, role, edite e use os gastos da sua ficha sem sair do combate.</small>
+                            <small>Use suas ações e perícias sem sair do combate.</small>
                         </div>
-                        <button type="button" class="campaign-ghost-btn" id="combat-quick-picker-toggle" aria-expanded="false" onclick="alternarSeletorAcessoRapidoCombate()">+ Escolher itens e habilidades</button>
+                        <button type="button" class="campaign-ghost-btn" id="combat-quick-picker-toggle" aria-expanded="false" onclick="alternarSeletorAcessoRapidoCombate()">+ Escolher atalhos</button>
+                    </div>
+                    <div class="combat-quick-tabs" role="tablist" aria-label="Tipo de acesso rápido">
+                        <button type="button" class="combat-quick-tab active" id="combat-quick-tab-actions" role="tab" aria-selected="true" onclick="mudarAbaAcessoRapidoCombate('acoes')">ITENS &amp; HABILIDADES</button>
+                        <button type="button" class="combat-quick-tab" id="combat-quick-tab-skills" role="tab" aria-selected="false" onclick="mudarAbaAcessoRapidoCombate('pericias')">PERÍCIAS</button>
                     </div>
                     <div id="combat-quick-picker" class="combat-quick-picker"></div>
                     <div id="combat-quick-grid" class="combat-quick-grid"></div>
@@ -11151,8 +11251,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function enviarRolagemParaServidor(titulo, subtitulo, total, corStatus, txtStatus, detalhes, eventoSom = null, natural = null) {
         if (modoSecreto) return; 
         const nick = String(document.getElementById('user-nickname')?.value || sheet?.nickname || '').trim() || "Personagem sem nome";
-        const novaRolagemRef = database.ref('rolagens').push();
-        novaRolagemRef.set({
+        const dadosRolagem = {
             jogador: nick,
             jogadorUid: currentUser?.uid || '',
             avatar: String(sheet?.avatar || '').trim(),
@@ -11164,9 +11263,15 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             detalhes: detalhes,
             eventoSom: eventoSom,
             natural: natural,
-            clienteSessaoId: clienteSessaoId,
+            clienteSessaoId: clienteSessaoId
+        };
+        const novaRolagemRef = database.ref('rolagens').push();
+        novaRolagemRef.set({
+            ...dadosRolagem,
             timestamp: firebase.database.ServerValue.TIMESTAMP
         });
+        registrarRolagemDestaqueCombate(dadosRolagem)
+            .catch(erro => console.warn('A rolagem apareceu no Olho do Abismo, mas não pôde ser destacada no combate.', erro));
     }
 
     rolagensQuery.on('child_added', (snapshot) => {
@@ -14715,10 +14820,12 @@ function recursoParticipante(participant, id) {
 }
 
 let seletorAcessoRapidoCombateAberto = false;
+let abaAcessoRapidoCombate = 'acoes';
 
 function garantirIdsConteudoAcessoRapido() {
     if (!Array.isArray(sheet.habilidades)) sheet.habilidades = [];
     if (!Array.isArray(sheet.itens)) sheet.itens = [];
+    normalizarPericiasDaFicha();
     sheet.habilidades.forEach(habilidade => {
         if (!habilidade?.idUnico) habilidade.idUnico = gerarIdConteudoFicha(habilidade?.isSeparator ? 'separator' : 'action');
     });
@@ -14734,11 +14841,12 @@ function normalizarAcessoRapidoCombate() {
         : (sheet.combatQuickAccess && typeof sheet.combatQuickAccess === 'object' ? Object.values(sheet.combatQuickAccess) : []);
     const validos = new Set([
         ...sheet.habilidades.filter(item => !item.isSeparator).map(item => `habilidade:${item.idUnico}`),
-        ...sheet.itens.filter(item => !item.isSeparator).map(item => `item:${item.idUnico}`)
+        ...sheet.itens.filter(item => !item.isSeparator).map(item => `item:${item.idUnico}`),
+        ...sheet.pericias.map(pericia => `pericia:${pericia.id}`)
     ]);
     const vistos = new Set();
     sheet.combatQuickAccess = raw.map(entrada => ({
-        kind: entrada?.kind === 'item' ? 'item' : 'habilidade',
+        kind: entrada?.kind === 'item' ? 'item' : (entrada?.kind === 'pericia' ? 'pericia' : 'habilidade'),
         id: String(entrada?.id || '')
     })).filter(entrada => {
         const chave = `${entrada.kind}:${entrada.id}`;
@@ -14749,12 +14857,25 @@ function normalizarAcessoRapidoCombate() {
     return sheet.combatQuickAccess;
 }
 
-function conteudosDisponiveisAcessoRapido() {
+function conteudosDisponiveisAcessoRapido(aba = abaAcessoRapidoCombate) {
     garantirIdsConteudoAcessoRapido();
+    if (aba === 'pericias') {
+        return normalizarPericiasDaFicha()
+            .slice()
+            .sort((a, b) => String(a.n).localeCompare(String(b.n), 'pt-BR'))
+            .map((conteudo, indice) => ({ kind: 'pericia', conteudo, indice }));
+    }
     return [
         ...sheet.habilidades.map((conteudo, indice) => ({ kind: 'habilidade', conteudo, indice })).filter(entrada => !entrada.conteudo.isSeparator),
         ...sheet.itens.map((conteudo, indice) => ({ kind: 'item', conteudo, indice })).filter(entrada => !entrada.conteudo.isSeparator)
     ];
+}
+
+function mudarAbaAcessoRapidoCombate(aba) {
+    const novaAba = aba === 'pericias' ? 'pericias' : 'acoes';
+    if (abaAcessoRapidoCombate !== novaAba) tocarSom('click');
+    abaAcessoRapidoCombate = novaAba;
+    renderizarAcessoRapidoCombate();
 }
 
 function alternarSeletorAcessoRapidoCombate() {
@@ -14767,9 +14888,10 @@ function alternarConteudoAcessoRapido(kind, idCodificado, selecionado) {
     tocarSom('click');
     const id = decodeURIComponent(idCodificado);
     const entradas = normalizarAcessoRapidoCombate();
-    const chave = `${kind}:${id}`;
+    const kindNormalizado = kind === 'item' ? 'item' : (kind === 'pericia' ? 'pericia' : 'habilidade');
+    const chave = `${kindNormalizado}:${id}`;
     const semAtual = entradas.filter(entrada => `${entrada.kind}:${entrada.id}` !== chave);
-    if (selecionado) semAtual.push({ kind: kind === 'item' ? 'item' : 'habilidade', id });
+    if (selecionado) semAtual.push({ kind: kindNormalizado, id });
     sheet.combatQuickAccess = semAtual;
     marcarAlteracao();
     renderizarAcessoRapidoCombate();
@@ -14779,9 +14901,30 @@ function removerConteudoAcessoRapido(kind, idCodificado) {
     alternarConteudoAcessoRapido(kind, idCodificado, false);
 }
 
+function rolagensDanoItemAcessoRapido(item) {
+    if (!item) return [];
+    let rolagens = normalizarRolagensPrincipais(item, true);
+    if (!rolagens.length) rolagens = normalizarRolagensPrincipais(item, false);
+    if (!rolagens.length && item.idUnico) {
+        const ataqueVinculado = sheet.habilidades?.find(habilidade => habilidade.itemIdRef === item.idUnico);
+        if (ataqueVinculado) rolagens = normalizarRolagensPrincipais(ataqueVinculado);
+    }
+    if (!rolagens.length && (item.weapDano || item.dano)) {
+        rolagens = [{
+            nome: 'Dano',
+            formula: String(item.weapDano || item.dano),
+            atributo: item.weapAtributo || item.danoAtributo || '',
+            temCrit: Boolean(item.weapCritDano || item.temCrit),
+            critMargem: parseInt(item.weapCritMargem || item.critMargem) || 20,
+            critDano: String(item.weapCritDano || item.critDano || '')
+        }];
+    }
+    return rolagens.filter(rolagem => String(rolagem.formula || '').trim());
+}
+
 function rolarItemPrincipalPorIndice(indice, indiceRolagem = 0) {
     const item = sheet.itens?.[indice];
-    const rolagem = normalizarRolagensPrincipais(item, true)[indiceRolagem];
+    const rolagem = rolagensDanoItemAcessoRapido(item)[indiceRolagem];
     if (!item || !rolagem?.formula) return;
     rolarHabilidadeComOuSemCrit(
         `${item.nome || 'Item'} — ${rolagem.nome || 'Rolagem'}`,
@@ -14790,6 +14933,40 @@ function rolarItemPrincipalPorIndice(indice, indiceRolagem = 0) {
         parseInt(rolagem.critMargem) || 20,
         rolagem.critDano || ''
     );
+}
+
+function rolarPericiaAcessoRapido(idCodificado) {
+    const pericia = obterPericiaPorReferencia(decodeURIComponent(idCodificado));
+    if (!pericia) return;
+    realizarRolagem(pericia.a, 0, pericia.n, true, pericia.n);
+}
+
+function cardPericiaAcessoRapido(pericia) {
+    const idCodificado = codificarValorInline(pericia.id || pericia.n);
+    const treino = parseInt(pericia.t) || 0;
+    const manual = parseInt(pericia.m) || 0;
+    const modEquipamento = getMods('pericia', pericia.n);
+    const atributo = (parseInt(sheet.atributos?.[pericia.a]) || 0) + getMods('atributo', pericia.a);
+    const bonus = atributo + treino + manual + modEquipamento;
+    const detalhes = detalhesDaPericia(pericia);
+    return `
+        <article class="combat-quick-card is-skill">
+            <header class="combat-quick-card-head">
+                <span class="combat-quick-card-image">◈</span>
+                <span class="combat-quick-card-heading">
+                    <small>PERÍCIA • ${escapeCampaignHtml(pericia.a)}</small>
+                    <h3 title="${escapeCampaignHtml(pericia.n)}">${escapeCampaignHtml(pericia.n)}</h3>
+                </span>
+                <span class="combat-quick-card-actions">
+                    ${detalhes ? `<button type="button" onclick="abrirInfoPericia(decodeURIComponent('${codificarValorInline(pericia.n)}'))" title="Ler perícia" aria-label="Ler ${escapeCampaignHtml(pericia.n)}">?</button>` : ''}
+                    <button type="button" onclick="removerConteudoAcessoRapido('pericia', '${idCodificado}')" title="Retirar do acesso rápido" aria-label="Retirar ${escapeCampaignHtml(pericia.n)} do acesso rápido">✕</button>
+                </span>
+            </header>
+            <div class="combat-quick-skill-main">
+                <span class="combat-quick-skill-meta">Atributo ${atributo >= 0 ? '+' : ''}${atributo} • Treino ${treino >= 0 ? '+' : ''}${treino} • Manual ${manual >= 0 ? '+' : ''}${manual}${modEquipamento ? ` • Equip. ${modEquipamento >= 0 ? '+' : ''}${modEquipamento}` : ''}<br><strong>Bônus total ${bonus >= 0 ? '+' : ''}${bonus}</strong></span>
+                <button type="button" class="combat-quick-skill-roll" onclick="rolarPericiaAcessoRapido('${idCodificado}')">🎲 Rolar</button>
+            </div>
+        </article>`;
 }
 
 function cardAcessoRapidoCombate(entrada) {
@@ -14803,9 +14980,8 @@ function cardAcessoRapidoCombate(entrada) {
         : (conteudo.geradoPorItem && conteudo.itemIdRef
             ? `abrirEditorItemPorReferencia('${escapeCampaignHtml(conteudo.itemIdRef)}')`
             : `abrirEditorHab('${escapeCampaignHtml(conteudo.tipo || 'habilidade')}', ${indice})`);
-    const rolagensPrincipais = isItem
-        ? normalizarRolagensPrincipais(conteudo, true).map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="rolarItemPrincipalPorIndice(${indice}, ${indiceRolagem})">⚔ ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)} ${badgeAtributoDano(rolagem.atributo)}</button>`).join('')
-        : normalizarRolagensPrincipais(conteudo).map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="rolarHabilidadePorIndice(${indice}, ${indiceRolagem})">⚔ ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)} ${badgeAtributoDano(rolagem.atributo)}</button>`).join('');
+    const dadosPrincipais = isItem ? rolagensDanoItemAcessoRapido(conteudo) : normalizarRolagensPrincipais(conteudo);
+    const rolagensPrincipais = dadosPrincipais.map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll combat-quick-damage-roll" onclick="${isItem ? 'rolarItemPrincipalPorIndice' : 'rolarHabilidadePorIndice'}(${indice}, ${indiceRolagem})">⚔ ${escapeCampaignHtml(rolagem.nome || 'Dano')} · ${escapeCampaignHtml(rolagem.formula)} ${badgeAtributoDano(rolagem.atributo)}</button>`).join('');
     const rolagensExtras = normalizarRolagensExtras(conteudo).map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="${isItem ? 'rolarExtraItemPorIndice' : 'rolarExtraHabilidadePorIndice'}(${indice}, ${indiceRolagem})">🎲 ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)}</button>`).join('');
     return `
         <article class="combat-quick-card ${isItem ? 'is-item' : ''}">
@@ -14823,7 +14999,7 @@ function cardAcessoRapidoCombate(entrada) {
             ${conteudo.desc ? `<div class="combat-quick-description">${renderMarkdown(conteudo.desc)}</div>` : ''}
             <div class="combat-quick-rolls">
                 ${botaoCustoAcao(conteudo, isItem ? 'item' : 'habilidade', indice)}
-                ${rolagensPrincipais}
+                ${rolagensPrincipais ? `<span class="combat-quick-damage-group"><span class="combat-quick-damage-label">ROLAGEM DE DANO</span>${rolagensPrincipais}</span>` : ''}
                 ${rolagensExtras}
             </div>
         </article>`;
@@ -14834,29 +15010,187 @@ function renderizarAcessoRapidoCombate() {
     const picker = document.getElementById('combat-quick-picker');
     const grid = document.getElementById('combat-quick-grid');
     const toggle = document.getElementById('combat-quick-picker-toggle');
-    if (!painel || !picker || !grid || !toggle) return;
+    const tabAcoes = document.getElementById('combat-quick-tab-actions');
+    const tabPericias = document.getElementById('combat-quick-tab-skills');
+    if (!painel || !picker || !grid || !toggle || !tabAcoes || !tabPericias) return;
 
     const selecionados = normalizarAcessoRapidoCombate();
     const selecionadosSet = new Set(selecionados.map(entrada => `${entrada.kind}:${entrada.id}`));
-    const disponiveis = conteudosDisponiveisAcessoRapido();
+    const disponiveis = conteudosDisponiveisAcessoRapido(abaAcessoRapidoCombate);
+    const mostrandoPericias = abaAcessoRapidoCombate === 'pericias';
+    tabAcoes.classList.toggle('active', !mostrandoPericias);
+    tabAcoes.setAttribute('aria-selected', String(!mostrandoPericias));
+    tabPericias.classList.toggle('active', mostrandoPericias);
+    tabPericias.setAttribute('aria-selected', String(mostrandoPericias));
     picker.classList.toggle('active', seletorAcessoRapidoCombateAberto);
     toggle.setAttribute('aria-expanded', String(seletorAcessoRapidoCombateAberto));
-    toggle.textContent = seletorAcessoRapidoCombateAberto ? 'Concluir seleção' : '+ Escolher itens e habilidades';
+    toggle.textContent = seletorAcessoRapidoCombateAberto ? 'Concluir seleção' : (mostrandoPericias ? '+ Escolher perícias' : '+ Escolher itens e habilidades');
     picker.innerHTML = disponiveis.length ? disponiveis.map(({ kind, conteudo }) => {
-        const chave = `${kind}:${conteudo.idUnico}`;
-        const idCodificado = codificarValorInline(conteudo.idUnico);
-        const tipo = kind === 'item' ? 'Item' : ({ ataque: 'Ataque', feitico: 'Feitiço', habilidade: 'Habilidade' }[conteudo.tipo] || 'Habilidade');
+        const referencia = kind === 'pericia' ? (conteudo.id || conteudo.n) : conteudo.idUnico;
+        const idCodificado = codificarValorInline(referencia);
+        const chaveSelecao = `${kind}:${referencia}`;
+        const tipo = kind === 'pericia' ? `${conteudo.a} • Treino ${parseInt(conteudo.t) > 0 ? `+${parseInt(conteudo.t)}` : '+0'}` : (kind === 'item' ? 'Item' : ({ ataque: 'Ataque', feitico: 'Feitiço', habilidade: 'Habilidade' }[conteudo.tipo] || 'Habilidade'));
         return `<label class="combat-quick-option">
-            <input type="checkbox" ${selecionadosSet.has(chave) ? 'checked' : ''} onchange="alternarConteudoAcessoRapido('${kind}', '${idCodificado}', this.checked)">
-            <span><strong>${escapeCampaignHtml(conteudo.nome || 'Sem nome')}</strong><small>${tipo}</small></span>
+            <input type="checkbox" ${selecionadosSet.has(chaveSelecao) ? 'checked' : ''} onchange="alternarConteudoAcessoRapido('${kind}', '${idCodificado}', this.checked)">
+            <span><strong>${escapeCampaignHtml(kind === 'pericia' ? conteudo.n : (conteudo.nome || 'Sem nome'))}</strong><small>${escapeCampaignHtml(tipo)}</small></span>
         </label>`;
-    }).join('') : '<div class="combat-quick-empty">Crie itens, ataques, feitiços ou habilidades na ficha para adicioná-los aqui.</div>';
+    }).join('') : `<div class="combat-quick-empty">${mostrandoPericias ? 'Nenhuma perícia disponível nesta ficha.' : 'Crie itens, ataques, feitiços ou habilidades na ficha para adicioná-los aqui.'}</div>`;
 
-    const porChave = new Map(disponiveis.map(entrada => [`${entrada.kind}:${entrada.conteudo.idUnico}`, entrada]));
-    const cards = selecionados.map(entrada => porChave.get(`${entrada.kind}:${entrada.id}`)).filter(Boolean);
+    const porChave = new Map(disponiveis.map(entrada => [`${entrada.kind}:${entrada.kind === 'pericia' ? (entrada.conteudo.id || entrada.conteudo.n) : entrada.conteudo.idUnico}`, entrada]));
+    const tiposDaAba = mostrandoPericias ? new Set(['pericia']) : new Set(['item', 'habilidade']);
+    const cards = selecionados.filter(entrada => tiposDaAba.has(entrada.kind)).map(entrada => porChave.get(`${entrada.kind}:${entrada.id}`)).filter(Boolean);
     grid.innerHTML = cards.length
-        ? cards.map(cardAcessoRapidoCombate).join('')
-        : '<div class="combat-quick-empty">Nenhum atalho selecionado. Use “Escolher itens e habilidades” para montar seu painel de combate.</div>';
+        ? cards.map(entrada => entrada.kind === 'pericia' ? cardPericiaAcessoRapido(entrada.conteudo) : cardAcessoRapidoCombate(entrada)).join('')
+        : `<div class="combat-quick-empty">${mostrandoPericias ? 'Nenhuma perícia no acesso rápido. Use “Escolher perícias” para adicionar.' : 'Nenhum item ou habilidade no acesso rápido. Use o botão acima para montar seu painel.'}</div>`;
+}
+
+function chaveTurnoCombate(combat) {
+    const order = ordemCombateArray(combat?.order).filter(id => combat?.participants?.[id]);
+    if (!order.length) return '';
+    const currentIndex = Math.min(Math.max(Number(combat?.currentIndex) || 0, 0), order.length - 1);
+    const currentId = order[currentIndex];
+    return `round-${Number(combat?.round) || 1}:character-${currentId}`;
+}
+
+function personagemDoRoladorNoCombate(combat) {
+    if (!currentUser || !combat?.participants) return '';
+    const candidatos = Object.entries(combat.participants).filter(([, participante]) => participante?.ownerUid === currentUser.uid);
+    if (!candidatos.length) return '';
+    const nomeFicha = normalizarTextoFiltro(sheet?.nickname || document.getElementById('user-nickname')?.value || '');
+    const porNome = candidatos.find(([, participante]) => normalizarTextoFiltro(participante?.name || '') === nomeFicha);
+    if (porNome) return porNome[0];
+    const slotAtual = String(document.getElementById('save-slot')?.value || '');
+    const porSlot = candidatos.find(([id]) => String(campaignState.activeCampaign?.characters?.[id]?.slot || '') === slotAtual);
+    return (porSlot || candidatos[0])?.[0] || '';
+}
+
+function combateAbertoParaDestaque() {
+    const tela = document.getElementById('campaign-combat');
+    const app = document.getElementById('campaign-app');
+    const combat = combateAtivoDaCampanha();
+    return Boolean(
+        currentUser &&
+        campaignState.activeId &&
+        app?.classList.contains('active') &&
+        tela && window.getComputedStyle(tela).display !== 'none' &&
+        combat?.phase === 'active' &&
+        chaveTurnoCombate(combat)
+    );
+}
+
+async function registrarRolagemDestaqueCombate(dadosRolagem) {
+    if (!combateAbertoParaDestaque()) return false;
+    const combat = combateAtivoDaCampanha();
+    const turnKey = chaveTurnoCombate(combat);
+    if (!turnKey) return false;
+    const rollRef = database.ref(`campaigns/${campaignState.activeId}/combat/rolls`).push();
+    const rollId = rollRef.key;
+    if (!rollId) return false;
+    const avatarOriginal = String(dadosRolagem?.avatar || '').trim();
+    const avatar = avatarOriginal.length <= 280000 ? avatarOriginal : '';
+    const roll = {
+        id: rollId,
+        turnKey,
+        round: Number(combat.round) || 1,
+        turnCharacterId: ordemCombateArray(combat.order)[Number(combat.currentIndex) || 0] || '',
+        rollerCharacterId: personagemDoRoladorNoCombate(combat),
+        rollerUid: currentUser.uid,
+        rollerName: String(dadosRolagem?.jogador || sheet?.nickname || 'Personagem sem nome'),
+        rollerAvatar: avatar,
+        title: String(dadosRolagem?.titulo || 'ROLAGEM'),
+        subtitle: String(dadosRolagem?.subtitulo || ''),
+        total: dadosRolagem?.total ?? '',
+        color: String(dadosRolagem?.cor || 'var(--text-gold)'),
+        status: String(dadosRolagem?.status || 'RESULTADO'),
+        details: String(dadosRolagem?.detalhes || '').replace(/<br\s*\/?>/gi, ' | ').replace(/<[^>]+>/g, ''),
+        natural: dadosRolagem?.natural ?? null,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+    const updates = {};
+    updates[`campaigns/${campaignState.activeId}/combat/rolls/${rollId}`] = roll;
+    updates[`campaigns/${campaignState.activeId}/combat/featuredRollId`] = rollId;
+    await database.ref().update(updates);
+    return true;
+}
+
+function rolagensDoTurnoAtual(combat) {
+    const turnKey = chaveTurnoCombate(combat);
+    if (!turnKey) return [];
+    return Object.entries(combat?.rolls || {})
+        .map(([id, roll]) => ({ id, ...(roll || {}) }))
+        .filter(roll => roll.turnKey === turnKey)
+        .sort((a, b) => (Number(a.timestamp) || 0) - (Number(b.timestamp) || 0) || String(a.id).localeCompare(String(b.id)));
+}
+
+function corSeguraRolagemCombate(valor) {
+    const cor = String(valor || '');
+    return /^(?:#[0-9a-f]{3,8}|rgba?\([\d\s.,%]+\)|var\(--[a-z0-9-]+\))$/i.test(cor) ? cor : 'var(--text-gold)';
+}
+
+function avatarRolagemCombate(roll, combat) {
+    const direto = String(roll?.rollerAvatar || '').trim();
+    if (/^(?:https?:\/\/|data:image\/)/i.test(direto)) return direto;
+    const participante = combat?.participants?.[roll?.rollerCharacterId];
+    const vinculado = campaignState.activeCampaign?.characters?.[roll?.rollerCharacterId];
+    return String(participante?.avatar || vinculado?.avatar || vinculado?.sheet?.avatar || '').trim();
+}
+
+function renderizarRolagemDestaqueCombate(combat) {
+    const rolagens = rolagensDoTurnoAtual(combat);
+    const featuredId = String(combat?.featuredRollId || '');
+    const indice = rolagens.findIndex(roll => roll.id === featuredId);
+    if (indice < 0) return '';
+    const roll = rolagens[indice];
+    const cor = corSeguraRolagemCombate(roll.color);
+    const avatar = avatarRolagemCombate(roll, combat);
+    const avatarSeguro = /^(?:https?:\/\/|data:image\/)/i.test(avatar) ? avatar : '';
+    const nome = String(roll.rollerName || 'Personagem');
+    const inicial = nome.trim().charAt(0).toLocaleUpperCase('pt-BR') || '?';
+    const controles = campaignState.role === 'mestre' ? `
+        <div class="combat-roll-history-controls" aria-label="Histórico de rolagens deste turno">
+            <button type="button" onclick="navegarRolagemDestaqueCombate(-1)" ${indice <= 0 ? 'disabled' : ''} title="Rolagem anterior">←</button>
+            <span>${indice + 1} / ${rolagens.length}</span>
+            <button type="button" onclick="navegarRolagemDestaqueCombate(1)" ${indice >= rolagens.length - 1 ? 'disabled' : ''} title="Próxima rolagem">→</button>
+            <button type="button" class="combat-roll-delete" onclick="apagarRolagemDestaqueCombate('${escapeCampaignHtml(roll.id)}')" title="Apagar esta rolagem">Apagar</button>
+        </div>` : '';
+    return `
+        <article class="combat-featured-roll" style="--featured-roll-color:${cor}" aria-live="polite">
+            <div class="combat-featured-roll-head">
+                <span class="combat-featured-roll-avatar">${avatarSeguro ? `<img src="${escapeCampaignHtml(avatarSeguro)}" alt="Foto de ${escapeCampaignHtml(nome)}">` : escapeCampaignHtml(inicial)}</span>
+                <span class="combat-featured-roll-copy"><small>${escapeCampaignHtml(nome)} rolou</small><strong>${escapeCampaignHtml(roll.title || 'ROLAGEM')}</strong></span>
+                <strong class="combat-featured-roll-total">${escapeCampaignHtml(roll.total ?? '—')}</strong>
+            </div>
+            <div class="combat-featured-roll-status"><strong>${escapeCampaignHtml(roll.status || 'RESULTADO')}</strong><span>${escapeCampaignHtml(roll.subtitle || '')}</span></div>
+            ${roll.details ? `<p class="combat-featured-roll-detail">${escapeCampaignHtml(roll.details)}</p>` : ''}
+            ${controles}
+        </article>`;
+}
+
+async function navegarRolagemDestaqueCombate(direcao) {
+    if (campaignState.role !== 'mestre' || !campaignState.activeId) return;
+    const combat = combateAtivoDaCampanha();
+    const rolagens = rolagensDoTurnoAtual(combat);
+    const atual = rolagens.findIndex(roll => roll.id === String(combat?.featuredRollId || ''));
+    const destino = Math.min(Math.max(atual + (direcao < 0 ? -1 : 1), 0), rolagens.length - 1);
+    if (atual < 0 || destino === atual || !rolagens[destino]) return;
+    tocarSom('click');
+    await database.ref(`campaigns/${campaignState.activeId}/combat/featuredRollId`).set(rolagens[destino].id);
+}
+
+async function apagarRolagemDestaqueCombate(rollId) {
+    if (campaignState.role !== 'mestre' || !campaignState.activeId) return;
+    const combat = combateAtivoDaCampanha();
+    const rolagens = rolagensDoTurnoAtual(combat);
+    const indice = rolagens.findIndex(roll => roll.id === rollId);
+    if (indice < 0 || !confirm(`Apagar a rolagem “${rolagens[indice].title || 'Rolagem'}” do combate?`)) return;
+    const proxima = rolagens[indice - 1] || rolagens[indice + 1] || null;
+    const updates = {};
+    updates[`campaigns/${campaignState.activeId}/combat/rolls/${rollId}`] = null;
+    if (String(combat.featuredRollId || '') === rollId) {
+        updates[`campaigns/${campaignState.activeId}/combat/featuredRollId`] = proxima?.id || null;
+    }
+    tocarSom('click');
+    await database.ref().update(updates);
 }
 
 function participanteTemIniciativa(participant) {
@@ -15270,6 +15604,7 @@ function renderizarCombateAtivo(combat) {
         <h2>${escapeCampaignHtml(current.name || 'Personagem')}</h2>
         ${controleIniciativaCombate(currentId, current, 'current')}
         <p>${isOwnTurn ? 'É a sua vez!' : `Turno de ${escapeCampaignHtml(current.ownerName || 'combatente')}`}</p>
+        ${renderizarRolagemDestaqueCombate(combat)}
         <div class="combat-current-resources">
             ${barraRecursoEscudo('PV', 'pv', currentPv)}
             ${barraRecursoEscudo('PA', 'pa', currentPa)}
@@ -15313,6 +15648,7 @@ async function pularTurnoCombate() {
     await database.ref(`campaigns/${campaignState.activeId}/combat`).update({
         currentIndex: nextIndex,
         round: nextRound,
+        featuredRollId: null,
         turnChangedAt: firebase.database.ServerValue.TIMESTAMP
     });
 }
