@@ -7110,6 +7110,129 @@ body.theme-umbral .custom-skills-collapse-toggle:focus-visible { border-color: v
 .custom-skill-manager-meta { color: #8d8792; font-size: .67rem; }
 .custom-skill-manager-actions { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
 .custom-skill-manager-actions .btn-action-card { width: 29px; height: 27px; margin: 0; padding: 0; border-radius: 4px; }
+.skill-inline-tools { display: inline-flex; align-items: center; gap: 3px; flex-shrink: 0; }
+.skill-favorite-btn {
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: transparent;
+    color: #716a78;
+    cursor: pointer;
+    font-size: .86rem;
+    line-height: 1;
+    transition: color .16s ease, border-color .16s ease, background .16s ease;
+}
+.skill-favorite-btn:hover,
+.skill-favorite-btn:focus-visible { color: var(--text-gold); border-color: color-mix(in srgb, var(--text-gold) 48%, transparent); outline: none; }
+.skill-favorite-btn.is-favorite { color: var(--text-gold); background: color-mix(in srgb, var(--text-gold) 10%, transparent); }
+.favorite-skills-block { margin-top: 22px; }
+#favorite-skills-manager { display: grid; gap: 7px; max-height: 280px; overflow: auto; padding: 2px 5px 2px 2px; }
+.favorite-skill-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 10px 11px;
+    border: 1px solid var(--border-color);
+    border-left: 2px solid var(--text-gold);
+    background: rgba(0,0,0,.2);
+}
+.favorite-skill-copy { display: grid; min-width: 0; gap: 2px; }
+.favorite-skill-copy strong { overflow: hidden; color: #eee; font: 600 .72rem 'Cinzel', serif; text-overflow: ellipsis; white-space: nowrap; }
+.favorite-skill-copy small { color: #888; font-size: .67rem; }
+.favorite-skill-actions { display: inline-flex; gap: 4px; }
+.favorite-skill-actions button {
+    min-height: 29px;
+    padding: 0 9px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: transparent;
+    color: #aaa;
+    cursor: pointer;
+    font: 600 .56rem 'Cinzel', serif;
+}
+.favorite-skill-actions button:first-child { color: var(--text-gold); border-color: color-mix(in srgb, var(--text-gold) 42%, var(--border-color)); }
+.favorite-skill-actions button:hover { color: #fff; border-color: var(--light-purple); }
+
+/* Identidade do personagem no Olho do Abismo. */
+.log-msg-user { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.log-msg-avatar {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--text-gold) 55%, #2b2630);
+    border-radius: 50%;
+    background: #111015;
+    color: var(--text-gold);
+    font: 600 .7rem 'Cinzel', serif;
+}
+.log-msg-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.log-msg-user-copy { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; min-width: 0; flex: 1; }
+.log-msg-user-copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.log-msg-time { flex-shrink: 0; color: #6f6973; font: .62rem var(--font-reading); }
+
+/* Acesso rápido privado da ficha dentro da arena de campanha. */
+.combat-quick-access-panel {
+    margin-top: 20px;
+    padding: 18px;
+    border: 1px solid var(--border-color);
+    border-top: 2px solid var(--text-gold);
+    background: rgba(5,4,8,.62);
+}
+.combat-quick-access-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.combat-quick-access-title { min-width: 0; }
+.combat-quick-access-title span { display: block; color: var(--text-gold); font: 600 .62rem 'Cinzel', serif; letter-spacing: 1.8px; }
+.combat-quick-access-title small { display: block; margin-top: 4px; color: #8d8792; font-size: .72rem; }
+.combat-quick-picker {
+    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    max-height: 250px;
+    margin-top: 15px;
+    padding: 12px;
+    overflow: auto;
+    border: 1px solid var(--border-color);
+    background: rgba(0,0,0,.3);
+}
+.combat-quick-picker.active { display: grid; }
+.combat-quick-option { display: flex; align-items: center; gap: 9px; min-width: 0; padding: 9px 10px; border: 1px solid #302b35; cursor: pointer; }
+.combat-quick-option:hover { border-color: var(--light-purple); background: rgba(123,31,162,.09); }
+.combat-quick-option input { accent-color: var(--primary-purple); }
+.combat-quick-option span { display: grid; min-width: 0; gap: 2px; }
+.combat-quick-option strong { overflow: hidden; color: #eee; font: 600 .68rem 'Cinzel', serif; text-overflow: ellipsis; white-space: nowrap; }
+.combat-quick-option small { color: #817a87; font-size: .62rem; text-transform: uppercase; }
+.combat-quick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; margin-top: 15px; }
+.combat-quick-empty { grid-column: 1 / -1; padding: 25px 15px; color: #7e7784; border: 1px dashed #332d38; text-align: center; font-size: .78rem; }
+.combat-quick-card { min-width: 0; padding: 14px; border: 1px solid #332d38; border-left: 3px solid var(--light-purple); background: rgba(10,8,13,.72); }
+.combat-quick-card.is-item { border-left-color: var(--text-gold); }
+.combat-quick-card-head { display: grid; grid-template-columns: 45px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.combat-quick-card-image { display: grid; place-items: center; width: 45px; height: 45px; overflow: hidden; border: 1px solid #39313f; background: #0b0910; color: #756c7e; font-size: 1rem; }
+.combat-quick-card-image img { width: 100%; height: 100%; object-fit: cover; }
+.combat-quick-card-heading { min-width: 0; }
+.combat-quick-card-heading small { display: block; color: var(--text-gold); font: 600 .52rem 'Cinzel', serif; letter-spacing: 1px; }
+.combat-quick-card-heading h3 { overflow: hidden; margin: 3px 0 0; color: #f1edf3; font-size: .82rem; text-overflow: ellipsis; white-space: nowrap; }
+.combat-quick-card-actions { display: inline-flex; gap: 4px; }
+.combat-quick-card-actions button { width: 29px; height: 29px; padding: 0; border: 1px solid #3a3340; border-radius: 3px; background: transparent; color: #aaa; cursor: pointer; }
+.combat-quick-card-actions button:hover { color: #fff; border-color: var(--light-purple); }
+.combat-quick-description { max-height: 135px; margin: 12px 0 9px; overflow: auto; color: #c9c3cd; font-size: .78rem; line-height: 1.55; }
+.combat-quick-rolls { display: flex; flex-wrap: wrap; gap: 6px; }
+.combat-quick-rolls .btn-roll,
+.combat-quick-card .action-cost-use { width: auto; max-width: 100%; margin: 0; padding: 6px 9px; font-size: .62rem; }
+
+body.theme-umbral .favorite-skill-card,
+body.theme-umbral .combat-quick-access-panel,
+body.theme-umbral .combat-quick-picker,
+body.theme-umbral .combat-quick-card { border-color: var(--umbral-line); background: rgba(7,5,8,.72); }
+body.theme-umbral .favorite-skill-card { border-left-color: var(--umbral-bronze); }
+body.theme-umbral .combat-quick-access-panel { border-top-color: var(--umbral-bronze); }
+body.theme-umbral .combat-quick-card { border-left-color: var(--umbral-purple); }
+body.theme-umbral .combat-quick-card.is-item { border-left-color: var(--umbral-bronze); }
 
 body.theme-umbral .custom-skill-form { border-right-color: var(--umbral-line); }
 body.theme-umbral .custom-skill-use-heading,
@@ -7123,6 +7246,11 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
     .custom-skill-fields,
     .custom-skill-use-row { grid-template-columns: 1fr; }
     .custom-skill-use-row button { width: 100%; }
+    .favorite-skill-card { grid-template-columns: 1fr; }
+    .favorite-skill-actions { justify-content: flex-end; }
+    .combat-quick-picker,
+    .combat-quick-grid { grid-template-columns: 1fr; }
+    .combat-quick-access-head { align-items: flex-start; flex-direction: column; }
 }
 
 @media (max-width: 680px) {
@@ -7505,6 +7633,13 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
                         <small id="custom-skills-counter">0 perícias</small>
                     </div>
                     <div id="custom-skills-manager" class="skills-list"></div>
+                    <div class="favorite-skills-block">
+                        <div class="custom-skill-library-heading">
+                            <span>PERÍCIAS FAVORITAS</span>
+                            <small id="favorite-skills-counter">0 favoritas</small>
+                        </div>
+                        <div id="favorite-skills-manager" aria-live="polite"></div>
+                    </div>
                 </div>
               </div>
             </div>
@@ -7805,6 +7940,17 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
                     </aside>
                     <section id="combat-current-card" class="combat-current-card"></section>
                 </div>
+                <section id="combat-quick-access" class="combat-quick-access-panel" aria-label="Acesso rápido de combate">
+                    <div class="combat-quick-access-head">
+                        <div class="combat-quick-access-title">
+                            <span>ACESSO RÁPIDO</span>
+                            <small>Leia, role, edite e use os gastos da sua ficha sem sair do combate.</small>
+                        </div>
+                        <button type="button" class="campaign-ghost-btn" id="combat-quick-picker-toggle" aria-expanded="false" onclick="alternarSeletorAcessoRapidoCombate()">+ Escolher itens e habilidades</button>
+                    </div>
+                    <div id="combat-quick-picker" class="combat-quick-picker"></div>
+                    <div id="combat-quick-grid" class="combat-quick-grid"></div>
+                </section>
             </section>
         </main>
     </div>
@@ -8800,6 +8946,7 @@ function resetarConfiguracoesAudio() {
             pericias: periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1 })),
             habilidades: [],
             itens: [], 
+            combatQuickAccess: [],
             historicoAcoes: [],
             rds: [],
             notas: [],
@@ -9100,6 +9247,7 @@ function resetarConfiguracoesAudio() {
         const resumo = document.getElementById('custom-skills-toggle-summary');
         if (!container || !contador) return;
         garantirEditorPericiasCustomizadas();
+        renderizarBibliotecaPericiasFavoritas();
         const personalizadas = normalizarPericiasDaFicha().filter(pericia => pericia.custom)
             .sort((a, b) => a.n.localeCompare(b.n, 'pt-BR'));
         contador.textContent = `${personalizadas.length} ${personalizadas.length === 1 ? 'perícia' : 'perícias'}`;
@@ -10214,6 +10362,239 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     const PERSONAL_TEMPLATE_TYPES = new Set(['ataque', 'habilidade', 'feitico', 'item']);
     let modelosPessoais = [];
 
+    const FAVORITE_SKILLS_PREFIX = 'abyssFavoriteSkillsV1:';
+    const FAVORITE_SKILLS_MIGRATION_PREFIX = 'abyssFavoriteSkillsMigratedV1:';
+    let periciasFavoritas = [];
+
+    function chaveLocalPericiasFavoritas(user = currentUser) {
+        return `${FAVORITE_SKILLS_PREFIX}${user?.uid || 'local'}`;
+    }
+
+    function chaveFontePericia(pericia) {
+        return `${pericia?.custom ? 'custom' : 'base'}:${normalizarTextoFiltro(pericia?.n || '')}`;
+    }
+
+    function gerarIdPericiaFavorita() {
+        return `fav_skill_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+    }
+
+    function normalizarPericiaFavorita(valor, idFallback = '') {
+        if (!valor || typeof valor !== 'object' || !valor.data || typeof valor.data !== 'object') return null;
+        const nome = String(valor.name || valor.data.n || '').trim();
+        if (!nome) return null;
+        const custom = valor.custom === true || valor.data.custom === true;
+        const data = {
+            n: nome,
+            a: ATRIBUTOS_PERICIA.includes(valor.data.a) ? valor.data.a : 'POD',
+            t: [0, 2, 4].includes(parseInt(valor.data.t)) ? parseInt(valor.data.t) : 0,
+            m: parseInt(valor.data.m) || 0,
+            d: valor.data.d === undefined ? 1 : (parseInt(valor.data.d) || 0),
+            custom,
+            descricao: custom ? String(valor.data.descricao || '') : '',
+            usos: custom ? normalizarUsosPericia(valor.data.usos) : []
+        };
+        return {
+            id: String(valor.id || idFallback || gerarIdPericiaFavorita()).replace(/[^a-zA-Z0-9_-]/g, '_'),
+            sourceKey: String(valor.sourceKey || chaveFontePericia(data)),
+            name: nome,
+            custom,
+            data,
+            createdAt: Number(valor.createdAt) || Date.now(),
+            updatedAt: Number(valor.updatedAt) || Number(valor.createdAt) || Date.now(),
+            schemaVersion: 1
+        };
+    }
+
+    function normalizarPericiasFavoritas(raw) {
+        const entradas = Array.isArray(raw)
+            ? raw.map((valor, indice) => [valor?.id || `legacy_fav_${indice}`, valor])
+            : Object.entries(raw && typeof raw === 'object' ? raw : {});
+        const porFonte = new Map();
+        entradas.map(([id, valor]) => normalizarPericiaFavorita(valor, id)).filter(Boolean).forEach(favorita => {
+            const anterior = porFonte.get(favorita.sourceKey);
+            if (!anterior || favorita.updatedAt >= anterior.updatedAt) porFonte.set(favorita.sourceKey, favorita);
+        });
+        return [...porFonte.values()].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+    }
+
+    function lerPericiasFavoritasLocais(user = currentUser) {
+        try {
+            return normalizarPericiasFavoritas(JSON.parse(localStorage.getItem(chaveLocalPericiasFavoritas(user)) || '[]'));
+        } catch (erro) {
+            console.warn('Não foi possível ler as perícias favoritas locais.', erro);
+            return [];
+        }
+    }
+
+    function salvarPericiasFavoritasLocais(user = currentUser) {
+        localStorage.setItem(chaveLocalPericiasFavoritas(user), JSON.stringify(periciasFavoritas));
+    }
+
+    function mapaPericiasFavoritas() {
+        return periciasFavoritas.reduce((mapa, favorita) => {
+            mapa[favorita.id] = favorita;
+            return mapa;
+        }, {});
+    }
+
+    async function persistirPericiasFavoritas() {
+        periciasFavoritas = normalizarPericiasFavoritas(periciasFavoritas);
+        salvarPericiasFavoritasLocais();
+        if (!currentUser) return true;
+        try {
+            await database.ref(`users/${currentUser.uid}/favoriteSkills`).set(mapaPericiasFavoritas());
+            return true;
+        } catch (erro) {
+            console.warn('A perícia foi favoritada neste navegador, mas a sincronização ficou pendente.', erro);
+            return false;
+        }
+    }
+
+    async function carregarPericiasFavoritas(user = currentUser) {
+        const uidEsperado = user?.uid || '';
+        const locais = lerPericiasFavoritasLocais(user);
+        if (!user) {
+            periciasFavoritas = locais;
+            if (typeof render === 'function') render();
+            return;
+        }
+        try {
+            const snapshot = await database.ref(`users/${user.uid}/favoriteSkills`).once('value');
+            if (currentUser?.uid !== uidEsperado) return;
+            const remotas = normalizarPericiasFavoritas(snapshot.val());
+            const chaveMigracao = `${FAVORITE_SKILLS_MIGRATION_PREFIX}${user.uid}`;
+            const anonimas = localStorage.getItem(chaveMigracao) ? [] : lerPericiasFavoritasLocais(null);
+            periciasFavoritas = normalizarPericiasFavoritas([...locais, ...anonimas, ...remotas]);
+            salvarPericiasFavoritasLocais(user);
+            localStorage.setItem(chaveMigracao, '1');
+            database.ref(`users/${user.uid}/favoriteSkills`).set(mapaPericiasFavoritas())
+                .catch(erro => console.warn('As favoritas foram carregadas, mas a atualização remota ficou pendente.', erro));
+        } catch (erro) {
+            if (currentUser?.uid === uidEsperado) periciasFavoritas = locais;
+            console.warn('Não foi possível sincronizar as perícias favoritas.', erro);
+        }
+        if (typeof render === 'function') render();
+    }
+
+    function periciaEstaFavorita(pericia) {
+        const chave = chaveFontePericia(pericia);
+        return periciasFavoritas.some(favorita => favorita.sourceKey === chave);
+    }
+
+    function criarSnapshotPericiaFavorita(pericia) {
+        const agora = Date.now();
+        const detalhes = detalhesDaPericia(pericia) || {};
+        return normalizarPericiaFavorita({
+            id: gerarIdPericiaFavorita(),
+            sourceKey: chaveFontePericia(pericia),
+            name: pericia.n,
+            custom: pericia.custom === true,
+            data: {
+                n: pericia.n,
+                a: pericia.a,
+                t: pericia.t,
+                m: pericia.m,
+                d: pericia.d,
+                custom: pericia.custom === true,
+                descricao: pericia.custom ? (detalhes.descricao || '') : '',
+                usos: pericia.custom ? normalizarUsosPericia(detalhes.usos) : []
+            },
+            createdAt: agora,
+            updatedAt: agora
+        });
+    }
+
+    async function alternarFavoritaPericia(referenciaCodificada) {
+        tocarSom('click');
+        const pericia = obterPericiaPorReferencia(decodeURIComponent(referenciaCodificada));
+        if (!pericia) return;
+        const chave = chaveFontePericia(pericia);
+        const existente = periciasFavoritas.find(favorita => favorita.sourceKey === chave);
+        if (existente) periciasFavoritas = periciasFavoritas.filter(favorita => favorita.id !== existente.id);
+        else periciasFavoritas.push(criarSnapshotPericiaFavorita(pericia));
+        const sincronizado = await persistirPericiasFavoritas();
+        render();
+        spawnPopup(
+            'PERÍCIA FAVORITA',
+            pericia.n,
+            existente ? 'REMOVIDA' : '★',
+            'var(--text-gold)',
+            existente ? 'FORA DA BIBLIOTECA' : 'PRONTA PARA REUTILIZAR',
+            existente ? 'A perícia continua nesta ficha.' : (sincronizado ? 'Use-a em qualquer uma das suas fichas.' : 'Salva neste navegador; a sincronização ficou pendente.')
+        );
+    }
+
+    async function removerPericiaFavorita(id) {
+        tocarSom('click');
+        const favorita = periciasFavoritas.find(item => item.id === id);
+        if (!favorita) return;
+        periciasFavoritas = periciasFavoritas.filter(item => item.id !== id);
+        await persistirPericiasFavoritas();
+        render();
+    }
+
+    function aplicarPericiaFavorita(id) {
+        tocarSom('click');
+        const favorita = periciasFavoritas.find(item => item.id === id);
+        if (!favorita) return;
+        const dados = favorita.data;
+        const pericias = normalizarPericiasDaFicha();
+        const chaveNome = normalizarTextoFiltro(dados.n);
+        let destino = pericias.find(pericia => normalizarTextoFiltro(pericia.n) === chaveNome && pericia.custom === favorita.custom);
+
+        if (!favorita.custom) {
+            destino = destino || pericias.find(pericia => !pericia.custom && normalizarTextoFiltro(pericia.n) === chaveNome);
+            if (!destino) return alert('A perícia-base correspondente não existe nesta versão da ficha.');
+            destino.a = dados.a;
+            destino.t = dados.t;
+            destino.m = dados.m;
+            destino.d = dados.d;
+        } else {
+            const conflitoBase = pericias.find(pericia => !pericia.custom && normalizarTextoFiltro(pericia.n) === chaveNome);
+            const nomeDestino = conflitoBase ? `${dados.n} — Personalizada` : dados.n;
+            destino = pericias.find(pericia => pericia.custom && normalizarTextoFiltro(pericia.n) === normalizarTextoFiltro(nomeDestino));
+            const copia = {
+                id: destino?.id || criarIdPericiaCustomizada(),
+                custom: true,
+                n: nomeDestino,
+                a: dados.a,
+                t: dados.t,
+                m: dados.m,
+                d: dados.d,
+                descricao: dados.descricao || '',
+                usos: normalizarUsosPericia(dados.usos)
+            };
+            if (destino) sheet.pericias[pericias.indexOf(destino)] = copia;
+            else sheet.pericias.push(copia);
+        }
+
+        render();
+        marcarAlteracao();
+        spawnPopup('PERÍCIA COPIADA', favorita.name, '✓', '#00c875', 'ADICIONADA À FICHA', favorita.custom ? 'Descrição, funções e treinamento foram copiados.' : 'Atributo, treinamento e modificador foram aplicados.');
+    }
+
+    function renderizarBibliotecaPericiasFavoritas() {
+        const container = document.getElementById('favorite-skills-manager');
+        const contador = document.getElementById('favorite-skills-counter');
+        if (!container || !contador) return;
+        contador.textContent = `${periciasFavoritas.length} ${periciasFavoritas.length === 1 ? 'favorita' : 'favoritas'}`;
+        if (!periciasFavoritas.length) {
+            container.innerHTML = '<div class="skills-empty">Use a estrela nas perícias para guardá-las e copiá-las para outros personagens.</div>';
+            return;
+        }
+        container.innerHTML = periciasFavoritas.map(favorita => `
+            <article class="favorite-skill-card">
+                <span class="favorite-skill-copy">
+                    <strong title="${escapeCampaignHtml(favorita.name)}">${escapeCampaignHtml(favorita.name)}</strong>
+                    <small>${favorita.custom ? 'Personalizada' : 'Perícia-base'} • ${escapeCampaignHtml(favorita.data.a)} • Treino ${favorita.data.t > 0 ? `+${favorita.data.t}` : '+0'}</small>
+                </span>
+                <span class="favorite-skill-actions">
+                    <button type="button" onclick="aplicarPericiaFavorita('${escapeCampaignHtml(favorita.id)}')">⧉ Usar</button>
+                    <button type="button" onclick="removerPericiaFavorita('${escapeCampaignHtml(favorita.id)}')" title="Remover da biblioteca" aria-label="Remover ${escapeCampaignHtml(favorita.name)} das favoritas">✕</button>
+                </span>
+            </article>`).join('');
+    }
+
     function chaveLocalModelosPessoais(user = currentUser) {
         return `${PERSONAL_TEMPLATES_PREFIX}${user?.uid || 'local'}`;
     }
@@ -10688,6 +11069,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             btnLogin.innerText = "🔓";
             btnLogin.title = "Sair (" + nomeExibicaoAtual() + ")";
             carregarModelosPessoais(user).catch(erro => console.warn('Não foi possível preparar os modelos pessoais.', erro));
+            carregarPericiasFavoritas(user).catch(erro => console.warn('Não foi possível preparar as perícias favoritas.', erro));
             carregarPerfilPublico(user)
                 .then(() => {
                     btnLogin.title = "Sair (" + nomeExibicaoAtual() + ")";
@@ -10710,6 +11092,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             btnLogin.innerText = "👤";
             btnLogin.title = "Login Google";
             carregarModelosPessoais(null);
+            carregarPericiasFavoritas(null);
             slotManagerState = criarConfiguracaoPadraoSlots();
             slotPreviewState = {};
             renderizarSeletoresSlots('1');
@@ -10772,6 +11155,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         novaRolagemRef.set({
             jogador: nick,
             jogadorUid: currentUser?.uid || '',
+            avatar: String(sheet?.avatar || '').trim(),
             titulo: titulo,
             subtitulo: subtitulo,
             total: total,
@@ -10790,13 +11174,21 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const logContainer = document.getElementById('log-messages');
         const msg = document.createElement('div');
         msg.className = 'log-msg';
-        msg.style.borderLeft = `4px solid ${data.cor}`;
+        const cor = /^(?:#[0-9a-f]{3,8}|rgba?\([\d\s.,%]+\)|var\(--[a-z0-9-]+\))$/i.test(String(data.cor || '')) ? String(data.cor) : '#d4af37';
+        msg.style.borderLeft = `4px solid ${cor}`;
         const hora = new Date(data.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const jogador = String(data.jogador || 'Personagem sem nome');
+        const avatar = String(data.avatar || '').trim();
+        const avatarSeguro = /^(?:https?:\/\/|data:image\/)/i.test(avatar) ? avatar : '';
+        const inicial = jogador.trim().charAt(0).toLocaleUpperCase('pt-BR') || '?';
         msg.innerHTML = `
-            <div class="log-msg-user">👤 ${data.jogador} <span style="float:right; font-size:0.65rem; color:#666;">${hora}</span></div>
-            <div class="log-msg-title">${data.titulo} <span style="font-size:0.7rem; color:${data.cor}; border: 1px solid ${data.cor}; padding: 1px 4px; border-radius: 3px; margin-left: 5px;">${data.status}</span></div>
-            <div class="log-msg-total" style="color:${data.cor}">${data.total}</div>
-            <div class="log-msg-detail">${data.subtitulo} <br> ${data.detalhes}</div>
+            <div class="log-msg-user">
+                <span class="log-msg-avatar">${avatarSeguro ? `<img src="${escapeCampaignHtml(avatarSeguro)}" alt="Foto de ${escapeCampaignHtml(jogador)}">` : escapeCampaignHtml(inicial)}</span>
+                <span class="log-msg-user-copy"><strong>${escapeCampaignHtml(jogador)}</strong><time class="log-msg-time">${escapeCampaignHtml(hora)}</time></span>
+            </div>
+            <div class="log-msg-title">${escapeCampaignHtml(data.titulo || '')} <span style="font-size:0.7rem; color:${cor}; border: 1px solid ${cor}; padding: 1px 4px; border-radius: 3px; margin-left: 5px;">${escapeCampaignHtml(data.status || '')}</span></div>
+            <div class="log-msg-total" style="color:${cor}">${escapeCampaignHtml(data.total ?? '')}</div>
+            <div class="log-msg-detail">${escapeCampaignHtml(data.subtitulo || '')} <br> ${escapeCampaignHtml(data.detalhes || '')}</div>
         `;
         logContainer.appendChild(msg);
         logContainer.scrollTop = logContainer.scrollHeight; 
@@ -11823,6 +12215,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const rolagensExtras = isSeparator ? [] : coletarRolagensExtrasDOM('hab');
         const primeiraRolagem = rolagensPrincipais[0] || {};
         const h = isSeparator ? {
+            idUnico: habilidadeAnterior?.idUnico || gerarIdConteudoFicha('separator'),
             tipo: document.getElementById('hab-tipo').value,
             nome: document.getElementById('hab-nome').value.trim() || 'Separador',
             isSeparator: true,
@@ -11840,6 +12233,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             ativa: false,
             recolhido: false
         } : {
+            idUnico: habilidadeAnterior?.idUnico || gerarIdConteudoFicha('action'),
             tipo: document.getElementById('hab-tipo').value,
             nome: document.getElementById('hab-nome').value,
             isSeparator: false,
@@ -12066,6 +12460,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             `;
             containerAlvo.appendChild(card);
         });
+        renderizarAcessoRapidoCombate();
     }
 
     function abrirEditorItem(idxEdicao = null) {
@@ -12143,6 +12538,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const secundarias = item.weapSec ? item.weapSec.split(',').map((formula, indice) => ({ nome: `Dano secundário ${indice + 1}`, formula: formula.trim() })).filter(r => r.formula) : [];
         const extras = [...secundarias, ...normalizarRolagensExtras(item)];
         return {
+            idUnico: `action-item-${item.idUnico}`,
             tipo: 'ataque',
             nome: item.nome,
             dano: primeira.formula || '',
@@ -12327,6 +12723,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const badgeSobrepeso = document.getElementById('badge-sobrepeso');
         if (pesoTotal > sheet.limiteCarga) badgeSobrepeso.style.display = "inline-block";
         else badgeSobrepeso.style.display = "none";
+        renderizarAcessoRapidoCombate();
     }
 
     function getNivelSucesso(dado, total) {
@@ -12854,6 +13251,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             const trainingClass = p.t == 2 ? 'skill-trained-2' : (p.t == 4 ? 'skill-trained-4' : '');
             const referenciaCodificada = codificarValorInline(p.id || p.n);
             const nomeCodificado = codificarValorInline(p.n);
+            const favorita = periciaEstaFavorita(p);
 
             let modEquip = getMods('pericia', p.n);
             let modDisplay = modEquip !== 0 ? `<span style="color:#00e5ff; font-size:0.7rem; margin-right:4px;" title="Bônus de Item/Hab">${modEquip > 0 ? '+' : ''}${modEquip}</span>` : '';
@@ -12871,7 +13269,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                             <option value="POD" ${p.a === 'POD' ? 'selected' : ''} style="background: #15151a; color: #fff;">POD</option>
                         </select>
                     </span>
-                    ${detalhesDaPericia(p) ? `<button class="btn-info-skill" onclick="event.stopPropagation(); abrirInfoPericia(decodeURIComponent('${nomeCodificado}'))">❓</button>` : '<span style="width: 25px;"></span>'}
+                    <span class="skill-inline-tools" onclick="event.stopPropagation()">
+                        <button type="button" class="skill-favorite-btn ${favorita ? 'is-favorite' : ''}" onclick="alternarFavoritaPericia('${referenciaCodificada}')" title="${favorita ? 'Remover das favoritas' : 'Favoritar para usar em outras fichas'}" aria-label="${favorita ? 'Remover' : 'Favoritar'} ${escapeCampaignHtml(p.n)}">${favorita ? '★' : '☆'}</button>
+                        ${detalhesDaPericia(p) ? `<button class="btn-info-skill" onclick="abrirInfoPericia(decodeURIComponent('${nomeCodificado}'))">❓</button>` : '<span style="width: 25px;"></span>'}
+                    </span>
                 </div>
                 <div style="display:flex; gap:3px; flex-shrink: 0; align-items:center;" onclick="event.stopPropagation()">
                     <span style="font-size:0.7rem; color:#aaa;">T:</span>
@@ -14313,6 +14714,151 @@ function recursoParticipante(participant, id) {
     };
 }
 
+let seletorAcessoRapidoCombateAberto = false;
+
+function garantirIdsConteudoAcessoRapido() {
+    if (!Array.isArray(sheet.habilidades)) sheet.habilidades = [];
+    if (!Array.isArray(sheet.itens)) sheet.itens = [];
+    sheet.habilidades.forEach(habilidade => {
+        if (!habilidade?.idUnico) habilidade.idUnico = gerarIdConteudoFicha(habilidade?.isSeparator ? 'separator' : 'action');
+    });
+    sheet.itens.forEach(item => {
+        if (!item?.idUnico) item.idUnico = gerarIdConteudoFicha(item?.isSeparator ? 'separator' : 'item');
+    });
+}
+
+function normalizarAcessoRapidoCombate() {
+    garantirIdsConteudoAcessoRapido();
+    const raw = Array.isArray(sheet.combatQuickAccess)
+        ? sheet.combatQuickAccess
+        : (sheet.combatQuickAccess && typeof sheet.combatQuickAccess === 'object' ? Object.values(sheet.combatQuickAccess) : []);
+    const validos = new Set([
+        ...sheet.habilidades.filter(item => !item.isSeparator).map(item => `habilidade:${item.idUnico}`),
+        ...sheet.itens.filter(item => !item.isSeparator).map(item => `item:${item.idUnico}`)
+    ]);
+    const vistos = new Set();
+    sheet.combatQuickAccess = raw.map(entrada => ({
+        kind: entrada?.kind === 'item' ? 'item' : 'habilidade',
+        id: String(entrada?.id || '')
+    })).filter(entrada => {
+        const chave = `${entrada.kind}:${entrada.id}`;
+        if (!entrada.id || !validos.has(chave) || vistos.has(chave)) return false;
+        vistos.add(chave);
+        return true;
+    });
+    return sheet.combatQuickAccess;
+}
+
+function conteudosDisponiveisAcessoRapido() {
+    garantirIdsConteudoAcessoRapido();
+    return [
+        ...sheet.habilidades.map((conteudo, indice) => ({ kind: 'habilidade', conteudo, indice })).filter(entrada => !entrada.conteudo.isSeparator),
+        ...sheet.itens.map((conteudo, indice) => ({ kind: 'item', conteudo, indice })).filter(entrada => !entrada.conteudo.isSeparator)
+    ];
+}
+
+function alternarSeletorAcessoRapidoCombate() {
+    tocarSom('click');
+    seletorAcessoRapidoCombateAberto = !seletorAcessoRapidoCombateAberto;
+    renderizarAcessoRapidoCombate();
+}
+
+function alternarConteudoAcessoRapido(kind, idCodificado, selecionado) {
+    tocarSom('click');
+    const id = decodeURIComponent(idCodificado);
+    const entradas = normalizarAcessoRapidoCombate();
+    const chave = `${kind}:${id}`;
+    const semAtual = entradas.filter(entrada => `${entrada.kind}:${entrada.id}` !== chave);
+    if (selecionado) semAtual.push({ kind: kind === 'item' ? 'item' : 'habilidade', id });
+    sheet.combatQuickAccess = semAtual;
+    marcarAlteracao();
+    renderizarAcessoRapidoCombate();
+}
+
+function removerConteudoAcessoRapido(kind, idCodificado) {
+    alternarConteudoAcessoRapido(kind, idCodificado, false);
+}
+
+function rolarItemPrincipalPorIndice(indice, indiceRolagem = 0) {
+    const item = sheet.itens?.[indice];
+    const rolagem = normalizarRolagensPrincipais(item, true)[indiceRolagem];
+    if (!item || !rolagem?.formula) return;
+    rolarHabilidadeComOuSemCrit(
+        `${item.nome || 'Item'} — ${rolagem.nome || 'Rolagem'}`,
+        montarFormulaDano(rolagem.formula, rolagem.atributo),
+        Boolean(rolagem.temCrit),
+        parseInt(rolagem.critMargem) || 20,
+        rolagem.critDano || ''
+    );
+}
+
+function cardAcessoRapidoCombate(entrada) {
+    const { kind, conteudo, indice } = entrada;
+    const idCodificado = codificarValorInline(conteudo.idUnico);
+    const isItem = kind === 'item';
+    const tipoNome = isItem ? 'ITEM' : ({ ataque: 'ATAQUE', feitico: 'FEITIÇO', habilidade: 'HABILIDADE' }[conteudo.tipo] || 'HABILIDADE');
+    const imagem = String(conteudo.img || '').trim();
+    const editor = isItem
+        ? `abrirEditorItem(${indice})`
+        : (conteudo.geradoPorItem && conteudo.itemIdRef
+            ? `abrirEditorItemPorReferencia('${escapeCampaignHtml(conteudo.itemIdRef)}')`
+            : `abrirEditorHab('${escapeCampaignHtml(conteudo.tipo || 'habilidade')}', ${indice})`);
+    const rolagensPrincipais = isItem
+        ? normalizarRolagensPrincipais(conteudo, true).map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="rolarItemPrincipalPorIndice(${indice}, ${indiceRolagem})">⚔ ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)} ${badgeAtributoDano(rolagem.atributo)}</button>`).join('')
+        : normalizarRolagensPrincipais(conteudo).map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="rolarHabilidadePorIndice(${indice}, ${indiceRolagem})">⚔ ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)} ${badgeAtributoDano(rolagem.atributo)}</button>`).join('');
+    const rolagensExtras = normalizarRolagensExtras(conteudo).map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="${isItem ? 'rolarExtraItemPorIndice' : 'rolarExtraHabilidadePorIndice'}(${indice}, ${indiceRolagem})">🎲 ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)}</button>`).join('');
+    return `
+        <article class="combat-quick-card ${isItem ? 'is-item' : ''}">
+            <header class="combat-quick-card-head">
+                <span class="combat-quick-card-image">${imagem ? `<img src="${escapeCampaignHtml(imagem)}" alt="">` : (isItem ? '◆' : '✦')}</span>
+                <span class="combat-quick-card-heading">
+                    <small>${tipoNome}</small>
+                    <h3 title="${escapeCampaignHtml(conteudo.nome || 'Sem nome')}">${escapeCampaignHtml(conteudo.nome || 'Sem nome')} ${badgeCustoAcao(conteudo)}</h3>
+                </span>
+                <span class="combat-quick-card-actions">
+                    <button type="button" onclick="${editor}" title="Editar" aria-label="Editar ${escapeCampaignHtml(conteudo.nome || tipoNome)}">✎</button>
+                    <button type="button" onclick="removerConteudoAcessoRapido('${kind}', '${idCodificado}')" title="Retirar do acesso rápido" aria-label="Retirar ${escapeCampaignHtml(conteudo.nome || tipoNome)} do acesso rápido">✕</button>
+                </span>
+            </header>
+            ${conteudo.desc ? `<div class="combat-quick-description">${renderMarkdown(conteudo.desc)}</div>` : ''}
+            <div class="combat-quick-rolls">
+                ${botaoCustoAcao(conteudo, isItem ? 'item' : 'habilidade', indice)}
+                ${rolagensPrincipais}
+                ${rolagensExtras}
+            </div>
+        </article>`;
+}
+
+function renderizarAcessoRapidoCombate() {
+    const painel = document.getElementById('combat-quick-access');
+    const picker = document.getElementById('combat-quick-picker');
+    const grid = document.getElementById('combat-quick-grid');
+    const toggle = document.getElementById('combat-quick-picker-toggle');
+    if (!painel || !picker || !grid || !toggle) return;
+
+    const selecionados = normalizarAcessoRapidoCombate();
+    const selecionadosSet = new Set(selecionados.map(entrada => `${entrada.kind}:${entrada.id}`));
+    const disponiveis = conteudosDisponiveisAcessoRapido();
+    picker.classList.toggle('active', seletorAcessoRapidoCombateAberto);
+    toggle.setAttribute('aria-expanded', String(seletorAcessoRapidoCombateAberto));
+    toggle.textContent = seletorAcessoRapidoCombateAberto ? 'Concluir seleção' : '+ Escolher itens e habilidades';
+    picker.innerHTML = disponiveis.length ? disponiveis.map(({ kind, conteudo }) => {
+        const chave = `${kind}:${conteudo.idUnico}`;
+        const idCodificado = codificarValorInline(conteudo.idUnico);
+        const tipo = kind === 'item' ? 'Item' : ({ ataque: 'Ataque', feitico: 'Feitiço', habilidade: 'Habilidade' }[conteudo.tipo] || 'Habilidade');
+        return `<label class="combat-quick-option">
+            <input type="checkbox" ${selecionadosSet.has(chave) ? 'checked' : ''} onchange="alternarConteudoAcessoRapido('${kind}', '${idCodificado}', this.checked)">
+            <span><strong>${escapeCampaignHtml(conteudo.nome || 'Sem nome')}</strong><small>${tipo}</small></span>
+        </label>`;
+    }).join('') : '<div class="combat-quick-empty">Crie itens, ataques, feitiços ou habilidades na ficha para adicioná-los aqui.</div>';
+
+    const porChave = new Map(disponiveis.map(entrada => [`${entrada.kind}:${entrada.conteudo.idUnico}`, entrada]));
+    const cards = selecionados.map(entrada => porChave.get(`${entrada.kind}:${entrada.id}`)).filter(Boolean);
+    grid.innerHTML = cards.length
+        ? cards.map(cardAcessoRapidoCombate).join('')
+        : '<div class="combat-quick-empty">Nenhum atalho selecionado. Use “Escolher itens e habilidades” para montar seu painel de combate.</div>';
+}
+
 function participanteTemIniciativa(participant) {
     return participant?.initiative !== null && participant?.initiative !== '' && participant?.initiative !== undefined && Number.isFinite(Number(participant.initiative));
 }
@@ -14734,6 +15280,7 @@ function renderizarCombateAtivo(combat) {
             : '<span style="color:#706977; font-size:.7rem;">Aguardando o Mestre avançar o turno</span>'}
     `;
     if (document.getElementById('combat-add-panel').classList.contains('active')) renderizarOpcoesAdicionarCombatente();
+    renderizarAcessoRapidoCombate();
 }
 
 async function moverCombatente(characterId, direction) {
