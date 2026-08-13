@@ -8038,6 +8038,288 @@ body.theme-umbral .combat-quick-skill-controls .mini-stat-input {
     .combat-quick-skill-controls { justify-content: flex-end; }
 }
 
+/* ========================================================================== */
+/* ORGANIZAÇÃO, CONDIÇÕES E CONTROLES DE ESTADO                               */
+/* ========================================================================== */
+
+/* O scroll nativo acompanha a cor primária escolhida pelo jogador. */
+html,
+body,
+body.theme-umbral,
+body.theme-umbral * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-purple) color-mix(in srgb, var(--bg-gradient-top) 88%, #000);
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+body.theme-umbral *::-webkit-scrollbar { width: 11px; height: 11px; }
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+body.theme-umbral *::-webkit-scrollbar-track {
+    border: 0;
+    background: color-mix(in srgb, var(--bg-gradient-top) 88%, #000);
+}
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+body.theme-umbral *::-webkit-scrollbar-thumb {
+    min-height: 42px;
+    border: 3px solid color-mix(in srgb, var(--bg-gradient-top) 88%, #000);
+    border-radius: 999px;
+    background: var(--primary-purple);
+}
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+body.theme-umbral *::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--primary-purple) 76%, white); }
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+body.theme-umbral *::-webkit-scrollbar-corner { background: color-mix(in srgb, var(--bg-gradient-top) 88%, #000); }
+
+.slot-row { grid-template-columns: minmax(125px, 1fr) minmax(120px, .7fr) auto auto; }
+.slot-row .slot-delete-button {
+    color: #ff8a97;
+    border-color: color-mix(in srgb, #ff596d 52%, var(--flat-line));
+    background: color-mix(in srgb, #4c101a 28%, var(--container-bg));
+}
+.slot-row .slot-delete-button:hover { color: #fff; border-color: #ff596d; background: color-mix(in srgb, #7a1826 34%, var(--container-bg)); }
+
+.ability-container-field,
+.custom-container-form-field > span {
+    display: block;
+    margin-top: 12px;
+    color: var(--text-gold);
+    font: 600 .7rem 'Cinzel', serif;
+    letter-spacing: 1.2px;
+}
+.ability-container-select { margin-bottom: 5px; }
+.ability-container-help { display: block; margin: -2px 0 15px; color: #817889; font-size: .72rem; line-height: 1.45; }
+.custom-container-modal { width: min(620px, calc(100vw - 30px)); }
+.custom-container-layout-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 18px 0 4px; padding: 0; border: 0; }
+.custom-container-layout-picker legend { grid-column: 1 / -1; margin-bottom: 7px; color: var(--text-gold); font: 600 .66rem 'Cinzel', serif; letter-spacing: 1.2px; }
+.custom-container-layout-picker label { position: relative; cursor: pointer; }
+.custom-container-layout-picker input { position: absolute; opacity: 0; pointer-events: none; }
+.custom-container-layout-picker label > span {
+    display: grid;
+    gap: 5px;
+    min-height: 82px;
+    padding: 14px;
+    border: 1px solid var(--umbral-line-soft);
+    background: rgba(0,0,0,.24);
+    transition: border-color .15s ease, background .15s ease;
+}
+.custom-container-layout-picker strong { color: #eee7f1; font: 600 .78rem 'Cinzel', serif; }
+.custom-container-layout-picker small { color: #8e8493; font-size: .72rem; line-height: 1.45; }
+.custom-container-layout-picker input:checked + span { border-color: var(--primary-purple); background: color-mix(in srgb, var(--primary-purple) 13%, rgba(0,0,0,.28)); }
+.custom-container-create-row { display: flex; justify-content: center; padding: 6px 0 30px; }
+.custom-container-create-button {
+    min-width: min(360px, 100%);
+    padding: 13px 24px;
+    color: color-mix(in srgb, var(--text-gold) 74%, white);
+    border: 1px dashed color-mix(in srgb, var(--primary-purple) 74%, var(--text-gold));
+    background: color-mix(in srgb, var(--primary-purple) 8%, rgba(5,4,7,.86));
+    font: 600 .72rem 'Cinzel', serif;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+}
+.custom-container-create-button:hover { border-style: solid; color: #fff; background: color-mix(in srgb, var(--primary-purple) 18%, rgba(5,4,7,.9)); }
+.custom-ability-containers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 22px; }
+.custom-ability-container { min-width: 0; margin: 0; }
+.custom-ability-container.is-wide { grid-column: 1 / -1; }
+.custom-ability-container-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding-bottom: 15px; border-bottom: 1px solid var(--umbral-line-soft); }
+.custom-ability-container-head h2 { margin: 4px 0 1px; color: var(--umbral-parchment, #eee); font-size: 1rem; letter-spacing: 1.4px; }
+.custom-ability-container-head small { color: #777080; font-size: .67rem; }
+.custom-ability-container-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 5px; }
+.custom-ability-container-controls button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    color: #a79cab;
+    border: 1px solid var(--umbral-line-soft);
+    background: rgba(0,0,0,.28);
+    cursor: pointer;
+}
+.custom-ability-container-controls button:hover { color: #fff; border-color: var(--primary-purple); }
+.custom-ability-container-controls button.danger:hover { color: #ff7888; border-color: #ff596d; }
+.custom-ability-container-body { padding-top: 18px; }
+.custom-ability-container.is-collapsed { padding-bottom: 17px; }
+.custom-ability-container.is-collapsed .custom-ability-container-head { padding-bottom: 0; border-bottom: 0; }
+.custom-ability-list { display: grid; gap: 13px; }
+.custom-ability-container.is-wide .custom-ability-list { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+
+.character-conditions-panel { margin-bottom: 24px; padding: 19px 22px; border-left: 3px solid var(--primary-purple); }
+.conditions-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.conditions-panel-head h2 { margin: 3px 0 1px; color: #eee7f0; font-size: 1.05rem; letter-spacing: 1.5px; }
+.conditions-panel-head small { color: #817988; font-size: .7rem; }
+.conditions-panel-toggle,
+.condition-quick-add > button,
+.campaign-condition-catalog-toggle {
+    min-height: 36px;
+    padding: 8px 13px;
+    color: #d9d0dc;
+    border: 1px solid color-mix(in srgb, var(--primary-purple) 52%, var(--umbral-line-soft));
+    background: color-mix(in srgb, var(--primary-purple) 9%, rgba(0,0,0,.34));
+    font: 600 .66rem 'Cinzel', serif;
+    cursor: pointer;
+}
+.conditions-panel-toggle:hover,
+.condition-quick-add > button:hover,
+.campaign-condition-catalog-toggle:hover { color: #fff; border-color: var(--primary-purple); }
+.condition-quick-add { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; margin-top: 15px; }
+.condition-quick-add .modal-input { min-height: 38px; margin: 0; }
+.active-conditions-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 9px; margin-top: 14px; }
+.active-condition-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 12px 13px;
+    border: 1px solid var(--umbral-line-soft);
+    border-left: 3px solid var(--condition-color, var(--primary-purple));
+    background: linear-gradient(90deg, color-mix(in srgb, var(--condition-color, var(--primary-purple)) 8%, rgba(0,0,0,.28)), rgba(0,0,0,.18));
+}
+.active-condition-card.category-fisica { --condition-color: #df5c68; }
+.active-condition-card.category-mental { --condition-color: #7fa7ff; }
+.active-condition-card.category-magica { --condition-color: #b66ae4; }
+.active-condition-card.is-automatic { border-style: dashed; }
+.active-condition-copy { min-width: 0; }
+.active-condition-kicker { display: block; color: #746d79; font: 600 .52rem 'Cinzel', serif; letter-spacing: 1.1px; }
+.active-condition-copy strong { display: block; margin-top: 3px; color: #f0e9f2; font: 600 .78rem 'Cinzel', serif; }
+.active-condition-copy p { margin: 5px 0 0; color: #aaa2ae; font-size: .76rem; line-height: 1.48; }
+.active-condition-copy small { display: inline-block; margin-top: 7px; color: color-mix(in srgb, var(--condition-color) 65%, white); font-size: .65rem; font-weight: 700; }
+.active-condition-actions { display: flex; align-items: flex-start; justify-content: flex-end; flex-wrap: wrap; gap: 5px; }
+.condition-roll-action,
+.condition-remove-action {
+    min-height: 29px;
+    padding: 6px 9px;
+    color: #e4dce7;
+    border: 1px solid color-mix(in srgb, var(--condition-color) 52%, #332d36);
+    background: rgba(0,0,0,.34);
+    font: 600 .58rem 'Cinzel', serif;
+    cursor: pointer;
+}
+.condition-remove-action { width: 29px; padding: 0; color: #ff7d8c; }
+.condition-roll-action:hover,
+.condition-remove-action:hover { color: #fff; border-color: var(--condition-color); }
+.condition-auto-label { padding: 5px 7px; color: #8d8491; border: 1px dashed #4b424e; font: 600 .52rem 'Cinzel', serif; letter-spacing: .8px; }
+.conditions-empty { margin-top: 13px; padding: 13px; color: #77707d; border: 1px dashed var(--umbral-line-soft); font-size: .75rem; text-align: center; }
+.condition-numeric-summary { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.condition-numeric-summary span { min-width: 122px; padding: 8px 10px; color: #87808c; border: 1px solid var(--umbral-line-soft); background: rgba(0,0,0,.2); font: 600 .52rem 'Cinzel', serif; letter-spacing: .8px; }
+.condition-numeric-summary strong { display: block; margin-top: 3px; color: #f0e8f2; font-size: .9rem; }
+.conditions-catalog { margin-top: 16px; padding-top: 15px; border-top: 1px solid var(--umbral-line-soft); }
+.condition-catalog-group { margin-top: 16px; }
+.condition-catalog-group h4 { margin: 0 0 8px; color: var(--text-gold); font-size: .6rem; letter-spacing: 1.25px; }
+.condition-catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 7px; }
+.condition-catalog-card { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 2px 7px; min-height: 78px; padding: 9px; color: #aaa2ae; border: 1px solid var(--umbral-line-soft); background: rgba(0,0,0,.22); text-align: left; cursor: pointer; }
+.condition-catalog-card > span { grid-row: 1 / 3; display: grid; place-items: center; width: 20px; height: 20px; color: var(--light-purple); border: 1px solid currentColor; border-radius: 50%; font-size: .56rem; }
+.condition-catalog-card strong { color: #e9e2eb; font: 600 .68rem 'Cinzel', serif; }
+.condition-catalog-card small { grid-column: 2; color: #847c89; font-size: .67rem; line-height: 1.38; }
+.condition-catalog-card:hover { border-color: var(--primary-purple); background: color-mix(in srgb, var(--primary-purple) 8%, rgba(0,0,0,.25)); }
+.condition-catalog-card.is-active { border-color: var(--primary-purple); background: color-mix(in srgb, var(--primary-purple) 14%, rgba(0,0,0,.27)); }
+.condition-catalog-card.is-automatic { opacity: .62; cursor: default; }
+.skill-condition-mod,
+.combat-quick-skill-mod.condition { color: #ff808d !important; font-size: .68rem; font-weight: 700; }
+.hab-card.is-condition-blocked { border-left-color: #ff596d; }
+.condition-blocked-notice { margin: 0 0 10px; padding: 7px 9px; color: #ff8b98; border: 1px solid rgba(255,89,109,.42); background: rgba(92,14,29,.18); font: 600 .58rem 'Cinzel', serif; letter-spacing: 1px; text-align: center; }
+
+/* Marcadores de PV e Sanidade: ícones legíveis no lugar do X. */
+body.theme-umbral .turn-boxes,
+.sheet-dashboard-panel .turn-boxes { top: -14px; gap: 7px; padding: 4px 8px; border-radius: 999px; }
+body.theme-umbral .turn-box,
+.sheet-dashboard-panel .turn-box {
+    width: 25px;
+    height: 25px;
+    border-width: 1px;
+    border-radius: 50%;
+    background: #08070a;
+    font-size: 0;
+    box-shadow: 0 3px 8px rgba(0,0,0,.42);
+}
+.status-box-pv .turn-box::before { content: '💀'; }
+.status-box-sa .turn-box::before { content: '🧠'; }
+.turn-box::before { font-size: 13px; line-height: 1; opacity: .32; filter: grayscale(.7); transition: opacity .15s ease, filter .15s ease, transform .15s ease; }
+.turn-box:hover::before { opacity: .72; filter: grayscale(.15); transform: scale(1.08); }
+body.theme-umbral .turn-box.active,
+.sheet-dashboard-panel .turn-box.active { background: color-mix(in srgb, var(--resource-accent) 24%, #08070a) !important; box-shadow: 0 0 0 2px color-mix(in srgb, var(--resource-accent) 22%, transparent); }
+.turn-box.active::before { opacity: 1; filter: none; }
+
+/* Condições no combate compartilhado: gaveta flutuante à direita. */
+.campaign-condition-dock {
+    position: fixed;
+    z-index: 12180;
+    top: 112px;
+    right: 0;
+    width: min(430px, calc(100vw - 26px));
+    pointer-events: none;
+}
+.campaign-condition-dock[hidden] { display: none !important; }
+.campaign-condition-dock-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    align-items: center;
+    gap: 7px;
+    min-height: 46px;
+    padding: 9px 12px;
+    color: #eee7ef;
+    border: 1px solid color-mix(in srgb, var(--primary-purple) 66%, var(--text-gold));
+    border-right: 0;
+    background: linear-gradient(90deg, #0c0810, color-mix(in srgb, var(--primary-purple) 18%, #0b080e));
+    box-shadow: 0 12px 32px rgba(0,0,0,.42);
+    font: 600 .64rem 'Cinzel', serif;
+    pointer-events: auto;
+    cursor: pointer;
+}
+.campaign-condition-dock-toggle em { display: grid; place-items: center; min-width: 20px; height: 20px; color: #fff; border-radius: 50%; background: var(--primary-purple); font-style: normal; font-size: .58rem; }
+.campaign-condition-dock-toggle b { color: var(--text-gold); font-size: 1rem; }
+.campaign-condition-dock.is-open .campaign-condition-dock-toggle { right: 100%; border-right: 1px solid color-mix(in srgb, var(--primary-purple) 66%, var(--text-gold)); }
+.campaign-condition-dock-body {
+    max-height: calc(100vh - 140px);
+    overflow: auto;
+    padding: 15px;
+    border: 1px solid color-mix(in srgb, var(--primary-purple) 58%, var(--text-gold));
+    border-right: 0;
+    background: linear-gradient(160deg, rgba(13,9,17,.98), rgba(7,5,9,.98));
+    box-shadow: -20px 20px 55px rgba(0,0,0,.5);
+    pointer-events: auto;
+}
+.campaign-condition-dock-body > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--umbral-line-soft); }
+.campaign-condition-dock-body > header > div { display: flex; align-items: center; gap: 10px; }
+.campaign-condition-dock-body > header .campaign-avatar { width: 42px; height: 42px; flex-basis: 42px; }
+.campaign-condition-dock-body > header span { display: grid; gap: 2px; }
+.campaign-condition-dock-body > header small { color: #766d7b; font: 600 .5rem 'Cinzel', serif; letter-spacing: 1px; }
+.campaign-condition-dock-body > header strong { color: #f0e8f2; font: 600 .76rem 'Cinzel', serif; }
+.campaign-condition-dock-body > header > button { color: #958b9b; border: 0; background: none; cursor: pointer; }
+.campaign-condition-target { display: grid; gap: 5px; margin-top: 12px; }
+.campaign-condition-target > span { color: var(--text-gold); font: 600 .52rem 'Cinzel', serif; letter-spacing: 1px; }
+.campaign-condition-target select { min-height: 35px; padding: 6px 9px; color: #eee; border: 1px solid var(--umbral-line-soft); background: #09070b; }
+.campaign-condition-dock .active-conditions-list.campaign { grid-template-columns: 1fr; max-height: 330px; overflow: auto; padding-right: 2px; }
+.campaign-condition-dock .active-condition-card { grid-template-columns: 1fr; }
+.campaign-condition-dock .active-condition-actions { justify-content: flex-start; }
+.campaign-condition-catalog-toggle { width: 100%; margin-top: 12px; }
+.campaign-condition-dock .conditions-catalog.campaign { max-height: 430px; overflow: auto; }
+.campaign-condition-dock .condition-catalog-grid { grid-template-columns: 1fr; }
+
+@media (max-width: 900px) {
+    .custom-ability-containers { grid-template-columns: 1fr; }
+    .custom-ability-container.is-wide { grid-column: auto; }
+    .campaign-condition-dock { top: 86px; width: min(390px, calc(100vw - 20px)); }
+}
+
+@media (max-width: 620px) {
+    .slot-row { grid-template-columns: 1fr 1fr; }
+    .slot-row input,
+    .slot-row select { grid-column: 1 / -1; }
+    .custom-container-layout-picker { grid-template-columns: 1fr; }
+    .conditions-panel-head { align-items: flex-start; }
+    .condition-quick-add { grid-template-columns: 1fr; }
+    .active-conditions-list { grid-template-columns: 1fr; }
+    body.theme-umbral .turn-box,
+    .sheet-dashboard-panel .turn-box { width: 23px; height: 23px; }
+    .campaign-condition-dock { top: 74px; width: calc(100vw - 14px); }
+    .campaign-condition-dock.is-open .campaign-condition-dock-toggle { right: 0; top: -47px; }
+}
+
     </style>
 </head>
 <body class="theme-umbral">
@@ -8437,6 +8719,7 @@ body.theme-umbral .combat-quick-skill-controls .mini-stat-input {
         <h1>Combate &amp; Feitiços</h1>
         <p>Armas, poderes e feitiços preparados para quando o Abismo responder.</p>
     </header>
+    <section id="character-conditions-panel" class="section-box character-conditions-panel" aria-label="Condições do personagem"></section>
     <div class="abilities-columns">
         <section class="section-box">
             <div class="section-title">Ataques</div>
@@ -8474,6 +8757,10 @@ body.theme-umbral .combat-quick-skill-controls .mini-stat-input {
         <input type="text" class="search-bar" id="search-feiticos" placeholder="Pesquisar feitiço..." onkeyup="filtrarCards('search-feiticos', 'feiticos-lista')">
         <div id="feiticos-lista" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px;"></div>
     </section>
+    <div id="custom-ability-containers" class="custom-ability-containers"></div>
+    <div class="custom-container-create-row">
+        <button type="button" class="custom-container-create-button" onclick="abrirEditorContainerCombate()">＋ Criar novo container</button>
+    </div>
 </div>
 
    <div id="area-inventario" class="page-area">
@@ -8758,6 +9045,7 @@ body.theme-umbral .combat-quick-skill-controls .mini-stat-input {
                     <div id="combat-quick-picker" class="combat-quick-picker"></div>
                     <div id="combat-quick-grid" class="combat-quick-grid"></div>
                 </section>
+                <aside id="campaign-condition-dock" class="campaign-condition-dock" aria-label="Condições dos combatentes"></aside>
             </section>
         </main>
     </div>
@@ -9101,7 +9389,7 @@ body.theme-umbral .combat-quick-skill-controls .mini-stat-input {
 </div>
 
 <div id="modal-hab" class="modal creation-modal" role="dialog" aria-modal="true" aria-labelledby="hab-modal-heading">
-    <div class="creation-modal-heading"><div><span>OFICINA DA FICHA</span><h3 id="hab-modal-heading">Criar conteúdo</h3></div><button type="button" onclick="document.getElementById('modal-hab').style.display='none'" aria-label="Fechar">✕</button></div>
+    <div class="creation-modal-heading"><div><span>OFICINA DA FICHA</span><h3 id="hab-modal-heading">Criar conteúdo</h3></div><button type="button" onclick="fecharSuperficieFoco('#modal-hab')" aria-label="Fechar">✕</button></div>
     <div class="modal-tabs">
         <button class="tab-btn active" onclick="switchTab('tab-info')">Informações</button>
         <button class="tab-btn" id="hab-media-tab" onclick="switchTab('tab-media')">Mídia/Imagem</button>
@@ -9112,6 +9400,10 @@ body.theme-umbral .combat-quick-skill-controls .mini-stat-input {
         <input type="hidden" id="hab-tipo">
         <label style="color:var(--text-gold); font-size:0.8rem">NOME DA HABILIDADE</label>
         <input type="text" id="hab-nome" class="modal-input" oninput="atualizarPreviewSeparadorHab()">
+
+        <label class="ability-container-field" for="hab-container-id">ORGANIZAR EM</label>
+        <select id="hab-container-id" class="modal-input ability-container-select"></select>
+        <small class="ability-container-help">Use a seção padrão do tipo ou envie este conteúdo para um container criado por você.</small>
 
         <label class="ability-separator-toggle">
             <input type="checkbox" id="hab-is-separator" onchange="atualizarModoSeparadorHab()">
@@ -9162,7 +9454,34 @@ body.theme-umbral .combat-quick-skill-controls .mini-stat-input {
     </div>
 
     <button onclick="salvarHabilidade()" style="width:100%; padding:15px; background:var(--primary-purple); color:#fff; border:none; font-family:'Cinzel', serif; cursor:pointer;">GRAVAR NO GRIMÓRIO</button>
-    <button onclick="document.getElementById('modal-hab').style.display='none'" style="width:100%; margin-top:10px; background:none; border:1px solid #333; color:#eee; padding:10px; cursor:pointer; font-family: 'Cinzel', serif;">Cancelar</button>
+    <button onclick="fecharSuperficieFoco('#modal-hab')" style="width:100%; margin-top:10px; background:none; border:1px solid #333; color:#eee; padding:10px; cursor:pointer; font-family: 'Cinzel', serif;">Cancelar</button>
+</div>
+
+<div id="modal-custom-container" class="modal custom-container-modal" role="dialog" aria-modal="true" aria-labelledby="custom-container-heading">
+    <div class="settings-modal-header">
+        <div>
+            <span class="settings-eyebrow">ORGANIZAÇÃO DO GRIMÓRIO</span>
+            <h3 id="custom-container-heading">Criar container</h3>
+        </div>
+        <button type="button" class="settings-close" onclick="fecharEditorContainerCombate()" aria-label="Fechar">✕</button>
+    </div>
+    <p class="settings-intro">Crie uma seção própria para reunir ataques, habilidades, feitiços e separadores.</p>
+    <form onsubmit="salvarContainerCombate(event)">
+        <input type="hidden" id="custom-container-edit-id">
+        <label class="custom-container-form-field" for="custom-container-name">
+            <span>NOME DO CONTAINER</span>
+            <input id="custom-container-name" class="modal-input" maxlength="55" required placeholder="Ex: Técnicas da Ordem">
+        </label>
+        <fieldset class="custom-container-layout-picker">
+            <legend>FORMATO NA PÁGINA</legend>
+            <label><input type="radio" name="custom-container-layout" value="wide" checked><span><strong>Largo</strong><small>Ocupa a linha inteira, como Feitiços.</small></span></label>
+            <label><input type="radio" name="custom-container-layout" value="compact"><span><strong>Compacto</strong><small>Ocupa meia linha, como Ataques e Habilidades.</small></span></label>
+        </fieldset>
+        <div class="settings-actions">
+            <button type="button" class="settings-secondary" onclick="fecharEditorContainerCombate()">Cancelar</button>
+            <button type="submit" class="settings-primary">Salvar container</button>
+        </div>
+    </form>
 </div>
 
 <div id="modal-item" class="modal creation-modal" role="dialog" aria-modal="true" aria-labelledby="item-modal-heading">
@@ -9752,6 +10071,10 @@ function resetarConfiguracoesAudio() {
             atributos: {"FOR":1, "AGI":1, "INT":1, "CON":1, "POD":1},
             pericias: periciasDados.map(p => ({ ...p, t: 0, m: 0, d: 1 })),
             habilidades: [],
+            containersCombate: [],
+            condicoes: [],
+            condicoesEstado: {},
+            condicoesUIAberto: false,
             itens: [], 
             combatQuickAccess: [],
             historicoAcoes: [],
@@ -10093,6 +10416,443 @@ function resetarConfiguracoesAudio() {
         sa: { nome: 'Sanidade', cor: '#35a7ff' }
     };
 
+    const CATEGORIAS_CONDICOES = {
+        fisica: { nome: 'Físicas', icone: '🩹' },
+        mental: { nome: 'Mentais', icone: '◉' },
+        magica: { nome: 'Mágicas', icone: '✦' }
+    };
+
+    const CONDICOES_CATALOGO = {
+        sangrando: { nome: 'Sangrando', categoria: 'fisica', descricao: 'Recebe 1d6 de Dano de Sangue por turno. Um Sucesso Bom em Constituição remove a condição; inimigos sangrando perdem regeneração.', acao: { formula: '1d6', recurso: 'pv', sinal: -1, rotulo: 'Sofrer 1d6 PV' } },
+        atordoado: { nome: 'Atordoado', categoria: 'fisica', descricao: 'Até o fim da próxima rodada, recebe −2 em todos os testes e não pode conjurar Feitiços.', efeito: 'Todos os testes −2 • Feitiços bloqueados' },
+        caido: { nome: 'Caído', categoria: 'fisica', descricao: 'Recebe +3 na Defesa contra projéteis e −3 contra ataques corpo a corpo, além de −2 em todos os testes.', efeito: 'Testes −2 • Defesa contextual' },
+        imobilizado: { nome: 'Imobilizado', categoria: 'fisica', descricao: 'Não pode se mover até escapar com Força ou Agilidade. Use Luta ou Crime contra a DT do teste de quem o imobilizou.' },
+        lento: { nome: 'Lento', categoria: 'fisica', descricao: 'Só pode se deslocar pela metade do deslocamento atual.', efeito: 'Deslocamento pela metade' },
+        exausto: { nome: 'Exausto', categoria: 'fisica', descricao: 'Fica Lento e recebe −2 em testes de Constituição. É aplicado automaticamente ao chegar a 0 PA.', efeito: 'Lento • CON −2' },
+        fraturado: { nome: 'Fraturado', categoria: 'fisica', descricao: 'Um ou mais membros estão fraturados. Diminui RDs físicas em 2.' },
+        envenenado: { nome: 'Envenenado', categoria: 'fisica', descricao: 'Fica Lento e Enjoado. Venenos letais funcionam como Sangramento, exceto pelo corte de regeneração.', efeito: 'Lento • Enjoado' },
+        enjoado: { nome: 'Enjoado', categoria: 'fisica', descricao: 'Só pode realizar uma ação por turno: Movimento, Padrão ou Interferência.' },
+        desprevenido: { nome: 'Desprevenido', categoria: 'fisica', descricao: 'Recebe −3 em Defesa e o próximo ataque contra você recebe +2 na margem de crítico.', efeito: 'Defesa −3' },
+        congelando: { nome: 'Congelando', categoria: 'fisica', descricao: 'Fica Lento e perde 1d4 de PA por turno. Gaste uma ação completa para se esquentar.', acao: { formula: '1d4', recurso: 'pa', sinal: -1, rotulo: 'Perder 1d4 PA' } },
+        queimando: { nome: 'Queimando', categoria: 'fisica', descricao: 'Sofre 1d6 de Dano Flamejante por turno. Gaste uma ação completa para apagar o fogo.', acao: { formula: '1d6', recurso: 'pv', sinal: -1, rotulo: 'Sofrer 1d6 PV' } },
+        eletrocutado: { nome: 'Eletrocutado', categoria: 'fisica', descricao: 'Rode 1d4 no começo do turno. Em resultado 1, ocorre Falha Crítica e o turno é perdido.', acao: { formula: '1d4', recurso: '', sinal: 0, rotulo: 'Rolar 1d4' } },
+        cego: { nome: 'Cego', categoria: 'fisica', descricao: 'Fica Desprevenido contra qualquer ataque ou ação visível.', efeito: 'Aplica Desprevenido' },
+        surdo: { nome: 'Surdo', categoria: 'fisica', descricao: 'Fica Desprevenido contra efeitos de som.', efeito: 'Aplica Desprevenido' },
+        silenciado: { nome: 'Silenciado', categoria: 'fisica', descricao: 'Não consegue falar. Feitiços ou habilidades que necessitam da fala não podem ser usados.' },
+        petrificado: { nome: 'Petrificado', categoria: 'fisica', descricao: 'Fica Silenciado e Imóvel, recebe RD 10 a dano físico não mental e fica imune a sangramento e envenenamento.' },
+        imovel: { nome: 'Imóvel', categoria: 'fisica', descricao: 'Não pode se deslocar, somente reagir.' },
+        machucado: { nome: 'Machucado', categoria: 'fisica', descricao: 'Está com menos da metade dos PV. O estado é exibido automaticamente.' },
+        fragilizado: { nome: 'Fragilizado', categoria: 'fisica', descricao: 'O PV máximo diminui em 10 pela cena.', efeito: 'PV máximo −10' },
+        debilitado: { nome: 'Debilitado', categoria: 'fisica', descricao: 'Recebe −3 em testes físicos.', efeito: 'FOR, AGI e CON −3' },
+        vulneravel: { nome: 'Vulnerável', categoria: 'fisica', descricao: 'A Defesa cai em 10 e a próxima fonte de dano causa um dado adicional.', efeito: 'Defesa −10' },
+        afolimbado: { nome: 'Afolimbado', categoria: 'fisica', descricao: 'Fica Fraturado e Fragilizado.', efeito: 'Fraturado • Fragilizado' },
+        molingado: { nome: 'Molingado', categoria: 'fisica', descricao: 'Fica Afolimbado e Debilitado.', efeito: 'Afolimbado • Debilitado' },
+        confuso: { nome: 'Confuso', categoria: 'mental', descricao: 'Recebe −2 em Percepção e Intuição. Precisa de Sucesso Bom em Percepção para não agir aleatoriamente.', efeito: 'Percepção e Intuição −2' },
+        amedrontado: { nome: 'Amedrontado', categoria: 'mental', descricao: 'Não consegue se aproximar da fonte do medo.' },
+        enlouquecendo: { nome: 'Enlouquecendo', categoria: 'mental', descricao: 'Obtido ao chegar em 0 de Sanidade. Há três tentativas para retornar à sanidade.' },
+        enlouquecido: { nome: 'Enlouquecido', categoria: 'mental', descricao: 'Obtido ao chegar em 0 de Sanidade e não ser salvo. O personagem fica louco.' },
+        encantado: { nome: 'Encantado', categoria: 'mental', descricao: 'Sofre −2 em testes opostos contra quem aplicou o efeito.', efeito: '−2 situacional em testes opostos' },
+        desorientado: { nome: 'Desorientado', categoria: 'mental', descricao: 'Fica Atordoado, Vulnerável e Confuso.', efeito: 'Atordoado • Vulnerável • Confuso' },
+        energizado: { nome: 'Energizado', categoria: 'magica', descricao: 'Recupera 1d6 de PA por turno até o fim da duração.', acao: { formula: '1d6', recurso: 'pa', sinal: 1, rotulo: 'Recuperar 1d6 PA' } },
+        drenado: { nome: 'Drenado', categoria: 'magica', descricao: 'Perde 1d6 de PA por turno até o fim da duração.', acao: { formula: '1d6', recurso: 'pa', sinal: -1, rotulo: 'Perder 1d6 PA' } },
+        selado: { nome: 'Selado', categoria: 'magica', descricao: 'Fica incapaz de usar habilidades mágicas.' },
+        intangivel: { nome: 'Intangível', categoria: 'magica', descricao: 'Não sofre dano físico e não pode interagir fisicamente com matéria ou obstáculos.' },
+        corrompido: { nome: 'Corrompido pelo Abismo', categoria: 'magica', descricao: 'Perde 1d6 de Sanidade por turno. Se entrar em Enlouquecendo, adquire uma penalidade ou trauma eterno.', acao: { formula: '1d6', recurso: 'sa', sinal: -1, rotulo: 'Perder 1d6 Sanidade' } }
+    };
+
+    const DEPENDENCIAS_CONDICOES = {
+        exausto: ['lento'],
+        envenenado: ['lento', 'enjoado'],
+        congelando: ['lento'],
+        cego: ['desprevenido'],
+        surdo: ['desprevenido'],
+        afolimbado: ['fraturado', 'fragilizado'],
+        molingado: ['afolimbado', 'debilitado'],
+        desorientado: ['atordoado', 'vulneravel', 'confuso']
+    };
+
+    function normalizarCondicoesDaFicha(ficha = sheet) {
+        if (!ficha || typeof ficha !== 'object') return [];
+        const origem = Array.isArray(ficha.condicoes)
+            ? ficha.condicoes
+            : (ficha.condicoes && typeof ficha.condicoes === 'object' ? Object.values(ficha.condicoes) : []);
+        ficha.condicoes = [...new Set(origem.map(valor => String(valor || '')).filter(id => CONDICOES_CATALOGO[id]))];
+        return ficha.condicoes;
+    }
+
+    function recursoAtualDaFicha(ficha, id) {
+        if (ficha === sheet) {
+            const campo = document.getElementById(`curr-${id}`);
+            if (campo) return parseInt(campo.value) || 0;
+        }
+        const recursos = ficha?.recursosFinos || {};
+        return parseInt(recursos[`${id}_atual`] ?? recursos[`${id}_base_atual`]) || 0;
+    }
+
+    function recursoExisteNaFicha(ficha, id) {
+        if (ficha === sheet && document.getElementById(`curr-${id}`)?.value !== '') return true;
+        const recursos = ficha?.recursosFinos || {};
+        return recursos[`${id}_atual`] !== undefined || recursos[`${id}_base_atual`] !== undefined;
+    }
+
+    function recursoMaximoDaFicha(ficha, id) {
+        if (ficha === sheet) {
+            const campo = document.getElementById(`max-${id}`);
+            if (campo) return Math.max(0, parseInt(campo.value) || 0);
+        }
+        const recursos = ficha?.recursosFinos || {};
+        return Math.max(0, parseInt(recursos[`${id}_max`] ?? recursos[`${id}_base_max`]) || 0);
+    }
+
+    function condicoesAutomaticasDaFicha(ficha = sheet) {
+        const automaticas = [];
+        const pa = recursoAtualDaFicha(ficha, 'pa');
+        const pv = recursoAtualDaFicha(ficha, 'pv');
+        const maxPv = recursoMaximoDaFicha(ficha, 'pv');
+        const sa = recursoAtualDaFicha(ficha, 'sa');
+        if (recursoExisteNaFicha(ficha, 'pa') && pa <= 0) automaticas.push('exausto');
+        if (recursoExisteNaFicha(ficha, 'pv') && pv > 0 && maxPv > 0 && pv <= maxPv / 2) automaticas.push('machucado');
+        if (recursoExisteNaFicha(ficha, 'sa') && sa <= 0) automaticas.push('enlouquecendo');
+        return automaticas;
+    }
+
+    function expandirCondicoes(ids) {
+        const efetivas = new Set();
+        const incluir = id => {
+            if (!CONDICOES_CATALOGO[id] || efetivas.has(id)) return;
+            efetivas.add(id);
+            (DEPENDENCIAS_CONDICOES[id] || []).forEach(incluir);
+        };
+        (ids || []).forEach(incluir);
+        return efetivas;
+    }
+
+    function estadoCondicoesDaFicha(ficha = sheet) {
+        const diretas = normalizarCondicoesDaFicha(ficha);
+        const automaticas = condicoesAutomaticasDaFicha(ficha).filter(id => !diretas.includes(id));
+        return { diretas, automaticas, efetivas: expandirCondicoes([...diretas, ...automaticas]) };
+    }
+
+    function normalizarNomeCondicaoTeste(valor) {
+        return String(valor || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR').trim();
+    }
+
+    function modificadorCondicaoTesteDaFicha(ficha, atributo = '', periciaNome = '') {
+        const ativas = estadoCondicoesDaFicha(ficha).efetivas;
+        const codigo = String(atributo || '').toUpperCase();
+        const pericia = normalizarNomeCondicaoTeste(periciaNome);
+        let total = 0;
+        if (ativas.has('atordoado')) total -= 2;
+        if (ativas.has('caido')) total -= 2;
+        if (ativas.has('exausto') && codigo === 'CON') total -= 2;
+        if (ativas.has('debilitado') && ['FOR', 'AGI', 'CON'].includes(codigo)) total -= 3;
+        if (ativas.has('confuso') && ['percepcao', 'intuicao'].includes(pericia)) total -= 2;
+        return total;
+    }
+
+    function modificadorDefesaCondicoesDaFicha(ficha = sheet) {
+        const ativas = estadoCondicoesDaFicha(ficha).efetivas;
+        let total = 0;
+        if (ativas.has('desprevenido')) total -= 3;
+        if (ativas.has('vulneravel')) total -= 10;
+        return total;
+    }
+
+    function modificadorPvMaxCondicoesDaFicha(ficha = sheet) {
+        return estadoCondicoesDaFicha(ficha).efetivas.has('fragilizado') ? -10 : 0;
+    }
+
+    function fichaEstaLenta(ficha = sheet) {
+        return estadoCondicoesDaFicha(ficha).efetivas.has('lento');
+    }
+
+    function condicaoBloqueiaHabilidade(habilidade, ficha = sheet) {
+        return habilidade?.tipo === 'feitico' && estadoCondicoesDaFicha(ficha).efetivas.has('atordoado');
+    }
+
+    function valorAtributoFicha(ficha, codigo) {
+        const base = parseInt(ficha?.atributos?.[codigo]) || 0;
+        const modificador = ficha === sheet
+            ? getMods('atributo', codigo)
+            : (typeof modificadoresDaFicha === 'function' ? modificadoresDaFicha(ficha, 'atributo', codigo) : 0);
+        return base + modificador;
+    }
+
+    function defesaSemCondicoesDaFicha(ficha = sheet) {
+        const calculo = ficha?.calculos?.defesa || {};
+        const atributo = ['FOR', 'AGI', 'INT', 'CON', 'POD'].includes(calculo.atributo) ? calculo.atributo : 'AGI';
+        const base = Number.isFinite(Number(calculo.base)) ? Number(calculo.base) : (parseInt(ficha?.recursosFinos?.defesa_base) || 10);
+        const modificador = ficha === sheet
+            ? getMods('status', 'defesa')
+            : (typeof modificadoresDaFicha === 'function' ? modificadoresDaFicha(ficha, 'status', 'defesa') : 0);
+        return base + valorAtributoFicha(ficha, atributo) + modificador;
+    }
+
+    function deslocamentoSemCondicoesDaFicha(ficha = sheet) {
+        const calculo = ficha?.calculos?.deslocamento || {};
+        const atributo = ['FOR', 'AGI', 'INT', 'CON', 'POD'].includes(calculo.atributo) ? calculo.atributo : 'AGI';
+        const base = Number.isFinite(Number(calculo.base)) ? Number(calculo.base) : 4;
+        const modificador = ficha === sheet
+            ? getMods('status', 'deslocamento')
+            : (typeof modificadoresDaFicha === 'function' ? modificadoresDaFicha(ficha, 'status', 'deslocamento') : 0);
+        return Math.max(0, base + (valorAtributoFicha(ficha, atributo) * 2) + modificador);
+    }
+
+    function resumoNumericoCondicoesDaFicha(ficha = sheet) {
+        const ativas = estadoCondicoesDaFicha(ficha).efetivas;
+        const defesaBase = defesaSemCondicoesDaFicha(ficha);
+        const defesaAtual = defesaBase + modificadorDefesaCondicoesDaFicha(ficha);
+        const deslocamentoBase = deslocamentoSemCondicoesDaFicha(ficha);
+        const deslocamentoAtual = fichaEstaLenta(ficha) ? Math.max(0, Math.floor(deslocamentoBase / 2)) : deslocamentoBase;
+        return {
+            defesaBase,
+            defesaAtual,
+            defesaProjetil: ativas.has('caido') ? defesaAtual + 3 : defesaAtual,
+            defesaCorpoACorpo: ativas.has('caido') ? defesaAtual - 3 : defesaAtual,
+            deslocamentoBase,
+            deslocamentoAtual,
+            caido: ativas.has('caido'),
+            lento: fichaEstaLenta(ficha)
+        };
+    }
+
+    function aplicarResumoCondicoesNaFicha(ficha) {
+        if (!ficha || typeof ficha !== 'object') return ficha;
+        if (!ficha.recursosFinos || typeof ficha.recursosFinos !== 'object') ficha.recursosFinos = {};
+        const recursos = ficha.recursosFinos;
+        const modPvItem = ficha === sheet
+            ? getMods('status', 'pv_max')
+            : (typeof modificadoresDaFicha === 'function' ? modificadoresDaFicha(ficha, 'status', 'pv_max') : 0);
+        let baseMax = parseInt(recursos.pv_base_max);
+        if (!Number.isFinite(baseMax)) {
+            const maxAtual = parseInt(recursos.pv_max) || 0;
+            baseMax = maxAtual - modPvItem - modificadorPvMaxCondicoesDaFicha(ficha);
+        }
+        const pvMaximo = Math.max(0, baseMax + modPvItem + modificadorPvMaxCondicoesDaFicha(ficha));
+        recursos.pv_base_max = baseMax;
+        recursos.pv_max = pvMaximo;
+        if (Number.isFinite(Number(recursos.pv_atual))) recursos.pv_atual = Math.min(Number(recursos.pv_atual), pvMaximo);
+        const resumo = resumoNumericoCondicoesDaFicha(ficha);
+        recursos.defesa_total = resumo.defesaAtual;
+        ficha.deslocamentoBase = resumo.deslocamentoBase;
+        ficha.deslocamentoTotal = resumo.deslocamentoAtual;
+        return ficha;
+    }
+
+    function opcoesAdicionarCondicaoHtml(ficha = sheet) {
+        const estado = estadoCondicoesDaFicha(ficha);
+        return Object.entries(CATEGORIAS_CONDICOES).map(([categoria, meta]) => {
+            const opcoes = Object.entries(CONDICOES_CATALOGO)
+                .filter(([, condicao]) => condicao.categoria === categoria)
+                .map(([id, condicao]) => {
+                    const direta = estado.diretas.includes(id);
+                    const automatica = estado.automaticas.includes(id);
+                    return `<option value="${id}" ${direta || automatica ? 'disabled' : ''}>${escapeCampaignHtml(condicao.nome)}${direta ? ' — ativa' : (automatica ? ' — automática' : '')}</option>`;
+                }).join('');
+            return `<optgroup label="${meta.icone} ${escapeCampaignHtml(meta.nome)}">${opcoes}</optgroup>`;
+        }).join('');
+    }
+
+    function resumoStatusCondicoesHtml(ficha = sheet) {
+        const resumo = resumoNumericoCondicoesDaFicha(ficha);
+        const blocos = [];
+        if (resumo.caido) {
+            blocos.push(`<div class="condition-numeric-summary defense"><span>DEFESA ATUAL<strong>${resumo.defesaAtual}</strong></span><span>PROJÉTEIS<strong>${resumo.defesaProjetil}</strong></span><span>CORPO A CORPO<strong>${resumo.defesaCorpoACorpo}</strong></span></div>`);
+        } else if (modificadorDefesaCondicoesDaFicha(ficha)) {
+            blocos.push(`<div class="condition-numeric-summary defense"><span>DEFESA SEM CONDIÇÃO<strong>${resumo.defesaBase}</strong></span><span>DEFESA ATUAL<strong>${resumo.defesaAtual}</strong></span></div>`);
+        }
+        if (resumo.lento) {
+            blocos.push(`<div class="condition-numeric-summary movement"><span>DESLOCAMENTO NORMAL<strong>${resumo.deslocamentoBase}q</strong></span><span>COM LENTO<strong>${resumo.deslocamentoAtual}q</strong></span></div>`);
+        }
+        return blocos.join('');
+    }
+
+    function condicaoAtivaHtml(id, automatica = false, contexto = 'ficha') {
+        const condicao = CONDICOES_CATALOGO[id];
+        if (!condicao) return '';
+        const executar = contexto === 'campanha'
+            ? `executarAcaoCondicaoCampanha('${id}')`
+            : `executarAcaoCondicao('${id}')`;
+        const remover = contexto === 'campanha'
+            ? `removerCondicaoCampanha('${id}')`
+            : `removerCondicaoFicha('${id}')`;
+        return `<article class="active-condition-card category-${condicao.categoria} ${automatica ? 'is-automatic' : ''}" data-condition-id="${id}">
+            <div class="active-condition-copy"><span class="active-condition-kicker">${CATEGORIAS_CONDICOES[condicao.categoria].icone} ${escapeCampaignHtml(CATEGORIAS_CONDICOES[condicao.categoria].nome)}</span><strong>${escapeCampaignHtml(condicao.nome)}</strong><p>${escapeCampaignHtml(condicao.descricao)}</p>${condicao.efeito ? `<small>${escapeCampaignHtml(condicao.efeito)}</small>` : ''}</div>
+            <div class="active-condition-actions">
+                ${condicao.acao ? `<button type="button" class="condition-roll-action" onclick="${executar}">🎲 ${escapeCampaignHtml(condicao.acao.rotulo)}</button>` : ''}
+                ${automatica ? '<span class="condition-auto-label">AUTOMÁTICA</span>' : `<button type="button" class="condition-remove-action" onclick="${remover}" title="Remover condição" aria-label="Remover ${escapeCampaignHtml(condicao.nome)}">✕</button>`}
+            </div>
+        </article>`;
+    }
+
+    function catalogoCondicoesHtml(ficha = sheet, contexto = 'ficha') {
+        const estado = estadoCondicoesDaFicha(ficha);
+        return Object.entries(CATEGORIAS_CONDICOES).map(([categoria, meta]) => {
+            const cards = Object.entries(CONDICOES_CATALOGO).filter(([, condicao]) => condicao.categoria === categoria).map(([id, condicao]) => {
+                const ativa = estado.diretas.includes(id);
+                const automatica = estado.automaticas.includes(id);
+                const acao = contexto === 'campanha' ? `alternarCondicaoCampanha('${id}')` : `alternarCondicaoFicha('${id}')`;
+                const busca = normalizarNomeCondicaoTeste(`${condicao.nome} ${condicao.descricao}`);
+                return `<button type="button" class="condition-catalog-card ${ativa ? 'is-active' : ''} ${automatica ? 'is-automatic' : ''}" data-condition-search="${escapeCampaignHtml(busca)}" onclick="${acao}" ${automatica ? 'disabled' : ''}>
+                    <span>${ativa ? '✓' : (automatica ? 'AUTO' : '+')}</span><strong>${escapeCampaignHtml(condicao.nome)}</strong><small>${escapeCampaignHtml(condicao.descricao)}</small>
+                </button>`;
+            }).join('');
+            return `<section class="condition-catalog-group"><h4>${meta.icone} CONDIÇÕES ${escapeCampaignHtml(meta.nome).toUpperCase()}</h4><div class="condition-catalog-grid">${cards}</div></section>`;
+        }).join('');
+    }
+
+    function renderizarCondicoes() {
+        const painel = document.getElementById('character-conditions-panel');
+        if (!painel) return;
+        const estado = estadoCondicoesDaFicha(sheet);
+        const ativas = [
+            ...estado.diretas.map(id => ({ id, automatica: false })),
+            ...estado.automaticas.map(id => ({ id, automatica: true }))
+        ];
+        const aberto = sheet.condicoesUIAberto === true;
+        painel.innerHTML = `<header class="conditions-panel-head">
+            <div><span class="dashboard-eyebrow">ESTADO EM COMBATE</span><h2>Condições</h2><small>${ativas.length ? `${ativas.length} ${ativas.length === 1 ? 'condição ativa' : 'condições ativas'}` : 'Nenhuma condição ativa'}</small></div>
+            <button type="button" class="conditions-panel-toggle" onclick="alternarPainelCondicoes()" aria-expanded="${aberto}">${aberto ? 'Recolher ▴' : 'Gerenciar ▾'}</button>
+        </header>
+        <div class="condition-quick-add"><select id="condition-add-select" class="modal-input" aria-label="Escolher condição"><option value="">Adicionar condição...</option>${opcoesAdicionarCondicaoHtml(sheet)}</select><button type="button" onclick="adicionarCondicaoSelecionada()">Adicionar</button></div>
+        ${ativas.length ? `<div class="active-conditions-list">${ativas.map(item => condicaoAtivaHtml(item.id, item.automatica)).join('')}</div>` : '<div class="conditions-empty">O personagem está livre de condições. Use o seletor para adicionar uma.</div>'}
+        ${resumoStatusCondicoesHtml(sheet)}
+        <div class="conditions-catalog" ${aberto ? '' : 'hidden'}>
+            <input type="search" class="search-bar" placeholder="Pesquisar condição..." oninput="filtrarCatalogoCondicoesDOM(this.value, this.closest('.conditions-catalog'))">
+            ${catalogoCondicoesHtml(sheet)}
+        </div>`;
+    }
+
+    function filtrarCatalogoCondicoesDOM(valor, raiz) {
+        const busca = normalizarNomeCondicaoTeste(valor);
+        raiz?.querySelectorAll('.condition-catalog-card').forEach(card => {
+            card.hidden = Boolean(busca && !String(card.dataset.conditionSearch || '').includes(busca));
+        });
+        raiz?.querySelectorAll('.condition-catalog-group').forEach(grupo => {
+            grupo.hidden = !grupo.querySelector('.condition-catalog-card:not([hidden])');
+        });
+    }
+
+    function alternarPainelCondicoes() {
+        sheet.condicoesUIAberto = sheet.condicoesUIAberto !== true;
+        renderizarCondicoes();
+        marcarAlteracao();
+    }
+
+    function adicionarCondicaoSelecionada() {
+        const seletor = document.getElementById('condition-add-select');
+        if (!seletor?.value) return;
+        alternarCondicaoFicha(seletor.value, true);
+    }
+
+    let recalculandoPorCondicoes = false;
+    function atualizarEfeitosCondicoesFicha() {
+        if (recalculandoPorCondicoes) return;
+        recalculandoPorCondicoes = true;
+        try {
+            calcularStatusClasse();
+            calcularVelocidade();
+        } finally {
+            recalculandoPorCondicoes = false;
+        }
+        render();
+        renderAbilities();
+        renderizarCondicoes();
+    }
+
+    function alternarCondicaoFicha(id, forcarAdicionar = false) {
+        if (!CONDICOES_CATALOGO[id]) return;
+        const condicoes = normalizarCondicoesDaFicha(sheet);
+        const indice = condicoes.indexOf(id);
+        if (indice >= 0 && !forcarAdicionar) condicoes.splice(indice, 1);
+        else if (indice < 0) condicoes.push(id);
+        atualizarEfeitosCondicoesFicha();
+        registrarHistoricoAcao({ categoria: 'condicao', titulo: `${CONDICOES_CATALOGO[id].nome}: ${indice >= 0 && !forcarAdicionar ? 'removida' : 'aplicada'}`, detalhes: CONDICOES_CATALOGO[id].efeito || 'Condição da ficha alterada' });
+        marcarAlteracao();
+    }
+
+    function removerCondicaoFicha(id) {
+        const condicoes = normalizarCondicoesDaFicha(sheet);
+        const indice = condicoes.indexOf(id);
+        if (indice < 0) return;
+        condicoes.splice(indice, 1);
+        atualizarEfeitosCondicoesFicha();
+        registrarHistoricoAcao({ categoria: 'condicao', titulo: `${CONDICOES_CATALOGO[id]?.nome || 'Condição'} removida`, detalhes: 'Efeitos recalculados na ficha' });
+        marcarAlteracao();
+    }
+
+    function aplicarVariacaoRecursoCondicao(id, variacao, motivo) {
+        if (!RECURSOS_META[id]) return;
+        const input = document.getElementById(`curr-${id}`);
+        const maximo = Math.max(0, parseInt(document.getElementById(`max-${id}`)?.value) || 0);
+        if (!input) return;
+        const antes = capturarSnapshotRecurso(id);
+        const atual = parseInt(input.value) || 0;
+        input.value = variacao > 0 ? Math.min(maximo, atual + variacao) : atual + variacao;
+        updateBar(id);
+        registrarHistoricoRecurso(id, antes, motivo);
+        marcarAlteracao();
+    }
+
+    function participanteDaFichaAtualNoCombate() {
+        if (typeof campaignState === 'undefined' || !campaignState.activeId) return null;
+        const combat = combateAtivoDaCampanha();
+        const slotAtual = String(document.getElementById('save-slot')?.value || '');
+        const entrada = Object.entries(combat?.participants || {}).find(([, participante]) => {
+            if (participante.ownerUid !== currentUser?.uid) return false;
+            const personagem = campaignState.activeCampaign?.characters?.[participante.characterId];
+            return String(personagem?.slot ?? '') === slotAtual;
+        });
+        return entrada ? { id: entrada[0], participante: entrada[1], combat } : null;
+    }
+
+    async function registrarTurnoPerdidoEletrocutado(characterId = '') {
+        if (!campaignState?.activeId) return;
+        const combat = combateAtivoDaCampanha();
+        const order = ordemCombateArray(combat?.order);
+        const currentId = order[Number(combat?.currentIndex) || 0];
+        const alvo = characterId || participanteDaFichaAtualNoCombate()?.id;
+        if (!alvo || alvo !== currentId) return;
+        await database.ref(`campaigns/${campaignState.activeId}/combat/participants/${alvo}/lostTurn`).set({
+            reason: 'Eletrocutado',
+            rolledBy: currentUser?.uid || '',
+            at: firebase.database.ServerValue.TIMESTAMP
+        }).catch(erro => console.warn('A falha de Eletrocutado não pôde avançar o turno automaticamente.', erro));
+    }
+
+    function executarAcaoCondicao(id) {
+        const condicao = CONDICOES_CATALOGO[id];
+        const acao = condicao?.acao;
+        if (!acao) return;
+        const resultado = rolarDadosAvancado(acao.formula);
+        if (resultado.erro) return alert(resultado.erro);
+        let status = 'EFEITO DE CONDIÇÃO';
+        let cor = acao.sinal > 0 ? '#41d17d' : '#ff6464';
+        let eventoSom = null;
+        if (id === 'eletrocutado' && resultado.total === 1) {
+            status = 'FALHA CRÍTICA • TURNO PERDIDO';
+            cor = '#800020';
+            eventoSom = 'fail';
+            if (!sheet.condicoesEstado || typeof sheet.condicoesEstado !== 'object') sheet.condicoesEstado = {};
+            sheet.condicoesEstado.eletrocutadoFalhou = true;
+            registrarTurnoPerdidoEletrocutado();
+        } else if (id === 'eletrocutado') {
+            status = 'TURNO PRESERVADO';
+            if (!sheet.condicoesEstado || typeof sheet.condicoesEstado !== 'object') sheet.condicoesEstado = {};
+            sheet.condicoesEstado.eletrocutadoFalhou = false;
+        }
+        if (acao.recurso) {
+            const variacao = resultado.total * acao.sinal;
+            aplicarVariacaoRecursoCondicao(acao.recurso, variacao, `${condicao.nome}: ${variacao >= 0 ? '+' : ''}${variacao}`);
+        }
+        tocarSom(eventoSom || 'roll');
+        const detalhes = `Fórmula: ${acao.formula}<br>Dados: ${resultado.text}${acao.recurso ? `<br>${RECURSOS_META[acao.recurso].nome}: ${acao.sinal > 0 ? '+' : '−'}${resultado.total}` : ''}`;
+        spawnPopup(condicao.nome.toUpperCase(), acao.rotulo, resultado.total, cor, status, detalhes);
+        enviarRolagemParaServidor(condicao.nome.toUpperCase(), acao.rotulo, resultado.total, cor, status, detalhes.replace(/<br>/g, ' | '), eventoSom, eventoSom ? 1 : null);
+        renderizarCondicoes();
+        marcarAlteracao();
+    }
+
     function clonarParaHistorico(valor) {
         return valor === undefined ? undefined : JSON.parse(JSON.stringify(valor));
     }
@@ -10151,7 +10911,7 @@ function resetarConfiguracoesAudio() {
             atual,
             max,
             baseAtual: recursos[`${id}_base_atual`] !== undefined ? (parseInt(recursos[`${id}_base_atual`]) || 0) : atual - getMods('status', `${id}_atual`),
-            baseMax: recursos[`${id}_base_max`] !== undefined ? Math.max(0, parseInt(recursos[`${id}_base_max`]) || 0) : Math.max(0, max - getMods('status', `${id}_max`)),
+            baseMax: recursos[`${id}_base_max`] !== undefined ? Math.max(0, parseInt(recursos[`${id}_base_max`]) || 0) : Math.max(0, max - getMods('status', `${id}_max`) - (id === 'pv' ? modificadorPvMaxCondicoesDaFicha(sheet) : 0)),
             temporario: id === 'pv' ? (parseInt(recursos.pv_temp) || 0) : (id === 'sa' ? (parseInt(recursos.sa_temp) || 0) : 0)
         };
     }
@@ -10397,9 +11157,22 @@ function toggleSecreto() {
 }
     function toggleTurn(el) {
         tocarSom('click');
-        if (el.innerText === "X") el.innerText = "";
-        else el.innerText = "X";
+        const ativo = !el.classList.contains('active');
+        el.classList.toggle('active', ativo);
+        el.textContent = '';
+        el.setAttribute('role', 'button');
+        el.setAttribute('tabindex', '0');
+        el.setAttribute('aria-pressed', String(ativo));
+        const recurso = el.closest('.status-box-pv') ? 'PV' : 'Sanidade';
+        const marcador = recurso === 'PV' ? 'caveira' : 'cérebro';
+        el.setAttribute('aria-label', `${ativo ? 'Desmarcar' : 'Marcar'} ${marcador} de ${recurso}`);
     }
+
+    document.addEventListener('keydown', event => {
+        if (!event.target?.classList?.contains('turn-box') || !['Enter', ' '].includes(event.key)) return;
+        event.preventDefault();
+        toggleTurn(event.target);
+    });
   
     // Novas cores definidas conforme a sua solicitação
 const coresRolagem = {
@@ -11087,6 +11860,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                                 <input value="${escapeCampaignHtml(slot.name)}" data-slot-id="${escapeCampaignHtml(slot.id)}" onchange="renomearSlot(this.dataset.slotId, this.value)" aria-label="Nome do slot">
                                 <select data-slot-id="${escapeCampaignHtml(slot.id)}" onchange="moverSlotParaPasta(this.dataset.slotId, this.value)" aria-label="Pasta do slot">${opcoesPastasHtml(slot.folderId)}</select>
                                 <button type="button" data-slot-id="${escapeCampaignHtml(slot.id)}" onclick="selecionarSlotGerenciado(this.dataset.slotId)">Abrir</button>
+                                <button type="button" class="slot-delete-button" data-slot-id="${escapeCampaignHtml(slot.id)}" onclick="excluirSlot(this.dataset.slotId)" title="Excluir esta ficha" aria-label="Excluir ${escapeCampaignHtml(slot.name)}">Excluir</button>
                             </div>`).join('') : '<div class="slot-folder-empty">Esta pasta ainda não possui fichas.</div>'}
                     </div>
                 </section>`;
@@ -11146,6 +11920,74 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         renderizarGerenciadorSlots();
     }
 
+    async function excluirSlot(id) {
+        const slotId = String(id || '');
+        const slot = slotManagerState.slots?.[slotId];
+        if (!currentUser || !slot) return;
+        const todos = slotsOrdenados();
+        if (todos.length <= 1) {
+            alert('Mantenha ao menos uma ficha. Crie outro slot antes de excluir este.');
+            return;
+        }
+        const seletor = document.getElementById('save-slot');
+        const eraAtual = String(seletor?.value || '') === slotId;
+        const avisoAlteracoes = eraAtual && alteracoesNaoSalvas
+            ? '\n\nEsta ficha possui alterações ainda não salvas, que também serão perdidas.'
+            : '';
+        const avisoCampanha = Object.values(campaignState?.links || {}).some(links =>
+            Object.values(links || {}).some(link => String(link?.slot || '') === slotId)
+        ) ? '\n\nAs cópias já colocadas em campanhas serão preservadas, mas deixarão de sincronizar com este slot.' : '';
+        if (!confirm(`Excluir definitivamente "${slot.name}" e todos os dados salvos nessa ficha?${avisoAlteracoes}${avisoCampanha}`)) return;
+
+        const estadoAnterior = JSON.parse(JSON.stringify(slotManagerState));
+        const previewAnterior = slotPreviewState[slotId];
+        delete slotManagerState.slots[slotId];
+        delete slotPreviewState[slotId];
+        const proximo = slotsOrdenados()[0];
+        const updates = {
+            [`users/${currentUser.uid}/slots/${slotId}`]: null,
+            [`users/${currentUser.uid}/slotConfig`]: slotManagerState
+        };
+        Object.entries(campaignState?.links || {}).forEach(([campaignId, links]) => {
+            Object.entries(links || {}).forEach(([characterId, link]) => {
+                if (String(link?.slot || '') === slotId) {
+                    updates[`users/${currentUser.uid}/campaignLinks/${campaignId}/${characterId}`] = null;
+                }
+            });
+        });
+
+        try {
+            const linksSnapshot = await database.ref(`users/${currentUser.uid}/campaignLinks`).once('value');
+            Object.entries(linksSnapshot.val() || {}).forEach(([campaignId, links]) => {
+                Object.entries(links || {}).forEach(([characterId, link]) => {
+                    if (String(link?.slot || '') === slotId) {
+                        updates[`users/${currentUser.uid}/campaignLinks/${campaignId}/${characterId}`] = null;
+                    }
+                });
+            });
+            await database.ref().update(updates);
+            if (eraAtual && proximo) {
+                renderizarSeletoresSlots(proximo.id);
+                seletor.value = proximo.id;
+                seletor.title = nomeDoSlot(proximo.id);
+                alteracoesNaoSalvas = false;
+                await carregarDaNuvem();
+            } else {
+                renderizarSeletoresSlots(seletor?.value);
+            }
+            renderizarGerenciadorSlots();
+            renderizarSeletorInicialFichas();
+            spawnPopup('FICHA EXCLUÍDA', slot.name, '✕', '#ff6464', 'SLOT REMOVIDO', 'As demais fichas e as cópias existentes em campanhas foram preservadas.');
+        } catch (erro) {
+            console.error('Erro ao excluir slot:', erro);
+            slotManagerState = estadoAnterior;
+            if (previewAnterior) slotPreviewState[slotId] = previewAnterior;
+            renderizarSeletoresSlots(slotId);
+            renderizarGerenciadorSlots();
+            alert('Não foi possível excluir essa ficha agora.');
+        }
+    }
+
     function selecionarSlotGerenciado(id) {
         if (!slotManagerState.slots[id]) return;
         const seletor = document.getElementById('save-slot');
@@ -11190,6 +12032,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const nome = String(valor.name || valor.data.n || '').trim();
         if (!nome) return null;
         const custom = valor.custom === true || valor.data.custom === true;
+        // A biblioteca pessoal é exclusiva para perícias criadas pelo jogador.
+        // Favoritos antigos de perícias-base são descartados durante a normalização.
+        if (!custom) return null;
         const data = {
             n: nome,
             a: ATRIBUTOS_PERICIA.includes(valor.data.a) ? valor.data.a : 'POD',
@@ -11284,11 +12129,13 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     }
 
     function periciaEstaFavorita(pericia) {
+        if (pericia?.custom !== true) return false;
         const chave = chaveFontePericia(pericia);
         return periciasFavoritas.some(favorita => favorita.sourceKey === chave);
     }
 
     function criarSnapshotPericiaFavorita(pericia) {
+        if (pericia?.custom !== true) return null;
         const agora = Date.now();
         const detalhes = detalhesDaPericia(pericia) || {};
         return normalizarPericiaFavorita({
@@ -11315,10 +12162,17 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         tocarSom('click');
         const pericia = obterPericiaPorReferencia(decodeURIComponent(referenciaCodificada));
         if (!pericia) return;
+        if (pericia.custom !== true) {
+            spawnPopup('PERÍCIA-BASE', pericia.n, '—', 'var(--text-gold)', 'NÃO FAVORITÁVEL', 'Somente perícias criadas pelo jogador podem ser copiadas para outras fichas.');
+            return;
+        }
         const chave = chaveFontePericia(pericia);
         const existente = periciasFavoritas.find(favorita => favorita.sourceKey === chave);
         if (existente) periciasFavoritas = periciasFavoritas.filter(favorita => favorita.id !== existente.id);
-        else periciasFavoritas.push(criarSnapshotPericiaFavorita(pericia));
+        else {
+            const snapshot = criarSnapshotPericiaFavorita(pericia);
+            if (snapshot) periciasFavoritas.push(snapshot);
+        }
         const sincronizado = await persistirPericiasFavoritas();
         render();
         renderizarAcessoRapidoCombate();
@@ -11348,16 +12202,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const dados = favorita.data;
         const pericias = normalizarPericiasDaFicha();
         const chaveNome = normalizarTextoFiltro(dados.n);
-        let destino = pericias.find(pericia => normalizarTextoFiltro(pericia.n) === chaveNome && pericia.custom === favorita.custom);
-
-        if (!favorita.custom) {
-            destino = destino || pericias.find(pericia => !pericia.custom && normalizarTextoFiltro(pericia.n) === chaveNome);
-            if (!destino) return alert('A perícia-base correspondente não existe nesta versão da ficha.');
-            destino.a = dados.a;
-            destino.t = dados.t;
-            destino.m = dados.m;
-            destino.d = dados.d;
-        } else {
+        if (!favorita.custom) return;
+        let destino = pericias.find(pericia => normalizarTextoFiltro(pericia.n) === chaveNome && pericia.custom === true);
+        {
             const conflitoBase = pericias.find(pericia => !pericia.custom && normalizarTextoFiltro(pericia.n) === chaveNome);
             const nomeDestino = conflitoBase ? `${dados.n} — Personalizada` : dados.n;
             destino = pericias.find(pericia => pericia.custom && normalizarTextoFiltro(pericia.n) === normalizarTextoFiltro(nomeDestino));
@@ -11378,7 +12225,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
         render();
         marcarAlteracao();
-        spawnPopup('PERÍCIA COPIADA', favorita.name, '✓', '#00c875', 'ADICIONADA À FICHA', favorita.custom ? 'Descrição, funções e treinamento foram copiados.' : 'Atributo, treinamento e modificador foram aplicados.');
+        spawnPopup('PERÍCIA COPIADA', favorita.name, '✓', '#00c875', 'ADICIONADA À FICHA', 'Descrição, funções e treinamento foram copiados.');
     }
 
     function renderizarBibliotecaPericiasFavoritas() {
@@ -11387,14 +12234,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (!container || !contador) return;
         contador.textContent = `${periciasFavoritas.length} ${periciasFavoritas.length === 1 ? 'favorita' : 'favoritas'}`;
         if (!periciasFavoritas.length) {
-            container.innerHTML = '<div class="skills-empty">Use a estrela nas perícias para guardá-las e copiá-las para outros personagens.</div>';
+            container.innerHTML = '<div class="skills-empty">Use a estrela nas perícias criadas por você para copiá-las em outros personagens.</div>';
             return;
         }
         container.innerHTML = periciasFavoritas.map(favorita => `
             <article class="favorite-skill-card">
                 <span class="favorite-skill-copy">
                     <strong title="${escapeCampaignHtml(favorita.name)}">${escapeCampaignHtml(favorita.name)}</strong>
-                    <small>${favorita.custom ? 'Personalizada' : 'Perícia-base'} • ${escapeCampaignHtml(favorita.data.a)} • Treino ${favorita.data.t > 0 ? `+${favorita.data.t}` : '+0'}</small>
+                    <small>Personalizada • ${escapeCampaignHtml(favorita.data.a)} • Treino ${favorita.data.t > 0 ? `+${favorita.data.t}` : '+0'}</small>
                 </span>
                 <span class="favorite-skill-actions">
                     <button type="button" onclick="aplicarPericiaFavorita('${escapeCampaignHtml(favorita.id)}')">⧉ Usar</button>
@@ -11533,6 +12380,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         delete copia.geradoPorItem;
         delete copia.itemIdRef;
         delete copia.idUnico;
+        delete copia.containerId;
         copia.tipo = PERSONAL_TEMPLATE_TYPES.has(copia.tipo) && copia.tipo !== 'item' ? copia.tipo : 'habilidade';
         copia.ativa = false;
         copia.recolhido = false;
@@ -11564,6 +12412,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const original = sheet.habilidades[indice];
         if (!original || original.isSeparator) return;
         const copia = prepararAcaoReutilizavel(original);
+        if (original.containerId && containerCombatePorId(original.containerId)) copia.containerId = original.containerId;
         copia.nome = nomeCopiaDisponivel(original.nome, sheet.habilidades);
         copia.idUnico = gerarIdConteudoFicha('action');
         sheet.habilidades.splice(indice + 1, 0, copia);
@@ -12244,6 +13093,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function usarCustoHabilidade(indice, indiceCusto = 0) {
         const habilidade = sheet.habilidades?.[indice];
+        if (condicaoBloqueiaHabilidade(habilidade)) {
+            alert('Atordoado impede a conjuração de Feitiços até o fim da condição.');
+            return;
+        }
         if (habilidade) gastarCustoAcao(habilidade, indiceCusto, habilidade.nome || 'Habilidade');
     }
 
@@ -12285,6 +13138,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function rolarHabilidadePorIndice(indice, indiceRolagem = 0) {
         const habilidade = sheet.habilidades?.[indice];
+        if (condicaoBloqueiaHabilidade(habilidade)) {
+            alert('Atordoado impede a conjuração de Feitiços até o fim da condição.');
+            return;
+        }
         const rolagem = normalizarRolagensPrincipais(habilidade)[indiceRolagem];
         if (!habilidade || !rolagem?.formula) return;
         rolarHabilidadeComOuSemCrit(
@@ -12298,6 +13155,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function rolarExtraHabilidadePorIndice(indiceHabilidade, indiceRolagem) {
         const habilidade = sheet.habilidades?.[indiceHabilidade];
+        if (condicaoBloqueiaHabilidade(habilidade)) {
+            alert('Atordoado impede a conjuração de Feitiços até o fim da condição.');
+            return;
+        }
         const rolagem = normalizarRolagensExtras(habilidade)[indiceRolagem];
         if (!rolagem?.formula) return;
         acionarRolagemGlobal(habilidade.nome || 'Habilidade', rolagem.nome, rolagem.formula, 'var(--light-purple)', 'BÔNUS');
@@ -12671,6 +13532,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const modBloq = getMods('status', 'bloqueio');
         const modCarga = getMods('status', 'carga');
         const modDesloc = getMods('status', 'deslocamento');
+        const modPvCondicao = modificadorPvMaxCondicoesDaFicha(sheet);
+        const modDefCondicao = modificadorDefesaCondicoesDaFicha(sheet);
 
         const aplicarRecurso = (id, maximoBase, modMaximo, modAtual) => {
             const maximoFinal = Math.max(0, maximoBase + modMaximo);
@@ -12691,13 +13554,13 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
         const suspensaoAnterior = suspendResourceCapture;
         suspendResourceCapture = true;
-        aplicarRecurso('pv', maxPV, modPV, modPVAtual);
+        aplicarRecurso('pv', maxPV, modPV + modPvCondicao, modPVAtual);
         aplicarRecurso('pa', maxPA, modPA, modPAAtual);
         aplicarRecurso('sa', maxSA, modSA, modSAAtual);
 
         if (temClasse && !calculos.defesa.customizado) calculos.defesa.base = def;
         const valorAttrDefesa = valorAtributoCalculado(calculos.defesa.atributo);
-        const defesaTotal = (parseInt(calculos.defesa.base) || 0) + valorAttrDefesa + modDef;
+        const defesaTotal = (parseInt(calculos.defesa.base) || 0) + valorAttrDefesa + modDef + modDefCondicao;
         recursos.defesa_base = parseInt(calculos.defesa.base) || 0;
         recursos.defesa_total = defesaTotal;
         const inputDefesa = document.getElementById('val-defesa');
@@ -12707,7 +13570,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (attrDefesa) attrDefesa.value = calculos.defesa.atributo;
         if (totalDefesa) {
             totalDefesa.textContent = defesaTotal;
-            totalDefesa.title = `${calculos.defesa.base} base + ${valorAttrDefesa} ${calculos.defesa.atributo}${modDef ? ` + ${modDef} modificador` : ''}`;
+            totalDefesa.title = `${calculos.defesa.base} base + ${valorAttrDefesa} ${calculos.defesa.atributo}${modDef ? ` + ${modDef} modificador` : ''}${modDefCondicao ? ` ${modDefCondicao > 0 ? '+' : '−'} ${Math.abs(modDefCondicao)} condições` : ''}`;
         }
         
         const bloqueioBase = sheet.bloqueioBase !== undefined ? sheet.bloqueioBase : 0;
@@ -12715,10 +13578,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         
         sheet.limiteCarga = (sheet.cargaBase !== undefined ? sheet.cargaBase : 20) + modCarga;
 
-        renderIndicadorRecurso('mod-ind-pv', modPV, modPVAtual);
+        renderIndicadorRecurso('mod-ind-pv', modPV + modPvCondicao, modPVAtual);
         renderIndicadorRecurso('mod-ind-sa', modSA, modSAAtual);
         renderIndicadorRecurso('mod-ind-pa', modPA, modPAAtual);
-        renderIndicadorMod('mod-ind-def', modDef);
+        renderIndicadorMod('mod-ind-def', modDef + modDefCondicao);
         renderIndicadorMod('mod-ind-bloq', modBloq);
         renderIndicadorMod('mod-ind-carga', modCarga);
         renderIndicadorMod('mod-ind-desloc', modDesloc);
@@ -12807,7 +13670,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (!suspendResourceCapture) {
             if (!sheet.recursosFinos) sheet.recursosFinos = { pv_temp: 0, sa_temp: 0 };
             sheet.recursosFinos[`${id}_base_atual`] = current - getMods('status', `${id}_atual`);
-            sheet.recursosFinos[`${id}_base_max`] = max - getMods('status', `${id}_max`);
+            const modMaxCondicao = id === 'pv' ? modificadorPvMaxCondicoesDaFicha(sheet) : 0;
+            sheet.recursosFinos[`${id}_base_max`] = max - getMods('status', `${id}_max`) - modMaxCondicao;
             sheet.recursosFinos[`${id}_atual`] = current;
             sheet.recursosFinos[`${id}_max`] = max;
         }
@@ -12860,6 +13724,13 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }
         
         bar.style.width = percentage + "%";
+        if (!suspendResourceCapture) {
+            renderizarCondicoes();
+            if (id === 'pa') {
+                calcularVelocidade();
+                render();
+            }
+        }
     }
 
     function changeStat(id, amount) {
@@ -12954,7 +13825,164 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }));
     }
 
-    function abrirEditorHab(t, idxEdicao = null) { 
+    function criarIdContainerCombate() {
+        return `combat-box-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function normalizarContainersCombate() {
+        const origem = Array.isArray(sheet.containersCombate)
+            ? sheet.containersCombate
+            : (sheet.containersCombate && typeof sheet.containersCombate === 'object' ? Object.values(sheet.containersCombate) : []);
+        const ids = new Set();
+        sheet.containersCombate = origem.map((container, indice) => {
+            if (!container || typeof container !== 'object') return null;
+            let id = String(container.id || criarIdContainerCombate()).replace(/[^a-zA-Z0-9_-]/g, '-');
+            while (ids.has(id)) id = criarIdContainerCombate();
+            ids.add(id);
+            return {
+                id,
+                nome: String(container.nome || `Container ${indice + 1}`).trim() || `Container ${indice + 1}`,
+                layout: container.layout === 'compact' ? 'compact' : 'wide',
+                recolhido: container.recolhido === true,
+                ordem: Number(container.ordem) || indice + 1
+            };
+        }).filter(Boolean).sort((a, b) => a.ordem - b.ordem);
+        return sheet.containersCombate;
+    }
+
+    function containerCombatePorId(id) {
+        return normalizarContainersCombate().find(container => container.id === String(id || '')) || null;
+    }
+
+    function opcoesContainerHabilidadeHtml(selecionado = '') {
+        const opcoes = ['<option value="">Seção padrão do tipo</option>'];
+        normalizarContainersCombate().forEach(container => {
+            opcoes.push(`<option value="${escapeCampaignHtml(container.id)}" ${container.id === selecionado ? 'selected' : ''}>${escapeCampaignHtml(container.nome)}</option>`);
+        });
+        return opcoes.join('');
+    }
+
+    function atualizarSeletorContainerHabilidade(selecionado = '') {
+        const seletor = document.getElementById('hab-container-id');
+        if (!seletor) return;
+        seletor.innerHTML = opcoesContainerHabilidadeHtml(selecionado);
+        seletor.value = containerCombatePorId(selecionado) ? selecionado : '';
+    }
+
+    function abrirEditorContainerCombate(id = '') {
+        const container = containerCombatePorId(id);
+        document.getElementById('custom-container-edit-id').value = container?.id || '';
+        document.getElementById('custom-container-name').value = container?.nome || '';
+        document.getElementById('custom-container-heading').textContent = container ? 'Editar container' : 'Criar container';
+        const layout = container?.layout || 'wide';
+        document.querySelectorAll('input[name="custom-container-layout"]').forEach(input => {
+            input.checked = input.value === layout;
+        });
+        abrirSuperficieFoco('#modal-custom-container');
+        requestAnimationFrame(() => document.getElementById('custom-container-name')?.focus());
+    }
+
+    function fecharEditorContainerCombate() {
+        fecharSuperficieFoco('#modal-custom-container');
+    }
+
+    function salvarContainerCombate(event) {
+        event.preventDefault();
+        const nome = document.getElementById('custom-container-name').value.trim();
+        if (!nome) return document.getElementById('custom-container-name').focus();
+        const layout = document.querySelector('input[name="custom-container-layout"]:checked')?.value === 'compact' ? 'compact' : 'wide';
+        const id = document.getElementById('custom-container-edit-id').value;
+        const containers = normalizarContainersCombate();
+        const existente = containers.find(container => container.id === id);
+        if (existente) {
+            existente.nome = nome;
+            existente.layout = layout;
+        } else {
+            containers.push({ id: criarIdContainerCombate(), nome, layout, recolhido: false, ordem: Date.now() });
+        }
+        fecharEditorContainerCombate();
+        renderAbilities();
+        marcarAlteracao();
+    }
+
+    function alternarContainerCombate(id) {
+        const container = containerCombatePorId(id);
+        if (!container) return;
+        container.recolhido = !container.recolhido;
+        renderAbilities();
+        marcarAlteracao();
+    }
+
+    function excluirContainerCombate(id) {
+        const container = containerCombatePorId(id);
+        if (!container) return;
+        const quantidade = (sheet.habilidades || []).filter(habilidade => habilidade.containerId === container.id).length;
+        const complemento = quantidade ? ` Os ${quantidade} conteúdos voltarão às seções padrão de seus tipos.` : '';
+        if (!confirm(`Excluir o container "${container.nome}"?${complemento}`)) return;
+        sheet.habilidades.forEach(habilidade => {
+            if (habilidade.containerId === container.id) delete habilidade.containerId;
+        });
+        sheet.containersCombate = normalizarContainersCombate().filter(item => item.id !== container.id);
+        renderAbilities();
+        marcarAlteracao();
+    }
+
+    function moverContainerCombate(id, direcao) {
+        const containers = normalizarContainersCombate();
+        const indice = containers.findIndex(container => container.id === id);
+        const destino = indice + Number(direcao);
+        if (indice < 0 || destino < 0 || destino >= containers.length) return;
+        [containers[indice], containers[destino]] = [containers[destino], containers[indice]];
+        containers.forEach((container, ordem) => { container.ordem = ordem + 1; });
+        renderAbilities();
+        marcarAlteracao();
+    }
+
+    function opcoesMoverHabilidadeHtml() {
+        const opcoes = [
+            '<option value="" disabled selected>Mover...</option>',
+            '<option value="tipo:ataque">Ataques</option>',
+            '<option value="tipo:habilidade">Habilidades</option>',
+            '<option value="tipo:feitico">Feitiços</option>'
+        ];
+        normalizarContainersCombate().forEach(container => {
+            opcoes.push(`<option value="container:${escapeCampaignHtml(container.id)}">${escapeCampaignHtml(container.nome)}</option>`);
+        });
+        return opcoes.join('');
+    }
+
+    function renderizarContainersCombate() {
+        const host = document.getElementById('custom-ability-containers');
+        if (!host) return;
+        const containers = normalizarContainersCombate();
+        host.innerHTML = containers.map(container => {
+            const quantidade = (sheet.habilidades || []).filter(habilidade => habilidade.containerId === container.id).length;
+            const idSeguro = escapeCampaignHtml(container.id);
+            const recolhido = container.recolhido === true;
+            return `<section class="section-box custom-ability-container is-${container.layout} ${recolhido ? 'is-collapsed' : ''}" data-container-id="${idSeguro}">
+                <header class="custom-ability-container-head">
+                    <div><span class="dashboard-eyebrow">CONTAINER PERSONALIZADO</span><h2>${escapeCampaignHtml(container.nome)}</h2><small>${quantidade} ${quantidade === 1 ? 'conteúdo' : 'conteúdos'}</small></div>
+                    <div class="custom-ability-container-controls">
+                        <button type="button" onclick="moverContainerCombate('${idSeguro}', -1)" title="Mover container para cima">▲</button>
+                        <button type="button" onclick="moverContainerCombate('${idSeguro}', 1)" title="Mover container para baixo">▼</button>
+                        <button type="button" onclick="abrirEditorContainerCombate('${idSeguro}')" title="Editar nome e formato">✎</button>
+                        <button type="button" onclick="alternarContainerCombate('${idSeguro}')" title="${recolhido ? 'Abrir container' : 'Recolher container'}" aria-expanded="${!recolhido}">${recolhido ? '▸' : '▾'}</button>
+                        <button type="button" class="danger" onclick="excluirContainerCombate('${idSeguro}')" title="Excluir container">✕</button>
+                    </div>
+                </header>
+                <div class="custom-ability-container-body" ${recolhido ? 'hidden' : ''}>
+                    <div class="ability-create-actions">
+                        <button class="btn-forge" type="button" onclick="abrirEditorHab('habilidade', null, '${idSeguro}')">+ Criar conteúdo</button>
+                        <button class="btn-separator-create" type="button" onclick="abrirEditorSeparador('habilidade', '${idSeguro}')">— Separador</button>
+                    </div>
+                    <input type="search" class="search-bar" id="search-${idSeguro}" placeholder="Pesquisar neste container..." oninput="filtrarCards('search-${idSeguro}', 'custom-list-${idSeguro}')">
+                    <div id="custom-list-${idSeguro}" class="custom-ability-list"></div>
+                </div>
+            </section>`;
+        }).join('');
+    }
+
+    function abrirEditorHab(t, idxEdicao = null, containerId = '') { 
         tocarSom('click');
         document.getElementById('hab-tipo').value = t; 
         const nomesTipo = { ataque: 'ataque', habilidade: 'habilidade', feitico: 'feitiço' };
@@ -12966,6 +13994,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         
         if (idxEdicao !== null) {
             const h = sheet.habilidades[idxEdicao];
+            atualizarSeletorContainerHabilidade(h.containerId || '');
             document.getElementById('hab-id-edicao').value = idxEdicao;
             document.getElementById('hab-nome').value = h.nome || '';
             document.getElementById('hab-is-separator').checked = Boolean(h.isSeparator);
@@ -12985,6 +14014,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
             normalizarRolagensExtras(h).forEach(ex => addInputRolagem(ex));
         } else {
+            atualizarSeletorContainerHabilidade(containerId);
             document.getElementById('hab-id-edicao').value = "";
             document.getElementById('hab-nome').value = "";
             document.getElementById('hab-is-separator').checked = false;
@@ -12997,7 +14027,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         atualizarEstadoListaCustos('hab');
         document.getElementById('hab-img-file').value = '';
         atualizarPreviewImagem('hab-img', 'hab-img-preview');
-        document.getElementById('modal-hab').style.display = 'block'; 
+        abrirSuperficieFoco('#modal-hab');
         switchTab('tab-info');
         atualizarModoSeparadorHab();
         requestAnimationFrame(() => autoAjustarTextarea(document.getElementById('hab-desc')));
@@ -13017,8 +14047,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         atualizarPreviewSeparadorHab();
     }
 
-    function abrirEditorSeparador(tipo) {
-        abrirEditorHab(tipo);
+    function abrirEditorSeparador(tipo, containerId = '') {
+        abrirEditorHab(tipo, null, containerId);
         document.getElementById('hab-is-separator').checked = true;
         atualizarModoSeparadorHab();
         document.getElementById('hab-nome').focus();
@@ -13048,9 +14078,12 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const rolagensPrincipais = isSeparator ? [] : coletarRolagensPrincipais('hab');
         const rolagensExtras = isSeparator ? [] : coletarRolagensExtrasDOM('hab');
         const primeiraRolagem = rolagensPrincipais[0] || {};
+        const containerSelecionado = document.getElementById('hab-container-id')?.value || '';
+        const containerId = containerCombatePorId(containerSelecionado) ? containerSelecionado : '';
         const h = isSeparator ? {
             idUnico: habilidadeAnterior?.idUnico || gerarIdConteudoFicha('separator'),
             tipo: document.getElementById('hab-tipo').value,
+            containerId,
             nome: document.getElementById('hab-nome').value.trim() || 'Separador',
             isSeparator: true,
             dano: '',
@@ -13069,6 +14102,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         } : {
             idUnico: habilidadeAnterior?.idUnico || gerarIdConteudoFicha('action'),
             tipo: document.getElementById('hab-tipo').value,
+            containerId,
             nome: document.getElementById('hab-nome').value,
             isSeparator: false,
             dano: primeiraRolagem.formula || '',
@@ -13093,7 +14127,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         
         atualizarVisualModificadoresGlobais();
         renderAbilities();
-        document.getElementById('modal-hab').style.display = 'none';
+        fecharSuperficieFoco('#modal-hab');
         marcarAlteracao();
     }
 
@@ -13107,15 +14141,19 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     }
 
     function moverHabVisuais(index, dir) {
-        let tipoAtual = sheet.habilidades[index].tipo;
+        const habilidadeAtual = sheet.habilidades[index];
+        if (!habilidadeAtual) return;
+        const grupoAtual = habilidadeAtual.containerId ? `container:${habilidadeAtual.containerId}` : `tipo:${habilidadeAtual.tipo}`;
         let targetIndex = -1;
         if(dir === -1) {
             for(let i = index - 1; i >= 0; i--) {
-                if(sheet.habilidades[i].tipo === tipoAtual) { targetIndex = i; break; }
+                const grupo = sheet.habilidades[i].containerId ? `container:${sheet.habilidades[i].containerId}` : `tipo:${sheet.habilidades[i].tipo}`;
+                if(grupo === grupoAtual) { targetIndex = i; break; }
             }
         } else {
             for(let i = index + 1; i < sheet.habilidades.length; i++) {
-                if(sheet.habilidades[i].tipo === tipoAtual) { targetIndex = i; break; }
+                const grupo = sheet.habilidades[i].containerId ? `container:${sheet.habilidades[i].containerId}` : `tipo:${sheet.habilidades[i].tipo}`;
+                if(grupo === grupoAtual) { targetIndex = i; break; }
             }
         }
         if(targetIndex !== -1) {
@@ -13127,12 +14165,21 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }
     }
 
-    function transferirHab(index, novoTipo) {
-        if(novoTipo) {
-            sheet.habilidades[index].tipo = novoTipo;
-            renderAbilities();
-            marcarAlteracao();
+    function transferirHab(index, novoDestino) {
+        const habilidade = sheet.habilidades[index];
+        if (!habilidade || !novoDestino) return;
+        if (novoDestino.startsWith('container:')) {
+            const containerId = novoDestino.slice('container:'.length);
+            if (!containerCombatePorId(containerId)) return;
+            habilidade.containerId = containerId;
+        } else if (novoDestino.startsWith('tipo:')) {
+            const tipo = novoDestino.slice('tipo:'.length);
+            if (!['ataque', 'habilidade', 'feitico'].includes(tipo)) return;
+            habilidade.tipo = tipo;
+            delete habilidade.containerId;
         }
+        renderAbilities();
+        marcarAlteracao();
     }
 
     function alternarAtivarHab(idx) {
@@ -13217,10 +14264,17 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             const el = document.getElementById(id);
             if (el) el.innerHTML = '';
         });
+        renderizarContainersCombate();
+        const mapaContainers = new Map(normalizarContainersCombate().map(container => [container.id, container]));
+        const opcoesMover = opcoesMoverHabilidadeHtml();
 
         sheet.habilidades.forEach((h, i) => {
             const listas = { ataque: 'ataques-lista', habilidade: 'habilidades-lista', feitico: 'feiticos-lista' };
-            const containerAlvo = document.getElementById(listas[h.tipo]);
+            const containerPersonalizado = h.containerId ? mapaContainers.get(h.containerId) : null;
+            if (h.containerId && !containerPersonalizado) delete h.containerId;
+            const containerAlvo = containerPersonalizado
+                ? document.getElementById(`custom-list-${containerPersonalizado.id}`)
+                : document.getElementById(listas[h.tipo]);
             if (!containerAlvo) return;
 
             if (h.isSeparator) {
@@ -13240,7 +14294,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
             const card = document.createElement('div');
             const recolhido = h.recolhido === true;
-            card.className = `hab-card ${h.ativa ? 'active-mod' : ''} ${recolhido ? 'is-collapsed' : ''}`;
+            const bloqueadoPorCondicao = condicaoBloqueiaHabilidade(h);
+            card.className = `hab-card ${h.ativa ? 'active-mod' : ''} ${recolhido ? 'is-collapsed' : ''} ${bloqueadoPorCondicao ? 'is-condition-blocked' : ''}`;
             const botaoRecolher = `<button class="card-collapse-toggle" onclick="alternarCartaoHabilidade(${i})" title="${recolhido ? 'Abrir conteúdo' : 'Recolher conteúdo'}" aria-expanded="${!recolhido}">${recolhido ? '▸' : '▾'}</button>`;
             
             let htmlControles = '';
@@ -13256,12 +14311,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     ${botaoRecolher}
                     <button class="btn-action-card" onclick="moverHabVisuais(${i}, -1)" title="Subir">🔼</button>
                     <button class="btn-action-card" onclick="moverHabVisuais(${i}, 1)" title="Descer">🔽</button>
-                    <select onchange="transferirHab(${i}, this.value)" style="background:transparent; border:1px solid #444; color:#888; font-size:0.7rem; border-radius:3px; margin:0 5px; height:20px; outline:none; font-family:'Cinzel', serif;">
-                        <option value="" disabled selected>Mover...</option>
-                        <option value="ataque">Ataque</option>
-                        <option value="habilidade">Habilidade</option>
-                        <option value="feitico">Feitiço</option>
-                    </select>
+                    <select onchange="transferirHab(${i}, this.value)" style="background:transparent; border:1px solid #444; color:#888; font-size:0.7rem; border-radius:3px; margin:0 5px; height:20px; outline:none; font-family:'Cinzel', serif;">${opcoesMover}</select>
                     <button class="btn-action-card" onclick="duplicarHabilidade(${i})" title="Duplicar">⧉</button>
                     <button class="btn-action-card btn-card-template" onclick="salvarHabilidadeComoModelo(${i})" title="Salvar como modelo pessoal">☆</button>
                     <button class="btn-action-card" onclick="abrirEditorHab('${h.tipo}', ${i})" title="Editar">✏️</button>
@@ -13284,6 +14334,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     <div class="adaptive-card-actions">${htmlControles}</div>
                 </div>
                 <div class="collapsible-card-body" ${recolhido ? 'hidden' : ''}>
+                ${bloqueadoPorCondicao ? '<div class="condition-blocked-notice">ATORDOADO • FEITIÇO INDISPONÍVEL</div>' : ''}
                 <div class="hab-desc-render">${renderMarkdown(h.desc || '')}</div>
                 ${h.img ? `<img src="${h.img}" class="content-card-image" alt="Imagem de ${h.nome || 'habilidade'}">` : ''}
                 ${botaoCustoAcao(h, 'habilidade', i)}
@@ -13712,6 +14763,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             qtdDados = attrValor + modAtributo; 
         }
 
+        const modCondicoes = modificadorCondicaoTesteDaFicha(sheet, attrNome, isPericia ? periciaNome : nomeDisplay);
+        bonusTotal += modCondicoes;
+
         let rolar = rolarD20Configurado();
         let final = rolar.final;
         const total = final + bonusTotal;
@@ -13721,7 +14775,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         
         const modoDados = rolar.keepLowest ? '<span style="color:#ff5252">Desvantagem</span>' : (rolar.rolagens.length > 1 ? '<span style="color:#8bd66f">Vantagem</span>' : 'Rolagem');
         let textoDados = `${modoDados} [${rolar.rolagens.join(', ')}]`;
-        let detalheTxt = `Dados Rolados: ${textoDados}<br>Soma: ${final} + ${bonusTotal}`;
+        let detalheTxt = `Dados Rolados: ${textoDados}<br>Soma: ${final} + ${bonusTotal}${modCondicoes ? `<br>Condições: ${modCondicoes > 0 ? '+' : ''}${modCondicoes}` : ''}`;
         
         spawnPopup(nomeDisplay.toUpperCase(), `Dado Base: [${final}]`, total, res.cor, res.txt, detalheTxt);
         const eventoSom = res.sound === 'crit' || res.sound === 'fail' ? res.sound : null;
@@ -13761,7 +14815,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
         let rolar = rolarD20Configurado();
         let final = rolar.final;
-        let bonusTotal = bonusBase + modManual;
+        const atributoCondicao = tipo.startsWith('Sentidos') ? 'POD' : '';
+        const periciaCondicao = tipo.startsWith('Sentidos') ? 'Percepção' : tipo;
+        const modCondicoes = modificadorCondicaoTesteDaFicha(sheet, atributoCondicao, periciaCondicao);
+        let bonusTotal = bonusBase + modManual + modCondicoes;
 
         const total = final + bonusTotal;
         const res = getNivelSucesso(final, total);
@@ -13770,7 +14827,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         
         const modoDados = rolar.keepLowest ? '<span style="color:#ff5252">Desvantagem</span>' : (rolar.rolagens.length > 1 ? '<span style="color:#8bd66f">Vantagem</span>' : 'Rolagem');
         let textoDados = `${modoDados} [${rolar.rolagens.join(', ')}]`;
-        let detalheTxt = `Dados: ${textoDados}<br>Soma: ${final} + ${bonusBase} + ${modManual}`;
+        let detalheTxt = `Dados: ${textoDados}<br>Soma: ${final} + ${bonusBase} + ${modManual}${modCondicoes ? ` ${modCondicoes > 0 ? '+' : '−'} ${Math.abs(modCondicoes)} condições` : ''}`;
         
         spawnPopup(nomeVisor, `Dado Final: [${final}]`, total, res.cor, res.txt, detalheTxt);
         const eventoSom = res.sound === 'crit' || res.sound === 'fail' ? res.sound : null;
@@ -13782,7 +14839,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const config = calculos.deslocamento;
         const valorAtributo = valorAtributoCalculado(config.atributo);
         const modDesloc = getMods('status', 'deslocamento');
-        const vel = (parseInt(config.base) || 0) + (valorAtributo * 2) + modDesloc;
+        const velBase = Math.max(0, (parseInt(config.base) || 0) + (valorAtributo * 2) + modDesloc);
+        const vel = fichaEstaLenta(sheet) ? Math.max(0, Math.floor(velBase / 2)) : velBase;
+        sheet.deslocamentoBase = velBase;
         sheet.deslocamentoTotal = vel;
         let display = document.getElementById('display-velocidade');
         if (display) display.innerText = vel + "q";
@@ -13793,7 +14852,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (attrDesloc) attrDesloc.value = config.atributo;
         if (totalDesloc) {
             totalDesloc.textContent = `${vel}q`;
-            totalDesloc.title = `${config.base} base + ${valorAtributo} ${config.atributo} × 2${modDesloc ? ` + ${modDesloc} modificador` : ''}`;
+            totalDesloc.title = `${config.base} base + ${valorAtributo} ${config.atributo} × 2${modDesloc ? ` + ${modDesloc} modificador` : ''}${vel !== velBase ? ` • reduzido de ${velBase}q para ${vel}q por Lento` : ''}`;
         }
     }
 
@@ -14089,6 +15148,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
             let modEquip = getMods('pericia', p.n);
             let modDisplay = modEquip !== 0 ? `<span style="color:#00e5ff; font-size:0.7rem; margin-right:4px;" title="Bônus de Item/Hab">${modEquip > 0 ? '+' : ''}${modEquip}</span>` : '';
+            const modCondicao = modificadorCondicaoTesteDaFicha(sheet, p.a, p.n);
+            if (modCondicao) modDisplay += `<span class="skill-condition-mod" title="Modificador de condições">${modCondicao > 0 ? '+' : ''}${modCondicao}</span>`;
 
             return `
             <div class="skill-item ${trainingClass}" onclick="realizarRolagem('${p.a}', 0, decodeURIComponent('${nomeCodificado}'), true, decodeURIComponent('${nomeCodificado}'))">
@@ -14104,7 +15165,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                         </select>
                     </span>
                     <span class="skill-inline-tools" onclick="event.stopPropagation()">
-                        <button type="button" class="skill-favorite-btn ${favorita ? 'is-favorite' : ''}" onclick="alternarFavoritaPericia('${referenciaCodificada}')" title="${favorita ? 'Remover das favoritas' : 'Favoritar para usar em outras fichas'}" aria-label="${favorita ? 'Remover' : 'Favoritar'} ${escapeCampaignHtml(p.n)}">${favorita ? '★' : '☆'}</button>
+                        ${p.custom ? `<button type="button" class="skill-favorite-btn ${favorita ? 'is-favorite' : ''}" onclick="alternarFavoritaPericia('${referenciaCodificada}')" title="${favorita ? 'Remover das favoritas' : 'Favoritar para usar em outras fichas'}" aria-label="${favorita ? 'Remover' : 'Favoritar'} ${escapeCampaignHtml(p.n)}">${favorita ? '★' : '☆'}</button>` : ''}
                         ${detalhesDaPericia(p) ? `<button class="btn-info-skill" onclick="abrirInfoPericia(decodeURIComponent('${nomeCodificado}'))">❓</button>` : '<span style="width: 25px;"></span>'}
                     </span>
                 </div>
@@ -14208,6 +15269,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     suspendResourceCapture = true;
     aplicarTemaDaFicha(); // <- Adicione esta linha para puxar a cor do slot automaticamente
     atualizarVisualConfigRolagem();
+    normalizarCondicoesDaFicha(sheet);
+    normalizarContainersCombate();
     atualizarVisuaisClasse();
     calcularStatusClasse();
     calcularVelocidade();
@@ -14229,6 +15292,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     document.getElementById('curr-sa').value = sheet.recursosFinos?.sa_atual ?? document.getElementById('max-sa').value;
     updateBar('pv'); updateBar('pa'); updateBar('sa');
     suspendResourceCapture = false;
+    calcularVelocidade();
+    render();
+    renderAbilities();
+    renderizarCondicoes();
 }
 
     window.onload = () => {
@@ -14347,7 +15414,11 @@ const campaignState = {
     initiativeRequest: null,
     turnAlertKeys: {},
     combatSetupSelection: new Set(),
-    combatAddSelection: new Set()
+    combatAddSelection: new Set(),
+    conditionDockOpen: false,
+    conditionCatalogOpen: false,
+    conditionTargetId: null,
+    turnLossProcessing: new Set()
 };
 let campaignSyncTimer = null;
 
@@ -15055,7 +16126,7 @@ function capturarRecursosDaTela() {
         if (max) {
             const valorMaximo = parseInt(max.value) || 0;
             sheet.recursosFinos[`${id}_max`] = valorMaximo;
-            sheet.recursosFinos[`${id}_base_max`] = valorMaximo - getMods('status', `${id}_max`);
+            sheet.recursosFinos[`${id}_base_max`] = valorMaximo - getMods('status', `${id}_max`) - (id === 'pv' ? modificadorPvMaxCondicoesDaFicha(sheet) : 0);
         }
     });
 }
@@ -15448,6 +16519,7 @@ function pararEscutaCombates() {
     campaignState.combats = {};
     campaignState.initiativeRequest = null;
     campaignState.turnAlertKeys = {};
+    campaignState.turnLossProcessing.clear();
     const overlay = document.getElementById('initiative-request-overlay');
     if (overlay) overlay.classList.remove('active');
 }
@@ -15496,6 +16568,10 @@ function modificadoresDaFicha(characterSheet, tipo, alvo) {
     return total;
 }
 
+function valorAtributoFichaCampanha(characterSheet, codigo) {
+    return (parseInt(characterSheet?.atributos?.[codigo]) || 0) + modificadoresDaFicha(characterSheet, 'atributo', codigo);
+}
+
 function dadosIniciativaDaFicha(characterSheet) {
     const agi = parseInt(characterSheet?.atributos?.AGI) || 0;
     const attrMod = modificadoresDaFicha(characterSheet, 'atributo', 'AGI');
@@ -15503,6 +16579,7 @@ function dadosIniciativaDaFicha(characterSheet) {
     const skillMod = modificadoresDaFicha(characterSheet, 'pericia', 'Iniciativa');
     const training = parseInt(skill.t) || 0;
     const manual = parseInt(skill.m) || 0;
+    const condition = modificadorCondicaoTesteDaFicha(characterSheet, 'AGI', 'Iniciativa');
     const rollConfig = characterSheet?.rolagemConfig;
     const usaConfigNova = rollConfig && typeof rollConfig === 'object';
     const dice = usaConfigNova
@@ -15511,11 +16588,12 @@ function dadosIniciativaDaFicha(characterSheet) {
     return {
         dice,
         disadvantage: usaConfigNova ? rollConfig.desvantagem === true : null,
-        bonus: agi + attrMod + training + manual + skillMod,
+        bonus: agi + attrMod + training + manual + skillMod + condition,
         agi,
         training,
         manual,
-        equipment: attrMod + skillMod
+        equipment: attrMod + skillMod,
+        condition
     };
 }
 
@@ -15528,6 +16606,7 @@ function participanteDePersonagem(characterId, character) {
         name: character.name || character.sheet?.nickname || 'Personagem sem nome',
         avatar: character.avatar || character.sheet?.avatar || '',
         resources: JSON.parse(JSON.stringify(character.sheet?.recursosFinos || {})),
+        conditions: [...normalizarCondicoesDaFicha(character.sheet || {})],
         initiative: null,
         requested: true,
         initiativeDice: initiativeData.dice,
@@ -15662,6 +16741,210 @@ async function alterarRecursoCombate(characterId, recursoId, valorBruto, input =
     } finally {
         if (elementoEstado) elementoEstado.classList.remove('combat-resource-saving');
     }
+}
+
+function participantesDisponiveisCondicoesCampanha() {
+    const combat = combateAtivoDaCampanha();
+    return Object.entries(combat?.participants || {}).filter(([, participant]) =>
+        campaignState.role === 'mestre' || participant.ownerUid === currentUser?.uid
+    );
+}
+
+function alvoCondicoesCampanha() {
+    const disponiveis = participantesDisponiveisCondicoesCampanha();
+    if (!disponiveis.length) return null;
+    const combat = combateAtivoDaCampanha();
+    const ordem = ordemCombateArray(combat?.order);
+    const atualId = ordem[Number(combat?.currentIndex) || 0];
+    const ids = new Set(disponiveis.map(([id]) => id));
+    if (!ids.has(campaignState.conditionTargetId)) {
+        campaignState.conditionTargetId = ids.has(atualId) ? atualId : disponiveis[0][0];
+    }
+    const participant = combat.participants[campaignState.conditionTargetId];
+    const character = campaignState.activeCampaign?.characters?.[participant?.characterId];
+    const ficha = character?.sheet || {
+        condicoes: participant?.conditions || [],
+        recursosFinos: participant?.resources || {},
+        atributos: participant?.attributes || {},
+        calculos: participant?.calculations || {}
+    };
+    return { id: campaignState.conditionTargetId, participant, character, ficha };
+}
+
+function alternarDockCondicoesCampanha() {
+    campaignState.conditionDockOpen = !campaignState.conditionDockOpen;
+    renderizarCondicoesCombateCampanha();
+}
+
+function alternarCatalogoCondicoesCampanha() {
+    campaignState.conditionCatalogOpen = !campaignState.conditionCatalogOpen;
+    renderizarCondicoesCombateCampanha();
+}
+
+function selecionarAlvoCondicoesCampanha(id) {
+    campaignState.conditionTargetId = String(id || '');
+    campaignState.conditionCatalogOpen = false;
+    renderizarCondicoesCombateCampanha();
+}
+
+function renderizarCondicoesCombateCampanha() {
+    const dock = document.getElementById('campaign-condition-dock');
+    if (!dock) return;
+    const combat = combateAtivoDaCampanha();
+    if (!combat || combat.phase !== 'active') {
+        dock.hidden = true;
+        dock.innerHTML = '';
+        return;
+    }
+    const alvo = alvoCondicoesCampanha();
+    if (!alvo) {
+        dock.hidden = true;
+        dock.innerHTML = '';
+        return;
+    }
+    dock.hidden = false;
+    const estado = estadoCondicoesDaFicha(alvo.ficha);
+    const ativas = [...estado.diretas.map(id => ({ id, automatica: false })), ...estado.automaticas.map(id => ({ id, automatica: true }))];
+    const disponiveis = participantesDisponiveisCondicoesCampanha();
+    const aberto = campaignState.conditionDockOpen === true;
+    dock.classList.toggle('is-open', aberto);
+    dock.innerHTML = `<button type="button" class="campaign-condition-dock-toggle" onclick="alternarDockCondicoesCampanha()" aria-expanded="${aberto}">
+        <span>✦</span><strong>Condições</strong><em>${ativas.length}</em><b>${aberto ? '›' : '‹'}</b>
+    </button>
+    <div class="campaign-condition-dock-body" ${aberto ? '' : 'hidden'}>
+        <header><div>${avatarCampanhaHtml(alvo.character || alvo.participant)}<span><small>CONDIÇÕES DE</small><strong>${escapeCampaignHtml(alvo.participant.name || 'Combatente')}</strong></span></div><button type="button" onclick="alternarDockCondicoesCampanha()" aria-label="Recolher">✕</button></header>
+        ${disponiveis.length > 1 ? `<label class="campaign-condition-target"><span>PERSONAGEM</span><select onchange="selecionarAlvoCondicoesCampanha(this.value)">${disponiveis.map(([id, participant]) => `<option value="${escapeCampaignHtml(id)}" ${id === alvo.id ? 'selected' : ''}>${escapeCampaignHtml(participant.name || 'Combatente')}</option>`).join('')}</select></label>` : ''}
+        <div class="condition-quick-add campaign"><select id="campaign-condition-add-select" class="modal-input"><option value="">Adicionar condição...</option>${opcoesAdicionarCondicaoHtml(alvo.ficha)}</select><button type="button" onclick="adicionarCondicaoCampanhaSelecionada()">Adicionar</button></div>
+        ${ativas.length ? `<div class="active-conditions-list campaign">${ativas.map(item => condicaoAtivaHtml(item.id, item.automatica, 'campanha')).join('')}</div>` : '<div class="conditions-empty">Nenhuma condição ativa neste combatente.</div>'}
+        ${resumoStatusCondicoesHtml(alvo.ficha)}
+        <button type="button" class="campaign-condition-catalog-toggle" onclick="alternarCatalogoCondicoesCampanha()">${campaignState.conditionCatalogOpen ? 'Fechar catálogo' : 'Ver todas as condições'}</button>
+        <div class="conditions-catalog campaign" ${campaignState.conditionCatalogOpen ? '' : 'hidden'}><input type="search" class="search-bar" placeholder="Pesquisar condição..." oninput="filtrarCatalogoCondicoesDOM(this.value, this.closest('.conditions-catalog'))">${catalogoCondicoesHtml(alvo.ficha, 'campanha')}</div>
+    </div>`;
+}
+
+function adicionarCondicaoCampanhaSelecionada() {
+    const seletor = document.getElementById('campaign-condition-add-select');
+    if (seletor?.value) alternarCondicaoCampanha(seletor.value, true);
+}
+
+async function alternarCondicaoCampanha(id, forcarAdicionar = false) {
+    const alvo = alvoCondicoesCampanha();
+    if (!alvo || !CONDICOES_CATALOGO[id]) return;
+    if (!(campaignState.role === 'mestre' || alvo.participant.ownerUid === currentUser?.uid)) {
+        alert('Você só pode alterar as condições dos seus personagens. O Mestre pode alterar todos.');
+        return;
+    }
+    const fichaCopia = JSON.parse(JSON.stringify(alvo.ficha || {}));
+    if (!fichaCopia.recursosFinos || typeof fichaCopia.recursosFinos !== 'object') fichaCopia.recursosFinos = {};
+    if (!Number.isFinite(Number(fichaCopia.recursosFinos.pv_base_max))) {
+        const modItemAnterior = modificadoresDaFicha(alvo.ficha, 'status', 'pv_max');
+        fichaCopia.recursosFinos.pv_base_max = (parseInt(alvo.ficha?.recursosFinos?.pv_max) || 0) - modItemAnterior - modificadorPvMaxCondicoesDaFicha(alvo.ficha);
+    }
+    const condicoes = normalizarCondicoesDaFicha(fichaCopia);
+    const indice = condicoes.indexOf(id);
+    if (indice >= 0 && !forcarAdicionar) condicoes.splice(indice, 1);
+    else if (indice < 0) condicoes.push(id);
+    aplicarResumoCondicoesNaFicha(fichaCopia);
+    const updates = {};
+    const baseParticipante = `campaigns/${campaignState.activeId}/combat/participants/${alvo.id}`;
+    if (alvo.character) {
+        const basePersonagem = `campaigns/${campaignState.activeId}/characters/${alvo.participant.characterId}`;
+        updates[`${basePersonagem}/sheet/condicoes`] = fichaCopia.condicoes;
+        updates[`${basePersonagem}/sheet/recursosFinos`] = fichaCopia.recursosFinos;
+        updates[`${basePersonagem}/sheet/deslocamentoBase`] = fichaCopia.deslocamentoBase ?? null;
+        updates[`${basePersonagem}/sheet/deslocamentoTotal`] = fichaCopia.deslocamentoTotal ?? null;
+        updates[`${basePersonagem}/updatedBy`] = currentUser.uid;
+            updates[`${basePersonagem}/updatedAt`] = firebase.database.ServerValue.TIMESTAMP;
+            updates[`${baseParticipante}/resources`] = fichaCopia.recursosFinos;
+            updates[`${baseParticipante}/conditions`] = fichaCopia.condicoes;
+        if (alvo.character.ownerUid === currentUser.uid && alvo.character.slot !== undefined) {
+            const baseSlot = `users/${currentUser.uid}/slots/${alvo.character.slot}`;
+            updates[`${baseSlot}/condicoes`] = fichaCopia.condicoes;
+            updates[`${baseSlot}/recursosFinos`] = fichaCopia.recursosFinos;
+            updates[`${baseSlot}/deslocamentoBase`] = fichaCopia.deslocamentoBase ?? null;
+            updates[`${baseSlot}/deslocamentoTotal`] = fichaCopia.deslocamentoTotal ?? null;
+        }
+    } else {
+        updates[`${baseParticipante}/conditions`] = fichaCopia.condicoes;
+        updates[`${baseParticipante}/resources`] = fichaCopia.recursosFinos;
+    }
+    try {
+        await database.ref().update(updates);
+        if (alvo.character) alvo.character.sheet = fichaCopia;
+        else {
+            alvo.participant.conditions = fichaCopia.condicoes;
+            alvo.participant.resources = fichaCopia.recursosFinos;
+        }
+        alvo.participant.conditions = [...fichaCopia.condicoes];
+        alvo.participant.resources = JSON.parse(JSON.stringify(fichaCopia.recursosFinos || {}));
+        if (alvo.character?.ownerUid === currentUser.uid && String(alvo.character.slot) === String(document.getElementById('save-slot')?.value || '')) {
+            sheet.condicoes = [...fichaCopia.condicoes];
+            atualizarEfeitosCondicoesFicha();
+        }
+        renderizarCondicoesCombateCampanha();
+    } catch (erro) {
+        console.error('Erro ao alterar condição na campanha:', erro);
+        alert('Não foi possível atualizar essa condição agora.');
+    }
+}
+
+function removerCondicaoCampanha(id) {
+    const alvo = alvoCondicoesCampanha();
+    if (!alvo || !normalizarCondicoesDaFicha(alvo.ficha).includes(id)) return;
+    alternarCondicaoCampanha(id, false);
+}
+
+function enviarRolagemCondicaoCampanha(alvo, condicao, resultado, status, cor, eventoSom = null) {
+    const dados = {
+        jogador: alvo.participant.name || 'Combatente',
+        jogadorUid: currentUser?.uid || '',
+        avatar: alvo.participant.avatar || alvo.character?.avatar || '',
+        titulo: condicao.nome.toUpperCase(),
+        subtitulo: condicao.acao.rotulo,
+        total: resultado.total,
+        cor,
+        status,
+        detalhes: `Fórmula: ${condicao.acao.formula} | Dados: ${resultado.text}`,
+        eventoSom,
+        natural: eventoSom ? 1 : null,
+        clienteSessaoId
+    };
+    if (!modoSecreto) {
+        database.ref('rolagens').push().set({ ...dados, timestamp: firebase.database.ServerValue.TIMESTAMP });
+        registrarRolagemDestaqueCombate(dados).catch(erro => console.warn('A rolagem de condição não pôde ser destacada.', erro));
+    }
+}
+
+async function executarAcaoCondicaoCampanha(id) {
+    const alvo = alvoCondicoesCampanha();
+    const condicao = CONDICOES_CATALOGO[id];
+    if (!alvo || !condicao?.acao) return;
+    if (!(campaignState.role === 'mestre' || alvo.participant.ownerUid === currentUser?.uid)) return;
+    const resultado = rolarDadosAvancado(condicao.acao.formula);
+    if (resultado.erro) return alert(resultado.erro);
+    let status = 'EFEITO DE CONDIÇÃO';
+    let cor = condicao.acao.sinal > 0 ? '#41d17d' : '#ff6464';
+    let eventoSom = null;
+    if (id === 'eletrocutado' && resultado.total === 1) {
+        status = 'FALHA CRÍTICA • TURNO PERDIDO';
+        cor = '#800020';
+        eventoSom = 'fail';
+        await registrarTurnoPerdidoEletrocutado(alvo.id);
+    } else if (id === 'eletrocutado') {
+        status = 'TURNO PRESERVADO';
+    }
+    if (condicao.acao.recurso) {
+        const recurso = recursoParticipante(alvo.participant, condicao.acao.recurso);
+        const atual = Number(recurso.current) || 0;
+        const maximo = Math.max(0, Number(recurso.max) || 0);
+        const variacao = resultado.total * condicao.acao.sinal;
+        const proximo = variacao > 0 ? Math.min(maximo, atual + variacao) : atual + variacao;
+        await alterarRecursoCombate(alvo.id, condicao.acao.recurso, proximo);
+    }
+    tocarSom(eventoSom || 'roll');
+    spawnPopup(condicao.nome.toUpperCase(), condicao.acao.rotulo, resultado.total, cor, status, `Fórmula: ${condicao.acao.formula}<br>Dados: ${resultado.text}`);
+    enviarRolagemCondicaoCampanha(alvo, condicao, resultado, status, cor, eventoSom);
+    renderizarCondicoesCombateCampanha();
 }
 
 let seletorAcessoRapidoCombateAberto = false;
@@ -15911,7 +17194,8 @@ function cardPericiaAcessoRapido(pericia) {
     const manual = parseInt(pericia.m) || 0;
     const modEquipamento = getMods('pericia', pericia.n);
     const atributo = (parseInt(sheet.atributos?.[pericia.a]) || 0) + getMods('atributo', pericia.a);
-    const bonus = atributo + treino + manual + modEquipamento;
+    const modCondicoes = modificadorCondicaoTesteDaFicha(sheet, pericia.a, pericia.n);
+    const bonus = atributo + treino + manual + modEquipamento + modCondicoes;
     const detalhes = detalhesDaPericia(pericia);
     const trainingClass = treino === 2 ? 'skill-trained-2' : (treino === 4 ? 'skill-trained-4' : '');
     const favorita = periciaEstaFavorita(pericia);
@@ -15932,7 +17216,7 @@ function cardPericiaAcessoRapido(pericia) {
                     </select>
                 </span>
                 <span class="skill-inline-tools" onclick="event.stopPropagation()">
-                    <button type="button" class="skill-favorite-btn ${favorita ? 'is-favorite' : ''}" onclick="event.stopPropagation(); alternarFavoritaPericia('${idCodificado}')" title="${favorita ? 'Remover das favoritas' : 'Favoritar para usar em outras fichas'}" aria-label="${favorita ? 'Remover' : 'Favoritar'} ${escapeCampaignHtml(pericia.n)}">${favorita ? '★' : '☆'}</button>
+                    ${pericia.custom ? `<button type="button" class="skill-favorite-btn ${favorita ? 'is-favorite' : ''}" onclick="event.stopPropagation(); alternarFavoritaPericia('${idCodificado}')" title="${favorita ? 'Remover das favoritas' : 'Favoritar para usar em outras fichas'}" aria-label="${favorita ? 'Remover' : 'Favoritar'} ${escapeCampaignHtml(pericia.n)}">${favorita ? '★' : '☆'}</button>` : ''}
                     ${detalhes ? `<button type="button" class="btn-info-skill" onclick="event.stopPropagation(); abrirInfoPericia(decodeURIComponent('${nomeCodificado}'))" title="Ver informações" aria-label="Ver informações de ${escapeCampaignHtml(pericia.n)}">❓</button>` : '<span style="width:25px;"></span>'}
                     <button type="button" class="combat-quick-skill-remove" onclick="event.stopPropagation(); removerConteudoAcessoRapido('pericia', '${idCodificado}')" title="Retirar do acesso rápido" aria-label="Retirar ${escapeCampaignHtml(pericia.n)} do acesso rápido">✕</button>
                 </span>
@@ -15946,6 +17230,7 @@ function cardPericiaAcessoRapido(pericia) {
                 </select>
                 <span>M:</span>
                 ${modEquipamento ? `<span class="combat-quick-skill-mod" title="Bônus de item ou habilidade">${modEquipamento >= 0 ? '+' : ''}${modEquipamento}</span>` : ''}
+                ${modCondicoes ? `<span class="combat-quick-skill-mod condition" title="Modificador de condições">${modCondicoes >= 0 ? '+' : ''}${modCondicoes}</span>` : ''}
                 <input type="number" class="mini-stat-input" value="${manual}" aria-label="Modificador manual de ${escapeCampaignHtml(pericia.n)}" onchange="atualizarPericiaAcessoRapido('${idCodificado}', 'm', this.value)">
             </div>
         </article>`;
@@ -16413,6 +17698,32 @@ function coordenarCombateComoMestre(campaignId, combat) {
         return;
     }
     if (combat.phase !== 'active') return;
+    const ordemAtual = ordemCombateArray(combat.order).filter(id => participants[id]);
+    const indiceAtual = Math.min(Math.max(Number(combat.currentIndex) || 0, 0), Math.max(ordemAtual.length - 1, 0));
+    const participanteAtualId = ordemAtual[indiceAtual];
+    if (participanteAtualId && participants[participanteAtualId]?.lostTurn) {
+        const chave = `${campaignId}/${participanteAtualId}/${combat.round || 1}`;
+        if (!campaignState.turnLossProcessing.has(chave)) {
+            campaignState.turnLossProcessing.add(chave);
+            let proximoIndice = indiceAtual + 1;
+            let proximaRodada = Number(combat.round) || 1;
+            if (proximoIndice >= ordemAtual.length) {
+                proximoIndice = 0;
+                proximaRodada += 1;
+            }
+            const updates = {
+                currentIndex: proximoIndice,
+                round: proximaRodada,
+                featuredRollId: null,
+                turnChangedAt: firebase.database.ServerValue.TIMESTAMP
+            };
+            database.ref(`campaigns/${campaignId}/combat`).update(updates)
+                .then(() => database.ref(`campaigns/${campaignId}/combat/participants/${participanteAtualId}/lostTurn`).remove())
+                .catch(error => console.error('Erro ao avançar turno perdido por Eletrocutado:', error))
+                .finally(() => campaignState.turnLossProcessing.delete(chave));
+        }
+        return;
+    }
     const currentOrder = ordemCombateArray(combat.order);
     const readyIds = ordenarParticipantesPorIniciativa(participants);
     const missing = readyIds.filter(id => !currentOrder.includes(id));
@@ -16539,6 +17850,7 @@ function renderizarTelaCombate() {
     active.style.display = combat.phase === 'active' ? 'block' : 'none';
     if (combat.phase === 'initiative') renderizarEsperaIniciativa(combat);
     if (combat.phase === 'active') renderizarCombateAtivo(combat);
+    else renderizarCondicoesCombateCampanha();
 }
 
 function renderizarEsperaIniciativa(combat) {
@@ -16597,6 +17909,7 @@ function renderizarCombateAtivo(combat) {
     const currentCard = document.getElementById('combat-current-card');
     if (!current) {
         currentCard.innerHTML = '<div class="campaign-empty">Aguardando a ordem de combate.</div>';
+        renderizarCondicoesCombateCampanha();
         return;
     }
     const isOwnTurn = current.ownerUid === currentUser?.uid;
@@ -16620,6 +17933,7 @@ function renderizarCombateAtivo(combat) {
     `;
     if (document.getElementById('combat-add-panel').classList.contains('active')) renderizarOpcoesAdicionarCombatente();
     renderizarAcessoRapidoCombate();
+    renderizarCondicoesCombateCampanha();
 }
 
 async function moverCombatente(characterId, direction) {
@@ -16737,6 +18051,13 @@ document.addEventListener('keydown', event => {
 document.addEventListener('DOMContentLoaded', () => {
     restaurarEstadoNavegacao();
     inicializarRecortadorBanner();
+    document.querySelectorAll('.turn-box').forEach(circulo => {
+        const recurso = circulo.closest('.status-box-pv') ? 'PV' : 'Sanidade';
+        circulo.setAttribute('role', 'button');
+        circulo.setAttribute('tabindex', '0');
+        circulo.setAttribute('aria-pressed', 'false');
+        circulo.setAttribute('aria-label', `Marcar ${recurso === 'PV' ? 'caveira' : 'cérebro'} de ${recurso}`);
+    });
     const statusSalvo = localStorage.getItem('estadoModoSecreto');
     const btn = document.getElementById('btn-secreto');
     
