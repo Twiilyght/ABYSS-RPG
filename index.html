@@ -22,6 +22,7 @@
             --light-purple: #bc4ed8;
             --text-gold: #d4af37;
             --roll-popup-border: #d4af37;
+            --ornament-color: #8d3db8;
             --text-light: #f0f0f0;
             --border-color: #4a3427;
             --skill-glow-2: #00ff88;
@@ -8185,6 +8186,25 @@ body.theme-umbral *::-webkit-scrollbar-corner { background: color-mix(in srgb, v
 .active-condition-copy strong { display: block; margin-top: 3px; color: #f0e9f2; font: 600 .78rem 'Cinzel', serif; }
 .active-condition-copy p { margin: 5px 0 0; color: #aaa2ae; font-size: .76rem; line-height: 1.48; }
 .active-condition-copy small { display: inline-block; margin-top: 7px; color: color-mix(in srgb, var(--condition-color) 65%, white); font-size: .65rem; font-weight: 700; }
+.condition-derived-chain {
+    display: grid;
+    gap: 5px;
+    margin-top: 10px;
+    padding: 8px 9px;
+    border-left: 1px solid color-mix(in srgb, var(--condition-color) 54%, transparent);
+    background: color-mix(in srgb, var(--condition-color) 5%, rgba(0,0,0,.2));
+}
+.condition-derived-title { color: #817887; font: 600 .48rem 'Cinzel', serif; letter-spacing: 1.15px; }
+.condition-derived-row {
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr);
+    gap: 5px;
+    padding-left: calc((var(--condition-depth, 1) - 1) * 10px);
+}
+.condition-derived-row > i { color: var(--condition-color); font-size: .68rem; font-style: normal; }
+.condition-derived-row > span { display: grid; gap: 1px; }
+.condition-derived-row > span > strong { margin: 0; color: #e9e1ec; font: 600 .64rem 'Cinzel', serif; }
+.condition-derived-row > span > small { margin: 0; color: #918896; font-size: .63rem; font-weight: 500; line-height: 1.35; }
 .active-condition-actions { display: flex; align-items: flex-start; justify-content: flex-end; flex-wrap: wrap; gap: 5px; }
 .condition-roll-action,
 .condition-remove-action {
@@ -8212,6 +8232,14 @@ body.theme-umbral *::-webkit-scrollbar-corner { background: color-mix(in srgb, v
 .condition-catalog-card > span { grid-row: 1 / 3; display: grid; place-items: center; width: 20px; height: 20px; color: var(--light-purple); border: 1px solid currentColor; border-radius: 50%; font-size: .56rem; }
 .condition-catalog-card strong { color: #e9e2eb; font: 600 .68rem 'Cinzel', serif; }
 .condition-catalog-card small { grid-column: 2; color: #847c89; font-size: .67rem; line-height: 1.38; }
+.condition-catalog-card .condition-derived-preview {
+    margin-top: 4px;
+    padding-top: 5px;
+    color: #a99bae;
+    border-top: 1px solid color-mix(in srgb, var(--primary-purple) 22%, transparent);
+    font-size: .61rem;
+}
+.condition-catalog-card .condition-derived-preview b { color: var(--light-purple); font-weight: 600; }
 .condition-catalog-card:hover { border-color: var(--primary-purple); background: color-mix(in srgb, var(--primary-purple) 8%, rgba(0,0,0,.25)); }
 .condition-catalog-card.is-active { border-color: var(--primary-purple); background: color-mix(in srgb, var(--primary-purple) 14%, rgba(0,0,0,.27)); }
 .condition-catalog-card.is-automatic { opacity: .62; cursor: default; }
@@ -8318,6 +8346,176 @@ body.theme-umbral .turn-box.active,
     .sheet-dashboard-panel .turn-box { width: 23px; height: 23px; }
     .campaign-condition-dock { top: 74px; width: calc(100vw - 14px); }
     .campaign-condition-dock.is-open .campaign-condition-dock-toggle { right: 0; top: -47px; }
+}
+
+/* Movimento mais leve: menus deslizam sem redimensionar a ficha inteira. */
+:root { --sidebar-collapsed-rail: 24px; }
+body.theme-umbral { --sidebar-collapsed-rail: 42px; }
+
+.sidebar,
+body.theme-umbral .sidebar {
+    width: var(--sidebar-width) !important;
+    transform: translate3d(0, 0, 0);
+    transition: transform .24s cubic-bezier(.22,.8,.25,1), border-color .18s ease, box-shadow .18s ease !important;
+    will-change: transform;
+    contain: paint;
+}
+.sidebar.is-collapsed,
+body.theme-umbral .sidebar.is-collapsed {
+    width: var(--sidebar-width) !important;
+    transform: translate3d(calc(-100% + var(--sidebar-collapsed-rail)), 0, 0);
+}
+body.theme-umbral .sidebar.is-collapsed::before { display: block; opacity: 0; }
+.sidebar-nav-items { transition: opacity .15s ease, transform .22s cubic-bezier(.22,.8,.25,1) !important; }
+
+.top-utility-bar,
+body.theme-umbral .top-utility-bar {
+    height: var(--topbar-height) !important;
+    transform: translate3d(0, 0, 0);
+    transition: transform .24s cubic-bezier(.22,.8,.25,1), background-color .18s ease, border-color .18s ease !important;
+    will-change: transform;
+}
+.top-utility-bar.is-collapsed,
+body.theme-umbral .top-utility-bar.is-collapsed {
+    height: var(--topbar-height) !important;
+    transform: translate3d(0, calc(-100% + 20px), 0);
+}
+.container,
+body.theme-umbral .container { transition: none !important; }
+body.sidebar-collapsed .container { width: calc(100% - 100px); margin-left: 100px; }
+body.sidebar-collapsed .top-utility-bar { left: var(--sidebar-width) !important; }
+body.topbar-collapsed .container { padding-top: 92px; }
+body.theme-umbral.sidebar-collapsed .container { width: calc(100% - var(--sidebar-width)); margin-left: var(--sidebar-width); }
+body.theme-umbral.topbar-collapsed .container { padding-top: calc(var(--topbar-height) + 48px); }
+
+/* Entrada e saída reais para as superfícies exclusivas. */
+#ui-focus-backdrop { transition: opacity .23s ease, visibility .23s ease !important; }
+.modal.ui-focus-surface {
+    opacity: 0 !important;
+    visibility: visible !important;
+    transform: translate(-50%, calc(-50% + 18px)) scale(.985) !important;
+    transition: opacity .2s ease, transform .23s cubic-bezier(.22,.8,.25,1) !important;
+    animation: none !important;
+    will-change: opacity, transform;
+}
+.modal.ui-focus-surface.ui-surface-visible {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+}
+.modal.ui-focus-surface.ui-surface-closing {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate(-50%, calc(-50% + 12px)) scale(.985) !important;
+}
+#theme-panel.ui-focus-surface {
+    opacity: 0 !important;
+    visibility: visible !important;
+    transform: translate3d(0, 14px, 0) scale(.985) !important;
+    transform-origin: right bottom;
+    transition: opacity .2s ease, transform .23s cubic-bezier(.22,.8,.25,1) !important;
+    animation: none !important;
+}
+#theme-panel.ui-focus-surface.ui-surface-visible { opacity: 1 !important; transform: translate3d(0, 0, 0) scale(1) !important; }
+#theme-panel.ui-focus-surface.ui-surface-closing { opacity: 0 !important; pointer-events: none !important; transform: translate3d(0, 10px, 0) scale(.985) !important; }
+#log-panel.ui-focus-surface {
+    opacity: 1 !important;
+    transform: translate3d(104%, 0, 0) !important;
+    transition: transform .24s cubic-bezier(.22,.8,.25,1) !important;
+    will-change: transform;
+}
+#log-panel.ui-focus-surface.ui-surface-visible { transform: translate3d(0, 0, 0) !important; }
+#log-panel.ui-focus-surface.ui-surface-closing { pointer-events: none !important; transform: translate3d(104%, 0, 0) !important; }
+
+/* A paleta precisa mostrar a ficha real durante a edição, sem véu escuro. */
+body.ui-theme-preview-open #ui-focus-backdrop {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+body.ui-focus-open.ui-theme-preview-open { overflow-x: hidden; overflow-y: auto; }
+
+/* Popups entram e saem lateralmente, sem salto brusco. */
+#central-popup {
+    transform: translate3d(calc(100% + 46px), 16px, 0) scale(.975) !important;
+    transition: opacity .2s ease, transform .24s cubic-bezier(.22,.8,.25,1) !important;
+    will-change: opacity, transform;
+}
+#central-popup.active { transform: translate3d(0, 0, 0) scale(1) !important; }
+#central-popup.closing {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate3d(42px, 8px, 0) scale(.98) !important;
+}
+.campaign-inline-form.active { animation: abyssDrawerIn .23s cubic-bezier(.22,.8,.25,1) both; }
+.campaign-shield-overlay.active > *,
+.campaign-viewer-overlay.active > *,
+#initiative-request-overlay.active > * { animation: abyssSurfaceIn .25s cubic-bezier(.22,.8,.25,1) both; }
+
+@keyframes abyssDrawerIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes abyssSurfaceIn {
+    from { opacity: 0; transform: translateY(15px) scale(.99); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Dados e vinhas em máscara: leves, recoloríveis e sem capturar cliques. */
+.abyss-ornamented-surface { position: relative; isolation: isolate; }
+.abyss-ornament-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    overflow: hidden;
+    pointer-events: none;
+}
+.abyss-vine,
+.abyss-die {
+    position: absolute;
+    display: block;
+    background: var(--ornament-color);
+    pointer-events: none;
+}
+.abyss-vine {
+    top: -3%;
+    bottom: -3%;
+    width: 72px;
+    opacity: .16;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2090%20560'%3E%3Cg%20fill='none'%20stroke='white'%20stroke-width='6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M48-18C18%2042%2070%2095%2037%20153C10%20204%2068%20250%2038%20312C13%20365%2069%20422%2039%20478C24%20508%2034%20542%2052%20578'/%3E%3Cpath%20d='M38%2071L12%2052M44%20119l27-24M31%20178L7%20160M43%20224l29-18M30%20287L8%20264M44%20334l28-20M31%20398L7%20377M43%20443l29-20M35%20502L13%20486'/%3E%3C/g%3E%3Cg%20fill='white'%3E%3Cpath%20d='M13%2052l15%204-9%2012zM71%2095l-15%205%208%2011zM8%20160l16%204-10%2012zM72%20206l-16%205%209%2012zM9%20264l16%204-10%2013zM72%20314l-16%205%209%2012zM8%20377l16%204-10%2012zM72%20423l-16%205%209%2012zM13%20486l15%204-9%2012z'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2090%20560'%3E%3Cg%20fill='none'%20stroke='white'%20stroke-width='6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M48-18C18%2042%2070%2095%2037%20153C10%20204%2068%20250%2038%20312C13%20365%2069%20422%2039%20478C24%20508%2034%20542%2052%20578'/%3E%3Cpath%20d='M38%2071L12%2052M44%20119l27-24M31%20178L7%20160M43%20224l29-18M30%20287L8%20264M44%20334l28-20M31%20398L7%20377M43%20443l29-20M35%20502L13%20486'/%3E%3C/g%3E%3Cg%20fill='white'%3E%3Cpath%20d='M13%2052l15%204-9%2012zM71%2095l-15%205%208%2011zM8%20160l16%204-10%2012zM72%20206l-16%205%209%2012zM9%20264l16%204-10%2013zM72%20314l-16%205%209%2012zM8%20377l16%204-10%2012zM72%20423l-16%205%209%2012zM13%20486l15%204-9%2012z'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.abyss-vine.left { left: -18px; }
+.abyss-vine.right { right: -18px; transform: scaleX(-1); }
+.abyss-die {
+    right: 18px;
+    bottom: 12px;
+    width: 142px;
+    aspect-ratio: 1;
+    opacity: .1;
+    transform: rotate(-8deg);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Cg%20fill='none'%20stroke='white'%20stroke-width='4'%20stroke-linejoin='round'%3E%3Cpath%20d='M60%204%20111%2039%2094%20105%2026%20105%209%2039Z'/%3E%3Cpath%20d='M60%204%2034%2039%2060%2088%2086%2039%2060%204M9%2039h25M86%2039h25M26%20105l34-17%2034%2017M34%2039h52M34%2039l-8%2066M86%2039l8%2066'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Cg%20fill='none'%20stroke='white'%20stroke-width='4'%20stroke-linejoin='round'%3E%3Cpath%20d='M60%204%20111%2039%2094%20105%2026%20105%209%2039Z'/%3E%3Cpath%20d='M60%204%2034%2039%2060%2088%2086%2039%2060%204M9%2039h25M86%2039h25M26%20105l34-17%2034%2017M34%2039h52M34%2039l-8%2066M86%2039l8%2066'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+#central-popup .abyss-vine { width: 46px; opacity: .12; }
+#central-popup .abyss-die { right: -18px; bottom: -27px; width: 125px; opacity: .13; transform: rotate(12deg); }
+.custom-skill-workshop .abyss-die,
+.campaign-inline-form .abyss-die { opacity: .07; }
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar,
+    .top-utility-bar,
+    .modal.ui-focus-surface,
+    #theme-panel.ui-focus-surface,
+    #log-panel.ui-focus-surface,
+    #central-popup { transition-duration: .01ms !important; }
+    .campaign-inline-form.active,
+    .campaign-shield-overlay.active > *,
+    .campaign-viewer-overlay.active > *,
+    #initiative-request-overlay.active > * { animation: none !important; }
+}
+@media (max-width: 680px) {
+    body.theme-umbral.topbar-collapsed .container { padding-top: calc(var(--topbar-height) + 31px); }
 }
 
     </style>
@@ -9182,6 +9380,10 @@ body.theme-umbral .turn-box.active,
         <input type="color" id="picker-roll-popup-border" oninput="mudarCor('--roll-popup-border', this.value)">
     </div>
     <div class="theme-row">
+        <span>Dados e vinhas:</span>
+        <input type="color" id="picker-ornament" oninput="mudarCor('--ornament-color', this.value)">
+    </div>
+    <div class="theme-row">
         <span>Caixas / Containers:</span>
         <input type="color" id="picker-container" oninput="mudarCor('--container-bg', this.value)">
     </div>
@@ -9582,11 +9784,14 @@ const firebaseConfig = {
 
 /* CONTROLE DE FOCO DOS MENUS E JANELAS */
 const UI_FOCUS_SELECTOR = '.modal, #theme-panel, #log-panel';
+const UI_SURFACE_TRANSITION_MS = 230;
 let superficieFocoAtiva = null;
 let sincronizandoSuperficiesFoco = false;
+const temporizadoresSuperficiesFoco = new WeakMap();
 
 function superficieFocoEstaAberta(elemento) {
     if (!elemento) return false;
+    if (elemento.classList.contains('ui-surface-closing')) return false;
     if (elemento.id === 'log-panel') return elemento.classList.contains('active');
     return window.getComputedStyle(elemento).display !== 'none';
 }
@@ -9609,19 +9814,32 @@ function atualizarGatilhosSuperficieFoco(elemento = null) {
     gatilho?.classList.add('active');
 }
 
-function ocultarSuperficieFoco(elemento) {
+function concluirOcultacaoSuperficieFoco(elemento) {
     if (!elemento) return;
     if (elemento.id === 'log-panel') elemento.classList.remove('active');
     else elemento.style.display = 'none';
-    elemento.classList.remove('ui-focus-surface');
+    elemento.classList.remove('ui-focus-surface', 'ui-surface-visible', 'ui-surface-closing');
     elemento.setAttribute('aria-hidden', 'true');
+    temporizadoresSuperficiesFoco.delete(elemento);
+}
+
+function ocultarSuperficieFoco(elemento, opcoes = {}) {
+    if (!elemento) return;
+    clearTimeout(temporizadoresSuperficiesFoco.get(elemento));
+    elemento.classList.remove('ui-surface-visible');
+    elemento.classList.add('ui-surface-closing');
+    elemento.setAttribute('aria-hidden', 'true');
+    if (elemento.id === 'log-panel') elemento.classList.remove('active');
+    if (opcoes?.imediato === true) return concluirOcultacaoSuperficieFoco(elemento);
+    const timer = setTimeout(() => concluirOcultacaoSuperficieFoco(elemento), UI_SURFACE_TRANSITION_MS);
+    temporizadoresSuperficiesFoco.set(elemento, timer);
 }
 
 function finalizarFocoSeNecessario() {
     if (superficieFocoAtiva && superficieFocoEstaAberta(superficieFocoAtiva)) return;
     superficieFocoAtiva?.classList.remove('ui-focus-surface');
     superficieFocoAtiva = null;
-    document.body.classList.remove('ui-focus-open', 'ui-focus-required');
+    document.body.classList.remove('ui-focus-open', 'ui-focus-required', 'ui-theme-preview-open');
     document.getElementById('ui-focus-backdrop')?.setAttribute('aria-hidden', 'true');
     atualizarGatilhosSuperficieFoco();
 }
@@ -9631,7 +9849,7 @@ function abrirSuperficieFoco(alvo) {
     if (!elemento) return;
     if (superficieFocoAtiva === elemento && superficieFocoEstaAberta(elemento)) return;
     if (superficieFocoExigeEscolha() && superficieFocoAtiva !== elemento) {
-        ocultarSuperficieFoco(elemento);
+        ocultarSuperficieFoco(elemento, { imediato: true });
         return;
     }
 
@@ -9639,6 +9857,9 @@ function abrirSuperficieFoco(alvo) {
     document.querySelectorAll(UI_FOCUS_SELECTOR).forEach(superficie => {
         if (superficie !== elemento && superficieFocoEstaAberta(superficie)) ocultarSuperficieFoco(superficie);
     });
+    clearTimeout(temporizadoresSuperficiesFoco.get(elemento));
+    temporizadoresSuperficiesFoco.delete(elemento);
+    elemento.classList.remove('ui-surface-closing', 'ui-surface-visible');
     if (elemento.id === 'log-panel') elemento.classList.add('active');
     else elemento.style.display = 'block';
     elemento.classList.add('ui-focus-surface');
@@ -9646,9 +9867,14 @@ function abrirSuperficieFoco(alvo) {
     superficieFocoAtiva = elemento;
     document.body.classList.add('ui-focus-open');
     document.body.classList.toggle('ui-focus-required', superficieFocoExigeEscolha(elemento));
+    document.body.classList.toggle('ui-theme-preview-open', elemento.id === 'theme-panel');
     document.getElementById('ui-focus-backdrop')?.setAttribute('aria-hidden', 'false');
     atualizarGatilhosSuperficieFoco(elemento);
     sincronizandoSuperficiesFoco = false;
+    void elemento.offsetWidth;
+    requestAnimationFrame(() => {
+        if (superficieFocoAtiva === elemento && !elemento.classList.contains('ui-surface-closing')) elemento.classList.add('ui-surface-visible');
+    });
 }
 
 function fecharSuperficieFoco(alvo = superficieFocoAtiva) {
@@ -9658,15 +9884,15 @@ function fecharSuperficieFoco(alvo = superficieFocoAtiva) {
     ocultarSuperficieFoco(elemento);
     if (superficieFocoAtiva === elemento) superficieFocoAtiva = null;
     sincronizandoSuperficiesFoco = false;
-    finalizarFocoSeNecessario();
+    setTimeout(finalizarFocoSeNecessario, UI_SURFACE_TRANSITION_MS);
 }
 
 function fecharTodasSuperficiesFoco() {
     sincronizandoSuperficiesFoco = true;
-    document.querySelectorAll(UI_FOCUS_SELECTOR).forEach(ocultarSuperficieFoco);
+    document.querySelectorAll(UI_FOCUS_SELECTOR).forEach(elemento => ocultarSuperficieFoco(elemento));
     superficieFocoAtiva = null;
     sincronizandoSuperficiesFoco = false;
-    finalizarFocoSeNecessario();
+    setTimeout(finalizarFocoSeNecessario, UI_SURFACE_TRANSITION_MS);
 }
 
 document.getElementById('ui-focus-backdrop')?.addEventListener('click', () => {
@@ -9690,11 +9916,43 @@ const observadorSuperficiesFoco = new MutationObserver(mudancas => {
         if (superficieFocoEstaAberta(elemento)) {
             if (elemento !== superficieFocoAtiva) abrirSuperficieFoco(elemento);
         } else if (elemento === superficieFocoAtiva) {
-            finalizarFocoSeNecessario();
+            if (elemento.id !== 'log-panel' && !elemento.classList.contains('ui-surface-closing') && elemento.style.display === 'none') {
+                sincronizandoSuperficiesFoco = true;
+                elemento.style.display = 'block';
+                sincronizandoSuperficiesFoco = false;
+                fecharSuperficieFoco(elemento);
+            } else {
+                finalizarFocoSeNecessario();
+            }
         }
     }
 });
 observadorSuperficiesFoco.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
+
+function prepararOrnamentosUmbral() {
+    const seletor = [
+        '.creation-modal',
+        '.custom-container-modal',
+        '.slot-manager-modal',
+        '.startup-slot-modal',
+        '.template-library-modal',
+        '.custom-skill-workshop',
+        '.campaign-inline-form',
+        '.initiative-request-card',
+        '#central-popup'
+    ].join(',');
+    document.querySelectorAll(seletor).forEach(superficie => {
+        if (superficie.querySelector(':scope > .abyss-ornament-layer')) return;
+        superficie.classList.add('abyss-ornamented-surface');
+        const camada = document.createElement('span');
+        camada.className = 'abyss-ornament-layer';
+        camada.setAttribute('aria-hidden', 'true');
+        camada.innerHTML = '<i class="abyss-vine left"></i><i class="abyss-vine right"></i><i class="abyss-die"></i>';
+        superficie.prepend(camada);
+    });
+}
+
+prepararOrnamentosUmbral();
 
 /* SISTEMA DE PESQUISA NAS CAIXAS */
 function filtrarCards(inputId, containerId) {
@@ -9962,6 +10220,7 @@ function resetarConfiguracoesAudio() {
         mudarCor('--light-purple', '#bc4ed8');
         mudarCor('--text-gold', '#d4af37');
         mudarCor('--roll-popup-border', '#d4af37');
+        mudarCor('--ornament-color', '#8d3db8');
         mudarCor('--skill-glow-2', '#00ff88');
         mudarCor('--skill-glow-4', '#d4af37');
         limparImagemFundo();
@@ -9981,6 +10240,7 @@ function resetarConfiguracoesAudio() {
             '--light-purple': 'picker-light',
             '--text-gold': 'picker-gold',
             '--roll-popup-border': 'picker-roll-popup-border',
+            '--ornament-color': 'picker-ornament',
             '--skill-glow-2': 'picker-skill-2',
             '--skill-glow-4': 'picker-skill-4'
         };
@@ -9993,6 +10253,7 @@ function resetarConfiguracoesAudio() {
             '--light-purple': '#bc4ed8',
             '--text-gold': '#d4af37',
             '--roll-popup-border': '#d4af37',
+            '--ornament-color': '#8d3db8',
             '--skill-glow-2': '#00ff88',
             '--skill-glow-4': '#d4af37'
         };
@@ -10113,6 +10374,7 @@ function resetarConfiguracoesAudio() {
                 '--light-purple': '#bc4ed8',
                 '--text-gold': '#d4af37',
                 '--roll-popup-border': '#d4af37',
+                '--ornament-color': '#8d3db8',
                 '--skill-glow-2': '#00ff88',
                 '--skill-glow-4': '#d4af37',
                 backgroundImage: '',
@@ -10466,6 +10728,7 @@ function resetarConfiguracoesAudio() {
         congelando: ['lento'],
         cego: ['desprevenido'],
         surdo: ['desprevenido'],
+        petrificado: ['silenciado', 'imovel'],
         afolimbado: ['fraturado', 'fragilizado'],
         molingado: ['afolimbado', 'debilitado'],
         desorientado: ['atordoado', 'vulneravel', 'confuso']
@@ -10525,6 +10788,41 @@ function resetarConfiguracoesAudio() {
         };
         (ids || []).forEach(incluir);
         return efetivas;
+    }
+
+    function condicoesDerivadasDetalhadas(id) {
+        const derivadas = [];
+        const visitadas = new Set([id]);
+        const visitar = (origem, nivel = 1) => {
+            (DEPENDENCIAS_CONDICOES[origem] || []).forEach(derivadaId => {
+                if (visitadas.has(derivadaId) || !CONDICOES_CATALOGO[derivadaId]) return;
+                visitadas.add(derivadaId);
+                derivadas.push({ id: derivadaId, nivel, condicao: CONDICOES_CATALOGO[derivadaId] });
+                visitar(derivadaId, nivel + 1);
+            });
+        };
+        visitar(id);
+        return derivadas;
+    }
+
+    function resumoEfeitoCondicao(condicao) {
+        if (!condicao) return '';
+        if (condicao.efeito) return condicao.efeito;
+        if (condicao.acao?.rotulo) return condicao.acao.rotulo;
+        return 'Efeito informativo — consulte a descrição';
+    }
+
+    function condicoesDerivadasHtml(id, compacto = false) {
+        const derivadas = condicoesDerivadasDetalhadas(id);
+        if (!derivadas.length) return '';
+        if (compacto) {
+            const resumo = derivadas.map(({ condicao }) => `${condicao.nome}: ${resumoEfeitoCondicao(condicao)}`).join(' • ');
+            return `<small class="condition-derived-preview"><b>Também aplica:</b> ${escapeCampaignHtml(resumo)}</small>`;
+        }
+        return `<div class="condition-derived-chain">
+            <span class="condition-derived-title">EFEITOS HERDADOS</span>
+            ${derivadas.map(({ condicao, nivel }) => `<div class="condition-derived-row" style="--condition-depth:${nivel}"><i aria-hidden="true">↳</i><span><strong>${escapeCampaignHtml(condicao.nome)}</strong><small>${escapeCampaignHtml(resumoEfeitoCondicao(condicao))}</small></span></div>`).join('')}
+        </div>`;
     }
 
     function estadoCondicoesDaFicha(ficha = sheet) {
@@ -10677,7 +10975,7 @@ function resetarConfiguracoesAudio() {
             ? `removerCondicaoCampanha('${id}')`
             : `removerCondicaoFicha('${id}')`;
         return `<article class="active-condition-card category-${condicao.categoria} ${automatica ? 'is-automatic' : ''}" data-condition-id="${id}">
-            <div class="active-condition-copy"><span class="active-condition-kicker">${CATEGORIAS_CONDICOES[condicao.categoria].icone} ${escapeCampaignHtml(CATEGORIAS_CONDICOES[condicao.categoria].nome)}</span><strong>${escapeCampaignHtml(condicao.nome)}</strong><p>${escapeCampaignHtml(condicao.descricao)}</p>${condicao.efeito ? `<small>${escapeCampaignHtml(condicao.efeito)}</small>` : ''}</div>
+            <div class="active-condition-copy"><span class="active-condition-kicker">${CATEGORIAS_CONDICOES[condicao.categoria].icone} ${escapeCampaignHtml(CATEGORIAS_CONDICOES[condicao.categoria].nome)}</span><strong>${escapeCampaignHtml(condicao.nome)}</strong><p>${escapeCampaignHtml(condicao.descricao)}</p>${condicao.efeito ? `<small>${escapeCampaignHtml(condicao.efeito)}</small>` : ''}${condicoesDerivadasHtml(id)}</div>
             <div class="active-condition-actions">
                 ${condicao.acao ? `<button type="button" class="condition-roll-action" onclick="${executar}">🎲 ${escapeCampaignHtml(condicao.acao.rotulo)}</button>` : ''}
                 ${automatica ? '<span class="condition-auto-label">AUTOMÁTICA</span>' : `<button type="button" class="condition-remove-action" onclick="${remover}" title="Remover condição" aria-label="Remover ${escapeCampaignHtml(condicao.nome)}">✕</button>`}
@@ -10692,9 +10990,10 @@ function resetarConfiguracoesAudio() {
                 const ativa = estado.diretas.includes(id);
                 const automatica = estado.automaticas.includes(id);
                 const acao = contexto === 'campanha' ? `alternarCondicaoCampanha('${id}')` : `alternarCondicaoFicha('${id}')`;
-                const busca = normalizarNomeCondicaoTeste(`${condicao.nome} ${condicao.descricao}`);
+                const buscaDerivadas = condicoesDerivadasDetalhadas(id).map(({ condicao: derivada }) => `${derivada.nome} ${derivada.descricao} ${resumoEfeitoCondicao(derivada)}`).join(' ');
+                const busca = normalizarNomeCondicaoTeste(`${condicao.nome} ${condicao.descricao} ${buscaDerivadas}`);
                 return `<button type="button" class="condition-catalog-card ${ativa ? 'is-active' : ''} ${automatica ? 'is-automatic' : ''}" data-condition-search="${escapeCampaignHtml(busca)}" onclick="${acao}" ${automatica ? 'disabled' : ''}>
-                    <span>${ativa ? '✓' : (automatica ? 'AUTO' : '+')}</span><strong>${escapeCampaignHtml(condicao.nome)}</strong><small>${escapeCampaignHtml(condicao.descricao)}</small>
+                    <span>${ativa ? '✓' : (automatica ? 'AUTO' : '+')}</span><strong>${escapeCampaignHtml(condicao.nome)}</strong><small>${escapeCampaignHtml(condicao.descricao)}</small>${condicoesDerivadasHtml(id, true)}
                 </button>`;
             }).join('');
             return `<section class="condition-catalog-group"><h4>${meta.icone} CONDIÇÕES ${escapeCampaignHtml(meta.nome).toUpperCase()}</h4><div class="condition-catalog-grid">${cards}</div></section>`;
@@ -11491,6 +11790,38 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     let slotPreviewState = {};
     let seletorInicialConcluidoParaUid = null;
 
+    function animarSecaoRetratil(content, abrir) {
+        if (!content) return;
+        if (typeof content.animate !== 'function' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            content.hidden = !abrir;
+            return;
+        }
+        content._abyssRetractAnimation?.cancel();
+        const alturaInicial = content.hidden ? 0 : content.getBoundingClientRect().height;
+        if (abrir) content.hidden = false;
+        const alturaFinal = abrir ? content.scrollHeight : 0;
+        content.style.overflow = 'hidden';
+        const animacao = content.animate([
+            { height: `${alturaInicial}px`, opacity: abrir ? .18 : 1, transform: abrir ? 'translateY(-7px)' : 'translateY(0)' },
+            { height: `${alturaFinal}px`, opacity: abrir ? 1 : .12, transform: abrir ? 'translateY(0)' : 'translateY(-7px)' }
+        ], { duration: 220, easing: 'cubic-bezier(.22,.8,.25,1)' });
+        content._abyssRetractAnimation = animacao;
+        animacao.onfinish = () => {
+            content.hidden = !abrir;
+            content.style.removeProperty('height');
+            content.style.removeProperty('overflow');
+            content.style.removeProperty('opacity');
+            content.style.removeProperty('transform');
+            content._abyssRetractAnimation = null;
+        };
+        animacao.oncancel = () => {
+            content.style.removeProperty('height');
+            content.style.removeProperty('overflow');
+            content.style.removeProperty('opacity');
+            content.style.removeProperty('transform');
+        };
+    }
+
     function alternarSecaoRetratil(sectionId, contentId, toggleId, forcarAberto = null) {
         const section = document.getElementById(sectionId);
         const content = document.getElementById(contentId);
@@ -11498,13 +11829,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (!section || !content || !toggle) return;
         const abrir = typeof forcarAberto === 'boolean' ? forcarAberto : section.classList.contains('is-collapsed');
         section.classList.toggle('is-collapsed', !abrir);
-        content.hidden = !abrir;
+        animarSecaoRetratil(content, abrir);
         toggle.setAttribute('aria-expanded', String(abrir));
+        return abrir;
     }
 
     function alternarCriacaoFichaInicial() {
-        alternarSecaoRetratil('startup-slot-create-section', 'startup-slot-create-content', 'startup-slot-create-toggle');
-        if (!document.getElementById('startup-slot-create-content')?.hidden) {
+        const abriu = alternarSecaoRetratil('startup-slot-create-section', 'startup-slot-create-content', 'startup-slot-create-toggle');
+        if (abriu) {
             document.getElementById('startup-new-slot-name')?.focus();
         }
     }
@@ -11514,8 +11846,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     }
 
     function alternarCriacaoPericias(forcarAberto = null) {
-        alternarSecaoRetratil('custom-skills-section', 'custom-skills-content', 'custom-skills-toggle', forcarAberto);
-        if (!document.getElementById('custom-skills-content')?.hidden && forcarAberto !== true) {
+        const abriu = alternarSecaoRetratil('custom-skills-section', 'custom-skills-content', 'custom-skills-toggle', forcarAberto);
+        if (abriu && forcarAberto !== true) {
             document.getElementById('custom-skill-name')?.focus();
         }
     }
@@ -14671,6 +15003,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 ${detalhes ? `<div class="system-popup-detail">${detalhes}</div>` : ''}`;
         }
 
+        clearTimeout(window.popCloseAnimationTimer);
+        pop.classList.remove('active', 'closing');
+        void pop.offsetWidth;
         pop.classList.add('active');
         clearTimeout(window.popTimer);
         window.popTimer = setTimeout(fecharPopup, resultadoNumerico ? 7500 : 6000);
@@ -14888,7 +15223,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         document.getElementById('tab-media').style.display = id === 'tab-media' ? 'block' : 'none';
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.getAttribute('onclick') && b.getAttribute('onclick').includes(id)));
     }
-    function fecharPopup() { document.getElementById('central-popup').classList.remove('active'); }
+    function fecharPopup() {
+        const popup = document.getElementById('central-popup');
+        if (!popup || !popup.classList.contains('active')) return;
+        clearTimeout(window.popTimer);
+        clearTimeout(window.popCloseAnimationTimer);
+        popup.classList.add('closing');
+        window.popCloseAnimationTimer = setTimeout(() => popup.classList.remove('active', 'closing'), 220);
+    }
     function setDif(v) { 
         tocarSom('click');
         sheet.dificuldade = v; 
