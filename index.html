@@ -8983,6 +8983,32 @@ body.theme-umbral #btn-documentos::after { content: "Documentos"; }
 }
 .document-desk-drawings .document-drawing-text { overflow: visible; pointer-events: all; }
 .document-desk-drawings .document-drawing-text > div { width: 100%; overflow: visible; line-height: 1.18; overflow-wrap: anywhere; white-space: pre-wrap; text-shadow: 0 2px 3px rgba(0,0,0,.7); }
+.document-selection-marquee {
+    position: absolute;
+    z-index: 9990;
+    min-width: 1px;
+    min-height: 1px;
+    border: 1px solid color-mix(in srgb, var(--primary-purple) 72%, white);
+    background: color-mix(in srgb, var(--primary-purple) 16%, transparent);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.5), inset 0 0 18px color-mix(in srgb, var(--primary-purple) 12%, transparent), 0 0 16px color-mix(in srgb, var(--primary-purple) 18%, transparent);
+    pointer-events: none;
+}
+.document-selection-marquee[hidden] { display: none !important; }
+.document-selection-marquee::after {
+    content: attr(data-count);
+    position: absolute;
+    right: -1px;
+    bottom: calc(100% + 5px);
+    min-width: 20px;
+    padding: 3px 6px;
+    border: 1px solid color-mix(in srgb, var(--primary-purple) 70%, white);
+    border-radius: 4px;
+    color: #fff;
+    background: rgba(12,7,16,.9);
+    font: 700 .58rem var(--font-rpg);
+    text-align: center;
+}
+body.document-desk-selecting { user-select: none !important; }
 .document-desk-cursors { z-index: 9999; pointer-events: none; }
 .desk-document {
     position: absolute;
@@ -10464,6 +10490,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
                     </div>
                     <div id="document-desk-documents" class="document-desk-documents"></div>
                     <svg id="document-desk-drawings" class="document-desk-drawings" aria-label="Anotações compartilhadas da mesa" role="img"><g id="document-drawing-layer"></g><g id="document-drawing-preview"></g></svg>
+                    <div id="document-selection-marquee" class="document-selection-marquee" data-count="0" aria-hidden="true" hidden></div>
                     <div id="document-eraser-preview" class="document-eraser-preview" aria-hidden="true"></div>
                     <div id="document-desk-cursors" class="document-desk-cursors"></div>
                     <div id="document-desk-empty" class="document-desk-empty active">
@@ -20348,6 +20375,7 @@ const documentDeskState = {
     selectedDocumentId: null,
     selectedDocumentIds: new Set(),
     selectedDrawingIds: new Set(),
+    selectionMarquee: null,
     editingTextId: null,
     stapleSourceId: null,
     spacePan: false,
@@ -20780,6 +20808,7 @@ function pararEscutasMesaDocumentos(removerPresenca = true) {
     documentDeskState.cursorTimer = null;
     clearTimeout(documentDeskState.groupMoveTimer);
     documentDeskState.groupMoveTimer = null;
+    cancelarSelecaoPorAreaMesa(false);
     if (removerPresenca && documentDeskState.presenceSelfRef) {
         documentDeskState.presenceSelfRef.onDisconnect().cancel().catch(() => {});
         documentDeskState.presenceSelfRef.remove().catch(() => {});
@@ -20800,7 +20829,7 @@ function pararEscutasMesaDocumentos(removerPresenca = true) {
     documentDeskState.spacePan = false;
     documentDeskState.stapleSourceId = null;
     cancelarCompositorTextoMesa();
-    document.body.classList.remove('document-desk-grabbing', 'document-desk-panning');
+    document.body.classList.remove('document-desk-grabbing', 'document-desk-panning', 'document-desk-selecting');
     document.getElementById('document-desk-app')?.classList.remove('space-pan-active');
     document.querySelector('.document-desk-viewport')?.classList.remove('is-panning');
     ocultarLupaDocumento();
@@ -21352,7 +21381,7 @@ function carregarPreferenciasDesenhoMesa() {
 
 function textoFerramentaDesenhoMesa(ferramenta = documentDeskState.drawingTool) {
     const textos = {
-        pan: 'Arraste o fundo para explorar. Ctrl+clique seleciona vários elementos; arraste um selecionado para mover todos. Duplo clique edita textos.',
+        pan: 'Arraste o fundo para explorar. Ctrl+arraste cria uma área de seleção; Ctrl+clique alterna elementos individuais. Duplo clique edita textos.',
         free: 'Desenho livre: arraste para desenhar. Segure Espaço e arraste para mover a mesa.',
         line: 'Reta: arraste do início ao fim. Segure Espaço e arraste para mover a mesa.',
         arrow: 'Seta: arraste da origem ao ponto indicado.',
@@ -21815,13 +21844,17 @@ function iniciarInteracaoFundoMesa(event) {
     const ferramenta = panForcado ? 'pan' : documentDeskState.drawingTool;
     const desenhoAlvo = event.target.closest?.('[data-drawing-id]');
     const documentoAlvo = event.target.closest?.('.desk-document');
+    const controle = event.target.closest?.('button, input, select, label, .document-slot-ribbon, .desk-resize-handle, .desk-rotate-handle, .desk-document-controls');
+    if (event.button === 0 && (event.ctrlKey || event.metaKey) && !panForcado && !controle) {
+        iniciarSelecaoPorAreaMesa(event, desenhoAlvo, documentoAlvo);
+        return;
+    }
     if ((event.ctrlKey || event.metaKey) && !panForcado && (desenhoAlvo || documentoAlvo)) return;
     if (desenhoAlvo && !panForcado && (ferramenta === 'pan' || event.ctrlKey || event.metaKey)) return;
     if (event.button === 0 && !event.ctrlKey && !event.metaKey && !documentoAlvo && !desenhoAlvo) {
         limparSelecaoElementosMesa();
         if (documentDeskState.stapleSourceId) cancelarSelecaoGrampoMesa();
     }
-    const controle = event.target.closest?.('button, input, select, label, .document-slot-ribbon, .desk-resize-handle, .desk-rotate-handle, .desk-document-controls');
     if (controle && !panForcado) return;
     const viewport = document.querySelector('.document-desk-viewport');
     if (!viewport) return;
@@ -21885,6 +21918,7 @@ function iniciarInteracaoFundoMesa(event) {
 }
 
 function moverPanOuDesenhoMesa(event) {
+    if (moverSelecaoPorAreaMesa(event)) return;
     const pan = documentDeskState.panDrag;
     if (pan && event.pointerId === pan.pointerId) {
         const viewport = document.querySelector('.document-desk-viewport');
@@ -21923,6 +21957,7 @@ function moverPanOuDesenhoMesa(event) {
 }
 
 async function finalizarPanOuDesenhoMesa(event) {
+    if (finalizarSelecaoPorAreaMesa(event)) return;
     const pan = documentDeskState.panDrag;
     if (pan && (event.pointerId == null || event.pointerId === pan.pointerId)) {
         encerrarArrastePanMesa(event.pointerId);
@@ -22322,6 +22357,208 @@ function selecionarSomenteDesenhoMesa(drawingId) {
     documentDeskState.selectedDocumentIds = new Set();
     documentDeskState.selectedDrawingIds = new Set(drawingId && documentDeskState.drawings?.[drawingId] ? [drawingId] : []);
     atualizarSelecaoVisualMesa();
+}
+
+function retanguloEntrePontosMesa(inicio, fim) {
+    const x1 = Math.min(limitarPercentualMesa(inicio?.x), limitarPercentualMesa(fim?.x));
+    const y1 = Math.min(limitarPercentualMesa(inicio?.y), limitarPercentualMesa(fim?.y));
+    const x2 = Math.max(limitarPercentualMesa(inicio?.x), limitarPercentualMesa(fim?.x));
+    const y2 = Math.max(limitarPercentualMesa(inicio?.y), limitarPercentualMesa(fim?.y));
+    return { x1, y1, x2, y2, w: x2 - x1, h: y2 - y1 };
+}
+
+function retangulosMesaSeCruzam(a, b) {
+    return Boolean(a && b && a.x1 <= b.x2 && a.x2 >= b.x1 && a.y1 <= b.y2 && a.y2 >= b.y1);
+}
+
+function caixaDocumentoSelecaoMesa(documentId) {
+    const placement = documentDeskState.placements?.[documentId];
+    if (!placement) return null;
+    const x1 = numeroMesa(placement.x, 0);
+    const y1 = numeroMesa(placement.y, 0);
+    return {
+        x1,
+        y1,
+        x2: x1 + Math.max(0, numeroMesa(placement.w, 19)),
+        y2: y1 + Math.max(0, numeroMesa(placement.h, 27))
+    };
+}
+
+function caixaDesenhoSelecaoMesa(desenho) {
+    if (!desenho) return null;
+    const board = document.getElementById('document-desk-board');
+    const larguraMesa = Math.max(1, board?.offsetWidth || 1600);
+    const alturaMesa = Math.max(1, board?.offsetHeight || 1000);
+    const margemPx = Math.max(5, numeroMesa(desenho.width, 4) * (desenho.type === 'marker' ? 2.4 : 1.1));
+    const margemX = margemPx / larguraMesa * 100;
+    const margemY = margemPx / alturaMesa * 100;
+    if (desenho.type === 'text') {
+        const x = limitarPercentualMesa(desenho.x);
+        const y = limitarPercentualMesa(desenho.y);
+        const tamanho = Math.max(12, Math.min(80, numeroMesa(desenho.fontSize, 24)));
+        const texto = String(desenho.text || '');
+        const caracteresPorLinha = Math.max(8, Math.floor(larguraMesa * .44 / (tamanho * .58)));
+        const linhas = texto.split(/\n/);
+        const linhasEstimadas = linhas.reduce((total, linha) => total + Math.max(1, Math.ceil(linha.length / caracteresPorLinha)), 0);
+        const larguraTexto = Math.min(44, Math.max(2.5, Math.max(...linhas.map(linha => Math.min(linha.length, caracteresPorLinha)), 1) * tamanho * .58 / larguraMesa * 100));
+        const alturaTexto = Math.max(tamanho * 1.25, linhasEstimadas * tamanho * 1.45) / alturaMesa * 100;
+        return { x1: x - margemX, y1: y - tamanho / alturaMesa * 100 - margemY, x2: x + larguraTexto + margemX, y2: y + alturaTexto + margemY };
+    }
+    if (desenho.type === 'circle') {
+        const centro = desenho.start || desenho.points?.[0];
+        const borda = desenho.end || desenho.points?.[1] || centro;
+        if (!centro || !borda) return null;
+        const dx = (numeroMesa(borda.x, 0) - numeroMesa(centro.x, 0)) / 100 * larguraMesa;
+        const dy = (numeroMesa(borda.y, 0) - numeroMesa(centro.y, 0)) / 100 * alturaMesa;
+        const raioPx = Math.hypot(dx, dy);
+        const raioX = raioPx / larguraMesa * 100;
+        const raioY = raioPx / alturaMesa * 100;
+        return {
+            x1: numeroMesa(centro.x, 0) - raioX - margemX,
+            y1: numeroMesa(centro.y, 0) - raioY - margemY,
+            x2: numeroMesa(centro.x, 0) + raioX + margemX,
+            y2: numeroMesa(centro.y, 0) + raioY + margemY
+        };
+    }
+    const pontos = desenho.type === 'free' || desenho.type === 'marker'
+        ? pontosDesenhoMesaSeguros(desenho.points)
+        : [desenho.start, desenho.end].filter(Boolean);
+    if (!pontos.length) return null;
+    const xs = pontos.map(ponto => numeroMesa(ponto?.x, 0));
+    const ys = pontos.map(ponto => numeroMesa(ponto?.y, 0));
+    return {
+        x1: Math.min(...xs) - margemX,
+        y1: Math.min(...ys) - margemY,
+        x2: Math.max(...xs) + margemX,
+        y2: Math.max(...ys) + margemY
+    };
+}
+
+function elementosNaAreaSelecaoMesa(retangulo) {
+    return {
+        documents: Object.keys(documentDeskState.placements || {}).filter(id => retangulosMesaSeCruzam(retangulo, caixaDocumentoSelecaoMesa(id))),
+        drawings: Object.entries(documentDeskState.drawings || {})
+            .filter(([, desenho]) => retangulosMesaSeCruzam(retangulo, caixaDesenhoSelecaoMesa(desenho)))
+            .map(([id]) => id)
+    };
+}
+
+function aplicarSelecaoPorAreaMesa(retangulo) {
+    const sessao = documentDeskState.selectionMarquee;
+    if (!sessao) return;
+    const encontrados = elementosNaAreaSelecaoMesa(retangulo);
+    documentDeskState.selectedDocumentIds = new Set([...sessao.baseDocumentIds, ...encontrados.documents]);
+    documentDeskState.selectedDrawingIds = new Set([...sessao.baseDrawingIds, ...encontrados.drawings]);
+    documentDeskState.selectedDocumentId = documentDeskState.selectedDocumentIds.has(sessao.basePrimaryDocumentId)
+        ? sessao.basePrimaryDocumentId
+        : (encontrados.documents[0] || [...documentDeskState.selectedDocumentIds][0] || null);
+    atualizarSelecaoVisualMesa();
+    const marcador = document.getElementById('document-selection-marquee');
+    if (marcador) marcador.dataset.count = String(quantidadeSelecaoMesa());
+}
+
+function iniciarSelecaoPorAreaMesa(event, desenhoAlvo = null, documentoAlvo = null) {
+    const board = document.getElementById('document-desk-board');
+    const ponto = pontoMesaDocumentosDoEvento(event);
+    if (!board || !ponto || event.button !== 0) return false;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    board.setPointerCapture?.(event.pointerId);
+    documentDeskState.selectionMarquee = {
+        pointerId: event.pointerId,
+        captor: board,
+        startClientX: event.clientX,
+        startClientY: event.clientY,
+        startPoint: ponto,
+        currentPoint: ponto,
+        moved: false,
+        originType: desenhoAlvo ? 'drawing' : (documentoAlvo ? 'document' : ''),
+        originId: desenhoAlvo?.dataset?.drawingId || documentoAlvo?.dataset?.documentId || '',
+        baseDocumentIds: new Set(documentDeskState.selectedDocumentIds || []),
+        baseDrawingIds: new Set(documentDeskState.selectedDrawingIds || []),
+        basePrimaryDocumentId: documentDeskState.selectedDocumentId || null
+    };
+    const marcador = document.getElementById('document-selection-marquee');
+    if (marcador) {
+        marcador.hidden = true;
+        marcador.dataset.count = String(quantidadeSelecaoMesa());
+        marcador.setAttribute('aria-hidden', 'true');
+    }
+    document.body.classList.add('document-desk-selecting');
+    publicarPresencaMesaDocumentos({ grabbing: false, tool: 'select' });
+    return true;
+}
+
+function moverSelecaoPorAreaMesa(event) {
+    const sessao = documentDeskState.selectionMarquee;
+    if (!sessao || event.pointerId !== sessao.pointerId) return false;
+    event.preventDefault();
+    const distancia = Math.hypot(event.clientX - sessao.startClientX, event.clientY - sessao.startClientY);
+    if (!sessao.moved && distancia < 5) return true;
+    sessao.moved = true;
+    sessao.currentPoint = pontoMesaDocumentosDoEvento(event) || sessao.currentPoint;
+    const retangulo = retanguloEntrePontosMesa(sessao.startPoint, sessao.currentPoint);
+    const marcador = document.getElementById('document-selection-marquee');
+    if (marcador) {
+        marcador.hidden = false;
+        marcador.setAttribute('aria-hidden', 'false');
+        marcador.style.left = `${retangulo.x1}%`;
+        marcador.style.top = `${retangulo.y1}%`;
+        marcador.style.width = `${retangulo.w}%`;
+        marcador.style.height = `${retangulo.h}%`;
+    }
+    aplicarSelecaoPorAreaMesa(retangulo);
+    return true;
+}
+
+function finalizarSelecaoPorAreaMesa(event) {
+    const sessao = documentDeskState.selectionMarquee;
+    if (!sessao || (event.pointerId != null && event.pointerId !== sessao.pointerId)) return false;
+    event.preventDefault?.();
+    try { sessao.captor?.releasePointerCapture?.(sessao.pointerId); } catch (_) {}
+    const cancelar = event.type === 'pointercancel';
+    const cliqueCurto = !sessao.moved;
+    const originType = sessao.originType;
+    const originId = sessao.originId;
+    if (cancelar || cliqueCurto) {
+        documentDeskState.selectedDocumentIds = new Set(sessao.baseDocumentIds);
+        documentDeskState.selectedDrawingIds = new Set(sessao.baseDrawingIds);
+        documentDeskState.selectedDocumentId = sessao.basePrimaryDocumentId;
+    }
+    documentDeskState.selectionMarquee = null;
+    const marcador = document.getElementById('document-selection-marquee');
+    if (marcador) {
+        marcador.hidden = true;
+        marcador.dataset.count = '0';
+        marcador.setAttribute('aria-hidden', 'true');
+    }
+    document.body.classList.remove('document-desk-selecting');
+    atualizarSelecaoVisualMesa();
+    if (!cancelar && cliqueCurto && originType && originId) alternarSelecaoElementoMesa(originType, originId);
+    else if (!cancelar && sessao.moved) anunciarSelecaoMesa();
+    else atualizarStatusDesenhoMesa();
+    publicarPresencaMesaDocumentos({ grabbing: false, tool: documentDeskState.spacePan ? 'pan' : documentDeskState.drawingTool });
+    return true;
+}
+
+function cancelarSelecaoPorAreaMesa(restaurar = true) {
+    const sessao = documentDeskState.selectionMarquee;
+    if (!sessao) return;
+    if (restaurar) {
+        documentDeskState.selectedDocumentIds = new Set(sessao.baseDocumentIds);
+        documentDeskState.selectedDrawingIds = new Set(sessao.baseDrawingIds);
+        documentDeskState.selectedDocumentId = sessao.basePrimaryDocumentId;
+    }
+    try { sessao.captor?.releasePointerCapture?.(sessao.pointerId); } catch (_) {}
+    documentDeskState.selectionMarquee = null;
+    const marcador = document.getElementById('document-selection-marquee');
+    if (marcador) {
+        marcador.hidden = true;
+        marcador.dataset.count = '0';
+        marcador.setAttribute('aria-hidden', 'true');
+    }
+    document.body.classList.remove('document-desk-selecting');
+    if (restaurar) atualizarSelecaoVisualMesa();
 }
 
 async function alternarMolduraDocumentoMesa(documentId) {
