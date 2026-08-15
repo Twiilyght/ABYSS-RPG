@@ -8660,6 +8660,29 @@ body.theme-umbral #btn-documentos::after { content: "Documentos"; }
 }
 .document-cursor-color-control input::-webkit-color-swatch-wrapper { padding: 0; }
 .document-cursor-color-control input::-webkit-color-swatch { border: 0; border-radius: 50%; }
+.document-cursor-avatar-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 34px;
+    padding: 5px 7px 5px 9px;
+    border: 1px solid #3c2b1d;
+    color: #b9aa96;
+    background: rgba(0,0,0,.24);
+    font: 600 .5rem var(--font-rpg);
+    letter-spacing: .8px;
+}
+.document-cursor-avatar-control select {
+    width: 94px;
+    min-height: 23px;
+    padding: 2px 22px 2px 7px;
+    border: 1px solid #70543a;
+    border-radius: 2px;
+    color: #efe5d7;
+    background: #100b08;
+    font: 600 .52rem var(--font-rpg);
+    cursor: pointer;
+}
 .document-desk-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
 .document-desk-zoom { display: inline-flex; align-items: stretch; border: 1px solid #5c4228; background: rgba(17,11,8,.9); }
 .document-desk-zoom button {
@@ -8747,6 +8770,15 @@ body.theme-umbral #btn-documentos::after { content: "Documentos"; }
 .document-drawing-toolbar button:disabled { opacity: .35; cursor: default; }
 .document-drawing-toolbar select { width: 80px; color: #e9dfd1; }
 .document-drawing-toolbar [hidden] { display: none !important; }
+.document-text-format { display: flex; align-items: center; gap: 3px; }
+.document-text-format select:first-child { width: 92px; }
+.document-text-format select:nth-child(2) { width: 55px; }
+.document-text-format button { min-width: 31px; padding-inline: 6px; }
+.document-text-format button.active {
+    color: #160d07;
+    border-color: var(--desk-gold);
+    background: var(--desk-gold);
+}
 .document-drawing-color {
     display: grid;
     width: 34px;
@@ -8778,6 +8810,39 @@ body.theme-umbral #btn-documentos::after { content: "Documentos"; }
     min-height: 0;
     flex: 1;
 }
+.document-text-composer {
+    position: absolute;
+    z-index: 10030;
+    bottom: 68px;
+    left: 18px;
+    width: min(430px, calc(100vw - 36px));
+    padding: 13px;
+    border: 1px solid color-mix(in srgb, var(--desk-gold) 62%, #4b3220);
+    border-radius: 4px;
+    color: #ede3d4;
+    background: linear-gradient(180deg, rgba(25,15,10,.98), rgba(10,7,5,.98));
+    box-shadow: 0 18px 46px rgba(0,0,0,.72);
+    animation: documentTextComposerIn .18s cubic-bezier(.2,.8,.25,1) both;
+}
+.document-text-composer[hidden] { display: none !important; }
+@keyframes documentTextComposerIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.document-text-composer > label { display: block; margin-bottom: 7px; color: var(--desk-gold); font: 700 .58rem var(--font-rpg); letter-spacing: 1.2px; }
+.document-text-composer textarea {
+    display: block;
+    width: 100%;
+    min-height: 92px;
+    resize: vertical;
+    padding: 10px;
+    border: 1px solid #594027;
+    border-radius: 2px;
+    color: #f6eee3;
+    background: #0d0907;
+    font: .92rem/1.4 var(--font-reading);
+}
+.document-text-composer small { display: block; margin: 7px 0 10px; color: #b9a991; font: .72rem var(--font-reading); }
+.document-text-composer > div { display: flex; justify-content: flex-end; gap: 7px; }
+.document-text-composer button { padding: 8px 11px; border: 1px solid #5a4128; color: #ded2c1; background: #130d09; font: 600 .57rem var(--font-rpg); cursor: pointer; }
+.document-text-composer button.primary { color: #1c1007; border-color: var(--desk-gold); background: var(--desk-gold); }
 .document-desk-viewport {
     position: absolute;
     inset: 0;
@@ -8907,6 +8972,8 @@ body.theme-umbral #btn-documentos::after { content: "Documentos"; }
 .document-desk-drawings .document-drawing-stroke { vector-effect: non-scaling-stroke; }
 .document-desk-drawings .document-drawing-marker { mix-blend-mode: screen; }
 .document-desk-drawings .document-drawing-preview { filter: drop-shadow(0 0 4px rgba(255,255,255,.26)); }
+.document-desk-drawings .document-drawing-text { overflow: visible; pointer-events: none; }
+.document-desk-drawings .document-drawing-text > div { width: 100%; overflow: visible; line-height: 1.18; overflow-wrap: anywhere; white-space: pre-wrap; text-shadow: 0 2px 3px rgba(0,0,0,.7); }
 .document-desk-cursors { z-index: 9999; pointer-events: none; }
 .desk-document {
     position: absolute;
@@ -9085,6 +9152,24 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
     transform: translateX(-50%) translateY(0) scale(1);
     pointer-events: auto;
 }
+.desk-document.is-staple-source {
+    outline: 2px dashed var(--desk-gold);
+    outline-offset: 5px;
+    filter: brightness(1.08);
+}
+.desk-document.is-stapled::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 8px;
+    height: 18px;
+    border: 2px solid rgba(54,38,25,.68);
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    transform: rotate(8deg);
+    pointer-events: none;
+}
 .desk-document-controls button { width: 27px; height: 25px; padding: 0; border: 0; color: #d9cab4; background: transparent; cursor: pointer; }
 .desk-document-controls button:hover { color: #fff; background: rgba(255,255,255,.08); }
 .desk-document-controls .document-control-delete,
@@ -9154,10 +9239,27 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='5' width='6' height='14' rx='3'/%3E%3Crect x='10' y='3' width='6' height='16' rx='3'/%3E%3Crect x='16' y='4' width='6' height='15' rx='3'/%3E%3Crect x='22' y='7' width='6' height='12' rx='3'/%3E%3Cpath d='M4 15h24v7a8 8 0 0 1-8 8h-7a9 9 0 0 1-9-9z'/%3E%3C/svg%3E") center / contain no-repeat;
     transform: rotate(-7deg);
 }
+.document-desk-cursor-avatar {
+    position: absolute;
+    top: 29px;
+    left: 11px;
+    display: grid;
+    width: 29px;
+    height: 29px;
+    place-items: center;
+    overflow: hidden;
+    border: 2px solid var(--cursor-color, #fff);
+    border-radius: 50%;
+    color: #140d09;
+    background: #eadfcf;
+    box-shadow: 0 3px 9px rgba(0,0,0,.58);
+    font: 800 .58rem Arial, sans-serif;
+}
+.document-desk-cursor-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .document-desk-cursor-name {
     display: block;
     max-width: 140px;
-    margin: -2px 0 0 20px;
+    margin: 22px 0 0 42px;
     overflow: hidden;
     padding: 3px 6px;
     color: #080505;
@@ -10312,6 +10414,13 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
                     <span>PONTEIRO</span>
                     <input id="document-cursor-color" type="color" value="#a970ff" aria-label="Cor do ponteiro compartilhado" oninput="previsualizarCorPonteiroMesa(this.value)" onchange="salvarCorPonteiroMesa(this.value)">
                 </label>
+                <label class="document-cursor-avatar-control" title="Escolha qual retrato aparece sob sua mão na mesa">
+                    <span>ÍCONE</span>
+                    <select id="document-cursor-avatar-mode" aria-label="Retrato do ponteiro compartilhado" onchange="salvarModoIconeCursorMesa(this.value)">
+                        <option value="character">Personagem</option>
+                        <option value="profile">Perfil</option>
+                    </select>
+                </label>
             </div>
             <div class="document-desk-actions">
                 <div class="document-desk-zoom" role="group" aria-label="Zoom da mesa">
@@ -10361,6 +10470,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
                     <button type="button" id="document-tool-circle" onclick="selecionarFerramentaDesenhoMesa('circle')" title="Circular uma região ou documento" aria-label="Desenhar círculo">◯</button>
                     <button type="button" id="document-tool-rect" onclick="selecionarFerramentaDesenhoMesa('rect')" title="Desenhar retângulo" aria-label="Desenhar retângulo">□</button>
                     <button type="button" id="document-tool-marker" onclick="selecionarFerramentaDesenhoMesa('marker')" title="Marca-texto" aria-label="Usar marca-texto">▰</button>
+                    <button type="button" id="document-tool-text" onclick="selecionarFerramentaDesenhoMesa('text')" title="Adicionar texto formatado" aria-label="Adicionar texto à mesa">T</button>
                     <button type="button" id="document-tool-eraser" onclick="selecionarFerramentaDesenhoMesa('eraser')" title="Apagar traços" aria-label="Usar borracha">⌫</button>
                 </div>
                 <span class="document-drawing-divider" aria-hidden="true"></span>
@@ -10388,9 +10498,32 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
                     <option value="54">Borracha G</option>
                     <option value="82">Borracha GG</option>
                 </select>
+                <div id="document-text-format" class="document-text-format" hidden>
+                    <select id="document-text-font" aria-label="Fonte do texto" onchange="definirFonteTextoMesa(this.value)">
+                        <option value="Crimson Text">Crimson</option>
+                        <option value="Cinzel">Cinzel</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Courier New">Máquina</option>
+                    </select>
+                    <select id="document-text-size" aria-label="Tamanho do texto" onchange="definirTamanhoTextoMesa(this.value)">
+                        <option value="18">18</option><option value="24" selected>24</option><option value="32">32</option><option value="42">42</option><option value="56">56</option>
+                    </select>
+                    <button type="button" id="document-text-bold" onclick="alternarFormatoTextoMesa('bold')" title="Negrito" aria-label="Alternar negrito"><b>B</b></button>
+                    <button type="button" id="document-text-italic" onclick="alternarFormatoTextoMesa('italic')" title="Itálico" aria-label="Alternar itálico"><i>I</i></button>
+                    <button type="button" id="document-text-underline" onclick="alternarFormatoTextoMesa('underline')" title="Sublinhado" aria-label="Alternar sublinhado"><u>U</u></button>
+                </div>
                 <button type="button" onclick="desfazerUltimaAcaoMesa()" title="Desfazer a última ação na mesa (Ctrl+Z)" aria-label="Desfazer a última ação na mesa">↶</button>
                 <button type="button" id="document-drawing-clear" class="document-drawing-clear" onclick="limparDesenhosMesa()" title="Apagar todos os desenhos deste slot" aria-label="Apagar todos os desenhos" hidden>⌫</button>
                 <span id="document-drawing-status" class="document-drawing-status">Arraste o fundo para explorar a mesa.</span>
+            </div>
+            <div id="document-text-composer" class="document-text-composer" hidden>
+                <label for="document-text-content">TEXTO NA MESA</label>
+                <textarea id="document-text-content" maxlength="3000" rows="4" placeholder="Escreva a anotação..."></textarea>
+                <small id="document-text-attachment-hint">O texto ficará solto na mesa.</small>
+                <div>
+                    <button type="button" onclick="cancelarCompositorTextoMesa()">Cancelar</button>
+                    <button type="button" class="primary" onclick="salvarTextoMesa()">Colocar texto</button>
+                </div>
             </div>
             <aside id="document-drawer" class="document-drawer" aria-label="Gaveta de documentos">
                 <button id="document-drawer-toggle" class="document-drawer-toggle" type="button" onclick="alternarGavetaDocumentos()" aria-label="Abrir gaveta de documentos" aria-expanded="true">›</button>
@@ -10632,6 +10765,15 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
         <label class="file-picker-button">📁 Arquivo<input type="file" id="audio-fail-file" accept="audio/*" onchange="carregarAudioLocal(this, 'audio-fail-url')"></label>
         <button type="button" class="audio-test-button" onclick="testarSomConfigurado('fail')">▶ Testar</button>
     </div>
+
+    <div class="audio-setting-row">
+        <div class="audio-setting-copy"><strong>Crítico de ataque</strong><small>Margem crítica de ataques, itens, feitiços e habilidades</small></div>
+        <input type="text" id="audio-attack-crit-url" class="modal-input" placeholder="attack-crit.mp3 ou https://...">
+        <label class="file-picker-button">📁 Arquivo<input type="file" id="audio-attack-crit-file" accept="audio/*" onchange="carregarAudioLocal(this, 'audio-attack-crit-url')"></label>
+        <button type="button" class="audio-test-button" onclick="testarSomConfigurado('attackCrit')">▶ Testar</button>
+    </div>
+
+    <p class="settings-intro audio-slot-hint">Os três sons acima pertencem somente à ficha/slot aberto agora. Ao trocar de ficha, o conjunto de sons também muda.</p>
 
     <label class="settings-checkbox-row">
         <input type="checkbox" id="audio-ouvir-alheios" checked>
@@ -11331,6 +11473,7 @@ const AUDIO_CONFIG_KEY = 'abyssAudioConfigV1';
 const AUDIO_DEFAULTS = {
     critUrl: 'crit.mp3',
     failUrl: 'fail.mp3',
+    attackCritUrl: 'crit.mp3',
     ouvirCriticosAlheios: true,
     ownVolume: 1,
     othersVolume: 0.8,
@@ -11355,9 +11498,58 @@ const efeitosSonoros = {
 };
 let ultimoSomDeClique = 0;
 
+function idSlotAudioAtual() {
+    return String(document.getElementById('save-slot')?.value || '1');
+}
+
+function idSlotAudioSeguro(valor = idSlotAudioAtual()) {
+    return String(valor || '1').replace(/[.#$\[\]\/]/g, '_').slice(0, 120) || '1';
+}
+
+function chaveAudioSlotAtual() {
+    return `abyssAudioSlotV2:${currentUser?.uid || 'local'}:${idSlotAudioSeguro()}`;
+}
+
+function lerAudioLocalDoSlot() {
+    try { return JSON.parse(localStorage.getItem(chaveAudioSlotAtual()) || '{}'); }
+    catch (_) { return {}; }
+}
+
+function obterSonsAudioSlotAtual() {
+    const local = lerAudioLocalDoSlot();
+    const ficha = sheet?.audioConfig && typeof sheet.audioConfig === 'object' ? sheet.audioConfig : {};
+    const semConfiguracaoPropria = !Object.keys(local).length && !Object.keys(ficha).length;
+    const legado = semConfiguracaoPropria ? {
+        critUrl: configuracoesAudio.critUrl,
+        failUrl: configuracoesAudio.failUrl,
+        attackCritUrl: configuracoesAudio.attackCritUrl || configuracoesAudio.critUrl
+    } : {};
+    const sons = { ...AUDIO_DEFAULTS, ...legado, ...local, ...ficha };
+    sons.attackCritUrl = sons.attackCritUrl || sons.critUrl || AUDIO_DEFAULTS.attackCritUrl;
+    return {
+        critUrl: sons.critUrl || AUDIO_DEFAULTS.critUrl,
+        failUrl: sons.failUrl || AUDIO_DEFAULTS.failUrl,
+        attackCritUrl: sons.attackCritUrl || AUDIO_DEFAULTS.attackCritUrl
+    };
+}
+
+function guardarSonsAudioSlotAtual(sons) {
+    const normalizados = {
+        critUrl: String(sons?.critUrl || AUDIO_DEFAULTS.critUrl),
+        failUrl: String(sons?.failUrl || AUDIO_DEFAULTS.failUrl),
+        attackCritUrl: String(sons?.attackCritUrl || sons?.critUrl || AUDIO_DEFAULTS.attackCritUrl)
+    };
+    try { localStorage.setItem(chaveAudioSlotAtual(), JSON.stringify(normalizados)); }
+    catch (erro) { console.warn('O áudio deste slot será mantido na ficha e na nuvem, mas excedeu o espaço local.', erro); }
+    if (typeof sheet === 'object' && sheet) sheet.audioConfig = normalizados;
+    return normalizados;
+}
+
 function obterFonteSom(tipo) {
-    if (tipo === 'crit') return configuracoesAudio.critUrl || AUDIO_DEFAULTS.critUrl;
-    if (tipo === 'fail') return configuracoesAudio.failUrl || AUDIO_DEFAULTS.failUrl;
+    const sonsSlot = obterSonsAudioSlotAtual();
+    if (tipo === 'crit') return sonsSlot.critUrl;
+    if (tipo === 'fail') return sonsSlot.failUrl;
+    if (tipo === 'attackCrit') return sonsSlot.attackCritUrl;
     return efeitosSonoros[tipo] || null;
 }
 
@@ -11383,7 +11575,7 @@ function tocarSom(tipo) {
     }
     const fonte = obterFonteSom(tipo);
     if (!fonte) return;
-    const volume = tipo === 'crit' || tipo === 'fail' ? configuracoesAudio.ownVolume : 1;
+    const volume = tipo === 'crit' || tipo === 'fail' || tipo === 'attackCrit' ? configuracoesAudio.ownVolume : 1;
     reproduzirAudio(typeof fonte === 'string' ? new Audio(fonte) : fonte, volume);
 }
 
@@ -11393,24 +11585,31 @@ function atualizarSaidaVolume(inputId, outputId) {
     if (input && output) output.value = `${Math.round(Number(input.value) || 0)}%`;
 }
 
-async function obterSonsPublicosDoJogador(uid) {
-    if (!uid) return { critUrl: AUDIO_DEFAULTS.critUrl, failUrl: AUDIO_DEFAULTS.failUrl };
+async function obterSonsPublicosDoJogador(uid, audioSlot = '1') {
+    if (!uid) return { critUrl: AUDIO_DEFAULTS.critUrl, failUrl: AUDIO_DEFAULTS.failUrl, attackCritUrl: AUDIO_DEFAULTS.attackCritUrl };
+    const slotSeguro = idSlotAudioSeguro(audioSlot);
+    const chaveCache = `${uid}:${slotSeguro}`;
+    if (cacheSonsRemotos.has(chaveCache)) return cacheSonsRemotos.get(chaveCache);
     try {
-        const snapshot = await database.ref(`publicProfiles/${uid}/sounds`).once('value');
-        const sons = { ...AUDIO_DEFAULTS, ...(snapshot.val() || {}) };
-        cacheSonsRemotos.set(uid, sons);
+        const [slotSnapshot, fallbackSnapshot] = await Promise.all([
+            database.ref(`publicProfiles/${uid}/soundsBySlot/${slotSeguro}`).once('value'),
+            database.ref(`publicProfiles/${uid}/sounds`).once('value')
+        ]);
+        const sons = { ...AUDIO_DEFAULTS, ...(fallbackSnapshot.val() || {}), ...(slotSnapshot.val() || {}) };
+        sons.attackCritUrl = sons.attackCritUrl || sons.critUrl;
+        cacheSonsRemotos.set(chaveCache, sons);
         return sons;
     } catch (erro) {
         console.warn('Não foi possível carregar o som público do jogador.', erro);
-        return { critUrl: AUDIO_DEFAULTS.critUrl, failUrl: AUDIO_DEFAULTS.failUrl };
+        return { critUrl: AUDIO_DEFAULTS.critUrl, failUrl: AUDIO_DEFAULTS.failUrl, attackCritUrl: AUDIO_DEFAULTS.attackCritUrl };
     }
 }
 
-async function tocarSomRemoto(uid, tipo) {
-    if (tipo !== 'crit' && tipo !== 'fail') return;
-    const sons = await obterSonsPublicosDoJogador(uid);
-    const fonte = tipo === 'crit' ? sons.critUrl : sons.failUrl;
-    reproduzirAudio(new Audio(fonte || AUDIO_DEFAULTS[`${tipo}Url`]), configuracoesAudio.othersVolume);
+async function tocarSomRemoto(uid, tipo, audioSlot = '1') {
+    if (!['crit', 'fail', 'attackCrit'].includes(tipo)) return;
+    const sons = await obterSonsPublicosDoJogador(uid, audioSlot);
+    const fonte = tipo === 'crit' ? sons.critUrl : (tipo === 'fail' ? sons.failUrl : sons.attackCritUrl);
+    reproduzirAudio(new Audio(fonte || (tipo === 'attackCrit' ? AUDIO_DEFAULTS.attackCritUrl : AUDIO_DEFAULTS[`${tipo}Url`])), configuracoesAudio.othersVolume);
 }
 
 document.addEventListener('click', event => {
@@ -11420,8 +11619,10 @@ document.addEventListener('click', event => {
 
 function abrirConfiguracoesAudio() {
     tocarSom('click');
-    document.getElementById('audio-crit-url').value = configuracoesAudio.critUrl || '';
-    document.getElementById('audio-fail-url').value = configuracoesAudio.failUrl || '';
+    const sonsSlot = obterSonsAudioSlotAtual();
+    document.getElementById('audio-crit-url').value = sonsSlot.critUrl || '';
+    document.getElementById('audio-fail-url').value = sonsSlot.failUrl || '';
+    document.getElementById('audio-attack-crit-url').value = sonsSlot.attackCritUrl || '';
     document.getElementById('audio-ouvir-alheios').checked = configuracoesAudio.ouvirCriticosAlheios !== false;
     document.getElementById('audio-own-volume').value = Math.round(limitarVolume(configuracoesAudio.ownVolume) * 100);
     document.getElementById('audio-others-volume').value = Math.round(limitarVolume(configuracoesAudio.othersVolume, 0.8) * 100);
@@ -11436,7 +11637,7 @@ function fecharConfiguracoesAudio() {
 }
 
 function testarSomConfigurado(tipo) {
-    const inputId = tipo === 'crit' ? 'audio-crit-url' : 'audio-fail-url';
+    const inputId = tipo === 'crit' ? 'audio-crit-url' : (tipo === 'fail' ? 'audio-fail-url' : 'audio-attack-crit-url');
     const fonte = document.getElementById(inputId).value.trim();
     if (!fonte) return alert('Escolha um link ou arquivo de áudio primeiro.');
     const volumeAtual = Number(document.getElementById('audio-own-volume')?.value ?? 100) / 100;
@@ -11462,19 +11663,38 @@ function carregarAudioLocal(input, targetId) {
 
 async function publicarSonsDoPerfil() {
     if (!currentUser) return;
+    const sonsSlot = obterSonsAudioSlotAtual();
     const sons = {
-        critUrl: configuracoesAudio.critUrl || AUDIO_DEFAULTS.critUrl,
-        failUrl: configuracoesAudio.failUrl || AUDIO_DEFAULTS.failUrl,
+        critUrl: sonsSlot.critUrl,
+        failUrl: sonsSlot.failUrl,
+        attackCritUrl: sonsSlot.attackCritUrl,
+        slotId: idSlotAudioAtual(),
         updatedAt: firebase.database.ServerValue.TIMESTAMP
     };
-    await database.ref(`publicProfiles/${currentUser.uid}/sounds`).set(sons);
-    cacheSonsRemotos.delete(currentUser.uid);
+    const updates = {};
+    updates[`publicProfiles/${currentUser.uid}/sounds`] = {
+        critUrl: String(sons.critUrl).startsWith('data:') ? AUDIO_DEFAULTS.critUrl : sons.critUrl,
+        failUrl: String(sons.failUrl).startsWith('data:') ? AUDIO_DEFAULTS.failUrl : sons.failUrl,
+        attackCritUrl: String(sons.attackCritUrl).startsWith('data:') ? AUDIO_DEFAULTS.attackCritUrl : sons.attackCritUrl,
+        slotId: sons.slotId,
+        updatedAt: firebase.database.ServerValue.TIMESTAMP
+    };
+    updates[`publicProfiles/${currentUser.uid}/soundsBySlot/${idSlotAudioSeguro()}`] = sons;
+    await database.ref().update(updates);
+    [...cacheSonsRemotos.keys()].filter(chave => chave.startsWith(`${currentUser.uid}:`)).forEach(chave => cacheSonsRemotos.delete(chave));
 }
 
 async function salvarConfiguracoesAudio() {
-    const novas = {
+    const sonsSlot = guardarSonsAudioSlotAtual({
         critUrl: document.getElementById('audio-crit-url').value.trim() || AUDIO_DEFAULTS.critUrl,
         failUrl: document.getElementById('audio-fail-url').value.trim() || AUDIO_DEFAULTS.failUrl,
+        attackCritUrl: document.getElementById('audio-attack-crit-url').value.trim() || document.getElementById('audio-crit-url').value.trim() || AUDIO_DEFAULTS.attackCritUrl
+    });
+    const novas = {
+        ...configuracoesAudio,
+        critUrl: AUDIO_DEFAULTS.critUrl,
+        failUrl: AUDIO_DEFAULTS.failUrl,
+        attackCritUrl: AUDIO_DEFAULTS.attackCritUrl,
         ouvirCriticosAlheios: document.getElementById('audio-ouvir-alheios').checked,
         ownVolume: limitarVolume(Number(document.getElementById('audio-own-volume').value) / 100),
         othersVolume: limitarVolume(Number(document.getElementById('audio-others-volume').value) / 100, 0.8),
@@ -11483,6 +11703,10 @@ async function salvarConfiguracoesAudio() {
     try {
         localStorage.setItem(AUDIO_CONFIG_KEY, JSON.stringify(novas));
         configuracoesAudio = novas;
+        if (currentUser) {
+            await database.ref(`users/${currentUser.uid}/slots/${idSlotAudioAtual()}/audioConfig`).set(sonsSlot);
+        }
+        if (typeof marcarAlteracao === 'function') marcarAlteracao();
         if (!novas.autoSave) clearTimeout(timerSalvamentoAutomatico);
         await publicarSonsDoPerfil();
         fecharConfiguracoesAudio();
@@ -11496,16 +11720,24 @@ async function salvarConfiguracoesAudio() {
 
 function resetarConfiguracoesAudio() {
     configuracoesAudio = { ...AUDIO_DEFAULTS };
+    const sonsSlot = guardarSonsAudioSlotAtual({
+        critUrl: AUDIO_DEFAULTS.critUrl,
+        failUrl: AUDIO_DEFAULTS.failUrl,
+        attackCritUrl: AUDIO_DEFAULTS.attackCritUrl
+    });
     clearTimeout(timerSalvamentoAutomatico);
     localStorage.setItem(AUDIO_CONFIG_KEY, JSON.stringify(configuracoesAudio));
-    document.getElementById('audio-crit-url').value = configuracoesAudio.critUrl;
-    document.getElementById('audio-fail-url').value = configuracoesAudio.failUrl;
+    document.getElementById('audio-crit-url').value = sonsSlot.critUrl;
+    document.getElementById('audio-fail-url').value = sonsSlot.failUrl;
+    document.getElementById('audio-attack-crit-url').value = sonsSlot.attackCritUrl;
     document.getElementById('audio-ouvir-alheios').checked = true;
     document.getElementById('audio-own-volume').value = 100;
     document.getElementById('audio-others-volume').value = 80;
     document.getElementById('settings-auto-save').checked = false;
     atualizarSaidaVolume('audio-own-volume', 'audio-own-volume-output');
     atualizarSaidaVolume('audio-others-volume', 'audio-others-volume-output');
+    if (typeof marcarAlteracao === 'function') marcarAlteracao();
+    if (currentUser) database.ref(`users/${currentUser.uid}/slots/${idSlotAudioAtual()}/audioConfig`).set(sonsSlot).catch(erro => console.warn('Não foi possível restaurar o áudio deste slot.', erro));
     publicarSonsDoPerfil().catch(erro => console.warn('Não foi possível publicar os sons padrão.', erro));
 }
     /* SISTEMA DE TEMAS (Personalização de cores e degradê por slot) */
@@ -11713,6 +11945,11 @@ function resetarConfiguracoesAudio() {
             dtFeiticos: 0, // <-- ADICIONE ISTO
             dtHabilidades: 0, // <-- ADICIONE ISTO
             notas: [],
+            audioConfig: {
+                critUrl: 'crit.mp3',
+                failUrl: 'fail.mp3',
+                attackCritUrl: 'crit.mp3'
+            },
             tema: {
                 '--bg-gradient-top': '#050507',
                 '--bg-gradient-bottom': '#12071c',
@@ -14498,6 +14735,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             status: txtStatus,
             detalhes: detalhes,
             eventoSom: eventoSom,
+            audioSlot: idSlotAudioAtual(),
             natural: natural,
             clienteSessaoId: clienteSessaoId
         };
@@ -14534,11 +14772,11 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         logContainer.appendChild(msg);
         logContainer.scrollTop = logContainer.scrollHeight; 
 
-        const eventoCompartilhado = data.eventoSom === 'crit' || data.eventoSom === 'fail';
+        const eventoCompartilhado = data.eventoSom === 'crit' || data.eventoSom === 'fail' || data.eventoSom === 'attackCrit';
         const eventoNovo = historicoRolagensCarregado && !chavesRolagensIniciais.has(snapshot.key);
         const veioDeOutroCliente = !data.clienteSessaoId || data.clienteSessaoId !== clienteSessaoId;
         if (eventoCompartilhado && eventoNovo && veioDeOutroCliente && configuracoesAudio.ouvirCriticosAlheios !== false) {
-            tocarSomRemoto(data.jogadorUid, data.eventoSom);
+            tocarSomRemoto(data.jogadorUid, data.eventoSom, data.audioSlot || '1');
         }
         chavesRolagensIniciais.delete(snapshot.key);
     });
@@ -14882,9 +15120,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }
 
         const eventoNatural = obterEventoNaturalD20(resPrincipal.d20Rolls);
-        if (eventoNatural) tocarSom(eventoNatural);
-        else if (isCrit) tocarSom('crit');
-        else tocarSom('roll');
+        const eventoSom = isCrit ? 'attackCrit' : eventoNatural;
+        tocarSom(eventoSom || 'roll');
 
         let formulaFinal = danoBase;
         let resFinalTotal = resPrincipal.total;
@@ -14907,7 +15144,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                               : `Fórmula: ${formulaFinal}<br>Soma: ${resFinalText}`;
         
         spawnPopup(nome, isCrit ? `CRÍTICO ATIVADO!` : `Rolagem de Dano`, resFinalTotal, cor, status, detalhe);
-        enviarRolagemParaServidor(nome, isCrit ? `Ativou!` : `Dano`, resFinalTotal, cor, status, detalhe.replace(/<[^>]+>/g, ' | '), eventoNatural, eventoNatural ? (eventoNatural === 'crit' ? 20 : 1) : null);
+        enviarRolagemParaServidor(nome, isCrit ? `Ativou!` : `Dano`, resFinalTotal, cor, status, detalhe.replace(/<[^>]+>/g, ' | '), eventoSom, eventoSom ? (eventoSom === 'fail' ? 1 : 20) : null);
     }
 
     function abrirInfoPericia(nome) {
@@ -17248,6 +17485,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 slotPreviewState[String(slot)] = { existe: false, nickname: '', antecedencia: '', avatar: '', classe: '' };
             }
             atualizarVisuaisDaFicha();
+            publicarSonsDoPerfil().catch(erro => console.warn('Não foi possível publicar o áudio desta ficha.', erro));
             renderizarSeletorInicialFichas();
             atualizarBotaoTrocaFicha();
             document.getElementById('val-nivel').value = sheet.nivel || 0;
@@ -20077,6 +20315,13 @@ const documentDeskState = {
     drawingWidth: 4,
     drawingStyle: 'solid',
     drawingOpacity: 1,
+    textFont: 'Crimson Text',
+    textSize: 24,
+    textBold: false,
+    textItalic: false,
+    textUnderline: false,
+    pendingTextPoint: null,
+    pendingTextDocumentId: null,
     eraserSize: 34,
     eraserSession: null,
     deskMagnifierActive: false,
@@ -20084,8 +20329,10 @@ const documentDeskState = {
     actionHistory: [],
     historyRestoring: false,
     selectedDocumentId: null,
+    stapleSourceId: null,
     spacePan: false,
     positionTimers: new Map(),
+    groupMoveTimer: null,
     dropAnimations: new Set(),
     dropTimers: new Map(),
     localDropLocks: new Map(),
@@ -20093,6 +20340,7 @@ const documentDeskState = {
     lastCursorPayload: null,
     drawerClosed: true,
     pointerColor: '#a970ff',
+    cursorAvatarMode: null,
     zoom: 1,
     panInitialized: false,
     portalReady: false
@@ -20156,6 +20404,73 @@ async function carregarCorPonteiroMesa() {
         previsualizarCorPonteiroMesa(remota);
     } catch (error) {
         console.warn('A cor remota do ponteiro não pôde ser carregada.', error);
+    }
+}
+
+function normalizarModoIconeCursorMesa(valor) {
+    return valor === 'profile' ? 'profile' : 'character';
+}
+
+function chaveModoIconeCursorMesa() {
+    return `abyssDocumentDeskCursorAvatar:${currentUser?.uid || 'local'}`;
+}
+
+function avatarSeguroCursorMesa(valor) {
+    const url = String(valor || '').trim();
+    return /^(?:https?:\/\/|data:image\/(?:png|jpe?g|gif|webp|bmp|avif);base64,)/i.test(url) ? url : '';
+}
+
+function dadosIconeCursorMesa(modo = documentDeskState.cursorAvatarMode) {
+    const modoSeguro = normalizarModoIconeCursorMesa(modo || (documentDeskState.role === 'mestre' ? 'profile' : 'character'));
+    if (modoSeguro === 'profile') {
+        const nome = nomeExibicaoAtual() || 'Jogador';
+        return {
+            mode: 'profile',
+            name: nome,
+            avatar: avatarSeguroCursorMesa(perfilPublico?.avatar || currentUser?.photoURL || ''),
+            initial: nome.trim().charAt(0).toLocaleUpperCase('pt-BR') || '?'
+        };
+    }
+    const nome = String(sheet?.nickname || document.getElementById('user-nickname')?.value || nomeExibicaoAtual() || 'Personagem').trim();
+    return {
+        mode: 'character',
+        name: nome,
+        avatar: avatarSeguroCursorMesa(resolverRetratoPersonagem(sheet).url || ''),
+        initial: nome.charAt(0).toLocaleUpperCase('pt-BR') || '?'
+    };
+}
+
+function aplicarModoIconeCursorMesa(valor, publicar = true) {
+    documentDeskState.cursorAvatarMode = normalizarModoIconeCursorMesa(valor);
+    const select = document.getElementById('document-cursor-avatar-mode');
+    if (select) select.value = documentDeskState.cursorAvatarMode;
+    const dados = dadosIconeCursorMesa();
+    atualizarPresencaLocalMesa({ name: dados.name, avatar: dados.avatar, avatarMode: dados.mode });
+    if (publicar) publicarPresencaMesaDocumentos({ name: dados.name, avatar: dados.avatar, avatarMode: dados.mode });
+}
+
+async function salvarModoIconeCursorMesa(valor) {
+    aplicarModoIconeCursorMesa(valor);
+    localStorage.setItem(chaveModoIconeCursorMesa(), documentDeskState.cursorAvatarMode);
+    if (currentUser) {
+        await database.ref(`users/${currentUser.uid}/preferences/documentDeskCursorAvatarMode`).set(documentDeskState.cursorAvatarMode).catch(error => {
+            console.warn('Não foi possível sincronizar o retrato do ponteiro.', error);
+        });
+    }
+}
+
+async function carregarModoIconeCursorMesa() {
+    const padrao = documentDeskState.role === 'mestre' ? 'profile' : 'character';
+    let modo = normalizarModoIconeCursorMesa(localStorage.getItem(chaveModoIconeCursorMesa()) || padrao);
+    aplicarModoIconeCursorMesa(modo, false);
+    if (!currentUser) return;
+    try {
+        const snapshot = await database.ref(`users/${currentUser.uid}/preferences/documentDeskCursorAvatarMode`).once('value');
+        if (snapshot.exists()) modo = normalizarModoIconeCursorMesa(snapshot.val());
+        localStorage.setItem(chaveModoIconeCursorMesa(), modo);
+        aplicarModoIconeCursorMesa(modo);
+    } catch (error) {
+        console.warn('O retrato remoto do ponteiro não pôde ser carregado.', error);
     }
 }
 
@@ -20379,6 +20694,7 @@ function abrirAplicativoMesaDocumentos() {
     documentDeskState.drawingTool = 'pan';
     documentDeskState.drawingDraft = null;
     documentDeskState.selectedDocumentId = null;
+    documentDeskState.stapleSourceId = null;
     documentDeskState.actionHistory = [];
     documentDeskState.drawerClosed = localStorage.getItem('abyssDocumentDeskDrawerClosed') !== 'false';
     const app = document.getElementById('document-desk-app');
@@ -20422,6 +20738,8 @@ function pararEscutasMesaDocumentos(removerPresenca = true) {
     documentDeskState.placementHandler = null;
     clearTimeout(documentDeskState.cursorTimer);
     documentDeskState.cursorTimer = null;
+    clearTimeout(documentDeskState.groupMoveTimer);
+    documentDeskState.groupMoveTimer = null;
     if (removerPresenca && documentDeskState.presenceSelfRef) {
         documentDeskState.presenceSelfRef.onDisconnect().cancel().catch(() => {});
         documentDeskState.presenceSelfRef.remove().catch(() => {});
@@ -20440,6 +20758,8 @@ function pararEscutasMesaDocumentos(removerPresenca = true) {
     documentDeskState.drawingDraft = null;
     documentDeskState.eraserSession = null;
     documentDeskState.spacePan = false;
+    documentDeskState.stapleSourceId = null;
+    cancelarCompositorTextoMesa();
     document.body.classList.remove('document-desk-grabbing', 'document-desk-panning');
     document.getElementById('document-desk-app')?.classList.remove('space-pan-active');
     document.querySelector('.document-desk-viewport')?.classList.remove('is-panning');
@@ -20487,6 +20807,7 @@ async function conectarMesaDocumentos(campaignId) {
             return;
         }
         documentDeskState.role = member.role || 'jogador';
+        await carregarModoIconeCursorMesa();
         document.getElementById('document-desk-title').textContent = meta.name ? `Mesa de Documentos · ${meta.name}` : 'Mesa de Documentos';
         const option = documentDeskState.campaignOptions.find(item => item.id === campaignId);
         if (option) option.name = meta.name || option.name;
@@ -20504,7 +20825,16 @@ async function conectarMesaDocumentos(campaignId) {
 
         const drawingsRef = database.ref(`${base}/drawings`);
         registrarEscutaMesa(drawingsRef, 'value', snapshot => {
-            documentDeskState.allDrawings = snapshot.val() || {};
+            const recebidos = snapshot.val() || {};
+            if (documentDeskState.drag?.mode === 'move') {
+                const locais = documentDeskState.drawings || {};
+                const idsLocais = new Set(Object.keys(documentDeskState.drag.initialDrawings || {}));
+                recebidos[documentDeskState.currentSlotId] = {
+                    ...(recebidos[documentDeskState.currentSlotId] || {}),
+                    ...Object.fromEntries([...idsLocais].filter(id => locais[id]).map(id => [id, locais[id]]))
+                };
+            }
+            documentDeskState.allDrawings = recebidos;
             documentDeskState.drawings = documentDeskState.allDrawings[documentDeskState.currentSlotId] || {};
             if (!documentDeskState.drawingDraft) renderizarDesenhosMesaDocumentos();
         });
@@ -20549,12 +20879,19 @@ function atualizarControlesMesaDocumentos() {
     const mestre = documentDeskState.role === 'mestre';
     const possuiAcesso = Boolean(documentDeskState.role && documentDeskState.campaignId);
     const add = document.getElementById('document-desk-add-button');
-    if (add) add.hidden = !mestre;
+    if (add) add.hidden = !possuiAcesso;
     document.getElementById('document-slot-tools')?.classList.toggle('active', mestre);
     const limpar = document.getElementById('document-drawing-clear');
     if (limpar) limpar.hidden = !mestre;
     document.getElementById('document-drawing-toolbar')?.classList.toggle('is-disabled', !possuiAcesso);
     atualizarStatusDesenhoMesa();
+}
+
+function podeEditarDocumentoMesa(documentId) {
+    if (!currentUser || !documentDeskState.role) return false;
+    if (documentDeskState.role === 'mestre') return true;
+    const documento = documentDeskState.documents?.[documentId];
+    return Boolean(documento && documento.createdBy === currentUser.uid);
 }
 
 function slotsMesaOrdenados() {
@@ -20579,6 +20916,8 @@ function trocarSlotMesaDocumentos(slotId) {
     documentDeskState.drawings = documentDeskState.allDrawings?.[slotId] || {};
     documentDeskState.drawingDraft = null;
     documentDeskState.selectedDocumentId = null;
+    documentDeskState.stapleSourceId = null;
+    cancelarCompositorTextoMesa();
     renderizarSlotsMesaDocumentos();
     renderizarDesenhosMesaDocumentos();
     escutarPosicoesSlotMesa(slotId);
@@ -20674,9 +21013,12 @@ function ativarPresencaMesaDocumentos() {
 function atualizarPresencaLocalMesa(extra = {}) {
     if (!currentUser?.uid || !documentDeskState.active) return;
     const uid = currentUser.uid;
+    const identidade = dadosIconeCursorMesa();
     documentDeskState.presence[uid] = {
         ...(documentDeskState.presence[uid] || {}),
-        name: nomeExibicaoAtual() || sheet?.nickname || 'Jogador',
+        name: identidade.name,
+        avatar: identidade.avatar,
+        avatarMode: identidade.mode,
         color: normalizarCorPonteiroMesa(documentDeskState.pointerColor),
         slotId: documentDeskState.currentSlotId,
         active: true,
@@ -20694,13 +21036,19 @@ function atualizarPresencaLocalMesa(extra = {}) {
     cursor.style.top = `${Math.max(0, Math.min(100, numeroMesa(presence.y, 0) * 100))}%`;
     cursor.style.setProperty('--cursor-color', normalizarCorPonteiroMesa(presence.color, documentDeskState.pointerColor));
     cursor.classList.toggle('grabbing', presence.grabbing === true);
+    if (Object.prototype.hasOwnProperty.call(extra, 'avatar') || Object.prototype.hasOwnProperty.call(extra, 'name') || Object.prototype.hasOwnProperty.call(extra, 'avatarMode')) {
+        renderizarCursoresMesaDocumentos();
+    }
 }
 
 function publicarPresencaMesaDocumentos(extra = {}) {
     atualizarPresencaLocalMesa(extra);
     if (!documentDeskState.presenceSelfRef || !currentUser) return;
+    const identidade = dadosIconeCursorMesa();
     const payload = {
-        name: nomeExibicaoAtual() || sheet?.nickname || 'Jogador',
+        name: identidade.name,
+        avatar: identidade.avatar,
+        avatarMode: identidade.mode,
         color: normalizarCorPonteiroMesa(documentDeskState.pointerColor),
         slotId: documentDeskState.currentSlotId,
         active: true,
@@ -20743,9 +21091,11 @@ function renderizarCursoresMesaDocumentos() {
     layer.innerHTML = presentes
         .map(([uid, presence]) => {
             const cor = normalizarCorPonteiroMesa(presence.color, corCursorMesaDocumentos(uid));
+            const avatar = avatarSeguroCursorMesa(presence.avatar);
+            const inicial = String(presence.name || 'Jogador').trim().charAt(0).toLocaleUpperCase('pt-BR') || '?';
             return `
             <span class="document-desk-cursor ${uid === currentUser?.uid ? 'local' : ''} ${presence.grabbing ? 'grabbing' : ''}" data-cursor-uid="${escapeCampaignHtml(uid)}" style="left:${Math.max(0,Math.min(100,numeroMesa(presence.x,0)*100))}%;top:${Math.max(0,Math.min(100,numeroMesa(presence.y,0)*100))}%;--cursor-color:${cor}">
-                <i class="document-desk-cursor-pointer"></i><b class="document-desk-cursor-name">${escapeCampaignHtml(presence.name || 'Jogador')}</b>
+                <i class="document-desk-cursor-pointer"></i><span class="document-desk-cursor-avatar">${avatar ? `<img src="${escapeCampaignHtml(avatar)}" alt="">` : escapeCampaignHtml(inicial)}</span><b class="document-desk-cursor-name">${escapeCampaignHtml(presence.name || 'Jogador')}</b>
             </span>`;
         }).join('');
 }
@@ -20774,6 +21124,26 @@ function numeroMesa(valor, padrao = 0) {
 }
 
 let contextoSomPapelMesa = null;
+const buffersSomPapelMesa = new Map();
+
+function criarBufferSomPapelMesa(contexto, tipo) {
+    const soltando = tipo === 'soltar';
+    const duracao = soltando ? .28 : .36;
+    const buffer = contexto.createBuffer(1, Math.ceil(contexto.sampleRate * duracao), contexto.sampleRate);
+    const canal = buffer.getChannelData(0);
+    let memoria = 0;
+    for (let indice = 0; indice < canal.length; indice++) {
+        const progresso = indice / Math.max(1, canal.length - 1);
+        const ataque = Math.min(1, progresso / .035);
+        const cauda = Math.pow(1 - progresso, soltando ? 2.4 : 1.35);
+        const ruido = Math.random() * 2 - 1;
+        memoria = memoria * (soltando ? .72 : .58) + ruido * (soltando ? .28 : .42);
+        const dobra = Math.sin(indice * (soltando ? .037 : .021)) * .16 + Math.sin(indice * .0067) * .1;
+        canal[indice] = (memoria + dobra) * ataque * cauda;
+    }
+    buffersSomPapelMesa.set(tipo, buffer);
+    return buffer;
+}
 
 function tocarSomPapelMesa(tipo = 'pegar') {
     try {
@@ -20783,52 +21153,52 @@ function tocarSomPapelMesa(tipo = 'pegar') {
             ? limitarVolume(configuracoesAudio.ownVolume, 1)
             : 1;
         if (volumePreferido <= 0) return;
-        contextoSomPapelMesa ||= new ConstrutorAudio();
+        if (!contextoSomPapelMesa || contextoSomPapelMesa.state === 'closed') {
+            contextoSomPapelMesa = new ConstrutorAudio();
+            buffersSomPapelMesa.clear();
+        }
         const contexto = contextoSomPapelMesa;
-        if (contexto.state === 'suspended') contexto.resume().catch(() => {});
-        const soltando = tipo === 'soltar';
-        const duracao = soltando ? .14 : .11;
-        const agora = contexto.currentTime;
-        const buffer = contexto.createBuffer(1, Math.ceil(contexto.sampleRate * duracao), contexto.sampleRate);
-        const canal = buffer.getChannelData(0);
-        for (let indice = 0; indice < canal.length; indice++) {
-            const progresso = indice / canal.length;
-            const textura = .64 + Math.sin(indice * (soltando ? .19 : .31)) * .2;
-            canal[indice] = (Math.random() * 2 - 1) * textura * (1 - progresso * .34);
-        }
-        const fonte = contexto.createBufferSource();
-        const filtro = contexto.createBiquadFilter();
-        const ganho = contexto.createGain();
-        fonte.buffer = buffer;
-        filtro.type = soltando ? 'lowpass' : 'bandpass';
-        filtro.frequency.setValueAtTime(soltando ? 1150 : 1750, agora);
-        filtro.Q.setValueAtTime(soltando ? .45 : .8, agora);
-        const volume = (soltando ? .115 : .075) * volumePreferido;
-        ganho.gain.setValueAtTime(.0001, agora);
-        ganho.gain.exponentialRampToValueAtTime(Math.max(.0002, volume), agora + .007);
-        ganho.gain.exponentialRampToValueAtTime(Math.max(.0002, volume * .38), agora + duracao * .5);
-        ganho.gain.exponentialRampToValueAtTime(.0001, agora + duracao);
-        fonte.connect(filtro).connect(ganho).connect(contexto.destination);
-        fonte.start(agora);
-        fonte.stop(agora + duracao + .02);
-        if (soltando) {
-            const impacto = contexto.createOscillator();
-            const ganhoImpacto = contexto.createGain();
-            impacto.type = 'triangle';
-            impacto.frequency.setValueAtTime(112, agora);
-            impacto.frequency.exponentialRampToValueAtTime(68, agora + .075);
-            ganhoImpacto.gain.setValueAtTime(.025 * volumePreferido, agora);
-            ganhoImpacto.gain.exponentialRampToValueAtTime(.0001, agora + .085);
-            impacto.connect(ganhoImpacto).connect(contexto.destination);
-            impacto.start(agora);
-            impacto.stop(agora + .09);
-        }
+        const reproduzir = () => {
+            const soltando = tipo === 'soltar';
+            const agora = contexto.currentTime + .004;
+            const fonte = contexto.createBufferSource();
+            const filtro = contexto.createBiquadFilter();
+            const ganho = contexto.createGain();
+            fonte.buffer = buffersSomPapelMesa.get(tipo) || criarBufferSomPapelMesa(contexto, tipo);
+            fonte.playbackRate.value = .94 + Math.random() * .12;
+            filtro.type = soltando ? 'lowpass' : 'bandpass';
+            filtro.frequency.value = soltando ? 1320 : 1880;
+            filtro.Q.value = soltando ? .38 : .62;
+            const pico = (soltando ? .16 : .105) * volumePreferido;
+            ganho.gain.setValueAtTime(.0001, agora);
+            ganho.gain.exponentialRampToValueAtTime(Math.max(.0002, pico), agora + .012);
+            ganho.gain.exponentialRampToValueAtTime(.0001, agora + (soltando ? .27 : .35));
+            fonte.connect(filtro).connect(ganho).connect(contexto.destination);
+            fonte.start(agora);
+            fonte.onended = () => {
+                try { fonte.disconnect(); filtro.disconnect(); ganho.disconnect(); } catch (_) {}
+            };
+            if (soltando) {
+                const impacto = contexto.createOscillator();
+                const ganhoImpacto = contexto.createGain();
+                impacto.type = 'sine';
+                impacto.frequency.setValueAtTime(96, agora);
+                impacto.frequency.exponentialRampToValueAtTime(58, agora + .12);
+                ganhoImpacto.gain.setValueAtTime(.036 * volumePreferido, agora);
+                ganhoImpacto.gain.exponentialRampToValueAtTime(.0001, agora + .14);
+                impacto.connect(ganhoImpacto).connect(contexto.destination);
+                impacto.start(agora);
+                impacto.stop(agora + .15);
+            }
+        };
+        if (contexto.state === 'suspended') contexto.resume().then(reproduzir).catch(() => {});
+        else reproduzir();
     } catch (error) {
         console.warn('O som de papel da Mesa de Documentos não pôde ser reproduzido.', error);
     }
 }
 
-const FERRAMENTAS_DESENHO_MESA = new Set(['pan', 'free', 'line', 'arrow', 'circle', 'rect', 'marker', 'eraser']);
+const FERRAMENTAS_DESENHO_MESA = new Set(['pan', 'free', 'line', 'arrow', 'circle', 'rect', 'marker', 'text', 'eraser']);
 
 function chavePreferenciaDesenhoMesa(tipo) {
     return `abyssDocumentDeskDrawing:${currentUser?.uid || 'local'}:${tipo}`;
@@ -20873,17 +21243,57 @@ function definirTamanhoBorrachaMesa(valor) {
     localStorage.setItem(chavePreferenciaDesenhoMesa('eraserSize'), String(tamanho));
 }
 
+function definirFonteTextoMesa(valor) {
+    const fontes = ['Crimson Text', 'Cinzel', 'Georgia', 'Courier New'];
+    documentDeskState.textFont = fontes.includes(valor) ? valor : 'Crimson Text';
+    const select = document.getElementById('document-text-font');
+    if (select) select.value = documentDeskState.textFont;
+    localStorage.setItem(chavePreferenciaDesenhoMesa('textFont'), documentDeskState.textFont);
+}
+
+function definirTamanhoTextoMesa(valor) {
+    const tamanhos = [18, 24, 32, 42, 56];
+    documentDeskState.textSize = tamanhos.includes(Number(valor)) ? Number(valor) : 24;
+    const select = document.getElementById('document-text-size');
+    if (select) select.value = String(documentDeskState.textSize);
+    localStorage.setItem(chavePreferenciaDesenhoMesa('textSize'), String(documentDeskState.textSize));
+}
+
+function atualizarBotoesFormatoTextoMesa() {
+    document.getElementById('document-text-bold')?.classList.toggle('active', documentDeskState.textBold);
+    document.getElementById('document-text-italic')?.classList.toggle('active', documentDeskState.textItalic);
+    document.getElementById('document-text-underline')?.classList.toggle('active', documentDeskState.textUnderline);
+}
+
+function alternarFormatoTextoMesa(tipo) {
+    if (tipo === 'bold') documentDeskState.textBold = !documentDeskState.textBold;
+    if (tipo === 'italic') documentDeskState.textItalic = !documentDeskState.textItalic;
+    if (tipo === 'underline') documentDeskState.textUnderline = !documentDeskState.textUnderline;
+    localStorage.setItem(chavePreferenciaDesenhoMesa('textBold'), String(documentDeskState.textBold));
+    localStorage.setItem(chavePreferenciaDesenhoMesa('textItalic'), String(documentDeskState.textItalic));
+    localStorage.setItem(chavePreferenciaDesenhoMesa('textUnderline'), String(documentDeskState.textUnderline));
+    atualizarBotoesFormatoTextoMesa();
+}
+
 function carregarPreferenciasDesenhoMesa() {
     const cor = normalizarCorPonteiroMesa(localStorage.getItem(chavePreferenciaDesenhoMesa('color')), documentDeskState.pointerColor || '#a970ff');
     const largura = numeroMesa(localStorage.getItem(chavePreferenciaDesenhoMesa('width')), 4);
     const estilo = localStorage.getItem(chavePreferenciaDesenhoMesa('style')) || 'solid';
     const opacidade = numeroMesa(localStorage.getItem(chavePreferenciaDesenhoMesa('opacity')), 1);
     const borracha = numeroMesa(localStorage.getItem(chavePreferenciaDesenhoMesa('eraserSize')), 34);
+    const fonteTexto = localStorage.getItem(chavePreferenciaDesenhoMesa('textFont')) || 'Crimson Text';
+    const tamanhoTexto = numeroMesa(localStorage.getItem(chavePreferenciaDesenhoMesa('textSize')), 24);
+    documentDeskState.textBold = localStorage.getItem(chavePreferenciaDesenhoMesa('textBold')) === 'true';
+    documentDeskState.textItalic = localStorage.getItem(chavePreferenciaDesenhoMesa('textItalic')) === 'true';
+    documentDeskState.textUnderline = localStorage.getItem(chavePreferenciaDesenhoMesa('textUnderline')) === 'true';
     definirCorDesenhoMesa(cor);
     definirEspessuraDesenhoMesa(largura);
     definirEstiloDesenhoMesa(estilo);
     definirOpacidadeDesenhoMesa(opacidade);
     definirTamanhoBorrachaMesa(borracha);
+    definirFonteTextoMesa(fonteTexto);
+    definirTamanhoTextoMesa(tamanhoTexto);
+    atualizarBotoesFormatoTextoMesa();
     selecionarFerramentaDesenhoMesa(documentDeskState.drawingTool || 'pan', false);
 }
 
@@ -20896,6 +21306,7 @@ function textoFerramentaDesenhoMesa(ferramenta = documentDeskState.drawingTool) 
         circle: 'Círculo: arraste do centro à borda. Segure Espaço e arraste para mover a mesa.',
         rect: 'Retângulo: arraste entre dois cantos.',
         marker: 'Marca-texto: arraste para destacar. Segure Espaço e arraste para mover a mesa.',
+        text: 'Texto: clique na mesa ou sobre um documento para escrever. Textos sobre documentos se movem junto.',
         eraser: 'Borracha: arraste sobre os seus traços para apagá-los. O mestre pode apagar qualquer traço.'
     };
     return textos[ferramenta] || textos.pan;
@@ -20928,11 +21339,14 @@ function selecionarFerramentaDesenhoMesa(ferramenta, reproduzirSom = true) {
         botao?.setAttribute('aria-pressed', String(nome === proxima));
     });
     const apagando = proxima === 'eraser';
+    const escrevendo = proxima === 'text';
     document.getElementById('document-drawing-color-wrap')?.toggleAttribute('hidden', apagando);
-    document.getElementById('document-drawing-width')?.toggleAttribute('hidden', apagando);
-    document.getElementById('document-drawing-style')?.toggleAttribute('hidden', apagando);
+    document.getElementById('document-drawing-width')?.toggleAttribute('hidden', apagando || escrevendo);
+    document.getElementById('document-drawing-style')?.toggleAttribute('hidden', apagando || escrevendo);
     document.getElementById('document-drawing-opacity')?.toggleAttribute('hidden', apagando);
     document.getElementById('document-eraser-size')?.toggleAttribute('hidden', !apagando);
+    document.getElementById('document-text-format')?.toggleAttribute('hidden', !escrevendo);
+    if (!escrevendo) cancelarCompositorTextoMesa();
     atualizarStatusDesenhoMesa(documentDeskState.spacePan ? mensagemPanTemporarioMesa() : '');
     if (documentDeskState.role) publicarPresencaMesaDocumentos({ tool: documentDeskState.spacePan ? 'pan' : proxima, grabbing: false });
 }
@@ -20949,6 +21363,95 @@ function pontoMesaDocumentosDoEvento(event) {
         x: limitarPercentualMesa((event.clientX - rect.left) / rect.width * 100),
         y: limitarPercentualMesa((event.clientY - rect.top) / rect.height * 100)
     };
+}
+
+function documentoNoPontoMesa(ponto) {
+    if (!ponto) return '';
+    return Object.entries(documentDeskState.placements || {})
+        .filter(([id, placement]) => documentDeskState.documents?.[id]
+            && ponto.x >= numeroMesa(placement?.x, 0)
+            && ponto.x <= numeroMesa(placement?.x, 0) + numeroMesa(placement?.w, 0)
+            && ponto.y >= numeroMesa(placement?.y, 0)
+            && ponto.y <= numeroMesa(placement?.y, 0) + numeroMesa(placement?.h, 0))
+        .sort(([, a], [, b]) => numeroMesa(b?.z, 0) - numeroMesa(a?.z, 0))[0]?.[0] || '';
+}
+
+function pontoReferenciaDesenhoMesa(desenho) {
+    if (!desenho) return null;
+    if (desenho.type === 'text') return { x: limitarPercentualMesa(desenho.x), y: limitarPercentualMesa(desenho.y) };
+    const pontos = desenho.type === 'free' || desenho.type === 'marker'
+        ? pontosDesenhoMesaSeguros(desenho.points)
+        : [desenho.start, desenho.end].filter(Boolean);
+    if (!pontos.length) return null;
+    return {
+        x: pontos.reduce((total, ponto) => total + limitarPercentualMesa(ponto?.x), 0) / pontos.length,
+        y: pontos.reduce((total, ponto) => total + limitarPercentualMesa(ponto?.y), 0) / pontos.length
+    };
+}
+
+function cancelarCompositorTextoMesa() {
+    documentDeskState.pendingTextPoint = null;
+    documentDeskState.pendingTextDocumentId = null;
+    const painel = document.getElementById('document-text-composer');
+    const campo = document.getElementById('document-text-content');
+    if (painel) painel.hidden = true;
+    if (campo) campo.value = '';
+}
+
+function abrirCompositorTextoMesa(ponto) {
+    const painel = document.getElementById('document-text-composer');
+    const campo = document.getElementById('document-text-content');
+    const dica = document.getElementById('document-text-attachment-hint');
+    if (!painel || !campo || !ponto) return;
+    const documentId = documentoNoPontoMesa(ponto);
+    documentDeskState.pendingTextPoint = { ...ponto };
+    documentDeskState.pendingTextDocumentId = documentId || null;
+    painel.hidden = false;
+    if (dica) dica.textContent = documentId
+        ? `Este texto ficará preso a “${documentDeskState.documents?.[documentId]?.title || 'este documento'}” e se moverá com ele.`
+        : 'Este texto ficará solto na mesa.';
+    requestAnimationFrame(() => campo.focus());
+}
+
+async function salvarTextoMesa() {
+    if (!currentUser || !documentDeskState.role || !documentDeskState.pendingTextPoint) return;
+    const campo = document.getElementById('document-text-content');
+    const texto = String(campo?.value || '').trim().slice(0, 3000);
+    if (!texto) return campo?.focus();
+    const id = database.ref(`${caminhoBaseMesaDocumentos()}/drawings/${documentDeskState.currentSlotId}`).push().key;
+    const desenhoLocal = {
+        type: 'text',
+        x: limitarPercentualMesa(documentDeskState.pendingTextPoint.x),
+        y: limitarPercentualMesa(documentDeskState.pendingTextPoint.y),
+        text: texto,
+        color: documentDeskState.drawingColor,
+        opacity: documentDeskState.drawingOpacity,
+        fontFamily: documentDeskState.textFont,
+        fontSize: documentDeskState.textSize,
+        bold: documentDeskState.textBold,
+        italic: documentDeskState.textItalic,
+        underline: documentDeskState.textUnderline,
+        attachedDocumentId: documentDeskState.pendingTextDocumentId || '',
+        createdBy: currentUser.uid,
+        createdAt: Date.now()
+    };
+    documentDeskState.drawings = { ...(documentDeskState.drawings || {}), [id]: desenhoLocal };
+    documentDeskState.allDrawings[documentDeskState.currentSlotId] = documentDeskState.drawings;
+    cancelarCompositorTextoMesa();
+    renderizarDesenhosMesaDocumentos();
+    try {
+        await database.ref(`${caminhoBaseMesaDocumentos()}/drawings/${documentDeskState.currentSlotId}/${id}`).set({
+            ...desenhoLocal,
+            createdAt: firebase.database.ServerValue.TIMESTAMP
+        });
+        registrarAcaoMesa({ type: 'drawing-add', slotId: documentDeskState.currentSlotId, drawingId: id, drawing: desenhoLocal });
+        atualizarStatusDesenhoMesa(desenhoLocal.attachedDocumentId ? 'Texto preso ao documento.' : 'Texto colocado na mesa.');
+    } catch (error) {
+        delete documentDeskState.drawings[id];
+        renderizarDesenhosMesaDocumentos();
+        console.error('Erro ao salvar texto na Mesa de Documentos:', error);
+        atualizarStatusDesenhoMesa('Não foi possível salvar esse texto.');
+    }
 }
 
 function pontosDesenhoMesaSeguros(pontos) {
@@ -20982,6 +21485,14 @@ function desenhoAtingidoPelaBorrachaMesa(desenho, pontoPercentual) {
     const raio = Math.max(6, documentDeskState.eraserSize / Math.max(.15, escala) / 2);
     const alvo = pontoDesenhoMesaEmPixels(pontoPercentual);
     const tolerancia = raio + Math.max(1, numeroMesa(desenho.width, 4)) * (desenho.type === 'marker' ? 2.1 : .55);
+    if (desenho.type === 'text') {
+        const origem = pontoDesenhoMesaEmPixels({ x: desenho.x, y: desenho.y });
+        const tamanho = Math.max(12, Math.min(80, numeroMesa(desenho.fontSize, 24)));
+        const linhas = String(desenho.text || '').split(/\n/);
+        const largura = Math.max(48, Math.min((board?.offsetWidth || 1600) * .44, Math.max(...linhas.map(linha => linha.length), 1) * tamanho * .58));
+        const altura = Math.max(tamanho * 1.25, linhas.length * tamanho * 1.28);
+        return alvo.x >= origem.x - raio && alvo.x <= origem.x + largura + raio && alvo.y >= origem.y - altura - raio && alvo.y <= origem.y + raio;
+    }
     if (desenho.type === 'free' || desenho.type === 'marker') {
         const pontos = pontosDesenhoMesaSeguros(desenho.points).map(pontoDesenhoMesaEmPixels);
         if (pontos.length === 1) return Math.hypot(alvo.x - pontos[0].x, alvo.y - pontos[0].y) <= tolerancia;
@@ -21045,6 +21556,21 @@ function desenhoMesaParaSvg(desenho, classeExtra = '') {
     const classes = `document-drawing-stroke ${marcador ? 'document-drawing-marker' : ''} ${classeExtra}`.trim();
     const atributos = `class="${classes}" fill="none" stroke="${cor}" stroke-width="${espessura}" stroke-opacity="${opacidade}" stroke-linecap="round" stroke-linejoin="round"${tracado}`;
     const converter = ponto => ({ x: limitarPercentualMesa(ponto?.x) / 100 * larguraMesa, y: limitarPercentualMesa(ponto?.y) / 100 * alturaMesa });
+    if (desenho.type === 'text') {
+        const posicao = converter({ x: desenho.x, y: desenho.y });
+        const fontes = ['Crimson Text', 'Cinzel', 'Georgia', 'Courier New'];
+        const fonte = fontes.includes(desenho.fontFamily) ? desenho.fontFamily : 'Crimson Text';
+        const tamanho = Math.max(12, Math.min(80, numeroMesa(desenho.fontSize, 24)));
+        const peso = desenho.bold ? '700' : '400';
+        const estiloFonte = desenho.italic ? 'italic' : 'normal';
+        const decoracao = desenho.underline ? 'underline' : 'none';
+        const texto = String(desenho.text || '').slice(0, 3000);
+        const conteudo = escapeCampaignHtml(texto);
+        const caracteresPorLinha = Math.max(8, Math.floor(larguraMesa * .44 / (tamanho * .58)));
+        const linhasEstimadas = texto.split(/\n/).reduce((total, linha) => total + Math.max(1, Math.ceil(linha.length / caracteresPorLinha)), 0);
+        const alturaTexto = Math.max(tamanho * 1.6, linhasEstimadas * tamanho * 1.45 + tamanho);
+        return `<foreignObject class="document-drawing-text ${classeExtra}" x="${posicao.x.toFixed(2)}" y="${(posicao.y - tamanho).toFixed(2)}" width="${(larguraMesa * .44).toFixed(2)}" height="${Math.min(alturaMesa, alturaTexto).toFixed(2)}" opacity="${opacidadeBase}"><div xmlns="http://www.w3.org/1999/xhtml" style="color:${cor};font-family:'${fonte}',serif;font-size:${tamanho}px;font-weight:${peso};font-style:${estiloFonte};text-decoration:${decoracao};">${conteudo}</div></foreignObject>`;
+    }
     if (desenho.type === 'free' || desenho.type === 'marker') {
         const pontos = pontosDesenhoMesaSeguros(desenho.points).map(converter);
         if (!pontos.length) return '';
@@ -21164,7 +21690,10 @@ function iniciarInteracaoFundoMesa(event) {
     if (!documentDeskState.active || !currentUser || !documentDeskState.role || !documentDeskState.campaignId || !documentDeskState.currentSlotId) return;
     const panForcado = event.button === 1 || documentDeskState.spacePan === true;
     const ferramenta = panForcado ? 'pan' : documentDeskState.drawingTool;
-    if (event.button === 0 && !event.target.closest?.('.desk-document')) selecionarDocumentoMesa(null);
+    if (event.button === 0 && !event.target.closest?.('.desk-document')) {
+        selecionarDocumentoMesa(null);
+        if (documentDeskState.stapleSourceId) cancelarSelecaoGrampoMesa();
+    }
     const controle = event.target.closest?.('button, input, select, label, .document-slot-ribbon, .desk-resize-handle, .desk-rotate-handle, .desk-document-controls');
     if (controle && !panForcado) return;
     const viewport = document.querySelector('.document-desk-viewport');
@@ -21193,6 +21722,11 @@ function iniciarInteracaoFundoMesa(event) {
     if (!ponto) return;
     event.preventDefault();
     event.stopImmediatePropagation();
+    if (ferramenta === 'text') {
+        abrirCompositorTextoMesa(ponto);
+        publicarPresencaMesaDocumentos({ grabbing: false, tool: 'text' });
+        return;
+    }
     event.currentTarget.setPointerCapture?.(event.pointerId);
     if (ferramenta === 'eraser') {
         documentDeskState.eraserSession = {
@@ -21288,6 +21822,7 @@ async function finalizarPanOuDesenhoMesa(event) {
         const dy = (rascunho.end.y - rascunho.start.y) / 100 * (board?.offsetHeight || 1000);
         if (Math.hypot(dx, dy) < 4) return atualizarStatusDesenhoMesa('Arraste um pouco mais para criar a forma.');
     }
+    rascunho.attachedDocumentId = documentoNoPontoMesa(pontoReferenciaDesenhoMesa(rascunho)) || '';
     const id = database.ref(`${caminhoBaseMesaDocumentos()}/drawings/${documentDeskState.currentSlotId}`).push().key;
     const desenhoLocal = { ...rascunho, createdAt: Date.now() };
     delete desenhoLocal.slotId;
@@ -21301,6 +21836,7 @@ async function finalizarPanOuDesenhoMesa(event) {
             createdAt: firebase.database.ServerValue.TIMESTAMP
         });
         registrarAcaoMesa({ type: 'drawing-add', slotId: documentDeskState.currentSlotId, drawingId: id, drawing: desenhoLocal });
+        if (desenhoLocal.attachedDocumentId) atualizarStatusDesenhoMesa('Desenho preso ao documento. Ele acompanhará o papel.');
     } catch (error) {
         delete documentDeskState.drawings[id];
         renderizarDesenhosMesaDocumentos();
@@ -21396,6 +21932,22 @@ async function desfazerUltimaAcaoMesa(reproduzirSom = true) {
                 modifiedAt: firebase.database.ServerValue.TIMESTAMP
             });
             atualizarStatusDesenhoMesa('Movimento do documento desfeito.');
+        } else if (acao.type === 'placement-group') {
+            const updates = {};
+            Object.entries(acao.placementsBefore || {}).forEach(([id, placement]) => {
+                documentDeskState.placements[id] = clonarValorMesa(placement);
+                updates[`${caminhoBaseMesaDocumentos()}/placements/${acao.slotId}/${id}`] = {
+                    ...placement,
+                    modifiedBy: currentUser.uid,
+                    modifiedAt: firebase.database.ServerValue.TIMESTAMP
+                };
+            });
+            Object.entries(acao.drawingsBefore || {}).forEach(([id, desenho]) => {
+                documentDeskState.drawings[id] = clonarValorMesa(desenho);
+                updates[`${caminhoBaseMesaDocumentos()}/drawings/${acao.slotId}/${id}`] = desenho;
+            });
+            await database.ref().update(updates);
+            atualizarStatusDesenhoMesa('Movimento do conjunto e de suas anotações desfeito.');
         }
         renderizarDesenhosMesaDocumentos();
         renderizarDocumentosNaMesa();
@@ -21516,6 +22068,7 @@ function renderizarDocumentosNaMesa() {
             const y = Math.max(7, Math.min(100 - h, numeroMesa(placement.y, 18)));
             const rotation = Math.max(-180, Math.min(180, numeroMesa(placement.rotation, 0)));
             const mestre = documentDeskState.role === 'mestre';
+            const podeEditar = podeEditarDocumentoMesa(id);
             const tipo = (documento.type === 'image' || documento.mime?.startsWith('image/'))
                 ? 'image'
                 : (documento.type === 'text' ? 'text' : 'file');
@@ -21524,7 +22077,9 @@ function renderizarDocumentosNaMesa() {
             const moldura = molduraAtiva ? '' : 'is-frameless';
             const possuiDescricao = textoCompleto ? 'has-description' : '';
             const selecionado = documentDeskState.selectedDocumentId === id ? 'is-selected' : '';
-            return `<article class="desk-document ${tipo} ${moldura} ${possuiDescricao} ${soltando} ${selecionado}" data-document-id="${escapeCampaignHtml(id)}" tabindex="0" aria-selected="${selecionado ? 'true' : 'false'}" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%;z-index:${Math.max(1, numeroMesa(placement.z, 1))};--doc-rotation:${rotation}deg" aria-label="${escapeCampaignHtml(documento.title || 'Documento')}">
+            const grampeado = placement.stapleGroupId ? 'is-stapled' : '';
+            const fonteGrampo = documentDeskState.stapleSourceId === id ? 'is-staple-source' : '';
+            return `<article class="desk-document ${tipo} ${moldura} ${possuiDescricao} ${soltando} ${selecionado} ${grampeado} ${fonteGrampo}" data-document-id="${escapeCampaignHtml(id)}" tabindex="0" aria-selected="${selecionado ? 'true' : 'false'}" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%;z-index:${Math.max(1, numeroMesa(placement.z, 1))};--doc-rotation:${rotation}deg" aria-label="${escapeCampaignHtml(documento.title || 'Documento')}">
                 <div class="desk-document-controls" onpointerdown="event.stopPropagation()">
                     <button type="button" data-document-no-front onclick="abrirDocumentoMesa('${escapeCampaignHtml(id)}')" title="Abrir documento">⌕</button>
                     <button type="button" data-document-no-front onclick="girarDocumentoMesa('${escapeCampaignHtml(id)}', -3)" title="Girar para a esquerda">↶</button>
@@ -21532,7 +22087,10 @@ function renderizarDocumentosNaMesa() {
                     <button type="button" data-document-no-front onclick="trazerDocumentoFrente('${escapeCampaignHtml(id)}')" title="Trazer para frente">⇧</button>
                     <button type="button" data-document-no-front onclick="guardarDocumentoNaGaveta('${escapeCampaignHtml(id)}')" title="Guardar na gaveta">▤</button>
                     <button type="button" data-document-no-front onclick="alternarMolduraDocumentoMesa('${escapeCampaignHtml(id)}')" title="${molduraAtiva ? 'Remover moldura' : 'Ativar moldura'}" aria-label="${molduraAtiva ? 'Remover moldura do documento' : 'Ativar moldura do documento'}">${molduraAtiva ? '▣' : '□'}</button>
-                    ${mestre ? `<button type="button" data-document-no-front onclick="abrirEditorDocumentoMesa('${escapeCampaignHtml(id)}')" title="Editar documento">✎</button><button type="button" data-document-no-front class="document-control-delete" onclick="excluirDocumentoMesa('${escapeCampaignHtml(id)}')" title="Excluir documento">✕</button>` : ''}
+                    <button type="button" data-document-no-front onclick="alternarGrampoDocumentoMesa('${escapeCampaignHtml(id)}')" title="Grampear com outro documento" aria-label="Grampear com outro documento">📎</button>
+                    ${placement.stapleGroupId ? `<button type="button" data-document-no-front onclick="desgrampearDocumentoMesa('${escapeCampaignHtml(id)}')" title="Soltar deste conjunto" aria-label="Remover grampo deste documento">⛓</button>` : ''}
+                    ${podeEditar ? `<button type="button" data-document-no-front onclick="abrirEditorDocumentoMesa('${escapeCampaignHtml(id)}')" title="Editar documento">✎</button>` : ''}
+                    ${mestre ? `<button type="button" data-document-no-front class="document-control-delete" onclick="excluirDocumentoMesa('${escapeCampaignHtml(id)}')" title="Excluir documento">✕</button>` : ''}
                 </div>
                 <header class="desk-document-title">${escapeCampaignHtml(documento.title || 'Sem título')}</header>
                 <div class="desk-document-body">${corpoDocumentoMesaHtml(documento)}</div>
@@ -21617,7 +22175,7 @@ function renderizarGavetaDocumentos() {
         })
         .sort(([, a], [, b]) => String(a.title || '').localeCompare(String(b.title || ''), 'pt-BR'));
     if (!documentos.length) {
-        lista.innerHTML = `<div class="document-drawer-empty">${busca ? 'Nenhum documento corresponde à pesquisa.' : 'A gaveta está vazia. O mestre pode guardar o primeiro documento aqui.'}</div>`;
+        lista.innerHTML = `<div class="document-drawer-empty">${busca ? 'Nenhum documento corresponde à pesquisa.' : 'A gaveta está vazia. Qualquer jogador da campanha pode criar o primeiro documento.'}</div>`;
         return;
     }
     const mestre = documentDeskState.role === 'mestre';
@@ -21629,6 +22187,7 @@ function renderizarGavetaDocumentos() {
         const thumb = (documento.type === 'image' || documento.mime?.startsWith('image/')) && thumbUrl
             ? `<img src="${escapeCampaignHtml(thumbUrl)}" alt="">`
             : documento.type === 'text' ? '✒' : '⌑';
+        const podeEditar = podeEditarDocumentoMesa(id);
         return `<article class="document-drawer-card">
             <span class="document-drawer-thumb">${thumb}</span>
             <span class="document-drawer-copy"><strong>${escapeCampaignHtml(documento.title || 'Sem título')}</strong><small>${escapeCampaignHtml(tipoDocumentoMesaRotulo(documento))} · ${escapeCampaignHtml(status)}</small></span>
@@ -21637,7 +22196,8 @@ function renderizarGavetaDocumentos() {
                 ${nestaMesa
                     ? `<button type="button" onclick="guardarDocumentoNaGaveta('${escapeCampaignHtml(id)}')" title="Guardar na gaveta">▤</button>`
                     : `<button type="button" onclick="colocarDocumentoNaMesa('${escapeCampaignHtml(id)}')" title="Colocar neste slot">↗</button>`}
-                ${mestre ? `<button type="button" onclick="abrirEditorDocumentoMesa('${escapeCampaignHtml(id)}')" title="Editar">✎</button><button type="button" class="document-control-delete" onclick="excluirDocumentoMesa('${escapeCampaignHtml(id)}')" title="Excluir definitivamente">✕</button>` : ''}
+                ${podeEditar ? `<button type="button" onclick="abrirEditorDocumentoMesa('${escapeCampaignHtml(id)}')" title="Editar">✎</button>` : ''}
+                ${mestre ? `<button type="button" class="document-control-delete" onclick="excluirDocumentoMesa('${escapeCampaignHtml(id)}')" title="Excluir definitivamente">✕</button>` : ''}
             </span>
         </article>`;
     }).join('');
@@ -21667,6 +22227,150 @@ async function guardarDocumentoNaGaveta(documentId) {
 
 function maiorCamadaMesaDocumentos() {
     return Math.max(1, ...Object.values(documentDeskState.placements || {}).map(item => numeroMesa(item?.z, 1)));
+}
+
+function idsGrupoGrampeadoMesa(documentId) {
+    const placement = documentDeskState.placements?.[documentId];
+    const grupo = String(placement?.stapleGroupId || '');
+    if (!grupo) return documentId && placement ? [documentId] : [];
+    return Object.entries(documentDeskState.placements || {})
+        .filter(([, item]) => String(item?.stapleGroupId || '') === grupo)
+        .map(([id]) => id);
+}
+
+function cancelarSelecaoGrampoMesa() {
+    documentDeskState.stapleSourceId = null;
+    document.querySelectorAll('.desk-document.is-staple-source').forEach(card => card.classList.remove('is-staple-source'));
+    atualizarStatusDesenhoMesa();
+}
+
+function alternarGrampoDocumentoMesa(documentId) {
+    if (!documentDeskState.placements?.[documentId]) return;
+    if (documentDeskState.stapleSourceId === documentId) {
+        cancelarSelecaoGrampoMesa();
+        return;
+    }
+    selecionarFerramentaDesenhoMesa('pan', false);
+    documentDeskState.stapleSourceId = documentId;
+    selecionarDocumentoMesa(documentId);
+    document.querySelectorAll('.desk-document').forEach(card => card.classList.toggle('is-staple-source', card.dataset.documentId === documentId));
+    atualizarStatusDesenhoMesa('Grampo pronto: clique no outro documento que deve acompanhar este.');
+}
+
+async function grampearDocumentosMesa(origemId, destinoId) {
+    if (!origemId || !destinoId || origemId === destinoId) return cancelarSelecaoGrampoMesa();
+    const origem = documentDeskState.placements?.[origemId];
+    const destino = documentDeskState.placements?.[destinoId];
+    if (!origem || !destino) return cancelarSelecaoGrampoMesa();
+    const grupoOrigem = String(origem.stapleGroupId || '');
+    const grupoDestino = String(destino.stapleGroupId || '');
+    const grupoNovo = grupoOrigem || grupoDestino || `staple_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+    const ids = new Set([origemId, destinoId]);
+    Object.entries(documentDeskState.placements || {}).forEach(([id, placement]) => {
+        const grupo = String(placement?.stapleGroupId || '');
+        if ((grupoOrigem && grupo === grupoOrigem) || (grupoDestino && grupo === grupoDestino)) ids.add(id);
+    });
+    const updates = {};
+    ids.forEach(id => {
+        documentDeskState.placements[id] = { ...documentDeskState.placements[id], stapleGroupId: grupoNovo };
+        updates[`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${id}/stapleGroupId`] = grupoNovo;
+    });
+    cancelarSelecaoGrampoMesa();
+    renderizarDocumentosNaMesa();
+    try {
+        await database.ref().update(updates);
+        atualizarStatusDesenhoMesa(`${ids.size} documentos grampeados. Ao puxar um, o conjunto inteiro acompanha.`);
+    } catch (error) {
+        console.error('Erro ao grampear documentos:', error);
+        atualizarStatusDesenhoMesa('Não foi possível grampear esses documentos agora.');
+    }
+}
+
+async function desgrampearDocumentoMesa(documentId) {
+    const placement = documentDeskState.placements?.[documentId];
+    const grupo = String(placement?.stapleGroupId || '');
+    if (!grupo) return;
+    const membros = idsGrupoGrampeadoMesa(documentId);
+    const restantes = membros.filter(id => id !== documentId);
+    const updates = {
+        [`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}/stapleGroupId`]: null
+    };
+    documentDeskState.placements[documentId] = { ...placement };
+    delete documentDeskState.placements[documentId].stapleGroupId;
+    if (restantes.length === 1) {
+        const ultimo = restantes[0];
+        updates[`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${ultimo}/stapleGroupId`] = null;
+        documentDeskState.placements[ultimo] = { ...documentDeskState.placements[ultimo] };
+        delete documentDeskState.placements[ultimo].stapleGroupId;
+    }
+    renderizarDocumentosNaMesa();
+    await database.ref().update(updates).catch(error => console.error('Erro ao remover grampo:', error));
+    atualizarStatusDesenhoMesa('Documento solto do conjunto.');
+}
+
+function transladarDesenhoMesa(desenho, dx, dy) {
+    const copia = clonarValorMesa(desenho);
+    const moverPonto = ponto => ({
+        x: limitarPercentualMesa(numeroMesa(ponto?.x, 0) + dx),
+        y: limitarPercentualMesa(numeroMesa(ponto?.y, 0) + dy)
+    });
+    if (copia.type === 'text') {
+        copia.x = limitarPercentualMesa(numeroMesa(copia.x, 0) + dx);
+        copia.y = limitarPercentualMesa(numeroMesa(copia.y, 0) + dy);
+    } else if (copia.type === 'free' || copia.type === 'marker') {
+        copia.points = pontosDesenhoMesaSeguros(copia.points).map(moverPonto);
+    } else {
+        copia.start = moverPonto(copia.start);
+        copia.end = moverPonto(copia.end);
+    }
+    return copia;
+}
+
+function desenhosAnexadosAosDocumentosMesa(documentIds) {
+    const conjunto = new Set(documentIds || []);
+    return Object.entries(documentDeskState.drawings || {}).reduce((resultado, [id, desenho]) => {
+        if (conjunto.has(String(desenho?.attachedDocumentId || ''))) resultado[id] = clonarValorMesa(desenho);
+        return resultado;
+    }, {});
+}
+
+function payloadPosicaoMesa(placement, incluirQueda = false) {
+    const payload = {
+        x: Number(numeroMesa(placement.x, 0).toFixed(3)),
+        y: Number(numeroMesa(placement.y, 0).toFixed(3)),
+        w: Number(numeroMesa(placement.w, 19).toFixed(3)),
+        h: Number(numeroMesa(placement.h, 27).toFixed(3)),
+        z: numeroMesa(placement.z, 1),
+        rotation: numeroMesa(placement.rotation, 0),
+        modifiedBy: currentUser.uid,
+        modifiedAt: firebase.database.ServerValue.TIMESTAMP
+    };
+    if (placement.stapleGroupId) payload.stapleGroupId = placement.stapleGroupId;
+    if (typeof placement.frameEnabled === 'boolean') payload.frameEnabled = placement.frameEnabled;
+    if (incluirQueda) payload.droppedAt = firebase.database.ServerValue.TIMESTAMP;
+    return payload;
+}
+
+function persistirMovimentoGrupoMesa(drag, imediato = false) {
+    if (!drag || !documentDeskState.campaignId || !documentDeskState.currentSlotId) return Promise.resolve();
+    const updates = {};
+    (drag.groupIds || [drag.documentId]).forEach(id => {
+        const placement = documentDeskState.placements[id];
+        if (placement) updates[`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${id}`] = payloadPosicaoMesa(placement, imediato);
+    });
+    Object.keys(drag.initialDrawings || {}).forEach(id => {
+        const desenho = documentDeskState.drawings[id];
+        if (desenho) updates[`${caminhoBaseMesaDocumentos()}/drawings/${documentDeskState.currentSlotId}/${id}`] = desenho;
+    });
+    return database.ref().update(updates);
+}
+
+function agendarMovimentoGrupoMesa(drag) {
+    clearTimeout(documentDeskState.groupMoveTimer);
+    documentDeskState.groupMoveTimer = setTimeout(() => {
+        documentDeskState.groupMoveTimer = null;
+        persistirMovimentoGrupoMesa(drag).catch(error => console.error('Erro ao sincronizar o conjunto de documentos:', error));
+    }, 75);
 }
 
 async function trazerDocumentoFrente(documentId) {
@@ -21795,6 +22499,12 @@ function finalizarRotacaoDocumentoMesa(event) {
 function destacarDocumentoMesaAoClicar(event) {
     const card = event.currentTarget;
     const documentId = card.dataset.documentId;
+    if (event.button === 0 && documentDeskState.stapleSourceId && documentDeskState.stapleSourceId !== documentId && !event.target.closest('button, .desk-resize-handle, [data-document-no-front]')) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        grampearDocumentosMesa(documentDeskState.stapleSourceId, documentId);
+        return;
+    }
     if (event.button === 0) selecionarDocumentoMesa(documentId);
     if (event.button !== 0 || event.target.closest('button, .desk-resize-handle, [data-document-no-front]')) return;
     const placement = documentDeskState.placements[documentId];
@@ -21836,11 +22546,26 @@ function iniciarMovimentoDocumentoMesa(event) {
     if (!placement || !rect?.width || !rect?.height) return;
     event.preventDefault();
     const modo = event.target.closest('.desk-resize-handle') ? 'resize' : 'move';
+    if (modo === 'move') tocarSomPapelMesa('pegar');
+    const groupIds = modo === 'move' ? idsGrupoGrampeadoMesa(documentId) : [documentId];
+    const initialPlacements = groupIds.reduce((resultado, id) => {
+        if (documentDeskState.placements[id]) resultado[id] = clonarValorMesa(documentDeskState.placements[id]);
+        return resultado;
+    }, {});
+    const initialDrawings = modo === 'move' ? desenhosAnexadosAosDocumentosMesa(groupIds) : {};
+    const cards = groupIds.reduce((resultado, id) => {
+        const elemento = [...document.querySelectorAll('.desk-document')].find(item => item.dataset.documentId === id);
+        if (elemento) resultado[id] = elemento;
+        return resultado;
+    }, {});
     card.setPointerCapture?.(event.pointerId);
-    card.classList.add('is-dragging');
+    Object.values(cards).forEach(elemento => elemento.classList.add('is-dragging'));
     document.body.classList.add('document-desk-grabbing');
     publicarPresencaMesaDocumentos({ active: true, grabbing: true });
-    const frontZ = numeroMesa(documentDeskState.placements[documentId]?.z, maiorCamadaMesaDocumentos() + 1);
+    const frontZ = maiorCamadaMesaDocumentos() + 1;
+    const zById = [...groupIds]
+        .sort((a, b) => numeroMesa(initialPlacements[a]?.z, 0) - numeroMesa(initialPlacements[b]?.z, 0))
+        .reduce((resultado, id, indice) => ({ ...resultado, [id]: frontZ + indice }), {});
     documentDeskState.drag = {
         documentId,
         pointerId: event.pointerId,
@@ -21850,8 +22575,15 @@ function iniciarMovimentoDocumentoMesa(event) {
         boardRect: rect,
         frontZ,
         before: clonarValorMesa(placement),
+        beforePlacements: clonarValorMesa(initialPlacements),
+        beforeDrawings: clonarValorMesa(initialDrawings),
+        initialPlacements,
+        initialDrawings,
+        groupIds,
+        zById,
+        cards,
         changed: false,
-        paperSoundStarted: false,
+        paperSoundStarted: modo === 'move',
         initial: {
             x: numeroMesa(placement.x, 12),
             y: numeroMesa(placement.y, 18),
@@ -21871,10 +22603,6 @@ function moverDocumentoMesaComPonteiro(event) {
     if (!drag.changed && deslocamentoPixels < 2) return;
     if (!drag.changed) {
         drag.changed = true;
-        if (drag.mode === 'move') {
-            tocarSomPapelMesa('pegar');
-            drag.paperSoundStarted = true;
-        }
     }
     const dx = (event.clientX - drag.startX) / drag.boardRect.width * 100;
     const dy = (event.clientY - drag.startY) / drag.boardRect.height * 100;
@@ -21882,18 +22610,46 @@ function moverDocumentoMesaComPonteiro(event) {
     if (drag.mode === 'resize') {
         atualizado.w = Math.max(12, Math.min(46, drag.initial.w + dx));
         atualizado.h = Math.max(15, Math.min(88, drag.initial.h + dy));
+        documentDeskState.placements[drag.documentId] = atualizado;
+        drag.card.style.left = `${atualizado.x}%`;
+        drag.card.style.top = `${atualizado.y}%`;
+        drag.card.style.width = `${atualizado.w}%`;
+        drag.card.style.height = `${atualizado.h}%`;
+        drag.card.style.zIndex = atualizado.z;
+        agendarPosicaoDocumentoMesa(drag.documentId, atualizado);
     } else {
-        atualizado.x = Math.max(0, Math.min(100 - atualizado.w, drag.initial.x + dx));
-        atualizado.y = Math.max(7, Math.min(100 - atualizado.h, drag.initial.y + dy));
+        const iniciais = Object.values(drag.initialPlacements || {});
+        const dxMinimo = Math.max(...iniciais.map(item => -numeroMesa(item.x, 0)));
+        const dxMaximo = Math.min(...iniciais.map(item => 100 - numeroMesa(item.w, 19) - numeroMesa(item.x, 0)));
+        const dyMinimo = Math.max(...iniciais.map(item => 7 - numeroMesa(item.y, 7)));
+        const dyMaximo = Math.min(...iniciais.map(item => 100 - numeroMesa(item.h, 27) - numeroMesa(item.y, 0)));
+        const dxAplicado = Math.max(dxMinimo, Math.min(dxMaximo, dx));
+        const dyAplicado = Math.max(dyMinimo, Math.min(dyMaximo, dy));
+        drag.groupIds.forEach(id => {
+            const inicial = drag.initialPlacements[id];
+            if (!inicial) return;
+            const item = {
+                ...inicial,
+                x: numeroMesa(inicial.x, 0) + dxAplicado,
+                y: numeroMesa(inicial.y, 0) + dyAplicado,
+                z: drag.zById[id] || inicial.z
+            };
+            documentDeskState.placements[id] = item;
+            const elemento = drag.cards[id];
+            if (elemento) {
+                elemento.style.left = `${item.x}%`;
+                elemento.style.top = `${item.y}%`;
+                elemento.style.zIndex = item.z;
+            }
+        });
+        Object.entries(drag.initialDrawings || {}).forEach(([id, desenho]) => {
+            documentDeskState.drawings[id] = transladarDesenhoMesa(desenho, dxAplicado, dyAplicado);
+        });
+        documentDeskState.allDrawings[documentDeskState.currentSlotId] = documentDeskState.drawings;
+        renderizarDesenhosMesaDocumentos();
+        agendarMovimentoGrupoMesa(drag);
     }
-    documentDeskState.placements[drag.documentId] = atualizado;
-    drag.card.style.left = `${atualizado.x}%`;
-    drag.card.style.top = `${atualizado.y}%`;
-    drag.card.style.width = `${atualizado.w}%`;
-    drag.card.style.height = `${atualizado.h}%`;
-    drag.card.style.zIndex = atualizado.z;
     documentDeskState.magnifierDirty = true;
-    agendarPosicaoDocumentoMesa(drag.documentId, atualizado);
 }
 
 function girarDocumentoSeguradoComScroll(event) {
@@ -21916,6 +22672,7 @@ function girarDocumentoSeguradoComScroll(event) {
     drag.changed = true;
     documentDeskState.placements[drag.documentId] = atualizado;
     drag.initial.rotation = rotation;
+    if (drag.initialPlacements?.[drag.documentId]) drag.initialPlacements[drag.documentId].rotation = rotation;
     drag.card.style.setProperty('--doc-rotation', `${rotation}deg`);
     drag.card.style.zIndex = drag.frontZ;
     documentDeskState.magnifierDirty = true;
@@ -21946,18 +22703,45 @@ function agendarPosicaoDocumentoMesa(documentId, placement, imediato = false) {
 function finalizarMovimentoDocumentoMesa(event) {
     const drag = documentDeskState.drag;
     if (!drag || (event.pointerId != null && event.pointerId !== drag.pointerId)) return;
-    drag.card?.classList.remove('is-dragging');
+    Object.values(drag.cards || { principal: drag.card }).forEach(elemento => elemento?.classList.remove('is-dragging'));
     document.body.classList.remove('document-desk-grabbing');
     publicarPresencaMesaDocumentos({ active: true, grabbing: false });
     const placement = documentDeskState.placements[drag.documentId];
-    const mudou = drag.changed && posicaoMesaMudou(drag.before, placement);
+    const depoisPlacements = (drag.groupIds || [drag.documentId]).reduce((resultado, id) => {
+        if (documentDeskState.placements[id]) resultado[id] = clonarValorMesa(documentDeskState.placements[id]);
+        return resultado;
+    }, {});
+    const depoisDrawings = Object.keys(drag.initialDrawings || {}).reduce((resultado, id) => {
+        if (documentDeskState.drawings[id]) resultado[id] = clonarValorMesa(documentDeskState.drawings[id]);
+        return resultado;
+    }, {});
+    const mudou = drag.changed && (drag.mode === 'move'
+        ? Object.keys(drag.beforePlacements || {}).some(id => posicaoMesaMudou(drag.beforePlacements[id], depoisPlacements[id]))
+        : posicaoMesaMudou(drag.before, placement));
     documentDeskState.drag = null;
-    if (placement && drag.changed) agendarPosicaoDocumentoMesa(drag.documentId, placement, true);
-    if (mudou) registrarAcaoMesa({ type: 'placement', slotId: documentDeskState.currentSlotId, documentId: drag.documentId, before: clonarValorMesa(drag.before), after: clonarValorMesa(placement) });
+    clearTimeout(documentDeskState.groupMoveTimer);
+    documentDeskState.groupMoveTimer = null;
+    if (placement && drag.changed) {
+        if (drag.mode === 'move') persistirMovimentoGrupoMesa(drag, true).catch(error => console.error('Erro ao soltar o conjunto de documentos:', error));
+        else agendarPosicaoDocumentoMesa(drag.documentId, placement, true);
+    }
+    if (mudou) {
+        if (drag.mode === 'move') registrarAcaoMesa({
+            type: 'placement-group',
+            slotId: documentDeskState.currentSlotId,
+            placementsBefore: clonarValorMesa(drag.beforePlacements),
+            placementsAfter: depoisPlacements,
+            drawingsBefore: clonarValorMesa(drag.beforeDrawings),
+            drawingsAfter: depoisDrawings
+        });
+        else registrarAcaoMesa({ type: 'placement', slotId: documentDeskState.currentSlotId, documentId: drag.documentId, before: clonarValorMesa(drag.before), after: clonarValorMesa(placement) });
+    }
     if (mudou) {
         if (drag.paperSoundStarted) tocarSomPapelMesa('soltar');
-        documentDeskState.localDropLocks.set(drag.documentId, Date.now() + 1500);
-        animarQuedaDocumentoMesa(drag.documentId);
+        (drag.groupIds || [drag.documentId]).forEach(id => {
+            documentDeskState.localDropLocks.set(id, Date.now() + 1500);
+            animarQuedaDocumentoMesa(id);
+        });
     }
     renderizarDocumentosNaMesa();
 }
@@ -21972,8 +22756,9 @@ function atualizarTipoEditorDocumento() {
 }
 
 function abrirEditorDocumentoMesa(documentId = '') {
-    if (documentDeskState.role !== 'mestre') return;
+    if (!documentDeskState.role || !currentUser) return;
     const documento = documentId ? documentDeskState.documents[documentId] : null;
+    if (documento && !podeEditarDocumentoMesa(documentId)) return;
     documentDeskState.editDocumentId = documento ? documentId : null;
     documentDeskState.pendingFile = null;
     documentDeskState.removeFile = false;
@@ -22071,11 +22856,12 @@ function limparArquivoDocumentoMesa() {
 
 async function salvarDocumentoMesa(event) {
     event.preventDefault();
-    if (documentDeskState.role !== 'mestre' || !currentUser) return;
+    if (!documentDeskState.role || !currentUser) return;
     const title = document.getElementById('document-editor-title').value.trim();
     const descricao = document.getElementById('document-editor-text').value.slice(0, 180000);
     if (!title) return document.getElementById('document-editor-title').focus();
     const atual = documentDeskState.editDocumentId ? documentDeskState.documents[documentDeskState.editDocumentId] : null;
+    if (atual && !podeEditarDocumentoMesa(documentDeskState.editDocumentId)) return alert('Você só pode editar documentos que criou.');
     const arquivo = documentDeskState.pendingFile || (atual?.dataUrl && !documentDeskState.removeFile ? {
         dataUrl: atual.dataUrl || '', mime: atual.mime || '', fileName: atual.fileName || '', extractedText: atual.extractedText || ''
     } : null);
@@ -22124,8 +22910,14 @@ async function excluirDocumentoMesa(documentId) {
     updates[`${caminhoBaseMesaDocumentos()}/documents/${documentId}`] = null;
     Object.keys(documentDeskState.slots || {}).forEach(slotId => {
         updates[`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`] = null;
+        Object.entries(documentDeskState.allDrawings?.[slotId] || {}).forEach(([drawingId, desenho]) => {
+            if (String(desenho?.attachedDocumentId || '') === documentId) {
+                updates[`${caminhoBaseMesaDocumentos()}/drawings/${slotId}/${drawingId}`] = null;
+            }
+        });
     });
     await database.ref().update(updates);
+    if (documentDeskState.stapleSourceId === documentId) cancelarSelecaoGrampoMesa();
     if (superficieFocoAtiva?.id === 'modal-document-viewer') fecharSuperficieFoco('#modal-document-viewer');
 }
 
@@ -22362,10 +23154,13 @@ function abrirDocumentoMesa(documentId) {
     garantirInteracoesLupaDocumento();
     const actions = document.getElementById('document-viewer-actions');
     const download = documento.dataUrl ? `<button type="button" class="settings-secondary" onclick="baixarDocumentoMesa('${escapeCampaignHtml(documentId)}')">Baixar</button>` : '';
-    const master = documentDeskState.role === 'mestre'
-        ? `<button type="button" class="settings-secondary" onclick="editarDocumentoMesaPeloVisualizador()">Editar</button><button type="button" class="settings-secondary document-danger-action" onclick="excluirDocumentoMesa('${escapeCampaignHtml(documentId)}')">Excluir</button>`
+    const edit = podeEditarDocumentoMesa(documentId)
+        ? `<button type="button" class="settings-secondary" onclick="editarDocumentoMesaPeloVisualizador()">Editar</button>`
         : '';
-    actions.innerHTML = `${download}${master}<button type="button" class="settings-primary" onclick="fecharSuperficieFoco('#modal-document-viewer')">Fechar</button>`;
+    const apagar = documentDeskState.role === 'mestre'
+        ? `<button type="button" class="settings-secondary document-danger-action" onclick="excluirDocumentoMesa('${escapeCampaignHtml(documentId)}')">Excluir</button>`
+        : '';
+    actions.innerHTML = `${download}${edit}${apagar}<button type="button" class="settings-primary" onclick="fecharSuperficieFoco('#modal-document-viewer')">Fechar</button>`;
     abrirSuperficieFoco('#modal-document-viewer');
 }
 
