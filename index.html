@@ -8556,6 +8556,8 @@ body.ui-focus-open.ui-theme-preview-open { overflow-x: hidden; overflow-y: auto;
    ========================================================= */
 body.document-desk-open { overflow: hidden !important; }
 body.document-desk-open.ui-focus-open .top-utility-bar { z-index: 1150 !important; }
+body.document-desk-open > .top-utility-bar,
+body.document-desk-open > .sidebar { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 body.theme-umbral #btn-documentos::after { content: "Mesa"; }
 #document-desk-app {
     --desk-ink: #28170d;
@@ -8576,7 +8578,7 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     position: relative;
     z-index: 8;
     display: grid;
-    grid-template-columns: minmax(190px, .8fr) minmax(280px, 1.25fr) auto;
+    grid-template-columns: minmax(280px, 1.2fr) minmax(300px, 1fr) auto;
     align-items: center;
     gap: 18px;
     min-height: 78px;
@@ -8596,15 +8598,14 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     letter-spacing: 2.4px;
 }
 .document-desk-heading h1 {
-    overflow: hidden;
+    overflow: visible;
     margin: 0;
     color: #f4ead9;
     font: 600 clamp(1rem, 2vw, 1.35rem) var(--font-rpg);
     letter-spacing: 2px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-wrap: balance;
 }
-.document-desk-context { display: flex; align-items: center; justify-content: center; gap: 9px; min-width: 0; }
+.document-desk-context { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 9px; min-width: 0; }
 .document-desk-campaign-select {
     width: min(330px, 48vw);
     min-width: 170px;
@@ -8615,7 +8616,9 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     background: #100b08;
     font: 600 .63rem var(--font-rpg);
     letter-spacing: .7px;
+    cursor: pointer;
 }
+.document-desk-campaign-select.is-loading { opacity: .58; cursor: wait; }
 .document-desk-presence-count {
     flex: 0 0 auto;
     padding: 7px 9px;
@@ -8625,7 +8628,47 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     font: 600 .55rem var(--font-rpg);
     letter-spacing: .7px;
 }
+.document-cursor-color-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 34px;
+    padding: 5px 7px 5px 9px;
+    border: 1px solid #3c2b1d;
+    color: #b9aa96;
+    background: rgba(0,0,0,.24);
+    font: 600 .5rem var(--font-rpg);
+    letter-spacing: .8px;
+    cursor: pointer;
+}
+.document-cursor-color-control input {
+    width: 25px;
+    height: 22px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #70543a;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+}
+.document-cursor-color-control input::-webkit-color-swatch-wrapper { padding: 0; }
+.document-cursor-color-control input::-webkit-color-swatch { border: 0; border-radius: 50%; }
 .document-desk-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+.document-desk-zoom { display: inline-flex; align-items: stretch; border: 1px solid #5c4228; background: rgba(17,11,8,.9); }
+.document-desk-zoom button {
+    min-width: 31px;
+    min-height: 34px;
+    padding: 5px 7px;
+    border: 0;
+    border-right: 1px solid #40301f;
+    color: #dfd3c2;
+    background: transparent;
+    font: 700 .62rem var(--font-rpg);
+    cursor: pointer;
+}
+.document-desk-zoom button:last-child { border-right: 0; }
+.document-desk-zoom button:hover { color: #fff; background: rgba(212,175,55,.1); }
+#document-desk-zoom-label { min-width: 49px; color: var(--desk-gold); font-size: .5rem; }
 .document-desk-button {
     min-height: 36px;
     padding: 8px 11px;
@@ -8657,6 +8700,13 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     background: #120a05;
     scrollbar-color: var(--primary-purple) #0d0805;
 }
+.document-desk-board-shell {
+    position: relative;
+    width: 100%;
+    min-width: 860px;
+    height: calc(100vh - 106px);
+    min-height: 610px;
+}
 .document-desk-board {
     position: relative;
     z-index: 1;
@@ -8674,6 +8724,8 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     box-shadow: inset 0 0 80px rgba(0,0,0,.55), 0 14px 38px rgba(0,0,0,.58);
     user-select: none;
     isolation: isolate;
+    transform: scale(var(--desk-zoom, 1));
+    transform-origin: left top;
 }
 .document-desk-board::after {
     content: "";
@@ -8752,12 +8804,26 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     background: #e5d6b4;
     border: 1px solid rgba(50,28,15,.62);
     box-shadow: 0 9px 16px rgba(0,0,0,.43), 0 2px 3px rgba(0,0,0,.35);
+    transform: rotate(var(--doc-rotation, 0deg));
     transform-origin: center;
+    transition: transform .18s cubic-bezier(.2,.75,.25,1), box-shadow .18s ease, filter .18s ease;
     touch-action: none;
     cursor: grab;
 }
 .desk-document:active { cursor: grabbing; }
-.desk-document.is-dragging { box-shadow: 0 18px 32px rgba(0,0,0,.62); }
+.desk-document.is-dragging {
+    z-index: 100000 !important;
+    box-shadow: 0 24px 38px rgba(0,0,0,.68), 0 7px 8px rgba(0,0,0,.34);
+    filter: saturate(1.06) brightness(1.04);
+    transform: rotate(var(--doc-rotation, 0deg)) translateY(-12px) scale(1.025);
+}
+.desk-document.is-dropping { animation: deskDocumentDrop .36s cubic-bezier(.22,.84,.3,1) both; }
+@keyframes deskDocumentDrop {
+    0% { transform: rotate(var(--doc-rotation, 0deg)) translateY(-12px) scale(1.025); box-shadow: 0 24px 38px rgba(0,0,0,.68); }
+    58% { transform: rotate(var(--doc-rotation, 0deg)) translateY(3px) scale(.987); box-shadow: 0 5px 9px rgba(0,0,0,.48); }
+    78% { transform: rotate(var(--doc-rotation, 0deg)) translateY(-1px) scale(1.004); }
+    100% { transform: rotate(var(--doc-rotation, 0deg)) translateY(0) scale(1); box-shadow: 0 9px 16px rgba(0,0,0,.43), 0 2px 3px rgba(0,0,0,.35); }
+}
 .desk-document::before {
     content: "";
     position: absolute;
@@ -8823,6 +8889,26 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     cursor: nwse-resize;
 }
 .desk-resize-handle::before { content: ""; position: absolute; right: 3px; bottom: 3px; width: 7px; height: 7px; border-right: 2px solid #3a2411; border-bottom: 2px solid #3a2411; }
+.desk-rotate-handle {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    z-index: 4;
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    padding: 0;
+    border: 1px solid #74552e;
+    border-radius: 50%;
+    color: #2a180b;
+    background: #d3b66e;
+    box-shadow: 0 3px 9px rgba(0,0,0,.42);
+    font: 800 .9rem Arial, sans-serif;
+    cursor: pointer;
+    transition: transform .15s ease, background .15s ease;
+}
+.desk-rotate-handle:hover { background: #f1d58c; transform: rotate(22deg) scale(1.08); }
 .document-desk-cursor { position: absolute; transform: translate(2px, 2px); transition: left .08s linear, top .08s linear; }
 .document-desk-cursor-pointer {
     width: 0;
@@ -8905,6 +8991,8 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
 .document-drawer-card-actions button { width: 29px; height: 29px; padding: 0; border: 1px solid #49331f; color: #cdbb9f; background: #120c08; cursor: pointer; }
 .document-drawer-card-actions button:hover { color: #fff; border-color: var(--desk-gold); }
 .document-drawer-empty { padding: 30px 12px; color: #8d806f; font: .82rem/1.45 var(--font-reading); text-align: center; }
+.document-editor-modal,
+.document-viewer-modal { --desk-gold: color-mix(in srgb, var(--text-gold) 82%, #f3d58a); }
 .document-editor-modal { width: min(670px, calc(100vw - 30px)) !important; }
 .document-editor-type-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin: 10px 0 17px; }
 .document-editor-type-grid label { cursor: pointer; }
@@ -8947,6 +9035,7 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     .document-desk-topbar { grid-template-columns: 1fr auto; }
     .document-desk-context { grid-column: 1/-1; grid-row: 2; justify-content: flex-start; }
     .document-desk-topbar { padding-block: 10px; }
+    .document-desk-board-shell,
     .document-desk-board { height: calc(100vh - 148px); }
     .document-drawer { width: 285px; }
 }
@@ -8954,6 +9043,7 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     .document-desk-heading small { display: none; }
     .document-desk-heading h1 { font-size: .84rem; letter-spacing: .8px; }
     .document-desk-actions .document-desk-button span { display: none; }
+    .document-cursor-color-control span { display: none; }
     .document-desk-button { min-width: 36px; padding-inline: 8px; }
     .document-desk-campaign-select { width: calc(100vw - 118px); }
     .document-drawer {
@@ -8968,9 +9058,14 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
     .drawer-closed .document-drawer { transform: translateX(calc(100% - 42px)); }
     .document-drawer-toggle { top: 16px; }
     .document-desk-viewport { padding: 8px; }
+    .document-desk-board-shell,
     .document-desk-board { height: calc(100vh - 150px); min-width: 820px; }
     .document-slot-ribbon { left: 18px; max-width: calc(100% - 36px); transform: none; }
     .document-editor-type-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .desk-document { transition: none !important; }
+    .desk-document.is-dropping { animation: none !important; }
 }
 
     </style>
@@ -9714,8 +9809,17 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
             <div class="document-desk-context">
                 <select id="document-desk-campaign-select" class="document-desk-campaign-select" aria-label="Campanha da mesa" onchange="trocarCampanhaMesaDocumentos(this.value)"></select>
                 <span id="document-desk-presence-count" class="document-desk-presence-count">0 NA MESA</span>
+                <label class="document-cursor-color-control" title="Cor que os outros jogadores verão no seu ponteiro">
+                    <span>PONTEIRO</span>
+                    <input id="document-cursor-color" type="color" value="#a970ff" aria-label="Cor do ponteiro compartilhado" oninput="previsualizarCorPonteiroMesa(this.value)" onchange="salvarCorPonteiroMesa(this.value)">
+                </label>
             </div>
             <div class="document-desk-actions">
+                <div class="document-desk-zoom" role="group" aria-label="Zoom da mesa">
+                    <button type="button" onclick="alterarZoomMesaDocumentos(-0.1)" title="Diminuir zoom">−</button>
+                    <button id="document-desk-zoom-label" type="button" onclick="definirZoomMesaDocumentos(1)" title="Restaurar zoom">100%</button>
+                    <button type="button" onclick="alterarZoomMesaDocumentos(0.1)" title="Aumentar zoom">＋</button>
+                </div>
                 <button id="document-desk-add-button" class="document-desk-button primary" type="button" onclick="abrirEditorDocumentoMesa()" hidden>＋ <span>Novo documento</span></button>
                 <button class="document-desk-button" type="button" onclick="alternarGavetaDocumentos()">▤ <span>Gaveta</span></button>
                 <button class="document-desk-button" type="button" onclick="fecharMesaDocumentos()">← <span>Voltar</span></button>
@@ -9723,7 +9827,8 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
         </header>
         <div id="document-desk-workspace" class="document-desk-workspace">
             <div class="document-desk-viewport">
-                <section id="document-desk-board" class="document-desk-board" aria-label="Mesa compartilhada de documentos">
+                <div id="document-desk-board-shell" class="document-desk-board-shell">
+                  <section id="document-desk-board" class="document-desk-board" aria-label="Mesa compartilhada de documentos">
                     <div class="document-slot-ribbon">
                         <div id="document-slot-tabs" class="document-slot-tabs"></div>
                         <div id="document-slot-tools" class="document-slot-tools">
@@ -9741,7 +9846,8 @@ body.theme-umbral #btn-documentos::after { content: "Mesa"; }
                             <p id="document-desk-empty-message">Esta ficha ainda não está vinculada a uma campanha.</p>
                         </div>
                     </div>
-                </section>
+                  </section>
+                </div>
             </div>
             <aside id="document-drawer" class="document-drawer" aria-label="Gaveta de documentos">
                 <button class="document-drawer-toggle" type="button" onclick="alternarGavetaDocumentos()" aria-label="Abrir ou fechar gaveta">›</button>
@@ -19082,10 +19188,24 @@ const documentDeskState = {
     viewDocumentId: null,
     drag: null,
     positionTimers: new Map(),
+    dropAnimations: new Set(),
+    dropTimers: new Map(),
     cursorTimer: null,
     lastCursorPayload: null,
-    drawerClosed: false
+    drawerClosed: false,
+    pointerColor: '#a970ff',
+    zoom: 1,
+    portalReady: false
 };
+
+function montarPortalMesaDocumentos() {
+    if (documentDeskState.portalReady) return;
+    ['document-desk-app', 'modal-document-editor', 'modal-document-viewer'].forEach(id => {
+        const elemento = document.getElementById(id);
+        if (elemento && elemento.parentElement !== document.body) document.body.appendChild(elemento);
+    });
+    documentDeskState.portalReady = true;
+}
 
 function caminhoBaseMesaDocumentos(campaignId = documentDeskState.campaignId) {
     return campaignId ? `campaignDocumentDesks/${campaignId}` : '';
@@ -19093,6 +19213,84 @@ function caminhoBaseMesaDocumentos(campaignId = documentDeskState.campaignId) {
 
 function normalizarBuscaMesaDocumentos(valor) {
     return String(valor || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function normalizarCorPonteiroMesa(valor, fallback = '#a970ff') {
+    const cor = String(valor || '').trim();
+    return /^#[0-9a-f]{6}$/i.test(cor) ? cor.toLowerCase() : fallback;
+}
+
+function chaveCorPonteiroMesa() {
+    return `abyssDocumentDeskCursor:${currentUser?.uid || 'local'}`;
+}
+
+function previsualizarCorPonteiroMesa(valor) {
+    documentDeskState.pointerColor = normalizarCorPonteiroMesa(valor, documentDeskState.pointerColor);
+    const input = document.getElementById('document-cursor-color');
+    if (input && input.value !== documentDeskState.pointerColor) input.value = documentDeskState.pointerColor;
+    publicarPresencaMesaDocumentos({ color: documentDeskState.pointerColor });
+}
+
+async function salvarCorPonteiroMesa(valor) {
+    previsualizarCorPonteiroMesa(valor);
+    localStorage.setItem(chaveCorPonteiroMesa(), documentDeskState.pointerColor);
+    if (currentUser) {
+        await database.ref(`users/${currentUser.uid}/preferences/documentDeskCursorColor`).set(documentDeskState.pointerColor).catch(error => {
+            console.warn('Não foi possível sincronizar a cor do ponteiro.', error);
+        });
+    }
+}
+
+async function carregarCorPonteiroMesa() {
+    const local = normalizarCorPonteiroMesa(localStorage.getItem(chaveCorPonteiroMesa()), '#a970ff');
+    documentDeskState.pointerColor = local;
+    previsualizarCorPonteiroMesa(local);
+    if (!currentUser) return;
+    try {
+        const snapshot = await database.ref(`users/${currentUser.uid}/preferences/documentDeskCursorColor`).once('value');
+        if (!currentUser || !snapshot.exists()) return;
+        const remota = normalizarCorPonteiroMesa(snapshot.val(), local);
+        documentDeskState.pointerColor = remota;
+        localStorage.setItem(chaveCorPonteiroMesa(), remota);
+        previsualizarCorPonteiroMesa(remota);
+    } catch (error) {
+        console.warn('A cor remota do ponteiro não pôde ser carregada.', error);
+    }
+}
+
+function definirZoomMesaDocumentos(valor) {
+    documentDeskState.zoom = Math.max(.6, Math.min(1.8, Math.round(numeroMesa(valor, 1) * 10) / 10));
+    localStorage.setItem('abyssDocumentDeskZoom', String(documentDeskState.zoom));
+    aplicarZoomMesaDocumentos();
+}
+
+function alterarZoomMesaDocumentos(delta) {
+    definirZoomMesaDocumentos(documentDeskState.zoom + numeroMesa(delta, 0));
+}
+
+function aplicarZoomMesaDocumentos() {
+    const viewport = document.getElementById('document-desk-app')?.classList.contains('active')
+        ? document.querySelector('.document-desk-viewport')
+        : null;
+    const shell = document.getElementById('document-desk-board-shell');
+    const board = document.getElementById('document-desk-board');
+    if (!viewport || !shell || !board) return;
+    const zoom = Math.max(.6, Math.min(1.8, numeroMesa(documentDeskState.zoom, 1)));
+    const topbar = document.querySelector('.document-desk-topbar');
+    const baseWidth = Math.max(860, viewport.clientWidth - 28);
+    const baseHeight = Math.max(610, window.innerHeight - numeroMesa(topbar?.offsetHeight, 78) - 28);
+    shell.style.width = `${Math.round(baseWidth * zoom)}px`;
+    shell.style.height = `${Math.round(baseHeight * zoom)}px`;
+    shell.style.minWidth = '0';
+    shell.style.minHeight = '0';
+    shell.style.marginInline = zoom < 1 ? 'auto' : '0';
+    board.style.width = `${baseWidth}px`;
+    board.style.height = `${baseHeight}px`;
+    board.style.minWidth = '0';
+    board.style.minHeight = '0';
+    board.style.setProperty('--desk-zoom', String(zoom));
+    const label = document.getElementById('document-desk-zoom-label');
+    if (label) label.textContent = `${Math.round(zoom * 100)}%`;
 }
 
 function campanhasVinculadasAoSlotAtual() {
@@ -19116,8 +19314,12 @@ function atualizarOpcoesCampanhaMesaDocumentos() {
         select.disabled = true;
         return;
     }
-    select.disabled = options.length < 2;
+    select.disabled = false;
     select.innerHTML = options.map(campaign => `<option value="${escapeCampaignHtml(campaign.id)}" ${campaign.id === documentDeskState.campaignId ? 'selected' : ''}>${escapeCampaignHtml(campaign.name)}</option>`).join('');
+    select.value = options.some(campaign => campaign.id === documentDeskState.campaignId)
+        ? documentDeskState.campaignId
+        : options[0].id;
+    select.title = options.length > 1 ? 'Escolher outra campanha vinculada' : 'Campanha vinculada a esta ficha';
 }
 
 function renderizarMesaDocumentosVazia(mensagem) {
@@ -19170,28 +19372,34 @@ function abrirMesaDocumentosCampanha() {
     if (!campaignState.activeId || !campaignState.activeCampaign) return;
     documentDeskState.origin = 'campaign';
     documentDeskState.campaignId = campaignState.activeId;
-    documentDeskState.campaignOptions = [{
-        id: campaignState.activeId,
-        name: campaignState.activeCampaign.meta?.name || 'Campanha'
-    }];
+    const acessiveis = (campaignState.campaigns || []).map(campaign => ({ id: campaign.id, name: campaign.name || 'Campanha' }));
+    documentDeskState.campaignOptions = acessiveis.some(campaign => campaign.id === campaignState.activeId)
+        ? acessiveis
+        : [{ id: campaignState.activeId, name: campaignState.activeCampaign.meta?.name || 'Campanha' }, ...acessiveis];
     abrirAplicativoMesaDocumentos();
     atualizarOpcoesCampanhaMesaDocumentos();
     conectarMesaDocumentos(campaignState.activeId);
 }
 
 function abrirAplicativoMesaDocumentos() {
+    montarPortalMesaDocumentos();
+    if (typeof fecharTodasSuperficiesFoco === 'function' && superficieFocoAtiva) fecharTodasSuperficiesFoco();
     pararEscutasMesaDocumentos(true);
     documentDeskState.active = true;
+    documentDeskState.zoom = Math.max(.6, Math.min(1.8, numeroMesa(localStorage.getItem('abyssDocumentDeskZoom'), 1)));
     const app = document.getElementById('document-desk-app');
     app?.classList.add('active');
     app?.setAttribute('aria-hidden', 'false');
     document.body.classList.add('document-desk-open');
     document.getElementById('document-desk-title').textContent = 'Mesa de Documentos';
     renderizarMesaDocumentosVazia('Abrindo o arquivo da campanha...');
+    carregarCorPonteiroMesa();
+    requestAnimationFrame(aplicarZoomMesaDocumentos);
 }
 
 function fecharMesaDocumentos() {
     tocarSom('click');
+    if (superficieFocoAtiva?.id === 'modal-document-editor' || superficieFocoAtiva?.id === 'modal-document-viewer') fecharTodasSuperficiesFoco();
     pararEscutasMesaDocumentos(true);
     documentDeskState.active = false;
     document.getElementById('document-desk-app')?.classList.remove('active');
@@ -19222,14 +19430,25 @@ function pararEscutasMesaDocumentos(removerPresenca = true) {
     documentDeskState.presenceSelfRef = null;
     documentDeskState.positionTimers.forEach(timer => clearTimeout(timer));
     documentDeskState.positionTimers.clear();
+    documentDeskState.dropTimers.forEach(timer => clearTimeout(timer));
+    documentDeskState.dropTimers.clear();
+    documentDeskState.dropAnimations.clear();
     documentDeskState.drag = null;
 }
 
 async function trocarCampanhaMesaDocumentos(campaignId) {
-    if (!campaignId || campaignId === documentDeskState.campaignId) return;
+    if (!campaignId) return;
     const permitido = (documentDeskState.campaignOptions || []).some(campaign => campaign.id === campaignId);
     if (!permitido) return;
-    await conectarMesaDocumentos(campaignId);
+    if (campaignId === documentDeskState.campaignId && documentDeskState.presenceSelfRef) return;
+    tocarSom('click');
+    const select = document.getElementById('document-desk-campaign-select');
+    if (select) select.classList.add('is-loading');
+    try {
+        await conectarMesaDocumentos(campaignId);
+    } finally {
+        if (select) select.classList.remove('is-loading');
+    }
 }
 
 async function conectarMesaDocumentos(campaignId) {
@@ -19261,6 +19480,7 @@ async function conectarMesaDocumentos(campaignId) {
         if (option) option.name = meta.name || option.name;
         atualizarOpcoesCampanhaMesaDocumentos();
         atualizarControlesMesaDocumentos();
+        requestAnimationFrame(aplicarZoomMesaDocumentos);
 
         const base = caminhoBaseMesaDocumentos(campaignId);
         const docsRef = database.ref(`${base}/documents`);
@@ -19342,8 +19562,14 @@ function escutarPosicoesSlotMesa(slotId) {
     }
     const ref = database.ref(`${caminhoBaseMesaDocumentos()}/placements`);
     const handler = snapshot => {
+        const anteriores = documentDeskState.placements || {};
         documentDeskState.allPlacements = snapshot.val() || {};
-        documentDeskState.placements = documentDeskState.allPlacements[documentDeskState.currentSlotId] || {};
+        const atuais = documentDeskState.allPlacements[documentDeskState.currentSlotId] || {};
+        Object.entries(atuais).forEach(([documentId, placement]) => {
+            const quedaAnterior = anteriores[documentId]?.droppedAt;
+            if (placement?.droppedAt && placement.droppedAt !== quedaAnterior) animarQuedaDocumentoMesa(documentId);
+        });
+        documentDeskState.placements = atuais;
         if (!documentDeskState.drag) renderizarDocumentosNaMesa();
         renderizarGavetaDocumentos();
     };
@@ -19397,6 +19623,7 @@ async function excluirSlotMesaDocumentos() {
 }
 
 function corCursorMesaDocumentos(uid) {
+    if (uid && currentUser?.uid === uid) return normalizarCorPonteiroMesa(documentDeskState.pointerColor);
     let hash = 0;
     for (const char of String(uid || 'jogador')) hash = ((hash << 5) - hash + char.charCodeAt(0)) | 0;
     return `hsl(${Math.abs(hash) % 360} 78% 66%)`;
@@ -19414,7 +19641,7 @@ function publicarPresencaMesaDocumentos(extra = {}) {
     if (!documentDeskState.presenceSelfRef || !currentUser) return;
     const payload = {
         name: nomeExibicaoAtual() || sheet?.nickname || 'Jogador',
-        color: corCursorMesaDocumentos(currentUser.uid),
+        color: normalizarCorPonteiroMesa(documentDeskState.pointerColor),
         slotId: documentDeskState.currentSlotId,
         active: true,
         ...documentDeskState.lastCursorPayload,
@@ -19454,11 +19681,13 @@ function renderizarCursoresMesaDocumentos() {
     if (counter) counter.textContent = `${presentes.length} ${presentes.length === 1 ? 'NA MESA' : 'NA MESA'}`;
     layer.innerHTML = presentes
         .filter(([uid]) => uid !== currentUser?.uid)
-        .map(([uid, presence]) => `
-            <span class="document-desk-cursor" style="left:${Math.max(0,Math.min(100,numeroMesa(presence.x,0)*100))}%;top:${Math.max(0,Math.min(100,numeroMesa(presence.y,0)*100))}%;--cursor-color:${corCursorMesaDocumentos(uid)}">
+        .map(([uid, presence]) => {
+            const cor = normalizarCorPonteiroMesa(presence.color, corCursorMesaDocumentos(uid));
+            return `
+            <span class="document-desk-cursor" style="left:${Math.max(0,Math.min(100,numeroMesa(presence.x,0)*100))}%;top:${Math.max(0,Math.min(100,numeroMesa(presence.y,0)*100))}%;--cursor-color:${cor}">
                 <i class="document-desk-cursor-pointer"></i><b class="document-desk-cursor-name">${escapeCampaignHtml(presence.name || 'Jogador')}</b>
-            </span>
-        `).join('');
+            </span>`;
+        }).join('');
 }
 
 function alternarGavetaDocumentos() {
@@ -19528,24 +19757,27 @@ function renderizarDocumentosNaMesa() {
             const h = Math.max(15, Math.min(68, numeroMesa(placement.h, 27)));
             const x = Math.max(0, Math.min(100 - w, numeroMesa(placement.x, 12)));
             const y = Math.max(7, Math.min(100 - h, numeroMesa(placement.y, 18)));
-            const rotation = Math.max(-18, Math.min(18, numeroMesa(placement.rotation, 0)));
+            const rotation = Math.max(-180, Math.min(180, numeroMesa(placement.rotation, 0)));
             const mestre = documentDeskState.role === 'mestre';
             const tipo = ['text', 'image', 'file'].includes(documento.type) ? documento.type : 'file';
-            return `<article class="desk-document ${tipo}" data-document-id="${escapeCampaignHtml(id)}" tabindex="0" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%;z-index:${Math.max(1, numeroMesa(placement.z, 1))};transform:rotate(${rotation}deg)" aria-label="${escapeCampaignHtml(documento.title || 'Documento')}">
+            const soltando = documentDeskState.dropAnimations.has(id) ? 'is-dropping' : '';
+            return `<article class="desk-document ${tipo} ${soltando}" data-document-id="${escapeCampaignHtml(id)}" tabindex="0" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%;z-index:${Math.max(1, numeroMesa(placement.z, 1))};--doc-rotation:${rotation}deg" aria-label="${escapeCampaignHtml(documento.title || 'Documento')}">
                 <div class="desk-document-controls" onpointerdown="event.stopPropagation()">
                     <button type="button" onclick="abrirDocumentoMesa('${escapeCampaignHtml(id)}')" title="Abrir documento">⌕</button>
                     <button type="button" onclick="girarDocumentoMesa('${escapeCampaignHtml(id)}', -3)" title="Girar para a esquerda">↶</button>
                     <button type="button" onclick="girarDocumentoMesa('${escapeCampaignHtml(id)}', 3)" title="Girar para a direita">↷</button>
                     <button type="button" onclick="trazerDocumentoFrente('${escapeCampaignHtml(id)}')" title="Trazer para frente">⇧</button>
-                    <button type="button" onclick="guardarDocumentoNaGaveta('${escapeCampaignHtml(id)}')" title="Guardar na gaveta">▤</button>
+                    <button type="button" data-document-no-front onclick="guardarDocumentoNaGaveta('${escapeCampaignHtml(id)}')" title="Guardar na gaveta">▤</button>
                     ${mestre ? `<button type="button" onclick="abrirEditorDocumentoMesa('${escapeCampaignHtml(id)}')" title="Editar documento">✎</button>` : ''}
                 </div>
                 <header class="desk-document-title">${escapeCampaignHtml(documento.title || 'Sem título')}</header>
                 <div class="desk-document-body">${corpoDocumentoMesaHtml(documento)}</div>
+                <button type="button" class="desk-rotate-handle" onclick="girarDocumentoMesa('${escapeCampaignHtml(id)}', 15)" title="Girar documento em 15 graus" aria-label="Girar documento">↻</button>
                 <span class="desk-resize-handle" data-resize-document="${escapeCampaignHtml(id)}" title="Redimensionar"></span>
             </article>`;
         }).join('');
     layer.querySelectorAll('.desk-document').forEach(card => {
+        card.addEventListener('pointerdown', destacarDocumentoMesaAoClicar, { capture: true });
         card.addEventListener('pointerdown', iniciarMovimentoDocumentoMesa);
         card.addEventListener('dblclick', event => {
             if (!event.target.closest('button, .desk-resize-handle')) abrirDocumentoMesa(card.dataset.documentId);
@@ -19616,8 +19848,10 @@ async function colocarDocumentoNaMesa(documentId) {
     updates[`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`] = {
         ...posicaoPadraoDocumentoMesa(),
         modifiedBy: currentUser.uid,
-        modifiedAt: firebase.database.ServerValue.TIMESTAMP
+        modifiedAt: firebase.database.ServerValue.TIMESTAMP,
+        droppedAt: firebase.database.ServerValue.TIMESTAMP
     };
+    animarQuedaDocumentoMesa(documentId);
     await database.ref().update(updates);
 }
 
@@ -19643,8 +19877,7 @@ async function girarDocumentoMesa(documentId, delta) {
     const placement = documentDeskState.placements[documentId];
     if (!placement) return;
     let rotation = numeroMesa(placement.rotation, 0) + numeroMesa(delta, 0);
-    if (rotation > 18) rotation = -18;
-    if (rotation < -18) rotation = 18;
+    rotation = ((rotation + 180) % 360 + 360) % 360 - 180;
     await database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update({
         rotation,
         modifiedBy: currentUser.uid,
@@ -19652,8 +19885,41 @@ async function girarDocumentoMesa(documentId, delta) {
     });
 }
 
+function destacarDocumentoMesaAoClicar(event) {
+    if (event.button !== 0 || event.target.closest('[data-document-no-front]')) return;
+    const card = event.currentTarget;
+    const documentId = card.dataset.documentId;
+    const placement = documentDeskState.placements[documentId];
+    if (!placement) return;
+    const z = maiorCamadaMesaDocumentos() + 1;
+    documentDeskState.placements[documentId] = { ...placement, z };
+    card.style.zIndex = z;
+    setTimeout(() => {
+        if (!documentDeskState.campaignId) return;
+        database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update({
+            z,
+            modifiedBy: currentUser.uid,
+            modifiedAt: firebase.database.ServerValue.TIMESTAMP
+        }).catch(error => console.error('Erro ao destacar documento:', error));
+    }, 0);
+}
+
+function animarQuedaDocumentoMesa(documentId) {
+    documentDeskState.dropAnimations.add(documentId);
+    clearTimeout(documentDeskState.dropTimers.get(documentId));
+    const localizarCard = () => [...document.querySelectorAll('.desk-document')].find(item => item.dataset.documentId === documentId);
+    const card = localizarCard();
+    card?.classList.add('is-dropping');
+    const timer = setTimeout(() => {
+        documentDeskState.dropAnimations.delete(documentId);
+        documentDeskState.dropTimers.delete(documentId);
+        localizarCard()?.classList.remove('is-dropping');
+    }, 430);
+    documentDeskState.dropTimers.set(documentId, timer);
+}
+
 function iniciarMovimentoDocumentoMesa(event) {
-    if (event.button !== 0 || event.target.closest('.desk-document-controls button')) return;
+    if (event.button !== 0 || event.target.closest('.desk-document-controls button, .desk-rotate-handle')) return;
     const card = event.currentTarget;
     const documentId = card.dataset.documentId;
     const placement = documentDeskState.placements[documentId];
@@ -19663,7 +19929,7 @@ function iniciarMovimentoDocumentoMesa(event) {
     event.preventDefault();
     card.setPointerCapture?.(event.pointerId);
     card.classList.add('is-dragging');
-    const frontZ = maiorCamadaMesaDocumentos() + 1;
+    const frontZ = numeroMesa(documentDeskState.placements[documentId]?.z, maiorCamadaMesaDocumentos() + 1);
     documentDeskState.drag = {
         documentId,
         pointerId: event.pointerId,
@@ -19682,8 +19948,6 @@ function iniciarMovimentoDocumentoMesa(event) {
         },
         card
     };
-    documentDeskState.placements[documentId] = { ...documentDeskState.placements[documentId], z: frontZ };
-    card.style.zIndex = frontZ;
 }
 
 function moverDocumentoMesaComPonteiro(event) {
@@ -19714,13 +19978,15 @@ function agendarPosicaoDocumentoMesa(documentId, placement, imediato = false) {
     const salvar = () => {
         documentDeskState.positionTimers.delete(documentId);
         if (!documentDeskState.campaignId || !documentDeskState.currentSlotId) return;
-        database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update({
+        const payload = {
             x: Number(placement.x.toFixed(3)), y: Number(placement.y.toFixed(3)),
             w: Number(placement.w.toFixed(3)), h: Number(placement.h.toFixed(3)),
             z: placement.z, rotation: placement.rotation,
             modifiedBy: currentUser.uid,
             modifiedAt: firebase.database.ServerValue.TIMESTAMP
-        }).catch(error => console.error('Erro ao organizar documento:', error));
+        };
+        if (imediato) payload.droppedAt = firebase.database.ServerValue.TIMESTAMP;
+        database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update(payload).catch(error => console.error('Erro ao organizar documento:', error));
     };
     if (imediato) salvar();
     else documentDeskState.positionTimers.set(documentId, setTimeout(salvar, 75));
@@ -19733,6 +19999,7 @@ function finalizarMovimentoDocumentoMesa(event) {
     const placement = documentDeskState.placements[drag.documentId];
     documentDeskState.drag = null;
     if (placement) agendarPosicaoDocumentoMesa(drag.documentId, placement, true);
+    animarQuedaDocumentoMesa(drag.documentId);
     renderizarDocumentosNaMesa();
 }
 
@@ -19948,6 +20215,7 @@ function baixarDocumentoMesa(documentId) {
 
 function inicializarInteracoesMesaDocumentos() {
     const board = document.getElementById('document-desk-board');
+    const viewport = document.querySelector('.document-desk-viewport');
     if (!board || board.dataset.interactionsReady === 'true') return;
     board.dataset.interactionsReady = 'true';
     board.addEventListener('pointermove', atualizarCursorMesaDocumentos);
@@ -19956,6 +20224,14 @@ function inicializarInteracoesMesaDocumentos() {
     document.addEventListener('pointermove', moverDocumentoMesaComPonteiro);
     document.addEventListener('pointerup', finalizarMovimentoDocumentoMesa);
     document.addEventListener('pointercancel', finalizarMovimentoDocumentoMesa);
+    viewport?.addEventListener('wheel', event => {
+        if (!event.ctrlKey && !event.metaKey) return;
+        event.preventDefault();
+        alterarZoomMesaDocumentos(event.deltaY > 0 ? -0.1 : 0.1);
+    }, { passive: false });
+    window.addEventListener('resize', () => {
+        if (documentDeskState.active) aplicarZoomMesaDocumentos();
+    });
 }
 
 function sincronizarAcessoMesaDocumentos() {
@@ -19968,7 +20244,15 @@ function sincronizarAcessoMesaDocumentos() {
         renderizarMesaDocumentosVazia('Entre com o Google e vincule esta ficha a uma campanha para acessar uma mesa compartilhada.');
         return;
     }
-    if (documentDeskState.origin !== 'sheet') return;
+    if (documentDeskState.origin === 'campaign') {
+        const options = (campaignState.campaigns || []).map(campaign => ({ id: campaign.id, name: campaign.name || 'Campanha' }));
+        if (campaignState.activeId && !options.some(option => option.id === campaignState.activeId)) {
+            options.unshift({ id: campaignState.activeId, name: campaignState.activeCampaign?.meta?.name || 'Campanha' });
+        }
+        documentDeskState.campaignOptions = options;
+        atualizarOpcoesCampanhaMesaDocumentos();
+        return;
+    }
     const options = campanhasVinculadasAoSlotAtual();
     documentDeskState.campaignOptions = options;
     atualizarOpcoesCampanhaMesaDocumentos();
@@ -19993,6 +20277,7 @@ document.addEventListener('keydown', event => {
 document.addEventListener('DOMContentLoaded', () => {
     restaurarEstadoNavegacao();
     inicializarRecortadorBanner();
+    montarPortalMesaDocumentos();
     inicializarInteracoesMesaDocumentos();
     document.querySelectorAll('.turn-box').forEach(circulo => {
         const recurso = circulo.closest('.status-box-pv') ? 'PV' : 'Sanidade';
