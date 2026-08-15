@@ -8852,6 +8852,66 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
 }
 .desk-document.image { padding: 7px; background: #d8c9aa; }
 .desk-document.file { color: #eee1cb; border-color: #7a5d38; background: #24170e; }
+.desk-document.is-frameless {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+.desk-document.is-frameless::before { display: none; }
+.desk-document.is-frameless.is-dragging,
+.desk-document.is-frameless.is-rotating { box-shadow: 0 20px 34px rgba(0,0,0,.48); }
+.desk-document.is-frameless.image { padding: 0; }
+.desk-document.is-frameless.image .desk-document-title {
+    position: absolute;
+    z-index: 5;
+    top: 7px;
+    right: 7px;
+    left: 7px;
+    padding: 6px 8px;
+    border: 1px solid rgba(224,190,120,.28);
+    color: #f7ead3;
+    background: rgba(12,7,6,.78);
+    box-shadow: 0 4px 12px rgba(0,0,0,.34);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .14s ease, transform .14s ease;
+    pointer-events: none;
+}
+.desk-document.is-frameless.image:hover .desk-document-title,
+.desk-document.is-frameless.image:focus-within .desk-document-title { opacity: 1; transform: translateY(0); }
+.desk-document.is-frameless.image .desk-document-body { padding: 0; overflow: hidden; }
+.desk-document.is-frameless.image .desk-document-media {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    background: transparent;
+}
+.desk-document.is-frameless.image .desk-document-media img {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: contain;
+    filter: drop-shadow(0 7px 7px rgba(0,0,0,.38));
+}
+.desk-document.is-frameless.image.has-description .desk-document-body {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+}
+.desk-document.is-frameless.image.has-description .desk-document-description {
+    max-height: 34%;
+    overflow: auto;
+    padding: 8px 9px;
+    color: #f4e6cf;
+    background: rgba(15,9,7,.84);
+    box-shadow: 0 -3px 12px rgba(0,0,0,.24);
+}
+.desk-document.is-frameless.text .desk-document-body { color: #1b120c; background: #e5d6b4; box-shadow: 0 5px 12px rgba(0,0,0,.24); }
+.desk-document.is-frameless.file .desk-document-body { color: #eee1cb; background: #24170e; box-shadow: 0 5px 12px rgba(0,0,0,.24); }
+.desk-document.is-frameless.text .desk-document-title { background: #e5d6b4; }
+.desk-document.is-frameless.file .desk-document-title { background: #24170e; }
 .desk-document-title {
     flex: 0 0 auto;
     overflow: hidden;
@@ -9067,8 +9127,72 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
 .document-editor-file-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .document-editor-file-footer .document-editor-hint { flex: 1; }
 .document-editor-file-footer button { flex: 0 0 auto; }
+.document-frame-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 4px 0 15px;
+    padding: 11px 12px;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    background: rgba(0,0,0,.16);
+    cursor: pointer;
+}
+.document-frame-option-copy { min-width: 0; }
+.document-frame-option-copy strong { display: block; color: var(--text-gold); font: 700 .56rem var(--font-rpg); letter-spacing: 1px; }
+.document-frame-option-copy small { display: block; margin-top: 4px; font: .74rem/1.35 var(--font-reading); }
+.document-frame-option input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.document-frame-switch {
+    position: relative;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 23px;
+    border: 1px solid #59472f;
+    border-radius: 14px;
+    background: #100c0a;
+    transition: border-color .16s ease, background .16s ease;
+}
+.document-frame-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #776b5b;
+    transition: transform .18s ease, background .16s ease;
+}
+.document-frame-option input:checked + .document-frame-switch { border-color: var(--text-gold); background: color-mix(in srgb, var(--primary-purple) 30%, #100c0a); }
+.document-frame-option input:checked + .document-frame-switch::after { background: var(--text-gold); transform: translateX(21px); }
+.document-frame-option input:focus-visible + .document-frame-switch { outline: 2px solid var(--light-purple); outline-offset: 3px; }
 .document-viewer-modal { width: min(900px, calc(100vw - 30px)) !important; }
-.document-viewer-content { max-height: 64vh; overflow: auto; padding: 18px; border: 1px solid #413528; color: #291b11; background: #e8dcc1; scrollbar-color: var(--primary-purple) #18100b; }
+.document-viewer-header-actions { display: flex; align-items: center; gap: 7px; }
+.document-magnifier-toggle {
+    display: inline-flex;
+    min-height: 34px;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border: 1px solid color-mix(in srgb, var(--text-gold) 42%, var(--border-color));
+    color: var(--text-muted);
+    background: rgba(0,0,0,.22);
+    font: 700 .53rem var(--font-rpg);
+    letter-spacing: .8px;
+    cursor: pointer;
+    transition: border-color .16s ease, color .16s ease, background .16s ease;
+}
+.document-magnifier-toggle:hover { color: #fff; border-color: var(--text-gold); }
+.document-magnifier-toggle[aria-pressed="true"] { color: #17100a; border-color: var(--text-gold); background: var(--text-gold); }
+.document-magnifier-toggle > span:first-child { font-size: .9rem; line-height: 1; }
+.document-viewer-content { position: relative; max-height: 64vh; overflow: auto; padding: 18px; border: 1px solid #413528; color: #291b11; background: #e8dcc1; scrollbar-color: var(--primary-purple) #18100b; }
+.document-viewer-content.document-magnifier-active,
+.document-viewer-content.document-magnifier-active * { cursor: zoom-in !important; }
+.document-viewer-content.document-magnifier-active iframe,
+.document-viewer-content.document-magnifier-active video,
+.document-viewer-content.document-magnifier-active audio,
+.document-viewer-content.document-magnifier-active button { pointer-events: none !important; }
 .document-viewer-content.text { white-space: pre-wrap; font: 1.04rem/1.62 var(--font-reading); }
 .document-viewer-content.image { display: grid; place-items: center; background: #090705; }
 .document-viewer-content.image img { max-width: 100%; max-height: 60vh; object-fit: contain; }
@@ -9093,7 +9217,66 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
     white-space: pre-wrap;
 }
 .document-viewer-content.file .document-viewer-description { color: #eee1cb; border-color: #4d3a28; background: #1b120d; }
+.document-magnifier-lens {
+    --document-lens-size: 188px;
+    position: fixed;
+    z-index: 1000002;
+    display: block;
+    width: var(--document-lens-size);
+    height: var(--document-lens-size);
+    overflow: hidden;
+    border: 3px solid var(--text-gold);
+    border-radius: 50%;
+    background: #0b0807;
+    box-shadow:
+        0 14px 42px rgba(0,0,0,.7),
+        0 0 0 3px color-mix(in srgb, var(--primary-purple) 78%, #120818),
+        0 0 0 5px rgba(0,0,0,.82),
+        inset 0 0 0 1px rgba(255,255,255,.18),
+        inset 0 0 24px rgba(0,0,0,.44);
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(.86);
+    transform-origin: center;
+    transition: opacity .12s ease, transform .16s cubic-bezier(.2,.82,.26,1);
+    contain: strict;
+}
+.document-magnifier-lens.is-visible { opacity: 1; transform: scale(1); }
+.document-magnifier-lens::after {
+    content: '2.25×';
+    position: absolute;
+    z-index: 5;
+    right: 17px;
+    bottom: 12px;
+    padding: 3px 6px;
+    border: 1px solid color-mix(in srgb, var(--text-gold) 60%, transparent);
+    border-radius: 10px;
+    color: #fff4d7;
+    background: rgba(10,6,8,.74);
+    font: 700 .56rem/1 var(--font-rpg);
+    letter-spacing: .5px;
+}
+.document-magnifier-copy {
+    position: absolute !important;
+    inset: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    pointer-events: none !important;
+    transform-origin: 0 0 !important;
+    scrollbar-width: none;
+}
+.document-magnifier-copy::-webkit-scrollbar { display: none; }
+.document-magnifier-copy audio,
+.document-magnifier-copy video { visibility: hidden; }
 .document-danger-action { color: #ef9ba0 !important; border-color: #733b40 !important; }
+
+@media (max-width: 620px) {
+    .document-magnifier-toggle > span:last-child { display: none; }
+    .document-magnifier-toggle { width: 34px; justify-content: center; padding: 0; }
+    .document-magnifier-lens { --document-lens-size: 146px; }
+}
 
 /* Galeria de retratos e estados visuais do personagem */
 .character-avatar-stack {
@@ -9169,10 +9352,15 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
 .avatar-gallery-card-copy small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .avatar-gallery-card-copy strong { color: #eee8f1; font: 700 .62rem var(--font-rpg); }
 .avatar-gallery-card-copy small { margin-top: 3px; color: var(--text-muted); font: .7rem var(--font-reading); }
-.avatar-gallery-card-actions { display: grid; grid-template-columns: 1fr auto; gap: 5px; }
+.avatar-gallery-card-actions { display: grid; grid-template-columns: minmax(0,1fr) repeat(2, auto); gap: 5px; }
 .avatar-gallery-card-actions button { min-height: 28px; padding: 5px 7px; border: 1px solid var(--border-color); color: #d9d2dc; background: #0b0a0e; font: 600 .52rem var(--font-rpg); cursor: pointer; }
 .avatar-gallery-card-actions button:hover { border-color: var(--text-gold); color: #fff; }
+.avatar-gallery-card-actions button:disabled { opacity: .3; cursor: default; border-color: var(--border-color); color: var(--text-muted); }
 .avatar-gallery-card-actions .avatar-gallery-delete { color: #ee9a9f; }
+.avatar-gallery-card-order { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.avatar-gallery-card-order button { min-height: 26px; padding: 4px 7px; border: 1px solid var(--border-color); color: var(--text-muted); background: rgba(0,0,0,.2); font: 700 .7rem/1 var(--font-rpg); cursor: pointer; }
+.avatar-gallery-card-order button:hover:not(:disabled) { border-color: var(--text-gold); color: var(--text-gold); }
+.avatar-gallery-card-order button:disabled { opacity: .25; cursor: default; }
 .avatar-gallery-empty { grid-column: 1/-1; padding: 20px; border: 1px dashed var(--border-color); color: var(--text-muted); font: .82rem/1.5 var(--font-reading); text-align: center; }
 .avatar-gallery-create { margin-top: 12px; padding: 14px; border: 1px solid var(--border-color); background: rgba(0,0,0,.16); }
 .avatar-gallery-create-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
@@ -9181,10 +9369,18 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
 .avatar-gallery-form-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(180px,.7fr); gap: 10px; }
 .avatar-gallery-upload-grid { display: grid; grid-template-columns: 112px minmax(0,1fr); gap: 13px; align-items: start; }
 .avatar-gallery-preview-frame { width: 112px; height: 112px; }
+.avatar-gallery-preview-frame img { width: 100%; height: 100%; max-height: none; object-fit: cover; }
+.avatar-media-preview img { width: 100%; height: 100%; max-height: none; object-fit: cover; }
+.avatar-gallery-position-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 11px; }
+.avatar-gallery-range-field { display: grid; grid-template-columns: auto minmax(90px,1fr) 36px; align-items: center; gap: 8px; color: var(--text-muted); font: 700 .53rem var(--font-rpg); letter-spacing: .7px; }
+.avatar-gallery-range-field input { width: 100%; accent-color: var(--text-gold); cursor: ew-resize; }
+.avatar-gallery-range-field output { color: var(--text-gold); font: 700 .66rem var(--font-reading); text-align: right; }
+.avatar-gallery-cancel-edit[hidden] { display: none !important; }
 
 @media (max-width: 620px) {
     .avatar-gallery-form-grid,
     .avatar-gallery-upload-grid { grid-template-columns: 1fr; }
+    .avatar-gallery-position-grid { grid-template-columns: 1fr; }
     .avatar-gallery-preview-frame { width: 96px; height: 96px; }
     .avatar-gallery-create-heading { align-items: flex-start; flex-direction: column; }
 }
@@ -10032,6 +10228,11 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
                 <label class="document-file-drop"><strong id="document-editor-file-status">Clique ou arraste um arquivo</strong><small>Até 15 MB. Imagens são reconhecidas e otimizadas automaticamente.</small><input id="document-editor-file" type="file" onchange="prepararArquivoDocumentoMesa(this)"></label>
                 <div class="document-editor-file-footer"><div class="document-editor-hint">Descrição e arquivo formam um único documento. Ambos aparecem juntos e entram na pesquisa da gaveta.</div><button id="document-editor-file-clear" type="button" class="settings-secondary" onclick="limparArquivoDocumentoMesa()" hidden>Remover arquivo</button></div>
             </div>
+            <label class="document-frame-option" for="document-editor-frame">
+                <span class="document-frame-option-copy"><strong>EXIBIR MOLDURA NA MESA</strong><small>Desative para imagens já recortadas ou documentos que devem ficar soltos sobre a madeira.</small></span>
+                <input id="document-editor-frame" type="checkbox" checked>
+                <span class="document-frame-switch" aria-hidden="true"></span>
+            </label>
             <div class="settings-actions">
                 <button type="button" class="settings-secondary" onclick="fecharSuperficieFoco('#modal-document-editor')">Cancelar</button>
                 <button id="document-editor-submit" type="submit" class="settings-primary">Guardar documento</button>
@@ -10042,7 +10243,10 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
     <div id="modal-document-viewer" class="modal document-viewer-modal" role="dialog" aria-modal="true" aria-labelledby="document-viewer-title">
         <div class="settings-modal-header">
             <div><span class="settings-eyebrow">DOCUMENTO ABERTO</span><h3 id="document-viewer-title">Documento</h3></div>
-            <button type="button" class="settings-close" onclick="fecharSuperficieFoco('#modal-document-viewer')" aria-label="Fechar">✕</button>
+            <div class="document-viewer-header-actions">
+                <button type="button" id="document-magnifier-toggle" class="document-magnifier-toggle" onclick="alternarLupaDocumento()" aria-pressed="false" title="Ativar lupa sobre o documento"><span aria-hidden="true">🔍</span><span>LUPA</span></button>
+                <button type="button" class="settings-close" onclick="fecharSuperficieFoco('#modal-document-viewer')" aria-label="Fechar">✕</button>
+            </div>
         </div>
         <div id="document-viewer-content" class="document-viewer-content"></div>
         <div id="document-viewer-actions" class="settings-actions"></div>
@@ -10353,6 +10557,10 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
         <label class="file-picker-button wide">📁 Escolher e recortar imagem<input type="file" id="avatar-file" accept="image/*" onchange="abrirRecorteMidia(this, 'avatar-url', 'avatar-editor-preview', 'square')"></label>
         <button type="button" class="settings-secondary" onclick="limparImagemCampo('avatar-url', 'avatar-editor-preview')">Remover</button>
     </div>
+    <div class="avatar-gallery-position-grid" aria-label="Enquadramento do retrato principal">
+        <label class="avatar-gallery-range-field"><span>HORIZONTAL</span><input type="range" id="avatar-position-x" min="0" max="100" value="50" oninput="atualizarPosicaoPreviewAvatarPrincipal()"><output id="avatar-position-x-output">50%</output></label>
+        <label class="avatar-gallery-range-field"><span>VERTICAL</span><input type="range" id="avatar-position-y" min="0" max="100" value="50" oninput="atualizarPosicaoPreviewAvatarPrincipal()"><output id="avatar-position-y-output">50%</output></label>
+    </div>
     <div class="settings-actions">
         <button type="button" class="settings-secondary" onclick="fecharEditorAvatar()">Cancelar</button>
         <button type="button" class="settings-primary" onclick="salvarAvatar()">Usar imagem</button>
@@ -10374,21 +10582,22 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
         </div>
         <button type="button" class="settings-close" onclick="fecharSuperficieFoco('#modal-avatar-gallery')" title="Fechar">✕</button>
     </div>
-    <p class="settings-intro">Adicione quantos retratos quiser. O modo automático usa o retrato mais recente de cada estado; você também pode escolher qualquer imagem manualmente.</p>
+    <p class="settings-intro">Adicione quantos retratos quiser. No modo automático, Perturbado é ativado com Sanidade pela metade e Enlouquecido somente ao chegar a 0. Você também pode editar, reordenar e ajustar o enquadramento de qualquer retrato.</p>
     <div class="avatar-gallery-toolbar">
         <button type="button" class="settings-secondary" onclick="ativarRetratoAutomatico()">◉ Usar estados automáticos</button>
         <span id="avatar-gallery-active-state" class="avatar-gallery-active-state">AUTOMÁTICO</span>
     </div>
     <div id="avatar-gallery-list" class="avatar-gallery-list"></div>
     <section class="avatar-gallery-create">
-        <div class="avatar-gallery-create-heading"><span>NOVO RETRATO</span><small>O recorte é quadrado e otimizado para a ficha.</small></div>
+        <input type="hidden" id="avatar-gallery-edit-id" value="">
+        <div class="avatar-gallery-create-heading"><span id="avatar-gallery-form-title">NOVO RETRATO</span><small>O recorte é quadrado; ajuste abaixo qual parte fica visível.</small></div>
         <div class="avatar-gallery-form-grid">
             <label class="document-editor-field"><span>NOME</span><input id="avatar-gallery-name" class="modal-input" maxlength="45" placeholder="Ex: Ferido após a batalha"></label>
             <label class="document-editor-field"><span>ATIVAR QUANDO</span>
                 <select id="avatar-gallery-trigger" class="modal-input">
                     <option value="livre">Livre / sem gatilho</option>
                     <option value="machucado">Machucado</option>
-                    <option value="enlouquecendo">Enlouquecendo</option>
+                    <option value="perturbado">Perturbado</option>
                     <option value="enlouquecido">Enlouquecido</option>
                     <option value="morrendo">Morrendo</option>
                     <option value="morto">Morto</option>
@@ -10406,7 +10615,14 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
                 </div>
             </div>
         </div>
-        <div class="settings-actions"><button type="button" class="settings-primary" onclick="adicionarRetratoAlternativo()">＋ Adicionar retrato</button></div>
+        <div class="avatar-gallery-position-grid" aria-label="Enquadramento do retrato">
+            <label class="avatar-gallery-range-field"><span>HORIZONTAL</span><input type="range" id="avatar-gallery-position-x" min="0" max="100" value="50" oninput="atualizarPosicaoPreviewRetrato()"><output id="avatar-gallery-position-x-output">50%</output></label>
+            <label class="avatar-gallery-range-field"><span>VERTICAL</span><input type="range" id="avatar-gallery-position-y" min="0" max="100" value="50" oninput="atualizarPosicaoPreviewRetrato()"><output id="avatar-gallery-position-y-output">50%</output></label>
+        </div>
+        <div class="settings-actions">
+            <button type="button" id="avatar-gallery-cancel-edit" class="settings-secondary avatar-gallery-cancel-edit" onclick="cancelarEdicaoRetratoAlternativo()" hidden>Cancelar edição</button>
+            <button type="button" id="avatar-gallery-submit" class="settings-primary" onclick="adicionarRetratoAlternativo()">＋ Adicionar retrato</button>
+        </div>
     </section>
 </div>
 
@@ -10669,6 +10885,7 @@ function concluirOcultacaoSuperficieFoco(elemento) {
 
 function ocultarSuperficieFoco(elemento, opcoes = {}) {
     if (!elemento) return;
+    if (elemento.id === 'modal-document-viewer' && typeof desativarLupaDocumento === 'function') desativarLupaDocumento();
     clearTimeout(temporizadoresSuperficiesFoco.get(elemento));
     elemento.classList.remove('ui-surface-visible');
     elemento.classList.add('ui-surface-closing');
@@ -14593,7 +14810,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function mudarAvatar() {
         tocarSom('click');
         document.getElementById('avatar-url').value = sheet.avatar || '';
+        document.getElementById('avatar-position-x').value = String(limitarPosicaoRetrato(sheet.avatarPositionX));
+        document.getElementById('avatar-position-y').value = String(limitarPosicaoRetrato(sheet.avatarPositionY));
         atualizarPreviewImagem('avatar-url', 'avatar-editor-preview');
+        atualizarPosicaoPreviewAvatarPrincipal();
         abrirSuperficieFoco('#modal-avatar');
     }
 
@@ -14601,8 +14821,21 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         fecharSuperficieFoco('#modal-avatar');
     }
 
+    function atualizarPosicaoPreviewAvatarPrincipal() {
+        const x = limitarPosicaoRetrato(document.getElementById('avatar-position-x')?.value);
+        const y = limitarPosicaoRetrato(document.getElementById('avatar-position-y')?.value);
+        const preview = document.getElementById('avatar-editor-preview');
+        const outputX = document.getElementById('avatar-position-x-output');
+        const outputY = document.getElementById('avatar-position-y-output');
+        if (preview) preview.style.objectPosition = `${x}% ${y}%`;
+        if (outputX) outputX.textContent = `${Math.round(x)}%`;
+        if (outputY) outputY.textContent = `${Math.round(y)}%`;
+    }
+
     function salvarAvatar() {
         sheet.avatar = document.getElementById('avatar-url').value.trim();
+        sheet.avatarPositionX = limitarPosicaoRetrato(document.getElementById('avatar-position-x')?.value);
+        sheet.avatarPositionY = limitarPosicaoRetrato(document.getElementById('avatar-position-y')?.value);
         atualizarAvatarUI();
         marcarAlteracao();
         fecharEditorAvatar();
@@ -14611,11 +14844,16 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     const ROTULOS_RETRATO_ESTADO = {
         livre: 'Livre / sem gatilho',
         machucado: 'Machucado',
-        enlouquecendo: 'Enlouquecendo',
+        perturbado: 'Perturbado',
         enlouquecido: 'Enlouquecido',
         morrendo: 'Morrendo',
         morto: 'Morto'
     };
+
+    function limitarPosicaoRetrato(valor) {
+        const numero = Number(valor);
+        return Math.max(0, Math.min(100, Number.isFinite(numero) ? numero : 50));
+    }
 
     function criarIdRetratoAlternativo() {
         if (window.crypto?.randomUUID) return `portrait-${window.crypto.randomUUID()}`;
@@ -14627,13 +14865,22 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const origem = Array.isArray(ficha.avatarAlternativos) ? ficha.avatarAlternativos : [];
         ficha.avatarAlternativos = origem
             .filter(item => item && typeof item === 'object' && String(item.url || '').trim())
-            .map((item, index) => ({
-                id: String(item.id || `portrait-legacy-${index}`),
-                nome: String(item.nome || item.name || 'Retrato alternativo').slice(0, 45),
-                url: String(item.url || '').trim(),
-                gatilho: ROTULOS_RETRATO_ESTADO[item.gatilho] ? item.gatilho : 'livre',
-                createdAt: Number(item.createdAt) || index + 1
-            }));
+            .map((item, index) => {
+                const gatilhoLegado = String(item.gatilho || '').toLowerCase();
+                const gatilhoMigrado = gatilhoLegado === 'enlouquecendo' ? 'perturbado' : gatilhoLegado;
+                return {
+                    id: String(item.id || `portrait-legacy-${index}`),
+                    nome: String(item.nome || item.name || 'Retrato alternativo').slice(0, 45),
+                    url: String(item.url || '').trim(),
+                    gatilho: ROTULOS_RETRATO_ESTADO[gatilhoMigrado] ? gatilhoMigrado : 'livre',
+                    positionX: limitarPosicaoRetrato(item.positionX ?? item.posicaoX),
+                    positionY: limitarPosicaoRetrato(item.positionY ?? item.posicaoY),
+                    ordem: Number.isFinite(Number(item.ordem)) ? Number(item.ordem) : index,
+                    createdAt: Number(item.createdAt) || index + 1
+                };
+            })
+            .sort((a, b) => a.ordem - b.ordem || a.createdAt - b.createdAt)
+            .map((item, index) => ({ ...item, ordem: index }));
         return ficha.avatarAlternativos;
     }
 
@@ -14643,13 +14890,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const pv = recursoAtualDaFicha(ficha, 'pv');
         const maxPv = recursoMaximoDaFicha(ficha, 'pv');
         const sa = recursoAtualDaFicha(ficha, 'sa');
+        const maxSa = recursoMaximoDaFicha(ficha, 'sa');
         if (recursoExisteNaFicha(ficha, 'pv') && pv <= 0) return 'morrendo';
-        if (diretas.has('enlouquecido')) return 'enlouquecido';
-        if (recursoExisteNaFicha(ficha, 'sa') && sa <= 0) {
-            const possuiRetratoEnlouquecido = (Array.isArray(ficha?.avatarAlternativos) ? ficha.avatarAlternativos : []).some(item => item?.gatilho === 'enlouquecido');
-            return possuiRetratoEnlouquecido ? 'enlouquecido' : 'enlouquecendo';
-        }
-        if (diretas.has('enlouquecendo')) return 'enlouquecendo';
+        if (recursoExisteNaFicha(ficha, 'sa') && sa <= 0) return 'enlouquecido';
+        if (diretas.has('perturbado') || diretas.has('enlouquecendo') || (recursoExisteNaFicha(ficha, 'sa') && sa > 0 && maxSa > 0 && sa <= maxSa / 2)) return 'perturbado';
         if (diretas.has('machucado') || (recursoExisteNaFicha(ficha, 'pv') && pv > 0 && maxPv > 0 && pv <= maxPv / 2)) return 'machucado';
         return 'normal';
     }
@@ -14658,24 +14902,60 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const base = String(ficha?.avatar || '').trim();
         const retratos = normalizarRetratosAlternativos(ficha);
         const manualId = ficha?.avatarManualId == null ? '' : String(ficha.avatarManualId);
-        if (manualId === 'base') return { url: base, id: 'base', modo: 'manual', estado: 'normal' };
+        const baseX = limitarPosicaoRetrato(ficha?.avatarPositionX);
+        const baseY = limitarPosicaoRetrato(ficha?.avatarPositionY);
+        if (manualId === 'base') return { url: base, id: 'base', modo: 'manual', estado: 'normal', positionX: baseX, positionY: baseY };
         const manual = retratos.find(item => item.id === manualId);
-        if (manual) return { url: manual.url, id: manual.id, modo: 'manual', estado: manual.gatilho };
+        if (manual) return { url: manual.url, id: manual.id, modo: 'manual', estado: manual.gatilho, positionX: manual.positionX, positionY: manual.positionY };
         const estado = estadoAutomaticoRetrato(ficha);
         const automatico = retratos
             .filter(item => item.gatilho === estado)
             .sort((a, b) => Number(b.createdAt) - Number(a.createdAt))[0];
-        if (automatico) return { url: automatico.url, id: automatico.id, modo: 'automatico', estado };
-        return { url: base, id: 'base', modo: 'automatico', estado };
+        if (automatico) return { url: automatico.url, id: automatico.id, modo: 'automatico', estado, positionX: automatico.positionX, positionY: automatico.positionY };
+        return { url: base, id: 'base', modo: 'automatico', estado, positionX: baseX, positionY: baseY };
+    }
+
+    function atualizarPosicaoPreviewRetrato() {
+        const x = limitarPosicaoRetrato(document.getElementById('avatar-gallery-position-x')?.value);
+        const y = limitarPosicaoRetrato(document.getElementById('avatar-gallery-position-y')?.value);
+        const preview = document.getElementById('avatar-gallery-preview');
+        const outputX = document.getElementById('avatar-gallery-position-x-output');
+        const outputY = document.getElementById('avatar-gallery-position-y-output');
+        if (preview) preview.style.objectPosition = `${x}% ${y}%`;
+        if (outputX) outputX.textContent = `${Math.round(x)}%`;
+        if (outputY) outputY.textContent = `${Math.round(y)}%`;
+    }
+
+    function resetarFormularioRetratoAlternativo() {
+        const editId = document.getElementById('avatar-gallery-edit-id');
+        const nome = document.getElementById('avatar-gallery-name');
+        const gatilho = document.getElementById('avatar-gallery-trigger');
+        const url = document.getElementById('avatar-gallery-url');
+        const arquivo = document.getElementById('avatar-gallery-file');
+        const posX = document.getElementById('avatar-gallery-position-x');
+        const posY = document.getElementById('avatar-gallery-position-y');
+        if (editId) editId.value = '';
+        if (nome) nome.value = '';
+        if (gatilho) gatilho.value = 'livre';
+        if (url) url.value = '';
+        if (arquivo) arquivo.value = '';
+        if (posX) posX.value = '50';
+        if (posY) posY.value = '50';
+        atualizarPreviewImagem('avatar-gallery-url', 'avatar-gallery-preview');
+        atualizarPosicaoPreviewRetrato();
+        const titulo = document.getElementById('avatar-gallery-form-title');
+        const submit = document.getElementById('avatar-gallery-submit');
+        const cancelar = document.getElementById('avatar-gallery-cancel-edit');
+        if (titulo) titulo.textContent = 'NOVO RETRATO';
+        if (submit) submit.textContent = '＋ Adicionar retrato';
+        if (cancelar) cancelar.hidden = true;
     }
 
     function abrirGaleriaRetratos() {
         tocarSom('click');
         normalizarRetratosAlternativos(sheet);
+        resetarFormularioRetratoAlternativo();
         renderizarGaleriaRetratos();
-        document.getElementById('avatar-gallery-name').value = '';
-        document.getElementById('avatar-gallery-trigger').value = 'livre';
-        limparImagemCampo('avatar-gallery-url', 'avatar-gallery-preview');
         abrirSuperficieFoco('#modal-avatar-gallery');
     }
 
@@ -14691,16 +14971,17 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const cards = [];
         if (String(sheet.avatar || '').trim()) {
             cards.push(`<article class="avatar-gallery-card ${resolvido.id === 'base' ? 'is-active' : ''}">
-                <img src="${escapeCampaignHtml(sheet.avatar)}" alt="Retrato principal">
+                <img src="${escapeCampaignHtml(sheet.avatar)}" alt="Retrato principal" style="object-position:${limitarPosicaoRetrato(sheet.avatarPositionX)}% ${limitarPosicaoRetrato(sheet.avatarPositionY)}%">
                 <span class="avatar-gallery-card-copy"><strong>Retrato principal</strong><small>Estado normal</small></span>
                 <span class="avatar-gallery-card-actions"><button type="button" onclick="ativarRetratoManual('base')">Usar agora</button><button type="button" onclick="mudarAvatar()" title="Editar imagem principal">✎</button></span>
             </article>`);
         }
-        retratos.forEach(retrato => {
+        retratos.forEach((retrato, index) => {
             cards.push(`<article class="avatar-gallery-card ${resolvido.id === retrato.id ? 'is-active' : ''}">
-                <img src="${escapeCampaignHtml(retrato.url)}" alt="${escapeCampaignHtml(retrato.nome)}">
+                <img src="${escapeCampaignHtml(retrato.url)}" alt="${escapeCampaignHtml(retrato.nome)}" style="object-position:${retrato.positionX}% ${retrato.positionY}%">
                 <span class="avatar-gallery-card-copy"><strong>${escapeCampaignHtml(retrato.nome)}</strong><small>${escapeCampaignHtml(ROTULOS_RETRATO_ESTADO[retrato.gatilho] || 'Livre')}</small></span>
-                <span class="avatar-gallery-card-actions"><button type="button" onclick="ativarRetratoManual('${escapeCampaignHtml(retrato.id)}')">Usar agora</button><button type="button" class="avatar-gallery-delete" onclick="excluirRetratoAlternativo('${escapeCampaignHtml(retrato.id)}')" title="Excluir retrato">✕</button></span>
+                <span class="avatar-gallery-card-actions"><button type="button" onclick="ativarRetratoManual('${escapeCampaignHtml(retrato.id)}')">Usar agora</button><button type="button" onclick="editarRetratoAlternativo('${escapeCampaignHtml(retrato.id)}')" title="Editar retrato" aria-label="Editar ${escapeCampaignHtml(retrato.nome)}">✎</button><button type="button" class="avatar-gallery-delete" onclick="excluirRetratoAlternativo('${escapeCampaignHtml(retrato.id)}')" title="Excluir retrato" aria-label="Excluir ${escapeCampaignHtml(retrato.nome)}">✕</button></span>
+                <span class="avatar-gallery-card-order"><button type="button" onclick="moverRetratoAlternativo('${escapeCampaignHtml(retrato.id)}', -1)" ${index === 0 ? 'disabled' : ''} title="Mover retrato para a esquerda" aria-label="Mover ${escapeCampaignHtml(retrato.nome)} para a esquerda">←</button><button type="button" onclick="moverRetratoAlternativo('${escapeCampaignHtml(retrato.id)}', 1)" ${index === retratos.length - 1 ? 'disabled' : ''} title="Mover retrato para a direita" aria-label="Mover ${escapeCampaignHtml(retrato.nome)} para a direita">→</button></span>
             </article>`);
         });
         lista.innerHTML = cards.join('') || '<div class="avatar-gallery-empty">Use a área abaixo para criar o primeiro retrato alternativo. A imagem principal continua sendo editada pelo retrato do cabeçalho.</div>';
@@ -14720,23 +15001,69 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         marcarAlteracao();
     }
 
+    function editarRetratoAlternativo(id) {
+        const retrato = normalizarRetratosAlternativos(sheet).find(item => item.id === String(id));
+        if (!retrato) return;
+        document.getElementById('avatar-gallery-edit-id').value = retrato.id;
+        document.getElementById('avatar-gallery-name').value = retrato.nome;
+        document.getElementById('avatar-gallery-trigger').value = retrato.gatilho;
+        document.getElementById('avatar-gallery-url').value = retrato.url;
+        document.getElementById('avatar-gallery-position-x').value = String(retrato.positionX);
+        document.getElementById('avatar-gallery-position-y').value = String(retrato.positionY);
+        atualizarPreviewImagem('avatar-gallery-url', 'avatar-gallery-preview');
+        atualizarPosicaoPreviewRetrato();
+        document.getElementById('avatar-gallery-form-title').textContent = 'EDITAR RETRATO';
+        document.getElementById('avatar-gallery-submit').textContent = '✓ Salvar alterações';
+        document.getElementById('avatar-gallery-cancel-edit').hidden = false;
+        document.querySelector('.avatar-gallery-create')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function cancelarEdicaoRetratoAlternativo() {
+        resetarFormularioRetratoAlternativo();
+    }
+
+    function moverRetratoAlternativo(id, direcao) {
+        const retratos = normalizarRetratosAlternativos(sheet);
+        const origem = retratos.findIndex(item => item.id === String(id));
+        const destino = origem + (Number(direcao) < 0 ? -1 : 1);
+        if (origem < 0 || destino < 0 || destino >= retratos.length) return;
+        const [retrato] = retratos.splice(origem, 1);
+        retratos.splice(destino, 0, retrato);
+        retratos.forEach((item, index) => { item.ordem = index; });
+        sheet.avatarAlternativos = retratos;
+        renderizarGaleriaRetratos();
+        marcarAlteracao();
+    }
+
     function adicionarRetratoAlternativo() {
         const url = String(document.getElementById('avatar-gallery-url')?.value || '').trim();
         if (!url) return alert('Escolha um arquivo ou informe o link do retrato.');
         const gatilho = document.getElementById('avatar-gallery-trigger')?.value || 'livre';
         const nomeInformado = String(document.getElementById('avatar-gallery-name')?.value || '').trim();
-        const retrato = {
-            id: criarIdRetratoAlternativo(),
+        const editId = String(document.getElementById('avatar-gallery-edit-id')?.value || '');
+        const retratos = normalizarRetratosAlternativos(sheet);
+        const existente = editId ? retratos.find(item => item.id === editId) : null;
+        const dados = {
             nome: (nomeInformado || ROTULOS_RETRATO_ESTADO[gatilho] || 'Retrato alternativo').slice(0, 45),
             url,
             gatilho: ROTULOS_RETRATO_ESTADO[gatilho] ? gatilho : 'livre',
-            createdAt: Date.now()
+            positionX: limitarPosicaoRetrato(document.getElementById('avatar-gallery-position-x')?.value),
+            positionY: limitarPosicaoRetrato(document.getElementById('avatar-gallery-position-y')?.value)
         };
-        normalizarRetratosAlternativos(sheet).push(retrato);
-        if (!sheet.avatar && sheet.avatarAlternativos.length === 1) sheet.avatarManualId = retrato.id;
-        document.getElementById('avatar-gallery-name').value = '';
-        document.getElementById('avatar-gallery-trigger').value = 'livre';
-        limparImagemCampo('avatar-gallery-url', 'avatar-gallery-preview');
+        if (existente) {
+            Object.assign(existente, dados);
+        } else {
+            const retrato = {
+                id: criarIdRetratoAlternativo(),
+                ...dados,
+                ordem: retratos.length,
+                createdAt: Date.now()
+            };
+            retratos.push(retrato);
+            if (!sheet.avatar && retratos.length === 1) sheet.avatarManualId = retrato.id;
+        }
+        sheet.avatarAlternativos = retratos;
+        resetarFormularioRetratoAlternativo();
         atualizarAvatarUI();
         renderizarGaleriaRetratos();
         marcarAlteracao();
@@ -14746,7 +15073,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const retrato = normalizarRetratosAlternativos(sheet).find(item => item.id === id);
         if (!retrato || !confirm(`Excluir o retrato “${retrato.nome}”?`)) return;
         sheet.avatarAlternativos = sheet.avatarAlternativos.filter(item => item.id !== id);
+        sheet.avatarAlternativos.forEach((item, index) => { item.ordem = index; });
         if (String(sheet.avatarManualId || '') === id) sheet.avatarManualId = null;
+        if (String(document.getElementById('avatar-gallery-edit-id')?.value || '') === id) resetarFormularioRetratoAlternativo();
         atualizarAvatarUI();
         renderizarGaleriaRetratos();
         marcarAlteracao();
@@ -14758,10 +15087,12 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const retrato = resolverRetratoPersonagem(sheet);
         if (retrato.url) {
             img.src = retrato.url;
+            img.style.objectPosition = `${limitarPosicaoRetrato(retrato.positionX)}% ${limitarPosicaoRetrato(retrato.positionY)}%`;
             img.style.display = 'block';
             icon.style.display = 'none';
         } else {
             img.removeAttribute('src');
+            img.style.objectPosition = '50% 50%';
             img.style.display = 'none';
             icon.style.display = 'block';
         }
@@ -16905,9 +17236,12 @@ function escapeCampaignHtml(value) {
 }
 
 function avatarCampanhaHtml(character, extraClass = '') {
-    const avatar = resolverRetratoPersonagem(character?.sheet || character || {}).url || character?.avatar || '';
+    const resolvido = resolverRetratoPersonagem(character?.sheet || character || {});
+    const avatar = resolvido.url || character?.avatar || '';
     if (avatar) {
-        return `<div class="campaign-avatar ${extraClass}"><img src="${escapeCampaignHtml(avatar)}" alt=""></div>`;
+        const x = limitarPosicaoRetrato(resolvido.positionX);
+        const y = limitarPosicaoRetrato(resolvido.positionY);
+        return `<div class="campaign-avatar ${extraClass}"><img src="${escapeCampaignHtml(avatar)}" alt="" style="object-position:${x}% ${y}%"></div>`;
     }
     return `<div class="campaign-avatar ${extraClass}">👤</div>`;
 }
@@ -20187,13 +20521,17 @@ function renderizarDocumentosNaMesa() {
                 ? 'image'
                 : (documento.type === 'text' ? 'text' : 'file');
             const soltando = documentDeskState.dropAnimations.has(id) ? 'is-dropping' : '';
-            return `<article class="desk-document ${tipo} ${soltando}" data-document-id="${escapeCampaignHtml(id)}" tabindex="0" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%;z-index:${Math.max(1, numeroMesa(placement.z, 1))};--doc-rotation:${rotation}deg" aria-label="${escapeCampaignHtml(documento.title || 'Documento')}">
+            const molduraAtiva = typeof placement.frameEnabled === 'boolean' ? placement.frameEnabled : documento.frameEnabled !== false;
+            const moldura = molduraAtiva ? '' : 'is-frameless';
+            const possuiDescricao = textoCompleto ? 'has-description' : '';
+            return `<article class="desk-document ${tipo} ${moldura} ${possuiDescricao} ${soltando}" data-document-id="${escapeCampaignHtml(id)}" tabindex="0" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%;z-index:${Math.max(1, numeroMesa(placement.z, 1))};--doc-rotation:${rotation}deg" aria-label="${escapeCampaignHtml(documento.title || 'Documento')}">
                 <div class="desk-document-controls" onpointerdown="event.stopPropagation()">
                     <button type="button" data-document-no-front onclick="abrirDocumentoMesa('${escapeCampaignHtml(id)}')" title="Abrir documento">⌕</button>
                     <button type="button" data-document-no-front onclick="girarDocumentoMesa('${escapeCampaignHtml(id)}', -3)" title="Girar para a esquerda">↶</button>
                     <button type="button" data-document-no-front onclick="girarDocumentoMesa('${escapeCampaignHtml(id)}', 3)" title="Girar para a direita">↷</button>
                     <button type="button" data-document-no-front onclick="trazerDocumentoFrente('${escapeCampaignHtml(id)}')" title="Trazer para frente">⇧</button>
                     <button type="button" data-document-no-front onclick="guardarDocumentoNaGaveta('${escapeCampaignHtml(id)}')" title="Guardar na gaveta">▤</button>
+                    <button type="button" data-document-no-front onclick="alternarMolduraDocumentoMesa('${escapeCampaignHtml(id)}')" title="${molduraAtiva ? 'Remover moldura' : 'Ativar moldura'}" aria-label="${molduraAtiva ? 'Remover moldura do documento' : 'Ativar moldura do documento'}">${molduraAtiva ? '▣' : '□'}</button>
                     ${mestre ? `<button type="button" data-document-no-front onclick="abrirEditorDocumentoMesa('${escapeCampaignHtml(id)}')" title="Editar documento">✎</button><button type="button" data-document-no-front class="document-control-delete" onclick="excluirDocumentoMesa('${escapeCampaignHtml(id)}')" title="Excluir documento">✕</button>` : ''}
                 </div>
                 <header class="desk-document-title">${escapeCampaignHtml(documento.title || 'Sem título')}</header>
@@ -20212,6 +20550,31 @@ function renderizarDocumentosNaMesa() {
             if (event.key === 'Enter') abrirDocumentoMesa(card.dataset.documentId);
         });
     });
+}
+
+async function alternarMolduraDocumentoMesa(documentId) {
+    if (!currentUser || !documentDeskState.currentSlotId) return;
+    const documento = documentDeskState.documents?.[documentId];
+    const placement = documentDeskState.placements?.[documentId];
+    if (!documento || !placement) return;
+    if (typeof tocarSom === 'function') tocarSom('click');
+    const estavaAtiva = typeof placement.frameEnabled === 'boolean' ? placement.frameEnabled : documento.frameEnabled !== false;
+    const proximoEstado = !estavaAtiva;
+    const atualizado = { ...placement, frameEnabled: proximoEstado };
+    documentDeskState.placements[documentId] = atualizado;
+    renderizarDocumentosNaMesa();
+    try {
+        await database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update({
+            frameEnabled: proximoEstado,
+            modifiedBy: currentUser.uid,
+            modifiedAt: firebase.database.ServerValue.TIMESTAMP
+        });
+    } catch (error) {
+        documentDeskState.placements[documentId] = placement;
+        renderizarDocumentosNaMesa();
+        console.error('Erro ao alterar a moldura do documento:', error);
+        alert('Não foi possível alterar a moldura deste documento.');
+    }
 }
 
 function localizarDocumentoMesa(documentId) {
@@ -20547,6 +20910,8 @@ function abrirEditorDocumentoMesa(documentId = '') {
     document.getElementById('document-editor-id').value = documento ? documentId : '';
     document.getElementById('document-editor-title').value = documento?.title || '';
     document.getElementById('document-editor-text').value = textoCompletoDocumentoMesa(documento || {});
+    const moldura = document.getElementById('document-editor-frame');
+    if (moldura) moldura.checked = documento?.frameEnabled !== false;
     const input = document.getElementById('document-editor-file');
     if (input) input.value = '';
     document.getElementById('document-editor-file-status').textContent = documento?.fileName
@@ -20659,6 +21024,7 @@ async function salvarDocumentoMesa(event) {
             mime: arquivo?.mime || 'text/plain',
             fileName: arquivo?.fileName || '',
             extractedText: arquivo?.extractedText || '',
+            frameEnabled: document.getElementById('document-editor-frame')?.checked !== false,
             createdBy: atual?.createdBy || currentUser.uid,
             createdAt: atual?.createdAt || firebase.database.ServerValue.TIMESTAMP,
             updatedBy: currentUser.uid,
@@ -20716,9 +21082,119 @@ function conteudoVisualizadorDocumentoMesa(documento) {
     return { classe: 'file', html: `<div class="document-viewer-file-card"><span>⌑</span><strong>${escapeCampaignHtml(documento.fileName || 'Arquivo')}</strong><small>${escapeCampaignHtml(documento.mime || 'Arquivo anexado')}</small><button type="button" class="settings-primary" onclick="baixarDocumentoMesa('${escapeCampaignHtml(documento.id || '')}')">Baixar arquivo</button></div>${descricaoHtml}${conteudoExtraido}` };
 }
 
+const DOCUMENT_MAGNIFIER_SCALE = 2.25;
+let documentMagnifierActive = false;
+
+function obterLenteDocumento() {
+    let lente = document.getElementById('document-magnifier-lens');
+    if (lente) return lente;
+    lente = document.createElement('div');
+    lente.id = 'document-magnifier-lens';
+    lente.className = 'document-magnifier-lens';
+    lente.setAttribute('aria-hidden', 'true');
+    lente.innerHTML = '<div id="document-magnifier-copy" class="document-magnifier-copy"></div>';
+    document.body.appendChild(lente);
+    return lente;
+}
+
+function atualizarBotaoLupaDocumento() {
+    const botao = document.getElementById('document-magnifier-toggle');
+    if (!botao) return;
+    botao.setAttribute('aria-pressed', String(documentMagnifierActive));
+    botao.title = documentMagnifierActive ? 'Desativar lupa' : 'Ativar lupa sobre o documento';
+}
+
+function sincronizarCopiaLupaDocumento() {
+    const area = document.getElementById('document-viewer-content');
+    const lente = obterLenteDocumento();
+    const copia = lente.querySelector('#document-magnifier-copy');
+    if (!area || !copia) return;
+    const classesOriginais = Array.from(area.classList).filter(classe => classe !== 'document-magnifier-active');
+    copia.className = `${classesOriginais.join(' ')} document-magnifier-copy`;
+    copia.innerHTML = area.innerHTML;
+    copia.querySelectorAll('[id]').forEach(elemento => elemento.removeAttribute('id'));
+    copia.querySelectorAll('[onclick], [onchange], [oninput]').forEach(elemento => {
+        elemento.removeAttribute('onclick');
+        elemento.removeAttribute('onchange');
+        elemento.removeAttribute('oninput');
+    });
+    copia.querySelectorAll('iframe, video, audio, button, a').forEach(elemento => {
+        elemento.setAttribute('tabindex', '-1');
+        elemento.setAttribute('aria-hidden', 'true');
+    });
+    copia.style.width = `${Math.max(area.scrollWidth, area.clientWidth)}px`;
+    copia.style.height = `${Math.max(area.scrollHeight, area.clientHeight)}px`;
+    copia.style.transform = `scale(${DOCUMENT_MAGNIFIER_SCALE})`;
+}
+
+function ocultarLupaDocumento() {
+    const lente = document.getElementById('document-magnifier-lens');
+    if (!lente) return;
+    lente.classList.remove('is-visible');
+    lente.setAttribute('aria-hidden', 'true');
+}
+
+function atualizarLupaDocumento(event) {
+    if (!documentMagnifierActive) return;
+    const area = document.getElementById('document-viewer-content');
+    const lente = obterLenteDocumento();
+    const copia = lente.querySelector('#document-magnifier-copy');
+    if (!area || !copia) return;
+    const rect = area.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
+        ocultarLupaDocumento();
+        return;
+    }
+    const tamanho = lente.offsetWidth || 188;
+    const margem = 9;
+    const esquerda = Math.max(margem, Math.min(window.innerWidth - tamanho - margem, event.clientX - tamanho / 2));
+    const topo = Math.max(margem, Math.min(window.innerHeight - tamanho - margem, event.clientY - tamanho / 2));
+    const origemX = event.clientX - rect.left + area.scrollLeft;
+    const origemY = event.clientY - rect.top + area.scrollTop;
+    const focoX = event.clientX - esquerda;
+    const focoY = event.clientY - topo;
+    lente.style.left = `${esquerda}px`;
+    lente.style.top = `${topo}px`;
+    copia.style.left = `${focoX - origemX * DOCUMENT_MAGNIFIER_SCALE}px`;
+    copia.style.top = `${focoY - origemY * DOCUMENT_MAGNIFIER_SCALE}px`;
+    lente.classList.add('is-visible');
+}
+
+function garantirInteracoesLupaDocumento() {
+    const area = document.getElementById('document-viewer-content');
+    if (!area || area.dataset.magnifierReady === 'true') return;
+    area.dataset.magnifierReady = 'true';
+    area.addEventListener('pointermove', atualizarLupaDocumento);
+    area.addEventListener('pointerleave', ocultarLupaDocumento);
+    area.addEventListener('scroll', ocultarLupaDocumento, { passive: true });
+}
+
+function alternarLupaDocumento(forcarEstado) {
+    const area = document.getElementById('document-viewer-content');
+    if (!area) return;
+    if (typeof forcarEstado !== 'boolean' && typeof tocarSom === 'function') tocarSom('click');
+    const proximoEstado = typeof forcarEstado === 'boolean' ? forcarEstado : !documentMagnifierActive;
+    documentMagnifierActive = proximoEstado;
+    area.classList.toggle('document-magnifier-active', documentMagnifierActive);
+    atualizarBotaoLupaDocumento();
+    if (documentMagnifierActive) {
+        garantirInteracoesLupaDocumento();
+        sincronizarCopiaLupaDocumento();
+    } else {
+        ocultarLupaDocumento();
+        const copia = document.getElementById('document-magnifier-copy');
+        if (copia) copia.innerHTML = '';
+    }
+}
+
+function desativarLupaDocumento() {
+    alternarLupaDocumento(false);
+}
+
 function abrirDocumentoMesa(documentId) {
     const original = documentDeskState.documents[documentId];
     if (!original) return;
+    desativarLupaDocumento();
     const documento = { id: documentId, ...original };
     documentDeskState.viewDocumentId = documentId;
     document.getElementById('document-viewer-title').textContent = documento.title || 'Documento';
@@ -20726,6 +21202,9 @@ function abrirDocumentoMesa(documentId) {
     const area = document.getElementById('document-viewer-content');
     area.className = `document-viewer-content ${conteudo.classe}`;
     area.innerHTML = conteudo.html;
+    area.scrollTop = 0;
+    area.scrollLeft = 0;
+    garantirInteracoesLupaDocumento();
     const actions = document.getElementById('document-viewer-actions');
     const download = documento.dataUrl ? `<button type="button" class="settings-secondary" onclick="baixarDocumentoMesa('${escapeCampaignHtml(documentId)}')">Baixar</button>` : '';
     const master = documentDeskState.role === 'mestre'
