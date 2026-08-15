@@ -8719,6 +8719,13 @@ body.theme-umbral #btn-documentos::after { content: "Mesa de Documentos"; }
 }
 .document-drawing-toolbar button:hover { color: #fff; border-color: var(--desk-gold); }
 .document-drawing-toolbar button.active { color: #160d07; border-color: var(--desk-gold); background: var(--desk-gold); }
+#document-desk-app.space-pan-active #document-tool-pan {
+    color: #160d07;
+    border-color: #fff0b4;
+    background: var(--desk-gold);
+    box-shadow: 0 0 0 2px rgba(212,175,55,.2), 0 0 16px rgba(212,175,55,.28);
+}
+#document-desk-app.space-pan-active .document-drawing-status { color: #f2d78b; }
 .document-drawing-toolbar button:disabled { opacity: .35; cursor: default; }
 .document-drawing-toolbar select { width: 80px; color: #e9dfd1; }
 .document-drawing-color {
@@ -9037,16 +9044,21 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
     gap: 2px;
     padding: 3px;
     z-index: 8;
-    opacity: 1;
-    visibility: visible;
+    opacity: 0;
+    visibility: hidden;
     border: 1px solid #5c432b;
     background: rgba(13,8,5,.95);
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(6px) scale(.97);
     transition: opacity .14s ease, transform .14s ease, visibility .14s ease;
     white-space: nowrap;
+    pointer-events: none;
 }
-.desk-document:hover .desk-document-controls,
-.desk-document:focus-within .desk-document-controls { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+.desk-document.is-selected .desk-document-controls {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0) scale(1);
+    pointer-events: auto;
+}
 .desk-document-controls button { width: 27px; height: 25px; padding: 0; border: 0; color: #d9cab4; background: transparent; cursor: pointer; }
 .desk-document-controls button:hover { color: #fff; background: rgba(255,255,255,.08); }
 .desk-document-controls .document-control-delete,
@@ -19991,6 +20003,7 @@ const documentDeskState = {
     drawingTool: 'pan',
     drawingColor: '#a970ff',
     drawingWidth: 4,
+    selectedDocumentId: null,
     spacePan: false,
     positionTimers: new Map(),
     dropAnimations: new Set(),
@@ -20164,6 +20177,7 @@ function renderizarMesaDocumentosVazia(mensagem) {
     documentDeskState.allPlacements = {};
     documentDeskState.drawings = {};
     documentDeskState.allDrawings = {};
+    documentDeskState.selectedDocumentId = null;
     documentDeskState.presence = {};
     const vazio = document.getElementById('document-desk-empty');
     const texto = document.getElementById('document-desk-empty-message');
@@ -20236,6 +20250,7 @@ function abrirAplicativoMesaDocumentos() {
     documentDeskState.panInitialized = false;
     documentDeskState.drawingTool = 'pan';
     documentDeskState.drawingDraft = null;
+    documentDeskState.selectedDocumentId = null;
     const app = document.getElementById('document-desk-app');
     app?.classList.add('active');
     app?.setAttribute('aria-hidden', 'false');
@@ -20284,12 +20299,14 @@ function pararEscutasMesaDocumentos(removerPresenca = true) {
     documentDeskState.dropTimers.clear();
     documentDeskState.dropAnimations.clear();
     documentDeskState.localDropLocks.clear();
+    try { documentDeskState.panDrag?.captor?.releasePointerCapture?.(documentDeskState.panDrag.pointerId); } catch (_) {}
     documentDeskState.drag = null;
     documentDeskState.rotationDrag = null;
     documentDeskState.panDrag = null;
     documentDeskState.drawingDraft = null;
     documentDeskState.spacePan = false;
     document.body.classList.remove('document-desk-grabbing', 'document-desk-panning');
+    document.getElementById('document-desk-app')?.classList.remove('space-pan-active');
     document.querySelector('.document-desk-viewport')?.classList.remove('is-panning');
 }
 
@@ -20425,6 +20442,7 @@ function trocarSlotMesaDocumentos(slotId) {
     documentDeskState.placements = {};
     documentDeskState.drawings = documentDeskState.allDrawings?.[slotId] || {};
     documentDeskState.drawingDraft = null;
+    documentDeskState.selectedDocumentId = null;
     renderizarSlotsMesaDocumentos();
     renderizarDesenhosMesaDocumentos();
     escutarPosicoesSlotMesa(slotId);
@@ -20638,12 +20656,16 @@ function carregarPreferenciasDesenhoMesa() {
 function textoFerramentaDesenhoMesa(ferramenta = documentDeskState.drawingTool) {
     const textos = {
         pan: 'Arraste o fundo para explorar a Mesa de Documentos.',
-        free: 'Desenho livre: arraste sobre a mesa ou sobre um documento.',
-        line: 'Reta: arraste do início até o ponto final.',
-        circle: 'Círculo: arraste do centro até a borda.',
-        marker: 'Marca-texto: arraste sobre a região que deseja destacar.'
+        free: 'Desenho livre: arraste para desenhar. Segure Espaço e arraste para mover a mesa.',
+        line: 'Reta: arraste do início ao fim. Segure Espaço e arraste para mover a mesa.',
+        circle: 'Círculo: arraste do centro à borda. Segure Espaço e arraste para mover a mesa.',
+        marker: 'Marca-texto: arraste para destacar. Segure Espaço e arraste para mover a mesa.'
     };
     return textos[ferramenta] || textos.pan;
+}
+
+function mensagemPanTemporarioMesa() {
+    return 'Mão temporária ativa: mantenha Espaço pressionado e arraste em qualquer ponto da mesa.';
 }
 
 function atualizarStatusDesenhoMesa(mensagem = '') {
@@ -20658,14 +20680,14 @@ function selecionarFerramentaDesenhoMesa(ferramenta, reproduzirSom = true) {
     cancelarRascunhoDesenhoMesa();
     documentDeskState.drawingTool = proxima;
     const app = document.getElementById('document-desk-app');
-    if (app) app.dataset.drawingTool = proxima;
+    if (app) app.dataset.drawingTool = documentDeskState.spacePan ? 'pan' : proxima;
     FERRAMENTAS_DESENHO_MESA.forEach(nome => {
         const botao = document.getElementById(`document-tool-${nome}`);
         botao?.classList.toggle('active', nome === proxima);
         botao?.setAttribute('aria-pressed', String(nome === proxima));
     });
-    atualizarStatusDesenhoMesa();
-    if (documentDeskState.role) publicarPresencaMesaDocumentos({ tool: proxima, grabbing: false });
+    atualizarStatusDesenhoMesa(documentDeskState.spacePan ? mensagemPanTemporarioMesa() : '');
+    if (documentDeskState.role) publicarPresencaMesaDocumentos({ tool: documentDeskState.spacePan ? 'pan' : proxima, grabbing: false });
 }
 
 function limitarPercentualMesa(valor) {
@@ -20757,21 +20779,67 @@ function cancelarRascunhoDesenhoMesa() {
     if (tinhaRascunho) renderizarDesenhosMesaDocumentos();
 }
 
+function encerrarArrastePanMesa(pointerId = null) {
+    const pan = documentDeskState.panDrag;
+    if (!pan || (pointerId != null && pointerId !== pan.pointerId)) return false;
+    documentDeskState.panDrag = null;
+    try { pan.captor?.releasePointerCapture?.(pan.pointerId); } catch (_) {}
+    document.querySelector('.document-desk-viewport')?.classList.remove('is-panning');
+    document.body.classList.remove('document-desk-panning');
+    const ferramenta = documentDeskState.spacePan ? 'pan' : documentDeskState.drawingTool;
+    publicarPresencaMesaDocumentos({ grabbing: false, tool: ferramenta });
+    atualizarStatusDesenhoMesa(documentDeskState.spacePan ? mensagemPanTemporarioMesa() : '');
+    return true;
+}
+
+function ativarPanTemporarioMesa(event) {
+    if (!documentDeskState.active || !documentDeskState.role || documentDeskState.spacePan) return;
+    const alvo = event?.target;
+    const editando = alvo?.isContentEditable || alvo?.closest?.('input, textarea, select, button, [contenteditable="true"]');
+    const focoModal = typeof superficieFocoAtiva !== 'undefined' && Boolean(superficieFocoAtiva);
+    if (editando || focoModal) return;
+    documentDeskState.spacePan = true;
+    const rascunho = documentDeskState.drawingDraft;
+    if (rascunho?.pointerId != null) {
+        try { document.getElementById('document-desk-board')?.releasePointerCapture?.(rascunho.pointerId); } catch (_) {}
+    }
+    cancelarRascunhoDesenhoMesa();
+    const app = document.getElementById('document-desk-app');
+    app?.classList.add('space-pan-active');
+    if (app) app.dataset.drawingTool = 'pan';
+    atualizarStatusDesenhoMesa(mensagemPanTemporarioMesa());
+    publicarPresencaMesaDocumentos({ grabbing: false, tool: 'pan' });
+}
+
+function desativarPanTemporarioMesa() {
+    if (!documentDeskState.spacePan) return;
+    documentDeskState.spacePan = false;
+    if (documentDeskState.panDrag?.bySpace) encerrarArrastePanMesa(documentDeskState.panDrag.pointerId);
+    const app = document.getElementById('document-desk-app');
+    app?.classList.remove('space-pan-active');
+    if (app) app.dataset.drawingTool = documentDeskState.drawingTool;
+    atualizarStatusDesenhoMesa();
+    publicarPresencaMesaDocumentos({ grabbing: false, tool: documentDeskState.drawingTool });
+}
+
 function iniciarInteracaoFundoMesa(event) {
     if (!documentDeskState.active || !currentUser || !documentDeskState.role || !documentDeskState.campaignId || !documentDeskState.currentSlotId) return;
     const panForcado = event.button === 1 || documentDeskState.spacePan === true;
     const ferramenta = panForcado ? 'pan' : documentDeskState.drawingTool;
+    if (event.button === 0 && !event.target.closest?.('.desk-document')) selecionarDocumentoMesa(null);
     const controle = event.target.closest?.('button, input, select, label, .document-slot-ribbon, .desk-resize-handle, .desk-rotate-handle, .desk-document-controls');
-    if (controle) return;
+    if (controle && !panForcado) return;
     const viewport = document.querySelector('.document-desk-viewport');
     if (!viewport) return;
     if (ferramenta === 'pan') {
         if (![0, 1].includes(event.button) || (event.target.closest?.('.desk-document') && !panForcado)) return;
         event.preventDefault();
-        if (panForcado && event.target.closest?.('.desk-document')) event.stopImmediatePropagation();
+        if (panForcado) event.stopImmediatePropagation();
         event.currentTarget.setPointerCapture?.(event.pointerId);
         documentDeskState.panDrag = {
             pointerId: event.pointerId,
+            captor: event.currentTarget,
+            bySpace: documentDeskState.spacePan === true,
             startX: event.clientX,
             startY: event.clientY,
             scrollLeft: viewport.scrollLeft,
@@ -20836,10 +20904,7 @@ function moverPanOuDesenhoMesa(event) {
 async function finalizarPanOuDesenhoMesa(event) {
     const pan = documentDeskState.panDrag;
     if (pan && (event.pointerId == null || event.pointerId === pan.pointerId)) {
-        documentDeskState.panDrag = null;
-        document.querySelector('.document-desk-viewport')?.classList.remove('is-panning');
-        document.body.classList.remove('document-desk-panning');
-        publicarPresencaMesaDocumentos({ grabbing: false, tool: documentDeskState.drawingTool });
+        encerrarArrastePanMesa(event.pointerId);
     }
     if (event.type === 'pointercancel') {
         cancelarRascunhoDesenhoMesa();
@@ -20989,7 +21054,8 @@ function renderizarDocumentosNaMesa() {
             const molduraAtiva = typeof placement.frameEnabled === 'boolean' ? placement.frameEnabled : documento.frameEnabled !== false;
             const moldura = molduraAtiva ? '' : 'is-frameless';
             const possuiDescricao = textoCompleto ? 'has-description' : '';
-            return `<article class="desk-document ${tipo} ${moldura} ${possuiDescricao} ${soltando}" data-document-id="${escapeCampaignHtml(id)}" tabindex="0" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%;z-index:${Math.max(1, numeroMesa(placement.z, 1))};--doc-rotation:${rotation}deg" aria-label="${escapeCampaignHtml(documento.title || 'Documento')}">
+            const selecionado = documentDeskState.selectedDocumentId === id ? 'is-selected' : '';
+            return `<article class="desk-document ${tipo} ${moldura} ${possuiDescricao} ${soltando} ${selecionado}" data-document-id="${escapeCampaignHtml(id)}" tabindex="0" aria-selected="${selecionado ? 'true' : 'false'}" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%;z-index:${Math.max(1, numeroMesa(placement.z, 1))};--doc-rotation:${rotation}deg" aria-label="${escapeCampaignHtml(documento.title || 'Documento')}">
                 <div class="desk-document-controls" onpointerdown="event.stopPropagation()">
                     <button type="button" data-document-no-front onclick="abrirDocumentoMesa('${escapeCampaignHtml(id)}')" title="Abrir documento">⌕</button>
                     <button type="button" data-document-no-front onclick="girarDocumentoMesa('${escapeCampaignHtml(id)}', -3)" title="Girar para a esquerda">↶</button>
@@ -21008,12 +21074,24 @@ function renderizarDocumentosNaMesa() {
     layer.querySelectorAll('.desk-document').forEach(card => {
         card.addEventListener('pointerdown', destacarDocumentoMesaAoClicar, { capture: true });
         card.addEventListener('pointerdown', iniciarMovimentoDocumentoMesa);
+        card.addEventListener('focus', () => selecionarDocumentoMesa(card.dataset.documentId, false));
         card.addEventListener('dblclick', event => {
             if (!event.target.closest('button, .desk-resize-handle')) abrirDocumentoMesa(card.dataset.documentId);
         });
         card.addEventListener('keydown', event => {
             if (event.key === 'Enter') abrirDocumentoMesa(card.dataset.documentId);
         });
+    });
+}
+
+function selecionarDocumentoMesa(documentId = null, focar = false) {
+    const valido = documentId && documentDeskState.placements?.[documentId] ? documentId : null;
+    documentDeskState.selectedDocumentId = valido;
+    document.querySelectorAll('#document-desk-documents .desk-document').forEach(card => {
+        const selecionado = Boolean(valido && card.dataset.documentId === valido);
+        card.classList.toggle('is-selected', selecionado);
+        card.setAttribute('aria-selected', String(selecionado));
+        if (selecionado && focar) card.focus({ preventScroll: true });
     });
 }
 
@@ -21234,9 +21312,10 @@ function finalizarRotacaoDocumentoMesa(event) {
 }
 
 function destacarDocumentoMesaAoClicar(event) {
-    if (event.button !== 0 || event.target.closest('button, .desk-resize-handle, [data-document-no-front]')) return;
     const card = event.currentTarget;
     const documentId = card.dataset.documentId;
+    if (event.button === 0) selecionarDocumentoMesa(documentId);
+    if (event.button !== 0 || event.target.closest('button, .desk-resize-handle, [data-document-no-front]')) return;
     const placement = documentDeskState.placements[documentId];
     if (!placement) return;
     const z = maiorCamadaMesaDocumentos() + 1;
@@ -21320,6 +21399,31 @@ function moverDocumentoMesaComPonteiro(event) {
     drag.card.style.height = `${atualizado.h}%`;
     drag.card.style.zIndex = atualizado.z;
     agendarPosicaoDocumentoMesa(drag.documentId, atualizado);
+}
+
+function girarDocumentoSeguradoComScroll(event) {
+    const drag = documentDeskState.drag;
+    if (!drag || drag.mode !== 'move' || !documentDeskState.active) return;
+    const deltaBruto = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+    if (!deltaBruto) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const placement = documentDeskState.placements[drag.documentId];
+    if (!placement) return;
+    const variacaoSuave = Math.max(-10, Math.min(10, deltaBruto * .04));
+    const variacao = event.shiftKey
+        ? Math.sign(deltaBruto) * 15
+        : (Math.abs(variacaoSuave) < .75 ? Math.sign(deltaBruto) * .75 : variacaoSuave);
+    let rotation = numeroMesa(placement.rotation, drag.initial.rotation) + variacao;
+    rotation = ((rotation + 180) % 360 + 360) % 360 - 180;
+    rotation = Number(rotation.toFixed(2));
+    const atualizado = { ...placement, rotation, z: drag.frontZ };
+    documentDeskState.placements[drag.documentId] = atualizado;
+    drag.initial.rotation = rotation;
+    drag.card.style.setProperty('--doc-rotation', `${rotation}deg`);
+    drag.card.style.zIndex = drag.frontZ;
+    agendarPosicaoDocumentoMesa(drag.documentId, atualizado);
+    atualizarStatusDesenhoMesa(`Documento girado para ${Math.round(rotation)}°.`);
 }
 
 function agendarPosicaoDocumentoMesa(documentId, placement, imediato = false) {
@@ -21706,6 +21810,7 @@ function inicializarInteracoesMesaDocumentos() {
     board.addEventListener('pointermove', atualizarCursorMesaDocumentos);
     board.addEventListener('pointerenter', () => publicarPresencaMesaDocumentos({ active: true }));
     board.addEventListener('pointerleave', () => publicarPresencaMesaDocumentos({ active: true, grabbing: Boolean(documentDeskState.drag || documentDeskState.rotationDrag || documentDeskState.panDrag) }));
+    board.addEventListener('wheel', girarDocumentoSeguradoComScroll, { passive: false });
     document.addEventListener('pointermove', moverDocumentoMesaComPonteiro);
     document.addEventListener('pointermove', moverRotacaoDocumentoMesa);
     document.addEventListener('pointermove', moverPanOuDesenhoMesa);
@@ -21716,12 +21821,19 @@ function inicializarInteracoesMesaDocumentos() {
     document.addEventListener('pointerup', finalizarPanOuDesenhoMesa);
     document.addEventListener('pointercancel', finalizarPanOuDesenhoMesa);
     document.addEventListener('keydown', event => {
-        if (!documentDeskState.active || event.code !== 'Space' || /INPUT|TEXTAREA|SELECT/.test(event.target?.tagName || '')) return;
-        documentDeskState.spacePan = true;
+        if (event.code !== 'Space' || !documentDeskState.active) return;
+        const alvo = event.target;
+        const editando = alvo?.isContentEditable || alvo?.closest?.('input, textarea, select, button, [contenteditable="true"]');
+        if (editando || (typeof superficieFocoAtiva !== 'undefined' && superficieFocoAtiva)) return;
         event.preventDefault();
+        if (!event.repeat) ativarPanTemporarioMesa(event);
     });
     document.addEventListener('keyup', event => {
-        if (event.code === 'Space') documentDeskState.spacePan = false;
+        if (event.code === 'Space') desativarPanTemporarioMesa();
+    });
+    window.addEventListener('blur', desativarPanTemporarioMesa);
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) desativarPanTemporarioMesa();
     });
     viewport?.addEventListener('wheel', event => {
         if (!event.ctrlKey && !event.metaKey) return;
