@@ -9374,6 +9374,34 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 .document-editor-modal,
 .document-viewer-modal { --desk-gold: color-mix(in srgb, var(--text-gold) 82%, #f3d58a); }
 .document-editor-modal { width: min(670px, calc(100vw - 30px)) !important; }
+.abyss-dialog-modal {
+    width: min(470px, calc(100vw - 34px)) !important;
+    padding: 24px !important;
+    border-color: color-mix(in srgb, var(--ornament-color) 58%, var(--border-color)) !important;
+    background:
+        radial-gradient(circle at 92% 8%, color-mix(in srgb, var(--ornament-color) 13%, transparent), transparent 34%),
+        linear-gradient(145deg, rgba(19, 14, 24, .985), rgba(8, 7, 11, .99)) !important;
+    box-shadow: 0 24px 70px rgba(0,0,0,.72), inset 0 0 0 1px rgba(255,255,255,.025) !important;
+}
+.abyss-dialog-message {
+    margin: 4px 0 20px;
+    color: var(--text-main);
+    font: 1rem/1.55 var(--font-reading);
+    white-space: pre-wrap;
+}
+.abyss-dialog-input-field { display: grid; gap: 7px; margin: -5px 0 20px; }
+.abyss-dialog-input-field[hidden] { display: none !important; }
+.abyss-dialog-input-field > span { color: var(--text-gold); font: 600 .56rem var(--font-rpg); letter-spacing: 1.2px; }
+.abyss-dialog-modal .settings-actions { margin-top: 0; }
+.abyss-dialog-modal.is-danger .settings-primary {
+    border-color: #9d3f4a;
+    background: linear-gradient(180deg, #8b2537, #5d1826);
+    color: #fff4f5;
+}
+.abyss-dialog-modal.is-warning .settings-primary {
+    border-color: color-mix(in srgb, var(--text-gold) 72%, #654516);
+    background: color-mix(in srgb, var(--primary-purple) 55%, #3b2810);
+}
 .document-editor-field { display: grid; gap: 6px; margin-bottom: 14px; }
 .document-editor-field > span { color: var(--text-gold); font: 600 .56rem var(--font-rpg); letter-spacing: 1.1px; }
 .document-editor-field textarea { min-height: 180px; }
@@ -10615,6 +10643,22 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
         <div id="document-viewer-actions" class="settings-actions"></div>
     </div>
 
+    <div id="modal-abyss-dialog" class="modal abyss-dialog-modal" role="alertdialog" aria-modal="true" aria-labelledby="abyss-dialog-title" aria-describedby="abyss-dialog-message" data-focus-persistent="true">
+        <div class="settings-modal-header">
+            <div><span id="abyss-dialog-eyebrow" class="settings-eyebrow">MESA DE DOCUMENTOS</span><h3 id="abyss-dialog-title">Confirmação</h3></div>
+            <span aria-hidden="true" style="color:var(--ornament-color);font-size:1.1rem;">✦</span>
+        </div>
+        <p id="abyss-dialog-message" class="abyss-dialog-message"></p>
+        <label id="abyss-dialog-input-field" class="abyss-dialog-input-field" hidden>
+            <span id="abyss-dialog-input-label">NOME</span>
+            <input id="abyss-dialog-input" class="modal-input" autocomplete="off">
+        </label>
+        <div class="settings-actions">
+            <button id="abyss-dialog-cancel" type="button" class="settings-secondary" onclick="resolverDialogoAbyss(false)">Cancelar</button>
+            <button id="abyss-dialog-confirm" type="button" class="settings-primary" onclick="resolverDialogoAbyss(true)">Confirmar</button>
+        </div>
+    </div>
+
     <div id="campaign-shield-overlay" class="campaign-shield-overlay" onclick="fecharEscudoMestre(event)">
         <div class="campaign-shield" onclick="event.stopPropagation()">
             <div class="campaign-shield-header">
@@ -11328,9 +11372,104 @@ function fecharTodasSuperficiesFoco() {
     setTimeout(finalizarFocoSeNecessario, UI_SURFACE_TRANSITION_MS);
 }
 
+let dialogoAbyssAtual = null;
+
+function mostrarDialogoAbyss(opcoes = {}) {
+    const modal = document.getElementById('modal-abyss-dialog');
+    if (!modal) return Promise.resolve(false);
+    if (dialogoAbyssAtual?.resolver) resolverDialogoAbyss(false);
+    const superficieAnterior = superficieFocoAtiva && superficieFocoAtiva !== modal && superficieFocoEstaAberta(superficieFocoAtiva)
+        ? superficieFocoAtiva
+        : null;
+    const modo = opcoes.modo === 'aviso' ? 'aviso' : (opcoes.modo === 'entrada' ? 'entrada' : 'confirmacao');
+    modal.classList.toggle('is-danger', opcoes.tom === 'perigo');
+    modal.classList.toggle('is-warning', opcoes.tom === 'aviso');
+    document.getElementById('abyss-dialog-eyebrow').textContent = opcoes.sobretitulo || 'MESA DE DOCUMENTOS';
+    document.getElementById('abyss-dialog-title').textContent = opcoes.titulo || (modo === 'aviso' ? 'Atenção' : (modo === 'entrada' ? 'Informar valor' : 'Confirmar ação'));
+    document.getElementById('abyss-dialog-message').textContent = String(opcoes.mensagem || '');
+    const cancelar = document.getElementById('abyss-dialog-cancel');
+    const confirmar = document.getElementById('abyss-dialog-confirm');
+    const campoEntrada = document.getElementById('abyss-dialog-input-field');
+    const entrada = document.getElementById('abyss-dialog-input');
+    campoEntrada.hidden = modo !== 'entrada';
+    if (modo === 'entrada') {
+        document.getElementById('abyss-dialog-input-label').textContent = opcoes.rotuloEntrada || 'NOME';
+        entrada.value = String(opcoes.valorInicial || '');
+        entrada.placeholder = String(opcoes.placeholder || '');
+        entrada.maxLength = Math.max(1, Number(opcoes.maxLength) || 90);
+    }
+    cancelar.hidden = modo === 'aviso';
+    cancelar.textContent = opcoes.rotuloCancelar || 'Cancelar';
+    confirmar.textContent = opcoes.rotuloConfirmar || (modo === 'aviso' ? 'Entendi' : 'Confirmar');
+    return new Promise(resolver => {
+        dialogoAbyssAtual = {
+            resolver,
+            modo,
+            entradaObrigatoria: opcoes.obrigatorio !== false,
+            superficieAnterior,
+            restaurarSempre: modo === 'aviso' || opcoes.restaurarSempre === true,
+            restaurarAoCancelar: opcoes.restaurarAoCancelar !== false
+        };
+        abrirSuperficieFoco(modal);
+        requestAnimationFrame(() => (modo === 'entrada' ? entrada : confirmar).focus());
+    });
+}
+
+function resolverDialogoAbyss(resposta) {
+    const contexto = dialogoAbyssAtual;
+    if (!contexto) return;
+    const modal = document.getElementById('modal-abyss-dialog');
+    let valorResolvido = Boolean(resposta);
+    if (contexto.modo === 'entrada') {
+        if (!resposta) valorResolvido = null;
+        else {
+            const entrada = document.getElementById('abyss-dialog-input');
+            const valor = String(entrada?.value || '').trim();
+            if (contexto.entradaObrigatoria && !valor) {
+                entrada?.focus();
+                return;
+            }
+            valorResolvido = valor;
+        }
+    }
+    dialogoAbyssAtual = null;
+    const confirmado = contexto.modo === 'entrada' ? valorResolvido !== null : Boolean(resposta);
+    const restaurar = contexto.superficieAnterior
+        && contexto.superficieAnterior.isConnected
+        && (contexto.restaurarSempre || (!confirmado && contexto.restaurarAoCancelar));
+    fecharSuperficieFoco(modal);
+    contexto.resolver(valorResolvido);
+    if (restaurar) {
+        setTimeout(() => {
+            if (!superficieFocoAtiva && contexto.superficieAnterior.isConnected) abrirSuperficieFoco(contexto.superficieAnterior);
+        }, UI_SURFACE_TRANSITION_MS + 20);
+    }
+}
+
+function confirmarAbyss(mensagem, opcoes = {}) {
+    return mostrarDialogoAbyss({ ...opcoes, mensagem, modo: 'confirmacao' });
+}
+
+function avisarAbyss(mensagem, opcoes = {}) {
+    return mostrarDialogoAbyss({ ...opcoes, mensagem, modo: 'aviso' });
+}
+
+function pedirTextoAbyss(mensagem, opcoes = {}) {
+    return mostrarDialogoAbyss({ ...opcoes, mensagem, modo: 'entrada' });
+}
+
 document.getElementById('ui-focus-backdrop')?.addEventListener('click', () => {
     if (!superficieFocoExigeEscolha()) fecharSuperficieFoco();
 });
+
+document.addEventListener('keydown', event => {
+    if (superficieFocoAtiva?.id !== 'modal-abyss-dialog') return;
+    if (event.key !== 'Escape' && event.key !== 'Enter') return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const modoAviso = document.getElementById('abyss-dialog-cancel')?.hidden === true;
+    resolverDialogoAbyss(event.key === 'Enter' || modoAviso);
+}, true);
 
 document.addEventListener('keydown', event => {
     if (event.key !== 'Escape' || !superficieFocoAtiva) return;
@@ -11572,7 +11711,8 @@ function obterSonsAudioSlotAtual() {
     return {
         critUrl: sons.critUrl || AUDIO_DEFAULTS.critUrl,
         failUrl: sons.failUrl || AUDIO_DEFAULTS.failUrl,
-        attackCritUrl: sons.attackCritUrl || AUDIO_DEFAULTS.attackCritUrl
+        attackCritUrl: sons.attackCritUrl || AUDIO_DEFAULTS.attackCritUrl,
+        revision: Math.max(0, Number(sons.revision) || 0)
     };
 }
 
@@ -11580,7 +11720,8 @@ function guardarSonsAudioSlotAtual(sons) {
     const normalizados = {
         critUrl: String(sons?.critUrl || AUDIO_DEFAULTS.critUrl),
         failUrl: String(sons?.failUrl || AUDIO_DEFAULTS.failUrl),
-        attackCritUrl: String(sons?.attackCritUrl || sons?.critUrl || AUDIO_DEFAULTS.attackCritUrl)
+        attackCritUrl: String(sons?.attackCritUrl || sons?.critUrl || AUDIO_DEFAULTS.attackCritUrl),
+        revision: Math.max(1, Number(sons?.revision) || Date.now())
     };
     try { localStorage.setItem(chaveAudioSlotAtual(), JSON.stringify(normalizados)); }
     catch (erro) { console.warn('O áudio deste slot será mantido na ficha e na nuvem, mas excedeu o espaço local.', erro); }
@@ -11628,29 +11769,43 @@ function atualizarSaidaVolume(inputId, outputId) {
     if (input && output) output.value = `${Math.round(Number(input.value) || 0)}%`;
 }
 
-async function obterSonsPublicosDoJogador(uid, audioSlot = '1') {
+async function obterSonsPublicosDoJogador(uid, audioSlot = '1', audioRevision = 0, forcarAtualizacao = false) {
     if (!uid) return { critUrl: AUDIO_DEFAULTS.critUrl, failUrl: AUDIO_DEFAULTS.failUrl, attackCritUrl: AUDIO_DEFAULTS.attackCritUrl };
     const slotSeguro = idSlotAudioSeguro(audioSlot);
-    const chaveCache = `${uid}:${slotSeguro}`;
-    if (cacheSonsRemotos.has(chaveCache)) return cacheSonsRemotos.get(chaveCache);
+    const chaveBase = `${uid}:${slotSeguro}`;
+    const revisao = Math.max(0, Number(audioRevision) || 0);
+    const chaveCache = revisao ? `${chaveBase}:${revisao}` : chaveBase;
+    if (!forcarAtualizacao && cacheSonsRemotos.has(chaveCache)) return cacheSonsRemotos.get(chaveCache);
     try {
         const [slotSnapshot, fallbackSnapshot] = await Promise.all([
             database.ref(`publicProfiles/${uid}/soundsBySlot/${slotSeguro}`).once('value'),
             database.ref(`publicProfiles/${uid}/sounds`).once('value')
         ]);
-        const sons = { ...AUDIO_DEFAULTS, ...(fallbackSnapshot.val() || {}), ...(slotSnapshot.val() || {}) };
+        const fallback = fallbackSnapshot.val() || {};
+        const fallbackPertenceAoSlot = !fallback.slotId || idSlotAudioSeguro(fallback.slotId) === slotSeguro;
+        const sons = {
+            ...AUDIO_DEFAULTS,
+            ...(fallbackPertenceAoSlot ? fallback : {}),
+            ...(slotSnapshot.val() || {})
+        };
         sons.attackCritUrl = sons.attackCritUrl || sons.critUrl;
+        sons.revision = Math.max(0, Number(sons.revision) || revisao);
+        cacheSonsRemotos.set(chaveBase, sons);
         cacheSonsRemotos.set(chaveCache, sons);
         return sons;
     } catch (erro) {
         console.warn('Não foi possível carregar o som público do jogador.', erro);
-        return { critUrl: AUDIO_DEFAULTS.critUrl, failUrl: AUDIO_DEFAULTS.failUrl, attackCritUrl: AUDIO_DEFAULTS.attackCritUrl };
+        return cacheSonsRemotos.get(chaveCache)
+            || cacheSonsRemotos.get(chaveBase)
+            || { critUrl: AUDIO_DEFAULTS.critUrl, failUrl: AUDIO_DEFAULTS.failUrl, attackCritUrl: AUDIO_DEFAULTS.attackCritUrl };
     }
 }
 
-async function tocarSomRemoto(uid, tipo, audioSlot = '1') {
+async function tocarSomRemoto(uid, tipo, audioSlot = '1', audioRevision = 0) {
     if (!['crit', 'fail', 'attackCrit'].includes(tipo)) return;
-    const sons = await obterSonsPublicosDoJogador(uid, audioSlot);
+    // A fonte é sempre consultada no perfil/slot de quem rolou. O volume e a
+    // preferência de ouvir terceiros continuam pertencendo a quem está ouvindo.
+    const sons = await obterSonsPublicosDoJogador(uid, audioSlot, audioRevision, true);
     const fonte = tipo === 'crit' ? sons.critUrl : (tipo === 'fail' ? sons.failUrl : sons.attackCritUrl);
     reproduzirAudio(new Audio(fonte || (tipo === 'attackCrit' ? AUDIO_DEFAULTS.attackCritUrl : AUDIO_DEFAULTS[`${tipo}Url`])), configuracoesAudio.othersVolume);
 }
@@ -11706,11 +11861,13 @@ function carregarAudioLocal(input, targetId) {
 
 async function publicarSonsDoPerfil() {
     if (!currentUser) return;
-    const sonsSlot = obterSonsAudioSlotAtual();
+    let sonsSlot = obterSonsAudioSlotAtual();
+    if (!sonsSlot.revision) sonsSlot = guardarSonsAudioSlotAtual({ ...sonsSlot, revision: Date.now() });
     const sons = {
         critUrl: sonsSlot.critUrl,
         failUrl: sonsSlot.failUrl,
         attackCritUrl: sonsSlot.attackCritUrl,
+        revision: sonsSlot.revision,
         slotId: idSlotAudioAtual(),
         updatedAt: firebase.database.ServerValue.TIMESTAMP
     };
@@ -11719,6 +11876,7 @@ async function publicarSonsDoPerfil() {
         critUrl: String(sons.critUrl).startsWith('data:') ? AUDIO_DEFAULTS.critUrl : sons.critUrl,
         failUrl: String(sons.failUrl).startsWith('data:') ? AUDIO_DEFAULTS.failUrl : sons.failUrl,
         attackCritUrl: String(sons.attackCritUrl).startsWith('data:') ? AUDIO_DEFAULTS.attackCritUrl : sons.attackCritUrl,
+        revision: sons.revision,
         slotId: sons.slotId,
         updatedAt: firebase.database.ServerValue.TIMESTAMP
     };
@@ -11992,7 +12150,8 @@ function resetarConfiguracoesAudio() {
             audioConfig: {
                 critUrl: 'crit.mp3',
                 failUrl: 'fail.mp3',
-                attackCritUrl: 'crit.mp3'
+                attackCritUrl: 'crit.mp3',
+                revision: 0
             },
             tema: {
                 '--bg-gradient-top': '#050507',
@@ -14768,6 +14927,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function enviarRolagemParaServidor(titulo, subtitulo, total, corStatus, txtStatus, detalhes, eventoSom = null, natural = null) {
         if (modoSecreto) return; 
         const nick = String(document.getElementById('user-nickname')?.value || sheet?.nickname || '').trim() || "Personagem sem nome";
+        const sonsDoSlotRolador = obterSonsAudioSlotAtual();
         const dadosRolagem = {
             jogador: nick,
             jogadorUid: currentUser?.uid || '',
@@ -14780,6 +14940,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             detalhes: detalhes,
             eventoSom: eventoSom,
             audioSlot: idSlotAudioAtual(),
+            audioRevision: sonsDoSlotRolador.revision || 0,
             natural: natural,
             clienteSessaoId: clienteSessaoId
         };
@@ -14820,7 +14981,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const eventoNovo = historicoRolagensCarregado && !chavesRolagensIniciais.has(snapshot.key);
         const veioDeOutroCliente = !data.clienteSessaoId || data.clienteSessaoId !== clienteSessaoId;
         if (eventoCompartilhado && eventoNovo && veioDeOutroCliente && configuracoesAudio.ouvirCriticosAlheios !== false) {
-            tocarSomRemoto(data.jogadorUid, data.eventoSom, data.audioSlot || '1');
+            tocarSomRemoto(data.jogadorUid, data.eventoSom, data.audioSlot || '1', data.audioRevision || 0);
         }
         chavesRolagensIniciais.delete(snapshot.key);
     });
@@ -19181,6 +19342,7 @@ function removerCondicaoCampanha(id) {
 }
 
 function enviarRolagemCondicaoCampanha(alvo, condicao, resultado, status, cor, eventoSom = null) {
+    const sonsDoSlotRolador = obterSonsAudioSlotAtual();
     const dados = {
         jogador: alvo.participant.name || 'Combatente',
         jogadorUid: currentUser?.uid || '',
@@ -19192,6 +19354,8 @@ function enviarRolagemCondicaoCampanha(alvo, condicao, resultado, status, cor, e
         status,
         detalhes: `Fórmula: ${condicao.acao.formula} | Dados: ${resultado.text}`,
         eventoSom,
+        audioSlot: idSlotAudioAtual(),
+        audioRevision: sonsDoSlotRolador.revision || 0,
         natural: eventoSom ? 1 : null,
         clienteSessaoId
     };
@@ -20396,7 +20560,7 @@ const documentDeskState = {
 
 function montarPortalMesaDocumentos() {
     if (documentDeskState.portalReady) return;
-    ['document-desk-app', 'modal-document-editor', 'modal-document-viewer'].forEach(id => {
+    ['document-desk-app', 'modal-document-editor', 'modal-document-viewer', 'modal-abyss-dialog'].forEach(id => {
         const elemento = document.getElementById(id);
         if (elemento && elemento.parentElement !== document.body) document.body.appendChild(elemento);
     });
@@ -21032,7 +21196,13 @@ function escutarPosicoesSlotMesa(slotId) {
 
 async function criarSlotMesaDocumentos() {
     if (documentDeskState.role !== 'mestre') return;
-    const name = prompt('Nome do novo slot de organização:');
+    const name = await pedirTextoAbyss('Crie um espaço nomeável para organizar os documentos dos jogadores.', {
+        titulo: 'Novo slot de organização',
+        rotuloEntrada: 'NOME DO SLOT',
+        placeholder: 'Ex: Pistas dos investigadores',
+        rotuloConfirmar: 'Criar slot',
+        maxLength: 45
+    });
     if (!name?.trim()) return;
     const id = database.ref(`${caminhoBaseMesaDocumentos()}/slots`).push().key;
     const order = slotsMesaOrdenados().reduce((max, slot) => Math.max(max, Number(slot.order) || 0), 0) + 1;
@@ -21054,7 +21224,13 @@ async function renomearSlotMesaDocumentos() {
     if (documentDeskState.role !== 'mestre') return;
     const atual = documentDeskState.slots[documentDeskState.currentSlotId];
     if (!atual) return;
-    const name = prompt('Novo nome deste slot:', atual.name || 'Mesa');
+    const name = await pedirTextoAbyss('Escolha um novo nome para este espaço da mesa.', {
+        titulo: 'Renomear slot',
+        rotuloEntrada: 'NOVO NOME',
+        valorInicial: atual.name || 'Mesa',
+        rotuloConfirmar: 'Salvar nome',
+        maxLength: 45
+    });
     if (!name?.trim()) return;
     await database.ref(`${caminhoBaseMesaDocumentos()}/slots/${documentDeskState.currentSlotId}/name`).set(name.trim().slice(0, 45));
 }
@@ -21062,9 +21238,16 @@ async function renomearSlotMesaDocumentos() {
 async function excluirSlotMesaDocumentos() {
     if (documentDeskState.role !== 'mestre') return;
     const slots = slotsMesaOrdenados();
-    if (slots.length <= 1) return alert('A campanha precisa manter pelo menos um slot de organização.');
+    if (slots.length <= 1) {
+        await avisarAbyss('A campanha precisa manter pelo menos um slot de organização.', { titulo: 'Último slot da mesa', tom: 'aviso' });
+        return;
+    }
     const atual = documentDeskState.slots[documentDeskState.currentSlotId];
-    if (!atual || !confirm(`Excluir o slot “${atual.name || 'Mesa'}” e sua organização? Os documentos continuarão na gaveta.`)) return;
+    if (!atual || !await confirmarAbyss(`Excluir o slot “${atual.name || 'Mesa'}” e sua organização?\n\nOs documentos continuarão seguros na gaveta.`, {
+        titulo: 'Excluir espaço da mesa',
+        rotuloConfirmar: 'Excluir slot',
+        tom: 'perigo'
+    })) return;
     const removido = documentDeskState.currentSlotId;
     const proximo = slots.find(slot => slot.id !== removido)?.id || 'principal';
     documentDeskState.currentSlotId = proximo;
@@ -22153,7 +22336,11 @@ async function desfazerDesenhoMesa(reproduzirSom = true, registrarHistorico = tr
 
 async function limparDesenhosMesa() {
     if (documentDeskState.role !== 'mestre' || !documentDeskState.currentSlotId) return;
-    if (!confirm('Apagar todos os desenhos deste slot da Mesa de Documentos?')) return;
+    if (!await confirmarAbyss('Apagar todos os desenhos deste slot da Mesa de Documentos?\n\nVocê ainda poderá usar Ctrl+Z logo depois para restaurá-los.', {
+        titulo: 'Limpar desenhos',
+        rotuloConfirmar: 'Apagar desenhos',
+        tom: 'perigo'
+    })) return;
     if (typeof tocarSom === 'function') tocarSom('click');
     const removidos = clonarValorMesa(documentDeskState.drawings || {});
     await database.ref(`${caminhoBaseMesaDocumentos()}/drawings/${documentDeskState.currentSlotId}`).remove();
@@ -22582,7 +22769,7 @@ async function alternarMolduraDocumentoMesa(documentId) {
         documentDeskState.placements[documentId] = placement;
         renderizarDocumentosNaMesa();
         console.error('Erro ao alterar a moldura do documento:', error);
-        alert('Não foi possível alterar a moldura deste documento.');
+        await avisarAbyss('Não foi possível alterar a moldura deste documento agora.', { titulo: 'Moldura não alterada', tom: 'aviso' });
     }
 }
 
@@ -22642,8 +22829,14 @@ function renderizarGavetaDocumentos() {
 }
 
 async function colocarDocumentoNaMesa(documentId) {
-    if (!currentUser || !documentDeskState.role || !documentId || !documentDeskState.currentSlotId || !documentDeskState.documents?.[documentId]) return;
+    if (!currentUser || !documentDeskState.role || !documentId || !documentDeskState.currentSlotId || !documentDeskState.documents?.[documentId]) return false;
     const slotAtual = documentDeskState.currentSlotId;
+    if (documentDeskState.placements?.[documentId]) {
+        selecionarDocumentoMesa(documentId);
+        return true;
+    }
+    documentDeskState.placements = documentDeskState.placements || {};
+    documentDeskState.allPlacements = documentDeskState.allPlacements || {};
     const placementsAntes = clonarValorMesa(documentDeskState.placements || {});
     const todosAntes = clonarValorMesa(documentDeskState.allPlacements || {});
     const posicaoLocal = {
@@ -22653,38 +22846,50 @@ async function colocarDocumentoNaMesa(documentId) {
         modifiedAt: Date.now(),
         droppedAt: Date.now()
     };
-    const updates = {};
-    const slotIds = new Set([
-        ...Object.keys(documentDeskState.slots || {}),
-        ...Object.keys(documentDeskState.allPlacements || {}),
-        slotAtual
-    ]);
-    slotIds.forEach(slotId => {
-        if (slotId !== slotAtual) updates[`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`] = null;
-    });
-    updates[`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`] = {
+    const payloadRemoto = {
         ...posicaoLocal,
         modifiedBy: currentUser.uid,
         modifiedAt: firebase.database.ServerValue.TIMESTAMP,
         droppedAt: firebase.database.ServerValue.TIMESTAMP
     };
-    slotIds.forEach(slotId => {
-        const lista = { ...(documentDeskState.allPlacements?.[slotId] || {}) };
-        delete lista[documentId];
-        documentDeskState.allPlacements[slotId] = lista;
-    });
-    documentDeskState.allPlacements[slotAtual] = {
-        ...(documentDeskState.allPlacements[slotAtual] || {}),
-        [documentId]: posicaoLocal
-    };
-    documentDeskState.placements = documentDeskState.allPlacements[slotAtual];
-    documentDeskState.localDropLocks.set(documentId, Date.now() + 1500);
-    animarQuedaDocumentoMesa(documentId);
-    selecionarDocumentoMesa(documentId);
-    renderizarDocumentosNaMesa();
-    renderizarGavetaDocumentos();
+    const slotsAnteriores = Object.entries(documentDeskState.allPlacements)
+        .filter(([slotId, lista]) => slotId !== slotAtual && Boolean(lista?.[documentId]))
+        .map(([slotId]) => slotId);
     try {
-        await database.ref().update(updates);
+        Object.keys(documentDeskState.allPlacements).forEach(slotId => {
+            const lista = { ...(documentDeskState.allPlacements?.[slotId] || {}) };
+            delete lista[documentId];
+            documentDeskState.allPlacements[slotId] = lista;
+        });
+        documentDeskState.allPlacements[slotAtual] = {
+            ...(documentDeskState.allPlacements[slotAtual] || {}),
+            [documentId]: posicaoLocal
+        };
+        documentDeskState.placements = documentDeskState.allPlacements[slotAtual];
+        documentDeskState.localDropLocks.set(documentId, Date.now() + 1500);
+        animarQuedaDocumentoMesa(documentId);
+        selecionarDocumentoMesa(documentId);
+        renderizarDocumentosNaMesa();
+        renderizarGavetaDocumentos();
+        await database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`).set(payloadRemoto);
+        if (slotsAnteriores.length) {
+            const resultados = await Promise.allSettled(slotsAnteriores.map(slotId =>
+                database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`).remove()
+            ));
+            resultados.forEach((resultado, indice) => {
+                if (resultado.status === 'fulfilled') return;
+                const slotId = slotsAnteriores[indice];
+                const placementAnterior = todosAntes?.[slotId]?.[documentId];
+                if (placementAnterior) {
+                    documentDeskState.allPlacements[slotId] = {
+                        ...(documentDeskState.allPlacements[slotId] || {}),
+                        [documentId]: placementAnterior
+                    };
+                }
+                console.warn(`O documento foi colocado na mesa atual, mas não pôde ser removido do slot ${slotId}.`, resultado.reason);
+            });
+        }
+        return true;
     } catch (error) {
         documentDeskState.placements = placementsAntes;
         documentDeskState.allPlacements = todosAntes;
@@ -22693,7 +22898,11 @@ async function colocarDocumentoNaMesa(documentId) {
         renderizarDocumentosNaMesa();
         renderizarGavetaDocumentos();
         console.error('Erro ao colocar documento na mesa:', error);
-        alert('Não foi possível retirar este documento da gaveta agora.');
+        await avisarAbyss('O documento continua seguro na gaveta, mas não foi possível colocá-lo neste slot agora. Verifique sua conexão e tente novamente.', {
+            titulo: 'Não foi possível colocar na mesa',
+            tom: 'aviso'
+        });
+        return false;
     }
 }
 
@@ -22718,7 +22927,10 @@ async function guardarDocumentoNaGaveta(documentId) {
         renderizarDocumentosNaMesa();
         renderizarGavetaDocumentos();
         console.error('Erro ao guardar documento na gaveta:', error);
-        alert('Não foi possível guardar este documento agora.');
+        await avisarAbyss('Não foi possível devolver este documento à gaveta agora. A posição anterior foi restaurada.', {
+            titulo: 'A gaveta não respondeu',
+            tom: 'aviso'
+        });
     }
 }
 
@@ -23492,7 +23704,7 @@ async function prepararArquivoDocumentoMesa(input) {
         documentDeskState.pendingFile = null;
         input.value = '';
         if (status) status.textContent = 'Clique ou arraste um arquivo';
-        alert(error.message || 'Não foi possível preparar o arquivo.');
+        await avisarAbyss(error.message || 'Não foi possível preparar o arquivo.', { titulo: 'Arquivo não preparado', tom: 'aviso' });
     }
 }
 
@@ -23514,17 +23726,24 @@ async function salvarDocumentoMesa(event) {
     const descricao = document.getElementById('document-editor-text').value.slice(0, 180000);
     if (!title) return document.getElementById('document-editor-title').focus();
     const atual = documentDeskState.editDocumentId ? documentDeskState.documents[documentDeskState.editDocumentId] : null;
-    if (atual && !podeEditarDocumentoMesa(documentDeskState.editDocumentId)) return alert('Você só pode editar documentos que criou.');
+    if (atual && !podeEditarDocumentoMesa(documentDeskState.editDocumentId)) {
+        await avisarAbyss('Você só pode editar os documentos que criou.', { titulo: 'Documento protegido', tom: 'aviso' });
+        return;
+    }
     const arquivo = documentDeskState.pendingFile || (atual?.dataUrl && !documentDeskState.removeFile ? {
         dataUrl: atual.dataUrl || '', mime: atual.mime || '', fileName: atual.fileName || '', extractedText: atual.extractedText || ''
     } : null);
-    if (!descricao.trim() && !arquivo?.dataUrl) return alert('Escreva uma descrição ou escolha um arquivo antes de guardar o documento.');
+    if (!descricao.trim() && !arquivo?.dataUrl) {
+        await avisarAbyss('Escreva uma descrição ou escolha um arquivo antes de guardar o documento.', { titulo: 'Documento vazio', tom: 'aviso' });
+        return;
+    }
     const tipo = arquivo?.dataUrl ? 'file' : 'text';
     const submit = document.getElementById('document-editor-submit');
     submit.disabled = true;
     submit.textContent = 'Guardando...';
+    const id = documentDeskState.editDocumentId || database.ref(`${caminhoBaseMesaDocumentos()}/documents`).push().key;
+    let documentoSalvo = false;
     try {
-        const id = documentDeskState.editDocumentId || database.ref(`${caminhoBaseMesaDocumentos()}/documents`).push().key;
         const payload = {
             title: title.slice(0, 90),
             type: tipo,
@@ -23551,31 +23770,62 @@ async function salvarDocumentoMesa(event) {
         documentDeskState.pendingFile = null;
         documentDeskState.removeFile = false;
         documentDeskState.editDocumentId = null;
-        if (!atual) await colocarDocumentoNaMesa(id);
+        documentoSalvo = true;
     } catch (error) {
         console.error('Erro ao guardar documento:', error);
-        alert('Não foi possível guardar este documento. Arquivos muito grandes podem exceder o limite da campanha.');
+        const mensagem = arquivo?.dataUrl
+            ? 'Não foi possível enviar este arquivo. Ele pode ter excedido o limite do armazenamento da campanha; tente uma versão menor ou mantenha somente a descrição.'
+            : 'Não foi possível sincronizar este documento de texto agora. Nada foi perdido no formulário; verifique sua conexão e tente novamente.';
+        await avisarAbyss(mensagem, { titulo: 'Documento não foi guardado', tom: 'aviso' });
     } finally {
         submit.disabled = false;
         submit.textContent = 'Guardar documento';
     }
+    if (documentoSalvo && !atual) await colocarDocumentoNaMesa(id);
 }
 
 async function excluirDocumentoMesa(documentId) {
-    if (!podeExcluirDocumentoMesa(documentId)) return alert('Você só pode excluir documentos que criou.');
+    if (!podeExcluirDocumentoMesa(documentId)) {
+        await avisarAbyss('Você só pode excluir os documentos que criou. O Mestre ainda pode remover qualquer documento da campanha.', {
+            titulo: 'Documento protegido',
+            tom: 'aviso'
+        });
+        return;
+    }
     const documento = documentDeskState.documents[documentId];
-    if (!documento || !confirm(`Excluir “${documento.title}” definitivamente da campanha?`)) return;
-    const updates = {};
-    updates[`${caminhoBaseMesaDocumentos()}/documents/${documentId}`] = null;
-    Object.keys(documentDeskState.slots || {}).forEach(slotId => {
-        updates[`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`] = null;
-        Object.entries(documentDeskState.allDrawings?.[slotId] || {}).forEach(([drawingId, desenho]) => {
+    if (!documento || !await confirmarAbyss(`Excluir “${documento.title}” definitivamente da campanha?\n\nO documento, suas posições e as anotações presas a ele serão removidos para todos.`, {
+        titulo: 'Excluir documento',
+        sobretitulo: 'ARQUIVO DA CAMPANHA',
+        rotuloConfirmar: 'Excluir definitivamente',
+        tom: 'perigo'
+    })) return;
+    try {
+        await database.ref(`${caminhoBaseMesaDocumentos()}/documents/${documentId}`).remove();
+    } catch (error) {
+        console.error('Erro ao excluir documento:', error);
+        await avisarAbyss('Não foi possível excluir este documento agora. Ele continua na campanha e nada foi removido.', {
+            titulo: 'Documento não excluído',
+            tom: 'aviso'
+        });
+        return;
+    }
+    const caminhosLimpeza = [];
+    Object.entries(documentDeskState.allPlacements || {}).forEach(([slotId, lista]) => {
+        if (lista?.[documentId]) caminhosLimpeza.push(`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`);
+    });
+    Object.entries(documentDeskState.allDrawings || {}).forEach(([slotId, desenhos]) => {
+        Object.entries(desenhos || {}).forEach(([drawingId, desenho]) => {
             if (String(desenho?.attachedDocumentId || '') === documentId) {
-                updates[`${caminhoBaseMesaDocumentos()}/drawings/${slotId}/${drawingId}`] = null;
+                caminhosLimpeza.push(`${caminhoBaseMesaDocumentos()}/drawings/${slotId}/${drawingId}`);
             }
         });
     });
-    await database.ref().update(updates);
+    if (caminhosLimpeza.length) {
+        const resultados = await Promise.allSettled(caminhosLimpeza.map(caminho => database.ref(caminho).remove()));
+        resultados.filter(resultado => resultado.status === 'rejected').forEach(resultado => {
+            console.warn('Uma referência antiga do documento não pôde ser limpa.', resultado.reason);
+        });
+    }
     delete documentDeskState.documents[documentId];
     Object.keys(documentDeskState.allPlacements || {}).forEach(slotId => {
         if (documentDeskState.allPlacements[slotId]) delete documentDeskState.allPlacements[slotId][documentId];
