@@ -8558,7 +8558,7 @@ body.document-desk-open { overflow: hidden !important; }
 body.document-desk-open.ui-focus-open .top-utility-bar { z-index: 1150 !important; }
 body.document-desk-open > .top-utility-bar,
 body.document-desk-open > .sidebar { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
-body.theme-umbral #btn-documentos::after { content: "Mesa de Documentos"; }
+body.theme-umbral #btn-documentos::after { content: "Documentos"; }
 #document-desk-app {
     --desk-ink: #28170d;
     --desk-paper: #eadcb9;
@@ -8737,6 +8737,12 @@ body.theme-umbral #btn-documentos::after { content: "Mesa de Documentos"; }
     background: var(--desk-gold);
     box-shadow: 0 0 0 2px rgba(212,175,55,.2), 0 0 16px rgba(212,175,55,.28);
 }
+#document-desk-app.space-pan-active .document-drawing-tools button.active:not(#document-tool-pan) {
+    color: #d9cdbd;
+    border-color: #49351f;
+    background: #120c09;
+    box-shadow: none;
+}
 #document-desk-app.space-pan-active .document-drawing-status { color: #f2d78b; }
 .document-drawing-toolbar button:disabled { opacity: .35; cursor: default; }
 .document-drawing-toolbar select { width: 80px; color: #e9dfd1; }
@@ -8817,9 +8823,6 @@ body.theme-umbral #btn-documentos::after { content: "Mesa de Documentos"; }
     cursor: pointer;
 }
 .document-desk-viewport.is-panning { scroll-behavior: auto; }
-body.document-desk-panning,
-body.document-desk-panning #document-desk-app,
-body.document-desk-panning #document-desk-app * { cursor: grabbing !important; }
 .document-desk-board::after {
     content: "";
     position: absolute;
@@ -8924,26 +8927,23 @@ body.document-desk-panning #document-desk-app * { cursor: grabbing !important; }
 }
 .desk-document:active,
 .desk-document.is-dragging { cursor: grabbing; }
-body.document-desk-grabbing,
-body.document-desk-grabbing #document-desk-app,
-body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; }
-#document-desk-board,
-#document-desk-board * { cursor: none !important; }
+body.document-desk-open #document-desk-app #document-desk-board,
+body.document-desk-open #document-desk-app #document-desk-board * { cursor: none !important; }
 .desk-document.is-dragging {
     z-index: 100000 !important;
     box-shadow: 0 24px 38px rgba(0,0,0,.68), 0 7px 8px rgba(0,0,0,.34);
     filter: saturate(1.06) brightness(1.04);
-    transform: rotate(var(--doc-rotation, 0deg)) translateY(-12px) scale(1.025);
+    transform: rotate(var(--doc-rotation, 0deg));
 }
 .desk-document.is-rotating {
     z-index: 100000 !important;
     box-shadow: 0 20px 34px rgba(0,0,0,.68), 0 6px 8px rgba(0,0,0,.34);
     filter: saturate(1.04) brightness(1.03);
 }
-.desk-document.is-dropping { animation: deskDocumentDrop .22s cubic-bezier(.18,.82,.28,1) both; }
+.desk-document.is-dropping { animation: deskDocumentDrop .15s ease-out both; }
 @keyframes deskDocumentDrop {
-    0% { transform: rotate(var(--doc-rotation, 0deg)) translateY(-12px) scale(1.025); box-shadow: 0 24px 38px rgba(0,0,0,.68); }
-    100% { transform: rotate(var(--doc-rotation, 0deg)) translateY(0) scale(1); box-shadow: 0 9px 16px rgba(0,0,0,.43), 0 2px 3px rgba(0,0,0,.35); }
+    0% { box-shadow: 0 17px 24px rgba(0,0,0,.56), 0 4px 5px rgba(0,0,0,.3); filter: brightness(1.025); }
+    100% { box-shadow: 0 9px 16px rgba(0,0,0,.43), 0 2px 3px rgba(0,0,0,.35); filter: brightness(1); }
 }
 .desk-document::before {
     content: "";
@@ -9135,7 +9135,7 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
 }
 .desk-rotate-handle:hover { background: #f1d58c; transform: rotate(22deg) scale(1.08); }
 .desk-rotate-handle:active { cursor: grabbing; background: #ffe3a1; transform: scale(1.08); }
-.document-desk-cursor { position: absolute; transform: translate(-7px, -4px); transition: left .08s linear, top .08s linear; }
+.document-desk-cursor { position: absolute; transform: translate(-7px, -4px); transition: left .03s linear, top .03s linear; }
 .document-desk-cursor.local { transition: none; }
 .document-desk-cursor-pointer {
     display: block;
@@ -9611,7 +9611,7 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
         <button class="sidebar-btn area-nav-btn" id="btn-combate" onclick="mudarArea('combate')" title="Combate">⚔️</button>
         <button class="sidebar-btn area-nav-btn" id="btn-inventario" onclick="mudarArea('inventario')" title="Inventário">🎒</button>
         <button class="sidebar-btn area-nav-btn" id="btn-notas" onclick="mudarArea('notas')" title="Anotações">📚</button>
-        <button class="sidebar-btn" id="btn-documentos" onclick="abrirMesaDocumentosDaFicha()" title="Mesa de Documentos">🗃️</button>
+        <button class="sidebar-btn" id="btn-documentos" onclick="abrirMesaDocumentosDaFicha()" title="Documentos">🗃️</button>
         <button class="sidebar-btn" id="btn-save-cloud" onclick="confirmarSalvar()" title="Salvar na Nuvem">💾</button>
     </div>
 </aside>
@@ -10353,9 +10353,9 @@ body.document-desk-grabbing #document-desk-app * { cursor: grabbing !important; 
             </div>
             <div id="document-drawing-toolbar" class="document-drawing-toolbar" role="toolbar" aria-label="Ferramentas da Mesa de Documentos">
                 <div class="document-drawing-tools">
-                    <button type="button" id="document-tool-pan" class="active" onclick="selecionarFerramentaDesenhoMesa('pan')" title="Mover a visão arrastando o fundo" aria-label="Mover a visão">✋</button>
-                    <button type="button" id="document-tool-magnifier" onclick="alternarLupaMesaDocumentos()" title="Lupa da mesa inteira" aria-label="Ativar lupa da mesa" aria-pressed="false">⌕</button>
-                    <button type="button" id="document-tool-free" onclick="selecionarFerramentaDesenhoMesa('free')" title="Desenho livre" aria-label="Desenho livre">✎</button>
+                    <button type="button" id="document-tool-pan" class="active" onclick="selecionarFerramentaDesenhoMesa('pan')" title="M — mover a visão arrastando o fundo" aria-label="Mover a visão — atalho M" aria-keyshortcuts="m">✋</button>
+                    <button type="button" id="document-tool-magnifier" onclick="alternarLupaMesaDocumentos()" title="P — lupa da mesa inteira" aria-label="Ativar lupa da mesa — atalho P" aria-keyshortcuts="p" aria-pressed="false">⌕</button>
+                    <button type="button" id="document-tool-free" onclick="selecionarFerramentaDesenhoMesa('free')" title="D — desenho livre" aria-label="Desenho livre — atalho D" aria-keyshortcuts="d">✎</button>
                     <button type="button" id="document-tool-line" onclick="selecionarFerramentaDesenhoMesa('line')" title="Desenhar reta" aria-label="Desenhar reta">╱</button>
                     <button type="button" id="document-tool-arrow" onclick="selecionarFerramentaDesenhoMesa('arrow')" title="Desenhar seta" aria-label="Desenhar seta">➜</button>
                     <button type="button" id="document-tool-circle" onclick="selecionarFerramentaDesenhoMesa('circle')" title="Circular uma região ou documento" aria-label="Desenhar círculo">◯</button>
@@ -20072,6 +20072,7 @@ const documentDeskState = {
     panDrag: null,
     drawingDraft: null,
     drawingTool: 'pan',
+    lastNonPanTool: 'free',
     drawingColor: '#a970ff',
     drawingWidth: 4,
     drawingStyle: 'solid',
@@ -20725,7 +20726,7 @@ function atualizarCursorMesaDocumentos(event) {
     documentDeskState.cursorTimer = setTimeout(() => {
         documentDeskState.cursorTimer = null;
         publicarPresencaMesaDocumentos();
-    }, 72);
+    }, 30);
 }
 
 function renderizarCursoresMesaDocumentos() {
@@ -20770,6 +20771,61 @@ function atualizarEstadoGavetaDocumentos() {
 function numeroMesa(valor, padrao = 0) {
     const numero = Number(valor);
     return Number.isFinite(numero) ? numero : padrao;
+}
+
+let contextoSomPapelMesa = null;
+
+function tocarSomPapelMesa(tipo = 'pegar') {
+    try {
+        const ConstrutorAudio = window.AudioContext || window.webkitAudioContext;
+        if (!ConstrutorAudio) return;
+        const volumePreferido = typeof configuracoesAudio !== 'undefined'
+            ? limitarVolume(configuracoesAudio.ownVolume, 1)
+            : 1;
+        if (volumePreferido <= 0) return;
+        contextoSomPapelMesa ||= new ConstrutorAudio();
+        const contexto = contextoSomPapelMesa;
+        if (contexto.state === 'suspended') contexto.resume().catch(() => {});
+        const soltando = tipo === 'soltar';
+        const duracao = soltando ? .14 : .11;
+        const agora = contexto.currentTime;
+        const buffer = contexto.createBuffer(1, Math.ceil(contexto.sampleRate * duracao), contexto.sampleRate);
+        const canal = buffer.getChannelData(0);
+        for (let indice = 0; indice < canal.length; indice++) {
+            const progresso = indice / canal.length;
+            const textura = .64 + Math.sin(indice * (soltando ? .19 : .31)) * .2;
+            canal[indice] = (Math.random() * 2 - 1) * textura * (1 - progresso * .34);
+        }
+        const fonte = contexto.createBufferSource();
+        const filtro = contexto.createBiquadFilter();
+        const ganho = contexto.createGain();
+        fonte.buffer = buffer;
+        filtro.type = soltando ? 'lowpass' : 'bandpass';
+        filtro.frequency.setValueAtTime(soltando ? 1150 : 1750, agora);
+        filtro.Q.setValueAtTime(soltando ? .45 : .8, agora);
+        const volume = (soltando ? .115 : .075) * volumePreferido;
+        ganho.gain.setValueAtTime(.0001, agora);
+        ganho.gain.exponentialRampToValueAtTime(Math.max(.0002, volume), agora + .007);
+        ganho.gain.exponentialRampToValueAtTime(Math.max(.0002, volume * .38), agora + duracao * .5);
+        ganho.gain.exponentialRampToValueAtTime(.0001, agora + duracao);
+        fonte.connect(filtro).connect(ganho).connect(contexto.destination);
+        fonte.start(agora);
+        fonte.stop(agora + duracao + .02);
+        if (soltando) {
+            const impacto = contexto.createOscillator();
+            const ganhoImpacto = contexto.createGain();
+            impacto.type = 'triangle';
+            impacto.frequency.setValueAtTime(112, agora);
+            impacto.frequency.exponentialRampToValueAtTime(68, agora + .075);
+            ganhoImpacto.gain.setValueAtTime(.025 * volumePreferido, agora);
+            ganhoImpacto.gain.exponentialRampToValueAtTime(.0001, agora + .085);
+            impacto.connect(ganhoImpacto).connect(contexto.destination);
+            impacto.start(agora);
+            impacto.stop(agora + .09);
+        }
+    } catch (error) {
+        console.warn('O som de papel da Mesa de Documentos não pôde ser reproduzido.', error);
+    }
 }
 
 const FERRAMENTAS_DESENHO_MESA = new Set(['pan', 'free', 'line', 'arrow', 'circle', 'rect', 'marker', 'eraser']);
@@ -20857,10 +20913,13 @@ function atualizarStatusDesenhoMesa(mensagem = '') {
 
 function selecionarFerramentaDesenhoMesa(ferramenta, reproduzirSom = true) {
     const proxima = FERRAMENTAS_DESENHO_MESA.has(ferramenta) ? ferramenta : 'pan';
+    const anterior = documentDeskState.drawingTool;
     if (reproduzirSom && typeof tocarSom === 'function') tocarSom('click');
     cancelarRascunhoDesenhoMesa();
     if (documentDeskState.eraserSession) cancelarSessaoBorrachaMesa();
     documentDeskState.drawingTool = proxima;
+    if (proxima === 'pan' && anterior && anterior !== 'pan') documentDeskState.lastNonPanTool = anterior;
+    else if (proxima !== 'pan') documentDeskState.lastNonPanTool = proxima;
     const app = document.getElementById('document-desk-app');
     if (app) app.dataset.drawingTool = documentDeskState.spacePan ? 'pan' : proxima;
     FERRAMENTAS_DESENHO_MESA.forEach(nome => {
@@ -21074,7 +21133,7 @@ function encerrarArrastePanMesa(pointerId = null) {
 function ativarPanTemporarioMesa(event) {
     if (!documentDeskState.active || !documentDeskState.role || documentDeskState.spacePan) return;
     const alvo = event?.target;
-    const editando = alvo?.isContentEditable || alvo?.closest?.('input, textarea, select, button, [contenteditable="true"]');
+    const editando = alvoBloqueiaAtalhosMesa(alvo);
     const focoModal = typeof superficieFocoAtiva !== 'undefined' && Boolean(superficieFocoAtiva);
     if (editando || focoModal) return;
     documentDeskState.spacePan = true;
@@ -21654,6 +21713,7 @@ function iniciarRotacaoDocumentoMesa(event, documentId) {
     if (!placement || !card || !rect?.width || !rect?.height) return;
     event.preventDefault();
     event.stopPropagation();
+    tocarSomPapelMesa('pegar');
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     const startAngle = Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI;
@@ -21724,7 +21784,11 @@ function finalizarRotacaoDocumentoMesa(event) {
             modifiedAt: firebase.database.ServerValue.TIMESTAMP
         }).catch(error => console.error('Erro ao girar documento:', error));
     }
-    if (mudou) registrarAcaoMesa({ type: 'placement', slotId: documentDeskState.currentSlotId, documentId: giro.documentId, before: clonarValorMesa(giro.before), after: clonarValorMesa(placement) });
+    if (mudou) {
+        registrarAcaoMesa({ type: 'placement', slotId: documentDeskState.currentSlotId, documentId: giro.documentId, before: clonarValorMesa(giro.before), after: clonarValorMesa(placement) });
+        tocarSomPapelMesa('soltar');
+        animarQuedaDocumentoMesa(giro.documentId);
+    }
     renderizarDocumentosNaMesa();
 }
 
@@ -21758,7 +21822,7 @@ function animarQuedaDocumentoMesa(documentId) {
         documentDeskState.dropAnimations.delete(documentId);
         documentDeskState.dropTimers.delete(documentId);
         localizarCard()?.classList.remove('is-dropping');
-    }, 270);
+    }, 180);
     documentDeskState.dropTimers.set(documentId, timer);
 }
 
@@ -21771,6 +21835,7 @@ function iniciarMovimentoDocumentoMesa(event) {
     const rect = board?.getBoundingClientRect();
     if (!placement || !rect?.width || !rect?.height) return;
     event.preventDefault();
+    const modo = event.target.closest('.desk-resize-handle') ? 'resize' : 'move';
     card.setPointerCapture?.(event.pointerId);
     card.classList.add('is-dragging');
     document.body.classList.add('document-desk-grabbing');
@@ -21779,13 +21844,14 @@ function iniciarMovimentoDocumentoMesa(event) {
     documentDeskState.drag = {
         documentId,
         pointerId: event.pointerId,
-        mode: event.target.closest('.desk-resize-handle') ? 'resize' : 'move',
+        mode: modo,
         startX: event.clientX,
         startY: event.clientY,
         boardRect: rect,
         frontZ,
         before: clonarValorMesa(placement),
         changed: false,
+        paperSoundStarted: false,
         initial: {
             x: numeroMesa(placement.x, 12),
             y: numeroMesa(placement.y, 18),
@@ -21801,6 +21867,15 @@ function iniciarMovimentoDocumentoMesa(event) {
 function moverDocumentoMesaComPonteiro(event) {
     const drag = documentDeskState.drag;
     if (!drag || event.pointerId !== drag.pointerId) return;
+    const deslocamentoPixels = Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY);
+    if (!drag.changed && deslocamentoPixels < 2) return;
+    if (!drag.changed) {
+        drag.changed = true;
+        if (drag.mode === 'move') {
+            tocarSomPapelMesa('pegar');
+            drag.paperSoundStarted = true;
+        }
+    }
     const dx = (event.clientX - drag.startX) / drag.boardRect.width * 100;
     const dy = (event.clientY - drag.startY) / drag.boardRect.height * 100;
     const atualizado = { ...drag.initial, z: drag.frontZ };
@@ -21811,7 +21886,6 @@ function moverDocumentoMesaComPonteiro(event) {
         atualizado.x = Math.max(0, Math.min(100 - atualizado.w, drag.initial.x + dx));
         atualizado.y = Math.max(7, Math.min(100 - atualizado.h, drag.initial.y + dy));
     }
-    drag.changed = drag.changed || Math.abs(dx) > .01 || Math.abs(dy) > .01;
     documentDeskState.placements[drag.documentId] = atualizado;
     drag.card.style.left = `${atualizado.x}%`;
     drag.card.style.top = `${atualizado.y}%`;
@@ -21878,10 +21952,13 @@ function finalizarMovimentoDocumentoMesa(event) {
     const placement = documentDeskState.placements[drag.documentId];
     const mudou = drag.changed && posicaoMesaMudou(drag.before, placement);
     documentDeskState.drag = null;
-    if (placement) agendarPosicaoDocumentoMesa(drag.documentId, placement, true);
+    if (placement && drag.changed) agendarPosicaoDocumentoMesa(drag.documentId, placement, true);
     if (mudou) registrarAcaoMesa({ type: 'placement', slotId: documentDeskState.currentSlotId, documentId: drag.documentId, before: clonarValorMesa(drag.before), after: clonarValorMesa(placement) });
-    documentDeskState.localDropLocks.set(drag.documentId, Date.now() + 1500);
-    animarQuedaDocumentoMesa(drag.documentId);
+    if (mudou) {
+        if (drag.paperSoundStarted) tocarSomPapelMesa('soltar');
+        documentDeskState.localDropLocks.set(drag.documentId, Date.now() + 1500);
+        animarQuedaDocumentoMesa(drag.documentId);
+    }
     renderizarDocumentosNaMesa();
 }
 
@@ -22310,6 +22387,21 @@ function baixarDocumentoMesa(documentId) {
     link.remove();
 }
 
+function alvoBloqueiaAtalhosMesa(alvo) {
+    return Boolean(alvo?.isContentEditable || alvo?.closest?.('input, textarea, select, [contenteditable="true"]'));
+}
+
+function alternarPincelAtalhoMesa() {
+    selecionarFerramentaDesenhoMesa(documentDeskState.drawingTool === 'free' ? 'pan' : 'free');
+}
+
+function alternarMaoAtalhoMesa() {
+    const proxima = documentDeskState.drawingTool === 'pan'
+        ? (documentDeskState.lastNonPanTool || 'free')
+        : 'pan';
+    selecionarFerramentaDesenhoMesa(proxima);
+}
+
 function inicializarInteracoesMesaDocumentos() {
     const board = document.getElementById('document-desk-board');
     const viewport = document.querySelector('.document-desk-viewport');
@@ -22337,21 +22429,44 @@ function inicializarInteracoesMesaDocumentos() {
     document.addEventListener('keydown', event => {
         if (!documentDeskState.active) return;
         const alvo = event.target;
-        const editando = alvo?.isContentEditable || alvo?.closest?.('input, textarea, select, button, [contenteditable="true"]');
+        const editando = alvoBloqueiaAtalhosMesa(alvo);
         const modalAberto = typeof superficieFocoAtiva !== 'undefined' && superficieFocoAtiva;
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z' && !event.shiftKey) {
             if (editando || modalAberto) return;
             event.preventDefault();
+            event.stopPropagation();
             desfazerUltimaAcaoMesa();
             return;
         }
-        if (event.code !== 'Space' || editando || modalAberto) return;
+        if (editando || modalAberto || event.ctrlKey || event.metaKey || event.altKey) return;
+        const tecla = String(event.key || '').toLowerCase();
+        if (!event.repeat && tecla === 'p') {
+            event.preventDefault();
+            event.stopPropagation();
+            alternarLupaMesaDocumentos();
+            return;
+        }
+        if (!event.repeat && tecla === 'd' && documentDeskState.role) {
+            event.preventDefault();
+            event.stopPropagation();
+            alternarPincelAtalhoMesa();
+            return;
+        }
+        if (!event.repeat && tecla === 'm' && documentDeskState.role) {
+            event.preventDefault();
+            event.stopPropagation();
+            alternarMaoAtalhoMesa();
+            return;
+        }
+        const teclaEspaco = event.code === 'Space' || event.key === ' ';
+        if (!teclaEspaco) return;
         event.preventDefault();
+        event.stopPropagation();
         if (!event.repeat) ativarPanTemporarioMesa(event);
-    });
+    }, true);
     document.addEventListener('keyup', event => {
-        if (event.code === 'Space') desativarPanTemporarioMesa();
-    });
+        if (event.code === 'Space' || event.key === ' ') desativarPanTemporarioMesa();
+    }, true);
     window.addEventListener('blur', desativarPanTemporarioMesa);
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) desativarPanTemporarioMesa();
