@@ -8487,12 +8487,13 @@ body.ui-focus-open.ui-theme-preview-open { overflow-x: hidden; overflow-y: auto;
     --ornament-vine-vertical: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%20180%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20stroke-width%3D%223.2%22%20d%3D%22M21-10C4%2018%2034%2035%2020%2062S4%20106%2020%20133s14%2042-2%2057%22%2F%3E%3Cpath%20stroke-width%3D%222.2%22%20d%3D%22M18-8C34%2015%205%2040%2020%2067s14%2043-2%2072-14%2037%203%2051%22%2F%3E%3C%2Fg%3E%3Cpath%20fill%3D%22white%22%20d%3D%22m12%2024-10-3%208%2010zm15%2027%2011%204-13%205zm-16%2040L0%2089l9%2010zm16%2028%2011%205-13%204zm-15%2038-10-2%208%209z%22%2F%3E%3C%2Fsvg%3E");
     --ornament-dice-pair: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2088%2070%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%223.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%228%22%20y%3D%2213%22%20width%3D%2238%22%20height%3D%2238%22%20rx%3D%226%22%20transform%3D%22rotate%28-12%2027%2032%29%22%2F%3E%3Crect%20x%3D%2239%22%20y%3D%2221%22%20width%3D%2238%22%20height%3D%2238%22%20rx%3D%226%22%20transform%3D%22rotate%2810%2058%2040%29%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22white%22%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%2223%22%20r%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%2235%22%20cy%3D%2239%22%20r%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2242%22%20r%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2231%22%20r%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%2265%22%20cy%3D%2234%22%20r%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%2255%22%20cy%3D%2247%22%20r%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%2269%22%20cy%3D%2250%22%20r%3D%222.5%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
     position: fixed;
-    z-index: 2147482000;
+    z-index: 10001;
     display: block;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transition: opacity .15s ease, visibility .15s ease;
+    will-change: left, top, width, height, opacity;
 }
 .abyss-ornament-portal.is-visible { visibility: visible; }
 .abyss-vine-edge,
@@ -8533,6 +8534,90 @@ body.ui-focus-open.ui-theme-preview-open { overflow-x: hidden; overflow-y: auto;
 
 @media (max-width: 620px) {
     .abyss-ornament-portal { --ornament-edge: 27px; }
+}
+
+/* O recortador sempre cabe na tela, inclusive para retratos e imagens quadradas. */
+#campaign-crop-overlay {
+    box-sizing: border-box;
+    place-items: center;
+    padding: clamp(14px, 3vh, 28px);
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+#campaign-crop-overlay.active { display: grid; }
+#campaign-crop-overlay .banner-crop-dialog {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto minmax(0, auto) auto auto;
+    gap: 14px;
+    width: min(760px, calc(100vw - 48px));
+    max-width: 760px;
+    max-height: calc(100dvh - 32px);
+    margin: auto;
+    padding: clamp(16px, 2.4vw, 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+#campaign-crop-overlay .campaign-shield-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 14px;
+    margin: 0;
+    padding: 0 0 12px;
+}
+#campaign-crop-overlay .campaign-shield-header h2 {
+    font-size: clamp(.84rem, 2vw, 1rem);
+    letter-spacing: 2px;
+}
+#campaign-crop-overlay .campaign-shield-header p {
+    max-width: 56ch;
+    margin-top: 5px;
+    font-size: clamp(.68rem, 1.6vw, .8rem);
+    line-height: 1.45;
+}
+#campaign-crop-overlay .banner-crop-stage {
+    width: fit-content;
+    max-width: 100%;
+    aspect-ratio: 3 / 1;
+    margin: 0 auto;
+    line-height: 0;
+}
+#campaign-crop-overlay #banner-crop-canvas {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+}
+#campaign-crop-overlay .banner-crop-guide { line-height: 1.25; }
+#campaign-crop-overlay .banner-crop-controls {
+    grid-template-columns: auto minmax(120px, 1fr) auto;
+    gap: 10px;
+    margin: 0;
+}
+#campaign-crop-overlay .campaign-form-actions { margin: 0; }
+
+@media (max-width: 620px) {
+    #campaign-crop-overlay { padding: 12px; }
+    #campaign-crop-overlay .banner-crop-dialog {
+        width: calc(100vw - 24px);
+        max-height: calc(100dvh - 24px);
+        gap: 11px;
+        padding: 14px;
+    }
+    #campaign-crop-overlay .banner-crop-controls {
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 8px 10px;
+    }
+    #campaign-crop-overlay .banner-crop-controls button {
+        grid-column: 1 / -1;
+        justify-self: end;
+    }
+}
+
+@media (max-width: 430px), (max-height: 520px) {
+    #campaign-crop-overlay .campaign-shield-header p { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -11506,6 +11591,7 @@ const ABYSS_ORNAMENT_SELECTOR = [
     '.custom-skill-workshop',
     '.campaign-inline-form',
     '.initiative-request-card',
+    '#campaign-crop-overlay .banner-crop-dialog',
     '#central-popup'
 ].join(',');
 const portaisOrnamentoUmbral = new Map();
@@ -11518,9 +11604,24 @@ function superficieOrnamentadaVisivel(superficie, retangulo, estilo) {
     return superficie.isConnected
         && retangulo.width > 3
         && retangulo.height > 3
+        && retangulo.right > 0
+        && retangulo.bottom > 0
+        && retangulo.left < innerWidth
+        && retangulo.top < innerHeight
         && estilo.display !== 'none'
         && estilo.visibility !== 'hidden'
         && Number.parseFloat(estilo.opacity || '1') > .025;
+}
+
+function calcularCamadaPortalOrnamento(superficie) {
+    let maiorCamada = 1;
+    let elemento = superficie;
+    while (elemento && elemento !== document.documentElement) {
+        const camada = Number.parseInt(getComputedStyle(elemento).zIndex, 10);
+        if (Number.isFinite(camada)) maiorCamada = Math.max(maiorCamada, camada);
+        elemento = elemento.parentElement;
+    }
+    return Math.min(2147481000, maiorCamada + 1);
 }
 
 function atualizarPortaisOrnamentoUmbral(agora = performance.now()) {
@@ -11542,12 +11643,13 @@ function atualizarPortaisOrnamentoUmbral(agora = performance.now()) {
 
         const compacto = superficie.id === 'central-popup' || retangulo.width < 410;
         const tamanhoBorda = compacto ? 26 : (innerWidth <= 620 ? 27 : 34);
-        const ressalto = tamanhoBorda / 2;
+        const ressalto = tamanhoBorda * .44;
         portal.style.setProperty('--ornament-edge', `${tamanhoBorda}px`);
         portal.style.left = `${retangulo.left - ressalto}px`;
         portal.style.top = `${retangulo.top - ressalto}px`;
-        portal.style.width = `${retangulo.width + tamanhoBorda}px`;
-        portal.style.height = `${retangulo.height + tamanhoBorda}px`;
+        portal.style.width = `${retangulo.width + ressalto * 2}px`;
+        portal.style.height = `${retangulo.height + ressalto * 2}px`;
+        portal.style.zIndex = String(calcularCamadaPortalOrnamento(superficie));
         portal.style.opacity = String(Math.min(.92, Number.parseFloat(estilo.opacity || '1') * .88));
         portal.classList.add('is-visible');
     });
@@ -18158,6 +18260,21 @@ async function abrirRecorteMidia(input, targetId, previewId = '', aspect = 'squa
     }
 }
 
+function ajustarTamanhoVisualRecorte() {
+    const canvas = document.getElementById('banner-crop-canvas');
+    const stage = canvas?.closest('.banner-crop-stage');
+    if (!canvas || !stage || !canvas.width || !canvas.height) return;
+    const compacto = innerWidth <= 620;
+    const muitoBaixo = innerHeight <= 520;
+    const larguraDisponivel = Math.max(180, Math.min(712, innerWidth - (compacto ? 52 : 96)));
+    const fracaoAltura = muitoBaixo ? .38 : (compacto ? .46 : .54);
+    const alturaDisponivel = Math.max(120, Math.min(560, innerHeight * fracaoAltura));
+    const proporcao = canvas.width / canvas.height;
+    const largura = Math.max(180, Math.min(larguraDisponivel, alturaDisponivel * proporcao));
+    stage.style.width = `${largura}px`;
+    stage.style.aspectRatio = `${canvas.width} / ${canvas.height}`;
+}
+
 function configurarFormatoRecorte(target) {
     const canvas = document.getElementById('banner-crop-canvas');
     const guide = document.getElementById('banner-crop-guide');
@@ -18174,6 +18291,7 @@ function configurarFormatoRecorte(target) {
     canvas.width = preset.width;
     canvas.height = preset.height;
     canvas.style.aspectRatio = `${preset.width} / ${preset.height}`;
+    ajustarTamanhoVisualRecorte();
     if (guide) guide.textContent = preset.label;
     if (title) title.textContent = preset.title;
 }
@@ -18273,6 +18391,7 @@ function inicializarRecortadorBanner() {
     const canvas = document.getElementById('banner-crop-canvas');
     if (!canvas || canvas.dataset.ready === 'true') return;
     canvas.dataset.ready = 'true';
+    window.addEventListener('resize', ajustarTamanhoVisualRecorte, { passive: true });
     const endDrag = event => {
         const crop = campaignState.bannerCrop;
         if (!crop.dragging) return;
