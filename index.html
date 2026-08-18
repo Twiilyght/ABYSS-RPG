@@ -9816,7 +9816,150 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
     .document-drawing-toolbar::-webkit-scrollbar { display: none; }
     .document-drawing-toolbar select { width: 66px; }
 }
+/* BUSCA, SINCRONIZAÇÃO E HISTÓRICO COMPARTILHADO */
+.topbar-search-action { min-width: 92px; }
+.topbar-search-shortcut {
+    padding: 2px 5px;
+    color: #8f8793;
+    border: 1px solid var(--flat-line);
+    border-radius: 4px;
+    font: 700 .48rem/1.2 Arial, sans-serif;
+}
+.sync-vine-indicator {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 25px minmax(54px, auto);
+    align-items: center;
+    min-height: 38px;
+    gap: 7px;
+    padding: 5px 12px 5px 8px;
+    color: #c9c1ce;
+    border: 1px solid color-mix(in srgb, var(--ornament-color) 55%, var(--flat-line));
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--container-bg) 94%, #000);
+    cursor: pointer;
+    isolation: isolate;
+}
+.sync-vine-indicator::before,
+.sync-vine-indicator::after {
+    position: absolute;
+    z-index: -1;
+    width: 30px;
+    height: 20px;
+    content: "";
+    opacity: .78;
+    background:
+        radial-gradient(ellipse at 20% 45%, var(--ornament-color) 0 12%, transparent 14%),
+        radial-gradient(ellipse at 72% 65%, var(--ornament-color) 0 10%, transparent 12%),
+        linear-gradient(30deg, transparent 43%, var(--ornament-color) 45% 50%, transparent 52%);
+    pointer-events: none;
+}
+.sync-vine-indicator::before { top: -7px; left: -7px; transform: rotate(-8deg); }
+.sync-vine-indicator::after { right: -7px; bottom: -7px; transform: rotate(172deg); }
+.sync-vine-indicator:hover { color: #fff; border-color: var(--ornament-color); background: var(--control-surface); }
+.sync-vine-indicator[data-state="saved"] { color: #9ee7b0; }
+.sync-vine-indicator[data-state="offline"] { color: #ffca6b; }
+.sync-vine-indicator[data-state="conflict"] { color: #ff808e; border-color: #c94a5a; }
+.sync-d20 {
+    display: grid;
+    place-items: center;
+    width: 25px;
+    aspect-ratio: 1;
+    color: #f7e8ae;
+    background: color-mix(in srgb, var(--primary-purple) 58%, #17121c);
+    clip-path: polygon(50% 0, 95% 25%, 86% 79%, 50% 100%, 14% 79%, 5% 25%);
+    font: 800 .47rem/1 Arial, sans-serif;
+    filter: drop-shadow(0 0 5px color-mix(in srgb, var(--ornament-color) 55%, transparent));
+    transform-origin: 50% 50%;
+}
+.sync-vine-indicator[data-state="saving"] .sync-d20 { animation: sync-d20-spin .78s linear infinite; }
+@keyframes sync-d20-spin { to { transform: rotate(360deg); } }
+.sync-copy { display: grid; gap: 1px; min-width: 0; text-align: left; }
+.sync-copy strong { font-size: .52rem; letter-spacing: .8px; text-transform: uppercase; }
+.sync-copy small { overflow: hidden; max-width: 92px; color: #77707c; font-size: .43rem; text-overflow: ellipsis; white-space: nowrap; }
+
+.global-search-modal { width: min(720px, calc(100vw - 28px)); max-height: min(720px, calc(100vh - 42px)); padding: 0; overflow: hidden; }
+.global-search-shell { display: grid; grid-template-rows: auto auto minmax(120px, 1fr); max-height: inherit; }
+.global-search-head { padding: 20px 22px 12px; }
+.global-search-field-wrap {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    margin: 0 22px 12px;
+    border: 1px solid color-mix(in srgb, var(--primary-purple) 65%, var(--flat-line));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--container-bg) 88%, #000);
+    box-shadow: 0 9px 28px #0008;
+}
+.global-search-field-wrap > span { padding-left: 13px; color: var(--text-gold); font-size: 1.05rem; }
+#global-search-input { width: 100%; min-width: 0; padding: 14px 12px; color: #f7f2f8; border: 0; outline: 0; background: transparent; font: 1rem var(--font-reading); }
+.global-search-field-wrap kbd { margin-right: 10px; padding: 3px 7px; color: #8d8491; border: 1px solid var(--flat-line); border-radius: 4px; font: .58rem Arial, sans-serif; }
+.global-search-filters { display: flex; gap: 6px; padding: 0 22px 12px; overflow-x: auto; scrollbar-width: thin; }
+.global-search-filter { flex: 0 0 auto; padding: 6px 10px; color: #8f8793; border: 1px solid var(--flat-line); border-radius: 999px; background: transparent; font: 700 .52rem Cinzel, serif; letter-spacing: .5px; }
+.global-search-filter.is-active { color: #fff; border-color: var(--primary-purple); background: color-mix(in srgb, var(--primary-purple) 18%, transparent); }
+.global-search-results { min-height: 170px; padding: 0 12px 14px; overflow: auto; overscroll-behavior: contain; }
+.global-search-result {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding: 11px 12px;
+    color: #cfc7d2;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    text-align: left;
+}
+.global-search-result:hover,
+.global-search-result.is-active { color: #fff; border-color: color-mix(in srgb, var(--primary-purple) 55%, var(--flat-line)); background: color-mix(in srgb, var(--primary-purple) 10%, var(--container-bg)); }
+.global-search-result-icon { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--flat-line); border-radius: 50%; background: #0d0a10; }
+.global-search-result-copy { display: grid; gap: 3px; min-width: 0; }
+.global-search-result-copy strong { overflow: hidden; color: inherit; font: 700 .73rem Cinzel, serif; text-overflow: ellipsis; white-space: nowrap; }
+.global-search-result-copy small { overflow: hidden; color: #837b87; font: .73rem var(--font-reading); text-overflow: ellipsis; white-space: nowrap; }
+.global-search-kind { color: var(--text-gold); font: 700 .48rem Cinzel, serif; letter-spacing: .7px; }
+.global-search-empty { padding: 45px 20px; color: #817984; text-align: center; font-family: var(--font-reading); }
+.global-search-status { padding: 0 22px 14px; color: #746d78; font: .58rem Cinzel, serif; letter-spacing: .6px; }
+
+.sync-modal { width: min(520px, calc(100vw - 28px)); }
+.sync-status-card { position: relative; display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: 14px; margin: 14px 0; padding: 15px; border: 1px solid var(--flat-line); border-radius: 8px; background: color-mix(in srgb, var(--container-bg) 90%, #000); }
+.sync-status-card .sync-d20 { width: 45px; font-size: .7rem; }
+.sync-status-card.is-saving .sync-d20 { animation: sync-d20-spin .78s linear infinite; }
+.sync-status-card strong { display: block; color: #f3edf5; font-family: Cinzel, serif; }
+.sync-status-card p { margin: 4px 0 0; color: #918895; font-size: .82rem; }
+.sync-meta-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin: 12px 0; }
+.sync-meta-grid > div { padding: 10px; border-left: 2px solid var(--ornament-color); background: #09080b; }
+.sync-meta-grid small { display: block; color: #6f6872; font-size: .53rem; letter-spacing: .8px; }
+.sync-meta-grid strong { display: block; margin-top: 3px; color: #ddd5e0; font-size: .73rem; }
+.sync-conflict-actions { display: none; gap: 8px; margin-top: 14px; }
+.sync-conflict-actions.is-visible { display: flex; }
+
+.history-mode-tabs { display: flex; gap: 7px; margin-bottom: 10px; }
+.history-mode-tabs button { flex: 1; padding: 8px; color: #8d8591; border: 1px solid var(--flat-line); border-radius: 6px; background: transparent; font: 700 .56rem Cinzel, serif; }
+.history-mode-tabs button.is-active { color: #fff; border-color: var(--primary-purple); background: color-mix(in srgb, var(--primary-purple) 15%, transparent); }
+.history-campaign-controls { display: none; grid-template-columns: 1fr auto; gap: 8px; margin-bottom: 10px; }
+.history-campaign-controls.is-visible { display: grid; }
+.history-entry.is-shared { border-left-color: var(--ornament-color); }
+.history-undo-btn:disabled { opacity: .38; cursor: not-allowed; }
+
+.hab-card,
+.item-card,
+.history-entry,
+.global-search-result { content-visibility: auto; contain-intrinsic-size: 72px; }
+
+@media (max-width: 1050px) {
+    .sync-copy small, .topbar-search-shortcut { display: none; }
+    .sync-vine-indicator { grid-template-columns: 25px auto; padding-right: 8px; }
+}
+@media (max-width: 760px) {
+    .sync-copy { display: none; }
+    .sync-vine-indicator { grid-template-columns: 25px; }
+    .global-search-result { grid-template-columns: 34px minmax(0, 1fr); }
+    .global-search-kind { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
+    .sync-vine-indicator[data-state="saving"] .sync-d20,
+    .sync-status-card.is-saving .sync-d20 { animation-duration: 1.6s; }
     .desk-document { transition: none !important; }
     .desk-document.is-dropping { animation: none !important; }
 }
@@ -9839,8 +9982,15 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
             <button class="topbar-action" id="btn-configuracoes" type="button" onclick="abrirConfiguracoesAudio()" title="Abrir opções e configurações">
                 <span class="topbar-action-icon" aria-hidden="true">⚙️</span><span>Opções</span>
             </button>
+            <button class="topbar-action topbar-search-action" id="btn-global-search" type="button" onclick="abrirBuscaGlobal()" title="Buscar em toda a ficha (Ctrl+K)">
+                <span class="topbar-action-icon" aria-hidden="true">⌕</span><span>Buscar</span><span class="topbar-search-shortcut">Ctrl K</span>
+            </button>
             <button class="topbar-action" id="btn-historico" type="button" onclick="abrirHistoricoAcoes()" title="Abrir histórico e desfazer ações">
                 <span class="topbar-action-icon" aria-hidden="true">🕘</span><span>Histórico / Desfazer</span>
+            </button>
+            <button class="sync-vine-indicator" id="sync-vine-indicator" type="button" data-state="local" onclick="abrirPainelSincronizacao()" aria-live="polite" title="Ver estado da sincronização">
+                <span class="sync-d20" aria-hidden="true">20</span>
+                <span class="sync-copy"><strong id="sync-indicator-label">Local</strong><small id="sync-indicator-detail">Entre para sincronizar</small></span>
             </button>
             <div class="topbar-slot-control">
                 <span class="topbar-slot-label">Personagem</span>
@@ -10980,12 +11130,73 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
         </div>
         <button type="button" class="settings-close" onclick="fecharHistoricoAcoes()" title="Fechar">✕</button>
     </div>
-    <p class="settings-intro">Alterações em PV, PA, Sanidade e inventário ficam registradas com o nome de quem as realizou.</p>
+    <p class="settings-intro">Consulte ações desta ficha ou o registro compartilhado da campanha. O desfazer respeita autoria e permissões do mestre.</p>
+    <div class="history-mode-tabs" role="tablist" aria-label="Origem do histórico">
+        <button type="button" id="history-tab-sheet" class="is-active" onclick="mudarModoHistorico('sheet')" role="tab" aria-selected="true">Ficha</button>
+        <button type="button" id="history-tab-campaign" onclick="mudarModoHistorico('campaign')" role="tab" aria-selected="false">Campanha</button>
+    </div>
+    <div id="history-campaign-controls" class="history-campaign-controls">
+        <select id="history-campaign-select" class="modal-input" aria-label="Campanha do histórico" onchange="selecionarCampanhaHistorico(this.value)"></select>
+        <button type="button" class="settings-secondary" onclick="atualizarHistoricoCampanha(true)">Atualizar</button>
+    </div>
     <div class="history-toolbar">
         <small id="history-counter">0 alterações</small>
-        <button type="button" class="settings-secondary" onclick="limparHistoricoAcoes()">Limpar histórico</button>
+        <button type="button" class="settings-secondary" id="history-clear-button" onclick="limparHistoricoAcoes()">Limpar histórico</button>
     </div>
     <div id="history-list" class="history-list"></div>
+</div>
+
+<div id="modal-global-search" class="modal global-search-modal" role="dialog" aria-modal="true" aria-labelledby="global-search-heading">
+    <div class="global-search-shell">
+        <div class="settings-modal-header global-search-head">
+            <div>
+                <span class="settings-eyebrow">BUSCA DO CÓDICE</span>
+                <h3 id="global-search-heading">Encontre e aja sem trocar de tela</h3>
+            </div>
+            <button type="button" class="settings-close" onclick="fecharBuscaGlobal()" title="Fechar">✕</button>
+        </div>
+        <div>
+            <label class="global-search-field-wrap">
+                <span aria-hidden="true">⌕</span>
+                <input id="global-search-input" type="search" autocomplete="off" placeholder="Perícia, item, feitiço, personagem, documento..." oninput="atualizarConsultaBuscaGlobal(this.value)">
+                <kbd>ESC</kbd>
+            </label>
+            <div class="global-search-filters" id="global-search-filters" role="tablist" aria-label="Filtrar busca">
+                <button type="button" class="global-search-filter is-active" data-search-kind="all" onclick="filtrarBuscaGlobal('all')">Tudo</button>
+                <button type="button" class="global-search-filter" data-search-kind="skill" onclick="filtrarBuscaGlobal('skill')">Perícias</button>
+                <button type="button" class="global-search-filter" data-search-kind="action" onclick="filtrarBuscaGlobal('action')">Ações</button>
+                <button type="button" class="global-search-filter" data-search-kind="item" onclick="filtrarBuscaGlobal('item')">Itens</button>
+                <button type="button" class="global-search-filter" data-search-kind="campaign" onclick="filtrarBuscaGlobal('campaign')">Campanhas</button>
+                <button type="button" class="global-search-filter" data-search-kind="character" onclick="filtrarBuscaGlobal('character')">Personagens</button>
+                <button type="button" class="global-search-filter" data-search-kind="document" onclick="filtrarBuscaGlobal('document')">Documentos</button>
+            </div>
+            <div class="global-search-status" id="global-search-status">Digite para pesquisar ou use as setas e Enter.</div>
+        </div>
+        <div id="global-search-results" class="global-search-results" role="listbox" aria-label="Resultados da busca"></div>
+    </div>
+</div>
+
+<div id="modal-sync-status" class="modal sync-modal" role="dialog" aria-modal="true" aria-labelledby="sync-modal-heading">
+    <div class="settings-modal-header">
+        <div>
+            <span class="settings-eyebrow">GUARDIÃO DA FICHA</span>
+            <h3 id="sync-modal-heading">Sincronização</h3>
+        </div>
+        <button type="button" class="settings-close" onclick="fecharPainelSincronizacao()" title="Fechar">✕</button>
+    </div>
+    <div id="sync-status-card" class="sync-status-card">
+        <span class="sync-d20" aria-hidden="true">20</span>
+        <div><strong id="sync-modal-status">Somente neste dispositivo</strong><p id="sync-modal-description">Entre com o Google para sincronizar esta ficha.</p></div>
+    </div>
+    <div class="sync-meta-grid">
+        <div><small>ÚLTIMO SALVAMENTO</small><strong id="sync-last-saved">—</strong></div>
+        <div><small>FILA OFFLINE</small><strong id="sync-pending-count">0 alterações</strong></div>
+    </div>
+    <p class="settings-intro" id="sync-conflict-message">Quando a conexão cair, a última versão da ficha fica em fila e é enviada automaticamente ao retornar.</p>
+    <div class="sync-conflict-actions" id="sync-conflict-actions">
+        <button type="button" class="settings-secondary" onclick="resolverConflitoSincronizacao('remote')">Usar versão da nuvem</button>
+        <button type="button" class="settings-primary" onclick="resolverConflitoSincronizacao('local')">Manter esta ficha</button>
+    </div>
 </div>
 
 <div id="modal-startup-slot" class="modal startup-slot-modal" data-focus-persistent="true" data-slot-mode="initial" role="dialog" aria-modal="true" aria-labelledby="startup-slot-heading" aria-describedby="startup-slot-intro">
@@ -11365,6 +11576,8 @@ function atualizarGatilhosSuperficieFoco(elemento = null) {
     const mapa = {
         'modal-audio-settings': 'btn-configuracoes',
         'modal-history': 'btn-historico',
+        'modal-global-search': 'btn-global-search',
+        'modal-sync-status': 'sync-vine-indicator',
         'modal-slot-manager': 'btn-slot-manager',
         'modal-startup-slot': 'slot-switcher-button',
         'theme-panel': 'theme-float-btn',
@@ -12166,11 +12379,15 @@ function resetarConfiguracoesAudio() {
         clearTimeout(timerSalvamentoAutomatico);
         if (!configuracoesAudio.autoSave || !currentUser) return;
         if (typeof campaignState !== 'undefined' && campaignState.sharedEdit) return;
+        if (typeof syncState !== 'undefined' && syncState.conflict) return;
         timerSalvamentoAutomatico = setTimeout(() => salvarNaNuvem(true), 1400);
     }
 
     function marcarAlteracao() {
+        if (typeof syncState !== 'undefined' && syncState.applyingRemote) return;
         alteracoesNaoSalvas = true;
+        if (typeof invalidarIndiceBuscaGlobal === 'function') invalidarIndiceBuscaGlobal();
+        if (typeof definirEstadoSincronizacao === 'function') definirEstadoSincronizacao('dirty');
         if (typeof atualizarAvatarUI === 'function' && typeof sheet !== 'undefined') atualizarAvatarUI();
         agendarSincronizacaoCampanha();
         agendarSalvamentoAutomatico();
@@ -13193,11 +13410,13 @@ function resetarConfiguracoesAudio() {
 
     function abrirHistoricoAcoes() {
         tocarSom('click');
-        renderizarHistoricoAcoes();
+        prepararCampanhasHistorico();
+        mudarModoHistorico(historicoCampanhaState.mode || 'sheet');
         abrirSuperficieFoco('#modal-history');
     }
 
     function fecharHistoricoAcoes() {
+        pararHistoricoCampanha();
         fecharSuperficieFoco('#modal-history');
     }
 
@@ -13206,6 +13425,10 @@ function resetarConfiguracoesAudio() {
     }
 
     function renderizarHistoricoAcoes() {
+        if (typeof historicoCampanhaState !== 'undefined' && historicoCampanhaState.mode === 'campaign') {
+            renderizarHistoricoCampanha();
+            return;
+        }
         const historico = normalizarHistoricoAcoes();
         const lista = document.getElementById('history-list');
         const contador = document.getElementById('history-counter');
@@ -14225,6 +14448,32 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         catch (_) { return {}; }
     })();
     let currentUser = null;
+    const syncClientId = (() => {
+        try {
+            let value = sessionStorage.getItem('abyssSyncClientV1');
+            if (!value) {
+                value = `sync-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+                sessionStorage.setItem('abyssSyncClientV1', value);
+            }
+            return value;
+        } catch (_) {
+            return `sync-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        }
+    })();
+    const syncState = {
+        connected: navigator.onLine,
+        status: 'local',
+        pending: 0,
+        lastSavedAt: 0,
+        lastLocalRevision: '',
+        lastCloudHash: '',
+        activeSlot: '',
+        activeRef: null,
+        activeHandler: null,
+        conflict: null,
+        applyingRemote: false,
+        processingQueue: false
+    };
 
     const PERSONAL_TEMPLATES_PREFIX = 'abyssPersonalTemplatesV1:';
     const PERSONAL_TEMPLATES_MIGRATION_PREFIX = 'abyssPersonalTemplatesMigratedV1:';
@@ -14964,7 +15213,16 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     abrirSeletorInicialFichas();
                 });
             atualizarAutenticacaoCampanhas(user);
+            atualizarContagemFilaSincronizacao().then(() => {
+                if (syncState.connected) processarFilaSincronizacao();
+                else definirEstadoSincronizacao('offline');
+            });
         } else {
+            desanexarObservadorSincronizacaoSlot();
+            syncState.conflict = null;
+            syncState.pending = 0;
+            syncState.lastSavedAt = 0;
+            definirEstadoSincronizacao('local');
             seletorInicialConcluidoParaUid = null;
             fecharSuperficieFoco('#modal-startup-slot');
             btnLogin.innerText = "👤";
@@ -17739,65 +17997,98 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }
     }
 
-    function salvarNaNuvem(silencioso = false) {
-        if(!currentUser) {
+    async function salvarNaNuvem(silencioso = false, opcoes = {}) {
+        if (!currentUser) {
+            definirEstadoSincronizacao('local');
             if (!silencioso) alert("Faça o login com o Google para poder salvar na nuvem!");
-            return;
+            return false;
         }
-        if (silencioso && typeof campaignState !== 'undefined' && campaignState.sharedEdit) return;
-        const slot = document.getElementById('save-slot').value;
-        database.ref(`users/${currentUser.uid}/slots/${slot}`).set(sheet)
-            .then(() => {
-                alteracoesNaoSalvas = false; // Reseta o rastreador
-                slotPreviewState[String(slot)] = {
-                    existe: true,
-                    nickname: String(sheet.nickname || '').trim(),
-                    antecedencia: String(sheet.antecedencia || '').trim(),
-                    avatar: String(resolverRetratoPersonagem(sheet).url || '').trim(),
-                    classe: String(sheet.classe || '').trim()
-                };
-                renderizarSeletorInicialFichas();
-                atualizarBotaoTrocaFicha();
-                if (!silencioso) {
-                    tocarSom('click');
-                    spawnPopup("SISTEMA", `${nomeDoSlot(slot)} atualizado`, "SALVO", "#00ff88", "PROGRESSO SALVO", "Sua ficha está segura na nuvem!");
-                }
-            })
-            .catch(e => {
-                console.error("Erro ao salvar:", e);
-                if (!silencioso) {
-                    tocarSom('click');
-                    alert("Ocorreu um erro ao tentar salvar na nuvem.");
-                }
-            });
+        if (silencioso && typeof campaignState !== 'undefined' && campaignState.sharedEdit) return false;
+        if (syncState.conflict && !opcoes.force) {
+            definirEstadoSincronizacao('conflict');
+            if (!silencioso) abrirPainelSincronizacao();
+            return false;
+        }
+        const slot = String(document.getElementById('save-slot').value || '1');
+        const pacote = criarPacoteSincronizacao(slot);
+        atualizarPreviewSlotComFicha(slot, pacote.sheet);
+        if (!syncState.connected || !navigator.onLine) {
+            await enfileirarSincronizacao(pacote);
+            alteracoesNaoSalvas = false;
+            definirEstadoSincronizacao('offline');
+            if (!silencioso) spawnPopup("SISTEMA", `${nomeDoSlot(slot)} em espera`, "FILA", "#ffca28", "SALVO NESTE DISPOSITIVO", "A ficha será enviada automaticamente quando a conexão voltar.");
+            return true;
+        }
+        definirEstadoSincronizacao('saving');
+        syncState.lastLocalRevision = pacote.revision;
+        try {
+            await database.ref(pacote.path).set(pacote.payload);
+            await removerSincronizacaoEnfileirada(pacote.key);
+            syncState.lastSavedAt = Date.now();
+            syncState.lastCloudHash = hashFichaSincronizacao(pacote.sheet);
+            syncState.conflict = null;
+            alteracoesNaoSalvas = false;
+            await atualizarContagemFilaSincronizacao();
+            definirEstadoSincronizacao('saved');
+            if (!silencioso) {
+                tocarSom('click');
+                spawnPopup("SISTEMA", `${nomeDoSlot(slot)} atualizado`, "SALVO", "#00ff88", "PROGRESSO SALVO", "Sua ficha está segura na nuvem!");
+            }
+            return true;
+        } catch (erro) {
+            console.error("Erro ao salvar:", erro);
+            await enfileirarSincronizacao(pacote);
+            alteracoesNaoSalvas = false;
+            definirEstadoSincronizacao(navigator.onLine ? 'offline' : 'offline');
+            if (!silencioso) spawnPopup("SISTEMA", `${nomeDoSlot(slot)} em espera`, "FILA", "#ffca28", "CONEXÃO INDISPONÍVEL", "A alteração foi preservada e será reenviada automaticamente.");
+            return false;
+        }
     }
 
-    function carregarDaNuvem() {
-        if(!currentUser) return Promise.resolve();
-        const slot = document.getElementById('save-slot').value;
+    async function carregarDaNuvem() {
+        if (!currentUser) {
+            definirEstadoSincronizacao('local');
+            return;
+        }
+        const slot = String(document.getElementById('save-slot').value || '1');
         document.getElementById('save-slot').title = nomeDoSlot(slot);
-        return database.ref(`users/${currentUser.uid}/slots/${slot}`).once('value').then(snapshot => {
-            const data = snapshot.val();
-            if(data) {
-                sheet = Object.assign(getFichaZerada(), data); 
-                slotPreviewState[String(slot)] = {
-                    existe: true,
-                    nickname: String(data.nickname || '').trim(),
-                    antecedencia: String(data.antecedencia || '').trim(),
-                    avatar: String(resolverRetratoPersonagem(data).url || '').trim(),
-                    classe: String(data.classe || '').trim()
-                };
+        definirEstadoSincronizacao(syncState.connected ? 'saving' : 'offline');
+        try {
+            const snapshot = await database.ref(`users/${currentUser.uid}/slots/${slot}`).once('value');
+            const bruto = snapshot.val();
+            const data = extrairFichaDoPayloadSincronizacao(bruto);
+            if (data) {
+                sheet = Object.assign(getFichaZerada(), data);
+                atualizarPreviewSlotComFicha(slot, data);
+                syncState.lastCloudHash = hashFichaSincronizacao(data);
+                syncState.lastSavedAt = Number(bruto?.syncMeta?.updatedAt) || Date.now();
             } else {
-                sheet = getFichaZerada(); 
-                slotPreviewState[String(slot)] = { existe: false, nickname: '', antecedencia: '', avatar: '', classe: '' };
+                sheet = getFichaZerada();
+                slotPreviewState[slot] = { existe: false, nickname: '', antecedencia: '', avatar: '', classe: '' };
+                syncState.lastCloudHash = hashFichaSincronizacao(sheet);
             }
             atualizarVisuaisDaFicha();
             publicarSonsDoPerfil().catch(erro => console.warn('Não foi possível publicar o áudio desta ficha.', erro));
             renderizarSeletorInicialFichas();
             atualizarBotaoTrocaFicha();
             document.getElementById('val-nivel').value = sheet.nivel || 0;
-            alteracoesNaoSalvas = false; // Carregou, então está limpo
-        }).catch(e => console.error("Erro ao carregar:", e));
+            alteracoesNaoSalvas = false;
+            syncState.conflict = null;
+            anexarObservadorSincronizacaoSlot(slot);
+            const pendente = await obterSincronizacaoEnfileirada(chaveFilaSincronizacao(currentUser.uid, slot));
+            if (pendente && syncState.connected) await processarFilaSincronizacao();
+            else definirEstadoSincronizacao(pendente ? 'offline' : 'saved');
+            agendarAquecimentoBuscaGlobal();
+        } catch (erro) {
+            console.error("Erro ao carregar:", erro);
+            const pendente = await obterSincronizacaoEnfileirada(chaveFilaSincronizacao(currentUser.uid, slot));
+            if (pendente?.sheet) {
+                sheet = Object.assign(getFichaZerada(), pendente.sheet);
+                atualizarVisuaisDaFicha();
+                alteracoesNaoSalvas = false;
+            }
+            definirEstadoSincronizacao('offline');
+        }
     }
 
     function atualizarVisuaisDaFicha() {
@@ -18808,7 +19099,7 @@ function escutarLinksPersonagens() {
         Object.entries(campaignState.links).forEach(([campaignId, links]) => {
             Object.entries(links || {}).forEach(([characterId, link]) => {
                 const ref = database.ref(`campaigns/${campaignId}/characters/${characterId}`);
-                const handler = characterSnapshot => {
+                const handler = async characterSnapshot => {
                     const character = characterSnapshot.val();
                     if (!currentUser || currentUser.uid !== uid) return;
                     if (!character) {
@@ -18824,13 +19115,38 @@ function escutarLinksPersonagens() {
                     campaignState.lastRemoteUpdate[updateKey] = true;
                     const slot = String(link?.slot || character.slot || '');
                     if (!slot) return;
-                    database.ref(`users/${uid}/slots/${slot}`).set(character.sheet).catch(error => {
+                    const fichaRemota = JSON.parse(JSON.stringify(character.sheet));
+                    const slotAtivo = String(document.getElementById('save-slot').value || '') === slot;
+                    const pendente = await obterSincronizacaoEnfileirada(chaveFilaSincronizacao(uid, slot));
+                    if (slotAtivo && !campaignState.sharedEdit && (alteracoesNaoSalvas || syncState.status === 'saving' || pendente)) {
+                        syncState.conflict = {
+                            remote: fichaRemota,
+                            remoteHash: hashFichaSincronizacao(fichaRemota),
+                            meta: { updatedAt: Number(character.updatedAt) || Date.now(), source: 'campaign', characterId },
+                            slot
+                        };
+                        definirEstadoSincronizacao('conflict');
+                        spawnPopup('CAMPANHA', character.name || 'Ficha atualizada', 'CONFLITO', '#ff7180', 'DUAS VERSÕES ENCONTRADAS', 'Abra o indicador de sincronização para escolher qual versão manter.');
+                        return;
+                    }
+                    if (pendente) return;
+                    const revision = `campaign-${updateKey}`;
+                    const payload = { ...fichaRemota, syncMeta: { clientId: `campaign-${character.updatedBy}`, revision, updatedAt: Date.now() } };
+                    try {
+                        await database.ref(`users/${uid}/slots/${slot}`).set(payload);
+                    } catch (error) {
                         console.error('Erro ao refletir alteração do Mestre no slot:', error);
-                    });
-                    if (!campaignState.sharedEdit && document.getElementById('save-slot').value === slot) {
-                        sheet = Object.assign(getFichaZerada(), JSON.parse(JSON.stringify(character.sheet)));
+                        return;
+                    }
+                    if (!campaignState.sharedEdit && slotAtivo) {
+                        syncState.applyingRemote = true;
+                        sheet = Object.assign(getFichaZerada(), fichaRemota);
                         atualizarVisuaisDaFicha();
                         alteracoesNaoSalvas = false;
+                        syncState.lastCloudHash = hashFichaSincronizacao(fichaRemota);
+                        syncState.lastSavedAt = Date.now();
+                        syncState.applyingRemote = false;
+                        definirEstadoSincronizacao('saved');
                         spawnPopup('CAMPANHA', character.name || 'Ficha atualizada', 'SYNC', '#38d9ff', 'ALTERAÇÃO DO MESTRE', 'A ficha foi atualizada em tempo real.');
                     }
                 };
@@ -24357,6 +24673,1033 @@ function sincronizarAcessoMesaDocumentos() {
     if (!options.some(option => option.id === documentDeskState.campaignId)) conectarMesaDocumentos(options[0].id);
 }
 
+/* SINCRONIZAÇÃO RESILIENTE: ESTADO VISÍVEL, FILA OFFLINE E CONFLITOS */
+const SYNC_DB_NAME = 'abyss-rpg-sync-v1';
+const SYNC_DB_STORE = 'pending';
+const SYNC_FALLBACK_KEY = 'abyssSyncQueueV1';
+let syncDbPromise = null;
+
+function chaveFilaSincronizacao(uid, slot) {
+    return `${String(uid || 'local')}:${String(slot || '1')}`;
+}
+
+function abrirBancoSincronizacao() {
+    if (!('indexedDB' in window)) return Promise.reject(new Error('IndexedDB indisponível'));
+    if (syncDbPromise) return syncDbPromise;
+    syncDbPromise = new Promise((resolve, reject) => {
+        const request = indexedDB.open(SYNC_DB_NAME, 1);
+        request.onupgradeneeded = () => {
+            if (!request.result.objectStoreNames.contains(SYNC_DB_STORE)) request.result.createObjectStore(SYNC_DB_STORE, { keyPath: 'key' });
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error('Falha ao abrir a fila offline'));
+    });
+    return syncDbPromise;
+}
+
+function lerFilaFallbackSincronizacao() {
+    try { return JSON.parse(localStorage.getItem(SYNC_FALLBACK_KEY) || '{}'); }
+    catch (_) { return {}; }
+}
+
+function salvarFilaFallbackSincronizacao(fila) {
+    try { localStorage.setItem(SYNC_FALLBACK_KEY, JSON.stringify(fila || {})); }
+    catch (erro) { console.warn('A fila offline excedeu o espaço local disponível.', erro); }
+}
+
+async function executarFilaIndexedDb(mode, callback) {
+    const db = await abrirBancoSincronizacao();
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(SYNC_DB_STORE, mode);
+        const store = transaction.objectStore(SYNC_DB_STORE);
+        let result;
+        try { result = callback(store); }
+        catch (erro) { reject(erro); return; }
+        transaction.oncomplete = () => resolve(result);
+        transaction.onerror = () => reject(transaction.error || new Error('Falha na fila offline'));
+        transaction.onabort = () => reject(transaction.error || new Error('Operação da fila cancelada'));
+    });
+}
+
+async function enfileirarSincronizacao(pacote) {
+    const registro = { ...pacote, queuedAt: Date.now() };
+    try {
+        await executarFilaIndexedDb('readwrite', store => store.put(registro));
+    } catch (_) {
+        const fila = lerFilaFallbackSincronizacao();
+        fila[registro.key] = registro;
+        salvarFilaFallbackSincronizacao(fila);
+    }
+    await atualizarContagemFilaSincronizacao();
+    return registro;
+}
+
+async function obterSincronizacaoEnfileirada(key) {
+    try {
+        const db = await abrirBancoSincronizacao();
+        return await new Promise((resolve, reject) => {
+            const request = db.transaction(SYNC_DB_STORE, 'readonly').objectStore(SYNC_DB_STORE).get(key);
+            request.onsuccess = () => resolve(request.result || null);
+            request.onerror = () => reject(request.error);
+        });
+    } catch (_) {
+        return lerFilaFallbackSincronizacao()[key] || null;
+    }
+}
+
+async function listarSincronizacoesEnfileiradas(uid = currentUser?.uid) {
+    let registros = [];
+    try {
+        const db = await abrirBancoSincronizacao();
+        registros = await new Promise((resolve, reject) => {
+            const request = db.transaction(SYNC_DB_STORE, 'readonly').objectStore(SYNC_DB_STORE).getAll();
+            request.onsuccess = () => resolve(request.result || []);
+            request.onerror = () => reject(request.error);
+        });
+    } catch (_) {
+        registros = Object.values(lerFilaFallbackSincronizacao());
+    }
+    return registros.filter(item => !uid || item.uid === uid).sort((a, b) => Number(a.queuedAt) - Number(b.queuedAt));
+}
+
+async function removerSincronizacaoEnfileirada(key) {
+    try {
+        await executarFilaIndexedDb('readwrite', store => store.delete(key));
+    } catch (_) {
+        const fila = lerFilaFallbackSincronizacao();
+        delete fila[key];
+        salvarFilaFallbackSincronizacao(fila);
+    }
+}
+
+async function atualizarContagemFilaSincronizacao() {
+    syncState.pending = (await listarSincronizacoesEnfileiradas(currentUser?.uid)).length;
+    atualizarInterfaceSincronizacao();
+    return syncState.pending;
+}
+
+function clonarFichaParaSincronizacao(valor = sheet) {
+    const copia = JSON.parse(JSON.stringify(valor || {}));
+    delete copia.syncMeta;
+    return copia;
+}
+
+function extrairFichaDoPayloadSincronizacao(payload) {
+    if (!payload || typeof payload !== 'object') return null;
+    const copia = JSON.parse(JSON.stringify(payload));
+    delete copia.syncMeta;
+    return copia;
+}
+
+function hashFichaSincronizacao(valor) {
+    let texto = '';
+    try { texto = JSON.stringify(valor || {}); }
+    catch (_) { return ''; }
+    let hash = 2166136261;
+    for (let i = 0; i < texto.length; i += 1) {
+        hash ^= texto.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+    }
+    return (hash >>> 0).toString(36);
+}
+
+function criarPacoteSincronizacao(slot) {
+    const ficha = clonarFichaParaSincronizacao(sheet);
+    const revision = `${Date.now()}-${syncClientId}-${Math.random().toString(36).slice(2, 7)}`;
+    return {
+        key: chaveFilaSincronizacao(currentUser.uid, slot),
+        uid: currentUser.uid,
+        slot: String(slot),
+        path: `users/${currentUser.uid}/slots/${slot}`,
+        revision,
+        sheet: ficha,
+        payload: {
+            ...ficha,
+            syncMeta: { clientId: syncClientId, revision, updatedAt: Date.now() }
+        }
+    };
+}
+
+function atualizarPreviewSlotComFicha(slot, ficha) {
+    slotPreviewState[String(slot)] = {
+        existe: true,
+        nickname: String(ficha?.nickname || '').trim(),
+        antecedencia: String(ficha?.antecedencia || '').trim(),
+        avatar: String(resolverRetratoPersonagem(ficha || {}).url || '').trim(),
+        classe: String(ficha?.classe || '').trim()
+    };
+    renderizarSeletorInicialFichas();
+    atualizarBotaoTrocaFicha();
+}
+
+function rotuloEstadoSincronizacao(estado = syncState.status) {
+    return ({
+        local: ['Local', 'Entre para sincronizar'],
+        dirty: ['Alterado', configuracoesAudio?.autoSave ? 'Salvamento agendado' : 'Clique para salvar'],
+        saving: ['Salvando', 'O d20 está protegendo a ficha'],
+        saved: ['Salvo', 'Ficha sincronizada'],
+        offline: ['Offline', `${syncState.pending || 0} na fila`],
+        conflict: ['Conflito', 'Escolha qual versão manter']
+    })[estado] || ['Sincronização', 'Estado desconhecido'];
+}
+
+function definirEstadoSincronizacao(estado) {
+    if (!currentUser && estado !== 'local') estado = 'local';
+    syncState.status = estado;
+    atualizarInterfaceSincronizacao();
+}
+
+function atualizarInterfaceSincronizacao() {
+    const estado = syncState.conflict ? 'conflict' : syncState.status;
+    const [rotulo, detalhe] = rotuloEstadoSincronizacao(estado);
+    const indicador = document.getElementById('sync-vine-indicator');
+    if (indicador) indicador.dataset.state = estado;
+    const label = document.getElementById('sync-indicator-label');
+    const detail = document.getElementById('sync-indicator-detail');
+    if (label) label.textContent = rotulo;
+    if (detail) detail.textContent = detalhe;
+    const card = document.getElementById('sync-status-card');
+    card?.classList.toggle('is-saving', estado === 'saving');
+    const modalStatus = document.getElementById('sync-modal-status');
+    const modalDescription = document.getElementById('sync-modal-description');
+    if (modalStatus) modalStatus.textContent = ({ local: 'Somente neste dispositivo', dirty: 'Há alterações ainda não enviadas', saving: 'Salvando a ficha', saved: 'Ficha protegida na nuvem', offline: 'Trabalhando sem conexão', conflict: 'Duas versões foram encontradas' })[estado] || rotulo;
+    if (modalDescription) modalDescription.textContent = detalhe;
+    const last = document.getElementById('sync-last-saved');
+    if (last) last.textContent = syncState.lastSavedAt ? new Date(syncState.lastSavedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : 'Ainda não salvo';
+    const pending = document.getElementById('sync-pending-count');
+    if (pending) pending.textContent = `${syncState.pending || 0} ${(syncState.pending || 0) === 1 ? 'alteração' : 'alterações'}`;
+    const conflictActions = document.getElementById('sync-conflict-actions');
+    conflictActions?.classList.toggle('is-visible', estado === 'conflict');
+    const message = document.getElementById('sync-conflict-message');
+    if (message) message.textContent = estado === 'conflict'
+        ? 'Outra sessão atualizou esta ficha enquanto você também tinha mudanças locais. Escolha conscientemente qual versão deve permanecer.'
+        : 'Quando a conexão cair, a última versão da ficha fica em fila e é enviada automaticamente ao retornar.';
+}
+
+function abrirPainelSincronizacao() {
+    tocarSom('click');
+    atualizarContagemFilaSincronizacao();
+    atualizarInterfaceSincronizacao();
+    abrirSuperficieFoco('#modal-sync-status');
+}
+
+function fecharPainelSincronizacao() {
+    fecharSuperficieFoco('#modal-sync-status');
+}
+
+function desanexarObservadorSincronizacaoSlot() {
+    if (syncState.activeRef && syncState.activeHandler) syncState.activeRef.off('value', syncState.activeHandler);
+    syncState.activeRef = null;
+    syncState.activeHandler = null;
+    syncState.activeSlot = '';
+}
+
+function anexarObservadorSincronizacaoSlot(slot) {
+    desanexarObservadorSincronizacaoSlot();
+    if (!currentUser) return;
+    syncState.activeSlot = String(slot);
+    syncState.activeRef = database.ref(`users/${currentUser.uid}/slots/${slot}`);
+    syncState.activeHandler = async snapshot => {
+        if (!currentUser || String(document.getElementById('save-slot')?.value || '') !== String(slot)) return;
+        const bruto = snapshot.val();
+        if (!bruto) return;
+        const meta = bruto.syncMeta || {};
+        const remoto = extrairFichaDoPayloadSincronizacao(bruto);
+        const hashRemoto = hashFichaSincronizacao(remoto);
+        if (meta.clientId === syncClientId && meta.revision === syncState.lastLocalRevision) {
+            syncState.lastCloudHash = hashRemoto;
+            syncState.lastSavedAt = Number(meta.updatedAt) || Date.now();
+            if (!syncState.conflict && syncState.status !== 'saving' && !syncState.processingQueue) definirEstadoSincronizacao('saved');
+            return;
+        }
+        if (!hashRemoto || hashRemoto === syncState.lastCloudHash) return;
+        const pendente = await obterSincronizacaoEnfileirada(chaveFilaSincronizacao(currentUser.uid, slot));
+        if (pendente) {
+            if (syncState.connected) processarFilaSincronizacao();
+            return;
+        }
+        if (alteracoesNaoSalvas || syncState.status === 'saving') {
+            syncState.conflict = { remote: remoto, remoteHash: hashRemoto, meta, slot: String(slot) };
+            definirEstadoSincronizacao('conflict');
+            return;
+        }
+        syncState.applyingRemote = true;
+        sheet = Object.assign(getFichaZerada(), remoto);
+        syncState.lastCloudHash = hashRemoto;
+        syncState.lastSavedAt = Number(meta.updatedAt) || Date.now();
+        alteracoesNaoSalvas = false;
+        atualizarPreviewSlotComFicha(slot, remoto);
+        atualizarVisuaisDaFicha();
+        syncState.applyingRemote = false;
+        definirEstadoSincronizacao('saved');
+        agendarAquecimentoBuscaGlobal();
+    };
+    syncState.activeRef.on('value', syncState.activeHandler);
+}
+
+async function resolverConflitoSincronizacao(escolha) {
+    const conflito = syncState.conflict;
+    if (!conflito || !currentUser) return;
+    if (escolha === 'remote') {
+        await removerSincronizacaoEnfileirada(chaveFilaSincronizacao(currentUser.uid, conflito.slot));
+        sheet = Object.assign(getFichaZerada(), conflito.remote);
+        syncState.lastCloudHash = conflito.remoteHash;
+        syncState.lastSavedAt = Number(conflito.meta?.updatedAt) || Date.now();
+        syncState.conflict = null;
+        alteracoesNaoSalvas = true;
+        atualizarVisuaisDaFicha();
+        atualizarPreviewSlotComFicha(conflito.slot, sheet);
+        await atualizarContagemFilaSincronizacao();
+        await salvarNaNuvem(true, { force: true });
+    } else {
+        syncState.conflict = null;
+        definirEstadoSincronizacao('dirty');
+        await salvarNaNuvem(false, { force: true });
+    }
+    fecharPainelSincronizacao();
+}
+
+async function processarFilaSincronizacao() {
+    if (syncState.processingQueue || !currentUser || !syncState.connected || !navigator.onLine) return;
+    syncState.processingQueue = true;
+    definirEstadoSincronizacao('saving');
+    try {
+        const fila = await listarSincronizacoesEnfileiradas(currentUser.uid);
+        for (const pacote of fila) {
+            if (!syncState.connected) break;
+            syncState.lastLocalRevision = pacote.revision;
+            await database.ref(pacote.path).set(pacote.payload);
+            await removerSincronizacaoEnfileirada(pacote.key);
+            syncState.lastSavedAt = Date.now();
+            if (String(pacote.slot) === String(document.getElementById('save-slot')?.value || '')) syncState.lastCloudHash = hashFichaSincronizacao(pacote.sheet);
+        }
+        await atualizarContagemFilaSincronizacao();
+        if (syncState.connected && !syncState.conflict) definirEstadoSincronizacao('saved');
+    } catch (erro) {
+        console.warn('A fila offline continuará aguardando conexão.', erro);
+        definirEstadoSincronizacao('offline');
+    } finally {
+        syncState.processingQueue = false;
+    }
+}
+
+database.ref('.info/connected').on('value', snapshot => {
+    syncState.connected = snapshot.val() === true && navigator.onLine;
+    if (syncState.connected) processarFilaSincronizacao();
+    else if (currentUser) definirEstadoSincronizacao('offline');
+});
+window.addEventListener('online', () => {
+    syncState.connected = true;
+    processarFilaSincronizacao();
+});
+window.addEventListener('offline', () => {
+    syncState.connected = false;
+    if (currentUser) definirEstadoSincronizacao('offline');
+});
+
+/* BUSCA GLOBAL E PALETA DE AÇÕES (CTRL/CMD + K) */
+const globalSearchState = {
+    query: '',
+    kind: 'all',
+    items: [],
+    visible: [],
+    activeIndex: 0,
+    localVersion: 0,
+    builtVersion: -1,
+    remoteCache: new Map(),
+    loadingRemote: false,
+    openingToken: 0
+};
+
+function invalidarIndiceBuscaGlobal() {
+    globalSearchState.localVersion += 1;
+}
+
+function textoBuscaGlobal(valor) {
+    if (typeof normalizarTextoFiltro === 'function') return normalizarTextoFiltro(String(valor || ''));
+    return String(valor || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function idResultadoBuscaGlobal(prefix) {
+    return `${prefix}-${Math.random().toString(36).slice(2, 9)}-${Date.now().toString(36)}`;
+}
+
+function indexarBuscaLocal(force = false) {
+    if (!force && globalSearchState.builtVersion === globalSearchState.localVersion && globalSearchState.items.some(item => item.scope === 'local')) return;
+    const remotos = globalSearchState.items.filter(item => item.scope === 'remote');
+    const locais = [];
+    (normalizarPericiasDaFicha?.() || []).forEach(pericia => {
+        locais.push({
+            id: `skill:${pericia.id || pericia.n}`,
+            scope: 'local', kind: 'skill', icon: '◈', name: pericia.n || 'Perícia',
+            detail: `${pericia.a || 'VAR'} • Treino +${parseInt(pericia.t) || 0}${pericia.custom ? ' • personalizada' : ''}`,
+            haystack: `${pericia.n} ${pericia.a} ${pericia.descricao || ''} ${(pericia.usos || []).map(uso => `${uso.titulo} ${uso.texto}`).join(' ')}`,
+            data: { reference: pericia.id || pericia.n, name: pericia.n, attribute: pericia.a }
+        });
+    });
+    (sheet?.habilidades || []).forEach((acao, index) => {
+        if (!acao || acao.isSeparator) return;
+        const tipo = ({ ataque: 'Ataque', habilidade: 'Habilidade', feitico: 'Feitiço' })[acao.tipo] || 'Ação';
+        const rolagens = typeof normalizarRolagensPrincipais === 'function' ? normalizarRolagensPrincipais(acao) : [];
+        locais.push({
+            id: `action:${acao.idUnico || index}`,
+            scope: 'local', kind: 'action', icon: acao.tipo === 'feitico' ? '✦' : (acao.tipo === 'ataque' ? '⚔' : '◆'), name: acao.nome || tipo,
+            detail: `${tipo}${rolagens[0]?.formula ? ` • ${rolagens[0].formula}` : ' • abrir editor'}`,
+            haystack: `${acao.nome} ${acao.desc || ''} ${tipo} ${rolagens.map(item => `${item.nome} ${item.formula}`).join(' ')}`,
+            data: { id: acao.idUnico || '', fallbackIndex: index, type: acao.tipo, canRoll: Boolean(rolagens[0]?.formula) }
+        });
+    });
+    (sheet?.itens || []).forEach((item, index) => {
+        if (!item || item.isSeparator) return;
+        const rolagens = typeof normalizarRolagensPrincipais === 'function' ? normalizarRolagensPrincipais(item, true) : [];
+        locais.push({
+            id: `item:${item.idUnico || index}`,
+            scope: 'local', kind: 'item', icon: item.isWeapon ? '⚔' : '▣', name: item.nome || 'Item',
+            detail: `${item.isWeapon ? 'Equipamento' : 'Inventário'}${rolagens[0]?.formula ? ` • ${rolagens[0].formula}` : ''}`,
+            haystack: `${item.nome} ${item.desc || ''} ${item.isWeapon ? 'arma equipamento' : 'inventario item'} ${rolagens.map(entry => `${entry.nome} ${entry.formula}`).join(' ')}`,
+            data: { id: item.idUnico || '', fallbackIndex: index, canRoll: Boolean(item.isWeapon && rolagens[0]?.formula) }
+        });
+    });
+    (campaignState?.campaigns || []).forEach(campaign => {
+        locais.push({
+            id: `campaign:${campaign.id}`,
+            scope: 'local', kind: 'campaign', icon: '♜', name: campaign.name || campaign.meta?.name || 'Campanha',
+            detail: `${campaign.role === 'mestre' ? 'Mestre' : 'Jogador'} • abrir campanha`,
+            haystack: `${campaign.name || campaign.meta?.name || ''} ${campaign.description || campaign.meta?.description || ''} campanha`,
+            data: { campaignId: campaign.id }
+        });
+    });
+    globalSearchState.items = [...locais, ...remotos];
+    globalSearchState.builtVersion = globalSearchState.localVersion;
+}
+
+function nomeCampanhaBusca(campaignId) {
+    const campanha = (campaignState?.campaigns || []).find(item => item.id === campaignId);
+    return campanha?.name || campanha?.meta?.name || (campaignState.activeId === campaignId ? campaignState.activeCampaign?.meta?.name : '') || 'Campanha';
+}
+
+async function enriquecerBuscaGlobalRemota(token = globalSearchState.openingToken) {
+    if (!currentUser || globalSearchState.loadingRemote) return;
+    const ids = [...new Set((campaignState?.campaigns || []).map(item => item.id).filter(Boolean))].slice(0, 24);
+    if (!ids.length) return;
+    globalSearchState.loadingRemote = true;
+    atualizarStatusBuscaGlobal('Consultando personagens e documentos das suas campanhas…');
+    try {
+        const agora = Date.now();
+        const blocos = await Promise.allSettled(ids.map(async campaignId => {
+            const cached = globalSearchState.remoteCache.get(campaignId);
+            if (cached && agora - cached.timestamp < 60000) return cached.items;
+            const [charactersSnapshot, documentsSnapshot] = await Promise.all([
+                database.ref(`campaigns/${campaignId}/characters`).once('value'),
+                database.ref(`campaignDocumentDesks/${campaignId}/documents`).once('value')
+            ]);
+            const campaignName = nomeCampanhaBusca(campaignId);
+            const entries = [];
+            Object.entries(charactersSnapshot.val() || {}).forEach(([characterId, character]) => {
+                const name = character?.name || character?.sheet?.nickname || 'Personagem sem nome';
+                entries.push({
+                    id: `character:${campaignId}:${characterId}`, scope: 'remote', kind: 'character', icon: '♟', name,
+                    detail: `${campaignName} • ${character?.ownerName || 'Jogador'}`,
+                    haystack: `${name} ${character?.ownerName || ''} ${character?.sheet?.antecedencia || ''} ${campaignName}`,
+                    data: { campaignId, characterId }
+                });
+            });
+            Object.entries(documentsSnapshot.val() || {}).forEach(([documentId, documentData]) => {
+                const title = String(documentData?.title || '').trim();
+                if (!title) return;
+                entries.push({
+                    id: `document:${campaignId}:${documentId}`, scope: 'remote', kind: 'document', icon: '▤', name: title,
+                    detail: `${campaignName} • documento`,
+                    haystack: `${title} ${documentData.description || ''} ${documentData.text || ''} ${documentData.extractedText || ''} ${documentData.fileName || ''} ${campaignName}`,
+                    data: { campaignId, documentId }
+                });
+            });
+            globalSearchState.remoteCache.set(campaignId, { timestamp: agora, items: entries });
+            return entries;
+        }));
+        if (token !== globalSearchState.openingToken) return;
+        const remotos = blocos.flatMap(result => result.status === 'fulfilled' ? result.value : []);
+        globalSearchState.items = [...globalSearchState.items.filter(item => item.scope !== 'remote'), ...remotos];
+        aplicarFiltroBuscaGlobal();
+    } finally {
+        globalSearchState.loadingRemote = false;
+        atualizarStatusBuscaGlobal();
+    }
+}
+
+function atualizarStatusBuscaGlobal(texto = '') {
+    const elemento = document.getElementById('global-search-status');
+    if (!elemento) return;
+    if (texto) elemento.textContent = texto;
+    else if (globalSearchState.loadingRemote) elemento.textContent = 'Consultando campanhas…';
+    else elemento.textContent = `${globalSearchState.visible.length} ${globalSearchState.visible.length === 1 ? 'resultado' : 'resultados'} • ↑ ↓ para navegar • Enter para abrir`;
+}
+
+function aplicarFiltroBuscaGlobal() {
+    const consulta = textoBuscaGlobal(globalSearchState.query);
+    const termos = consulta.split(/\s+/).filter(Boolean);
+    globalSearchState.visible = globalSearchState.items
+        .filter(item => globalSearchState.kind === 'all' || item.kind === globalSearchState.kind)
+        .map(item => {
+            const alvo = textoBuscaGlobal(`${item.name} ${item.detail} ${item.haystack || ''}`);
+            if (!termos.every(termo => alvo.includes(termo))) return null;
+            let score = 0;
+            const nome = textoBuscaGlobal(item.name);
+            if (consulta && nome === consulta) score += 100;
+            else if (consulta && nome.startsWith(consulta)) score += 60;
+            termos.forEach(termo => { if (nome.includes(termo)) score += 12; });
+            if (item.scope === 'local') score += 2;
+            return { ...item, score };
+        })
+        .filter(Boolean)
+        .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, 'pt-BR'))
+        .slice(0, 60);
+    globalSearchState.activeIndex = Math.min(globalSearchState.activeIndex, Math.max(0, globalSearchState.visible.length - 1));
+    renderizarBuscaGlobal();
+}
+
+function rotuloTipoBuscaGlobal(kind) {
+    return ({ skill: 'PERÍCIA', action: 'AÇÃO', item: 'ITEM', campaign: 'CAMPANHA', character: 'PERSONAGEM', document: 'DOCUMENTO' })[kind] || 'RESULTADO';
+}
+
+function renderizarBuscaGlobal() {
+    const lista = document.getElementById('global-search-results');
+    if (!lista) return;
+    if (!globalSearchState.visible.length) {
+        lista.innerHTML = `<div class="global-search-empty">${globalSearchState.loadingRemote ? 'Consultando o arquivo…' : 'Nada encontrado. Tente outro nome ou filtro.'}</div>`;
+        atualizarStatusBuscaGlobal();
+        return;
+    }
+    lista.innerHTML = globalSearchState.visible.map((item, index) => `
+        <button type="button" class="global-search-result ${index === globalSearchState.activeIndex ? 'is-active' : ''}" role="option" aria-selected="${index === globalSearchState.activeIndex}" data-result-index="${index}" onclick="executarResultadoBuscaGlobal('${escapeCampaignHtml(item.id)}')" onmouseenter="selecionarResultadoBuscaGlobal(${index})">
+            <span class="global-search-result-icon" aria-hidden="true">${item.icon}</span>
+            <span class="global-search-result-copy"><strong>${escapeCampaignHtml(item.name)}</strong><small>${escapeCampaignHtml(item.detail)}</small></span>
+            <span class="global-search-kind">${rotuloTipoBuscaGlobal(item.kind)}</span>
+        </button>`).join('');
+    atualizarStatusBuscaGlobal();
+}
+
+function selecionarResultadoBuscaGlobal(index) {
+    globalSearchState.activeIndex = Math.max(0, Math.min(Number(index) || 0, globalSearchState.visible.length - 1));
+    document.querySelectorAll('#global-search-results .global-search-result').forEach((item, itemIndex) => {
+        item.classList.toggle('is-active', itemIndex === globalSearchState.activeIndex);
+        item.setAttribute('aria-selected', String(itemIndex === globalSearchState.activeIndex));
+    });
+}
+
+function atualizarConsultaBuscaGlobal(valor) {
+    globalSearchState.query = valor || '';
+    globalSearchState.activeIndex = 0;
+    aplicarFiltroBuscaGlobal();
+}
+
+function filtrarBuscaGlobal(kind) {
+    globalSearchState.kind = kind || 'all';
+    globalSearchState.activeIndex = 0;
+    document.querySelectorAll('[data-search-kind]').forEach(button => button.classList.toggle('is-active', button.dataset.searchKind === globalSearchState.kind));
+    aplicarFiltroBuscaGlobal();
+}
+
+function abrirBuscaGlobal() {
+    tocarSom('click');
+    globalSearchState.openingToken += 1;
+    indexarBuscaLocal(true);
+    globalSearchState.query = '';
+    globalSearchState.kind = 'all';
+    globalSearchState.activeIndex = 0;
+    const input = document.getElementById('global-search-input');
+    if (input) input.value = '';
+    document.querySelectorAll('[data-search-kind]').forEach(button => button.classList.toggle('is-active', button.dataset.searchKind === 'all'));
+    aplicarFiltroBuscaGlobal();
+    abrirSuperficieFoco('#modal-global-search');
+    requestAnimationFrame(() => input?.focus());
+    enriquecerBuscaGlobalRemota(globalSearchState.openingToken);
+}
+
+function fecharBuscaGlobal() {
+    globalSearchState.openingToken += 1;
+    fecharSuperficieFoco('#modal-global-search');
+}
+
+function localizarIndicePorId(lista, id, fallback = 0) {
+    const indice = (lista || []).findIndex(item => String(item?.idUnico || '') === String(id || ''));
+    return indice >= 0 ? indice : Math.max(0, Number(fallback) || 0);
+}
+
+function aguardarCondicaoBusca(teste, timeout = 3200) {
+    return new Promise(resolve => {
+        const inicio = Date.now();
+        const verificar = () => {
+            if (teste()) resolve(true);
+            else if (Date.now() - inicio >= timeout) resolve(false);
+            else setTimeout(verificar, 80);
+        };
+        verificar();
+    });
+}
+
+async function executarResultadoBuscaGlobal(id) {
+    const item = globalSearchState.items.find(entry => entry.id === id);
+    if (!item) return;
+    fecharBuscaGlobal();
+    if (item.kind === 'skill') {
+        realizarRolagem(item.data.attribute, 0, item.data.name, true, item.data.name);
+        return;
+    }
+    if (item.kind === 'action') {
+        const index = localizarIndicePorId(sheet.habilidades, item.data.id, item.data.fallbackIndex);
+        mudarArea('combate');
+        const atual = sheet.habilidades?.[index];
+        const rolagem = atual && normalizarRolagensPrincipais(atual)[0];
+        if (rolagem?.formula) rolarHabilidadePorIndice(index, 0);
+        else abrirEditorHab(atual?.tipo || item.data.type || 'habilidade', index);
+        return;
+    }
+    if (item.kind === 'item') {
+        const index = localizarIndicePorId(sheet.itens, item.data.id, item.data.fallbackIndex);
+        mudarArea('inventario');
+        const atual = sheet.itens?.[index];
+        const rolagem = atual && normalizarRolagensPrincipais(atual, true)[0];
+        if (atual?.isWeapon && rolagem?.formula) rolarItemPrincipalPorIndice(index, 0);
+        else abrirEditorItem(index);
+        return;
+    }
+    if (item.kind === 'campaign') {
+        abrirCampanhas();
+        abrirDetalheCampanha(item.data.campaignId);
+        return;
+    }
+    if (item.kind === 'character') {
+        abrirCampanhas();
+        abrirDetalheCampanha(item.data.campaignId);
+        const pronto = await aguardarCondicaoBusca(() => campaignState.activeId === item.data.campaignId && campaignState.activeCampaign?.characters?.[item.data.characterId]);
+        if (pronto) visualizarPersonagemCampanha(item.data.characterId);
+        return;
+    }
+    if (item.kind === 'document') {
+        documentDeskState.origin = 'campaign';
+        documentDeskState.campaignOptions = (campaignState.campaigns || []).map(campaign => ({ id: campaign.id, name: campaign.name || 'Campanha' }));
+        if (!documentDeskState.campaignOptions.some(option => option.id === item.data.campaignId)) documentDeskState.campaignOptions.unshift({ id: item.data.campaignId, name: nomeCampanhaBusca(item.data.campaignId) });
+        abrirAplicativoMesaDocumentos();
+        await conectarMesaDocumentos(item.data.campaignId);
+        const pronto = await aguardarCondicaoBusca(() => Boolean(documentDeskState.documents?.[item.data.documentId]));
+        if (pronto) abrirDocumentoMesa(item.data.documentId);
+    }
+}
+
+function agendarAquecimentoBuscaGlobal() {
+    const preparar = () => indexarBuscaLocal(true);
+    if ('requestIdleCallback' in window) requestIdleCallback(preparar, { timeout: 1400 });
+    else setTimeout(preparar, 250);
+}
+
+/* HISTÓRICO COMPARTILHADO DE CAMPANHA COM DESFAZER POR PERMISSÃO */
+const historicoCampanhaState = {
+    mode: 'sheet',
+    campaignId: '',
+    entries: [],
+    ref: null,
+    handler: null,
+    wrappersReady: false
+};
+const HISTORICO_CAMPANHA_LIMITE = 120;
+const HISTORICO_CAMPANHA_UNDO_MAX = 190000;
+
+function campanhasDisponiveisHistorico() {
+    const lista = (campaignState?.campaigns || []).map(campaign => ({
+        id: campaign.id,
+        name: campaign.name || campaign.meta?.name || 'Campanha',
+        role: campaign.role || campaignState.membershipRoles?.[campaign.id] || ''
+    }));
+    if (campaignState?.activeId && !lista.some(item => item.id === campaignState.activeId)) {
+        lista.unshift({ id: campaignState.activeId, name: campaignState.activeCampaign?.meta?.name || 'Campanha', role: campaignState.role || '' });
+    }
+    return lista.filter(item => item.id);
+}
+
+function prepararCampanhasHistorico() {
+    const select = document.getElementById('history-campaign-select');
+    if (!select) return;
+    const campanhas = campanhasDisponiveisHistorico();
+    const preferida = historicoCampanhaState.campaignId || campaignState?.activeId || campanhas[0]?.id || '';
+    historicoCampanhaState.campaignId = campanhas.some(item => item.id === preferida) ? preferida : (campanhas[0]?.id || '');
+    select.innerHTML = campanhas.length
+        ? campanhas.map(item => `<option value="${escapeCampaignHtml(item.id)}" ${item.id === historicoCampanhaState.campaignId ? 'selected' : ''}>${escapeCampaignHtml(item.name)}</option>`).join('')
+        : '<option value="">Nenhuma campanha vinculada</option>';
+}
+
+function mudarModoHistorico(mode) {
+    historicoCampanhaState.mode = mode === 'campaign' ? 'campaign' : 'sheet';
+    document.getElementById('history-tab-sheet')?.classList.toggle('is-active', historicoCampanhaState.mode === 'sheet');
+    document.getElementById('history-tab-campaign')?.classList.toggle('is-active', historicoCampanhaState.mode === 'campaign');
+    document.getElementById('history-tab-sheet')?.setAttribute('aria-selected', String(historicoCampanhaState.mode === 'sheet'));
+    document.getElementById('history-tab-campaign')?.setAttribute('aria-selected', String(historicoCampanhaState.mode === 'campaign'));
+    document.getElementById('history-campaign-controls')?.classList.toggle('is-visible', historicoCampanhaState.mode === 'campaign');
+    const clearButton = document.getElementById('history-clear-button');
+    if (clearButton) clearButton.hidden = historicoCampanhaState.mode === 'campaign';
+    if (historicoCampanhaState.mode === 'campaign') {
+        prepararCampanhasHistorico();
+        atualizarHistoricoCampanha();
+    } else {
+        pararHistoricoCampanha();
+        renderizarHistoricoAcoes();
+    }
+}
+
+function selecionarCampanhaHistorico(campaignId) {
+    historicoCampanhaState.campaignId = campaignId || '';
+    atualizarHistoricoCampanha(true);
+}
+
+function pararHistoricoCampanha() {
+    if (historicoCampanhaState.ref && historicoCampanhaState.handler) historicoCampanhaState.ref.off('value', historicoCampanhaState.handler);
+    historicoCampanhaState.ref = null;
+    historicoCampanhaState.handler = null;
+}
+
+function atualizarHistoricoCampanha(force = false) {
+    const campaignId = historicoCampanhaState.campaignId;
+    if (!campaignId) {
+        historicoCampanhaState.entries = [];
+        renderizarHistoricoCampanha();
+        return;
+    }
+    if (!force && historicoCampanhaState.ref) return renderizarHistoricoCampanha();
+    pararHistoricoCampanha();
+    const query = database.ref(`campaigns/${campaignId}/activity`).limitToLast(HISTORICO_CAMPANHA_LIMITE);
+    historicoCampanhaState.ref = query;
+    historicoCampanhaState.handler = snapshot => {
+        historicoCampanhaState.entries = [];
+        snapshot.forEach(child => historicoCampanhaState.entries.push({ id: child.key, ...(child.val() || {}) }));
+        renderizarHistoricoCampanha();
+    };
+    query.on('value', historicoCampanhaState.handler, erro => {
+        console.warn('Não foi possível abrir o histórico compartilhado.', erro);
+        historicoCampanhaState.entries = [];
+        renderizarHistoricoCampanha('Não foi possível consultar este histórico agora.');
+    });
+}
+
+function papelUsuarioNaCampanha(campaignId) {
+    if (campaignState?.activeId === campaignId) return campaignState.role || '';
+    return campaignState?.membershipRoles?.[campaignId]
+        || (campaignState?.campaigns || []).find(item => item.id === campaignId)?.role
+        || '';
+}
+
+function podeDesfazerEntradaCampanha(entrada) {
+    if (!currentUser || !entrada?.undo || entrada.desfeito) return false;
+    if (papelUsuarioNaCampanha(historicoCampanhaState.campaignId) === 'mestre') return true;
+    return entrada.actorUid === currentUser.uid && (!entrada.ownerUid || entrada.ownerUid === currentUser.uid);
+}
+
+function renderizarHistoricoCampanha(mensagemErro = '') {
+    if (historicoCampanhaState.mode !== 'campaign') return;
+    const lista = document.getElementById('history-list');
+    const contador = document.getElementById('history-counter');
+    if (!lista || !contador) return;
+    const entradas = historicoCampanhaState.entries || [];
+    contador.textContent = `${entradas.length} ${entradas.length === 1 ? 'ação compartilhada' : 'ações compartilhadas'}`;
+    if (mensagemErro || !historicoCampanhaState.campaignId || !entradas.length) {
+        lista.innerHTML = `<div class="history-empty">${escapeCampaignHtml(mensagemErro || (!historicoCampanhaState.campaignId ? 'Vincule-se a uma campanha para consultar o registro.' : 'As próximas ações de combate e documentos aparecerão aqui.'))}</div>`;
+        return;
+    }
+    lista.innerHTML = [...entradas].reverse().map(entrada => {
+        const quando = new Date(Number(entrada.timestamp) || Date.now()).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+        const podeDesfazer = podeDesfazerEntradaCampanha(entrada);
+        const estado = entrada.desfeito
+            ? `<span class="history-undone-label">DESFEITO${entrada.undoneByName ? ` POR ${escapeCampaignHtml(entrada.undoneByName)}` : ''}</span>`
+            : (entrada.undo ? `<button class="history-undo-btn" ${podeDesfazer ? '' : 'disabled'} onclick="desfazerHistoricoCampanha('${escapeCampaignHtml(entrada.id)}')" title="${podeDesfazer ? 'Desfazer esta ação' : 'Somente o autor ou o Mestre pode desfazer'}">↶ Desfazer</button>` : '');
+        return `<article class="history-entry is-shared ${entrada.desfeito ? 'is-undone' : ''}">
+            <div class="history-entry-main">
+                <div class="history-entry-top"><span class="history-category">${escapeCampaignHtml(String(entrada.category || 'campanha').toUpperCase())}</span><strong>${escapeCampaignHtml(entrada.title || 'Ação na campanha')}</strong></div>
+                ${entrada.details ? `<p>${escapeCampaignHtml(entrada.details)}</p>` : ''}
+                <small>${escapeCampaignHtml(entrada.actorName || 'Jogador')} • ${escapeCampaignHtml(quando)}</small>
+            </div>${estado}
+        </article>`;
+    }).join('');
+}
+
+function reduzirUndoHistoricoCampanha(undo) {
+    if (!undo) return null;
+    try {
+        const copia = JSON.parse(JSON.stringify(undo));
+        return JSON.stringify(copia).length <= HISTORICO_CAMPANHA_UNDO_MAX ? copia : null;
+    } catch (_) { return null; }
+}
+
+async function registrarHistoricoCampanha({ campaignId = campaignState?.activeId || documentDeskState?.campaignId, category = 'campanha', title, details = '', ownerUid = '', undo = null }) {
+    if (!currentUser || !campaignId || !title) return;
+    const membro = (campaignState?.campaigns || []).some(item => item.id === campaignId)
+        || campaignState?.activeId === campaignId
+        || documentDeskState?.campaignId === campaignId;
+    if (!membro) return;
+    try {
+        await database.ref(`campaigns/${campaignId}/activity`).push().set({
+            category,
+            title: String(title).slice(0, 140),
+            details: String(details || '').slice(0, 450),
+            actorUid: currentUser.uid,
+            actorName: nomeExibicaoAtual() || 'Jogador',
+            actorRole: papelUsuarioNaCampanha(campaignId) || documentDeskState?.role || 'jogador',
+            ownerUid: ownerUid || currentUser.uid,
+            undo: reduzirUndoHistoricoCampanha(undo),
+            desfeito: false,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+    } catch (erro) {
+        console.warn('A ação ocorreu, mas não pôde entrar no histórico compartilhado.', erro);
+    }
+}
+
+function caminhoUndoCampanhaPermitido(campaignId, path) {
+    const normalizado = String(path || '').replace(/^\/+/, '');
+    return normalizado.startsWith(`campaigns/${campaignId}/combat/`)
+        || normalizado.startsWith(`campaigns/${campaignId}/characters/`)
+        || normalizado.startsWith(`campaignDocumentDesks/${campaignId}/documents/`)
+        || normalizado.startsWith(`campaignDocumentDesks/${campaignId}/placements/`)
+        || normalizado.startsWith(`campaignDocumentDesks/${campaignId}/drawings/`);
+}
+
+async function desfazerHistoricoCampanha(entryId) {
+    const campaignId = historicoCampanhaState.campaignId;
+    if (!campaignId || !entryId || !currentUser) return;
+    try {
+        const snapshot = await database.ref(`campaigns/${campaignId}/activity/${entryId}`).once('value');
+        const entrada = snapshot.val();
+        if (!entrada || entrada.desfeito || !entrada.undo || !podeDesfazerEntradaCampanha({ id: entryId, ...entrada })) return;
+        const updates = entrada.undo.updates && typeof entrada.undo.updates === 'object' ? entrada.undo.updates : null;
+        if (!updates || !Object.keys(updates).length || !Object.keys(updates).every(path => caminhoUndoCampanhaPermitido(campaignId, path))) {
+            throw new Error('O registro não contém uma restauração segura.');
+        }
+        await database.ref().update(updates);
+        await database.ref(`campaigns/${campaignId}/activity/${entryId}`).update({
+            desfeito: true,
+            undoneBy: currentUser.uid,
+            undoneByName: nomeExibicaoAtual() || 'Jogador',
+            undoneAt: firebase.database.ServerValue.TIMESTAMP
+        });
+        tocarSom('click');
+    } catch (erro) {
+        console.error('Erro ao desfazer ação compartilhada:', erro);
+        avisarAbyss('Não foi possível desfazer essa ação. Ela pode ter sido alterada por outra pessoa.', { titulo: 'Desfazer indisponível', tom: 'aviso' });
+    }
+}
+
+function instalarHistoricoCompartilhado() {
+    if (historicoCampanhaState.wrappersReady) return;
+    historicoCampanhaState.wrappersReady = true;
+
+    const originalRecurso = alterarRecursoCombate;
+    alterarRecursoCombate = async function(characterId, recursoId, valorBruto, input = null) {
+        const campaignId = campaignState.activeId;
+        const combat = combateAtivoDaCampanha();
+        const participant = combat?.participants?.[characterId];
+        const liveCharacter = campaignState.activeCampaign?.characters?.[participant?.characterId];
+        const chaveAtual = `${recursoId}_atual`;
+        const chaveBase = `${recursoId}_base_atual`;
+        const antesAtual = participant?.resources?.[chaveAtual];
+        const antesBase = participant?.resources?.[chaveBase];
+        await originalRecurso(characterId, recursoId, valorBruto, input);
+        const depois = combateAtivoDaCampanha()?.participants?.[characterId]?.resources?.[chaveAtual];
+        if (!campaignId || antesAtual === depois) return;
+        const updates = {};
+        updates[`campaigns/${campaignId}/combat/participants/${characterId}/resources/${chaveAtual}`] = antesAtual ?? null;
+        updates[`campaigns/${campaignId}/combat/participants/${characterId}/resources/${chaveBase}`] = antesBase ?? null;
+        if (liveCharacter) {
+            const idPersonagem = participant.characterId;
+            updates[`campaigns/${campaignId}/characters/${idPersonagem}/sheet/recursosFinos/${chaveAtual}`] = liveCharacter.sheet?.recursosFinos?.[chaveAtual] === depois ? antesAtual ?? null : antesAtual ?? null;
+            updates[`campaigns/${campaignId}/characters/${idPersonagem}/sheet/recursosFinos/${chaveBase}`] = antesBase ?? null;
+        }
+        registrarHistoricoCampanha({ campaignId, category: 'recursos', title: `${String(recursoId).toUpperCase()} de ${participant?.name || 'personagem'}: ${antesAtual ?? '—'} → ${depois ?? '—'}`, ownerUid: participant?.ownerUid || '', undo: { updates } });
+    };
+
+    const originalCondicao = alternarCondicaoCampanha;
+    alternarCondicaoCampanha = async function(id, forcarAdicionar = false) {
+        const campaignId = campaignState.activeId;
+        const alvo = alvoCondicoesCampanha();
+        const antes = alvo ? JSON.parse(JSON.stringify({
+            condicoes: normalizarCondicoesDaFicha(alvo.ficha),
+            recursosFinos: alvo.ficha?.recursosFinos || {},
+            deslocamentoBase: alvo.ficha?.deslocamentoBase ?? null,
+            deslocamentoTotal: alvo.ficha?.deslocamentoTotal ?? null
+        })) : null;
+        await originalCondicao(id, forcarAdicionar);
+        if (!campaignId || !alvo || !antes) return;
+        const alvoDepois = alvoCondicoesCampanha();
+        const depois = normalizarCondicoesDaFicha(alvoDepois?.ficha || alvo.ficha);
+        if (JSON.stringify(antes.condicoes) === JSON.stringify(depois)) return;
+        const baseParticipante = `campaigns/${campaignId}/combat/participants/${alvo.id}`;
+        const updates = {
+            [`${baseParticipante}/conditions`]: antes.condicoes,
+            [`${baseParticipante}/resources`]: antes.recursosFinos
+        };
+        if (alvo.character) {
+            const basePersonagem = `campaigns/${campaignId}/characters/${alvo.participant.characterId}/sheet`;
+            updates[`${basePersonagem}/condicoes`] = antes.condicoes;
+            updates[`${basePersonagem}/recursosFinos`] = antes.recursosFinos;
+            updates[`${basePersonagem}/deslocamentoBase`] = antes.deslocamentoBase;
+            updates[`${basePersonagem}/deslocamentoTotal`] = antes.deslocamentoTotal;
+        }
+        const adicionada = !antes.condicoes.includes(id) && depois.includes(id);
+        registrarHistoricoCampanha({ campaignId, category: 'condição', title: `${adicionada ? 'Condição aplicada' : 'Condição removida'}: ${CONDICOES_CATALOGO[id]?.nome || id}`, details: alvo.participant?.name || '', ownerUid: alvo.participant?.ownerUid || '', undo: { updates } });
+    };
+
+    const originalIniciativa = alterarIniciativaCombate;
+    alterarIniciativaCombate = async function(characterId, rawValue, inputElement = null) {
+        const campaignId = campaignState.activeId;
+        const participant = combateAtivoDaCampanha()?.participants?.[characterId];
+        const anterior = participant?.initiative ?? null;
+        await originalIniciativa(characterId, rawValue, inputElement);
+        const novo = Math.trunc(Number(rawValue));
+        if (!campaignId || !Number.isFinite(novo) || Number(anterior) === Number(novo)) return;
+        registrarHistoricoCampanha({
+            campaignId, category: 'iniciativa', title: `Iniciativa de ${participant?.name || 'personagem'}: ${anterior ?? '—'} → ${novo ?? '—'}`,
+            ownerUid: participant?.ownerUid || '',
+            undo: { updates: { [`campaigns/${campaignId}/combat/participants/${characterId}/initiative`]: anterior } }
+        });
+    };
+
+    const originalIniciar = enviarSolicitacoesIniciativa;
+    enviarSolicitacoesIniciativa = async function() {
+        const campaignId = campaignState.activeId;
+        const quantidade = campaignState.combatSetupSelection?.size || 0;
+        await originalIniciar();
+        if (campaignId && quantidade > 0 && campaignState.role === 'mestre') registrarHistoricoCampanha({ campaignId, category: 'mestre', title: 'Combate iniciado', details: `${quantidade} participantes selecionados` });
+    };
+
+    const originalPular = pularTurnoCombate;
+    pularTurnoCombate = async function() {
+        const campaignId = campaignState.activeId;
+        const combat = combateAtivoDaCampanha();
+        const currentIndex = Number(combat?.currentIndex) || 0;
+        const round = Number(combat?.round) || 1;
+        await originalPular();
+        if (campaignId) registrarHistoricoCampanha({ campaignId, category: 'turno', title: 'Turno avançado', details: `Rodada ${round}`, undo: { updates: { [`campaigns/${campaignId}/combat/currentIndex`]: currentIndex, [`campaigns/${campaignId}/combat/round`]: round } } });
+    };
+
+    const originalEncerrar = encerrarCombate;
+    encerrarCombate = async function() {
+        const campaignId = campaignState.activeId;
+        const existia = Boolean(combateAtivoDaCampanha());
+        await originalEncerrar();
+        if (campaignId && existia) registrarHistoricoCampanha({ campaignId, category: 'mestre', title: 'Combate encerrado' });
+    };
+
+    const originalSalvarDocumento = salvarDocumentoMesa;
+    salvarDocumentoMesa = async function(event) {
+        const campaignId = documentDeskState.campaignId;
+        const idAnterior = documentDeskState.editDocumentId;
+        const antes = idAnterior ? JSON.parse(JSON.stringify(documentDeskState.documents?.[idAnterior] || null)) : null;
+        const idsAntes = new Set(Object.keys(documentDeskState.documents || {}));
+        await originalSalvarDocumento(event);
+        const novoId = idAnterior || Object.keys(documentDeskState.documents || {}).find(id => !idsAntes.has(id));
+        const depois = novoId ? documentDeskState.documents?.[novoId] : null;
+        if (!campaignId || !novoId || !depois) return;
+        let undo = null;
+        if (!antes) undo = { updates: { [`campaignDocumentDesks/${campaignId}/documents/${novoId}`]: null } };
+        else if (JSON.stringify(antes).length <= HISTORICO_CAMPANHA_UNDO_MAX) undo = { updates: { [`campaignDocumentDesks/${campaignId}/documents/${novoId}`]: antes } };
+        registrarHistoricoCampanha({ campaignId, category: 'documento', title: `${antes ? 'Documento editado' : 'Documento criado'}: ${depois.title || 'Sem título'}`, ownerUid: depois.createdBy || currentUser.uid, undo });
+    };
+
+    const originalExcluirDocumento = excluirDocumentoMesa;
+    excluirDocumentoMesa = async function(documentId) {
+        const campaignId = documentDeskState.campaignId;
+        const antes = JSON.parse(JSON.stringify(documentDeskState.documents?.[documentId] || null));
+        await originalExcluirDocumento(documentId);
+        if (!campaignId || !antes || documentDeskState.documents?.[documentId]) return;
+        const undo = JSON.stringify(antes).length <= HISTORICO_CAMPANHA_UNDO_MAX
+            ? { updates: { [`campaignDocumentDesks/${campaignId}/documents/${documentId}`]: antes } }
+            : null;
+        registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento excluído: ${antes.title || 'Sem título'}`, ownerUid: antes.createdBy || '', undo });
+    };
+
+    const originalColocarDocumento = colocarDocumentoNaMesa;
+    colocarDocumentoNaMesa = async function(documentId) {
+        const campaignId = documentDeskState.campaignId;
+        const slotId = documentDeskState.currentSlotId;
+        const antes = JSON.parse(JSON.stringify(documentDeskState.allPlacements || {}));
+        const sucesso = await originalColocarDocumento(documentId);
+        if (!sucesso || !campaignId || !slotId) return sucesso;
+        const updates = {};
+        Object.keys(documentDeskState.allPlacements || {}).forEach(idSlot => {
+            updates[`campaignDocumentDesks/${campaignId}/placements/${idSlot}/${documentId}`] = antes?.[idSlot]?.[documentId] ?? null;
+        });
+        registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento colocado na mesa: ${documentDeskState.documents?.[documentId]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[documentId]?.createdBy || '', undo: { updates } });
+        return sucesso;
+    };
+
+    const originalGuardarDocumento = guardarDocumentoNaGaveta;
+    guardarDocumentoNaGaveta = async function(documentId) {
+        const campaignId = documentDeskState.campaignId;
+        const slotId = documentDeskState.currentSlotId;
+        const anterior = JSON.parse(JSON.stringify(documentDeskState.placements?.[documentId] || null));
+        const resultado = await originalGuardarDocumento(documentId);
+        if (campaignId && slotId && anterior && !documentDeskState.placements?.[documentId]) {
+            registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento guardado: ${documentDeskState.documents?.[documentId]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[documentId]?.createdBy || '', undo: { updates: { [`campaignDocumentDesks/${campaignId}/placements/${slotId}/${documentId}`]: anterior } } });
+        }
+        return resultado;
+    };
+
+    const originalFinalizarMovimento = finalizarMovimentoDocumentoMesa;
+    finalizarMovimentoDocumentoMesa = function(event) {
+        const drag = documentDeskState.drag;
+        const campaignId = documentDeskState.campaignId;
+        const slotId = documentDeskState.currentSlotId;
+        const ids = [...new Set(drag?.groupIds || (drag?.documentId ? [drag.documentId] : []))];
+        const antes = JSON.parse(JSON.stringify(drag?.beforePlacements || (drag?.before && drag?.documentId ? { [drag.documentId]: drag.before } : {})));
+        const mudou = Boolean(drag?.changed);
+        originalFinalizarMovimento(event);
+        if (!mudou || !campaignId || !slotId || !ids.length) return;
+        const updates = {};
+        ids.forEach(id => { updates[`campaignDocumentDesks/${campaignId}/placements/${slotId}/${id}`] = antes[id] ?? null; });
+        registrarHistoricoCampanha({ campaignId, category: 'documento', title: ids.length > 1 ? `${ids.length} documentos reorganizados` : `Documento movido: ${documentDeskState.documents?.[ids[0]]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[ids[0]]?.createdBy || '', undo: { updates } });
+    };
+}
+
+/* OTIMIZAÇÕES SEGURAS PARA O ARQUIVO ÚNICO: IMAGENS SOB DEMANDA E ÍNDICE OCIOSO */
+function prepararImagemSobDemanda(imagem) {
+    if (!(imagem instanceof HTMLImageElement) || imagem.dataset.abyssImageReady === '1') return;
+    imagem.dataset.abyssImageReady = '1';
+    if (!imagem.closest('.avatar-wrapper, .sheet-hero, .campaign-banner-cropper, .image-crop-stage, #document-desk-app')) imagem.loading = 'lazy';
+    imagem.decoding = 'async';
+}
+
+function inicializarOtimizacoesVisuais() {
+    document.querySelectorAll('img').forEach(prepararImagemSobDemanda);
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => mutation.addedNodes.forEach(node => {
+            if (node instanceof HTMLImageElement) prepararImagemSobDemanda(node);
+            else if (node instanceof Element) node.querySelectorAll('img').forEach(prepararImagemSobDemanda);
+        }));
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    agendarAquecimentoBuscaGlobal();
+}
+
+document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        const alvo = event.target;
+        if (alvo?.isContentEditable) return;
+        event.preventDefault();
+        event.stopPropagation();
+        abrirBuscaGlobal();
+        return;
+    }
+    if (superficieFocoAtiva?.id !== 'modal-global-search') return;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        const delta = event.key === 'ArrowDown' ? 1 : -1;
+        const total = globalSearchState.visible.length;
+        if (!total) return;
+        selecionarResultadoBuscaGlobal((globalSearchState.activeIndex + delta + total) % total);
+        document.querySelector(`#global-search-results [data-result-index="${globalSearchState.activeIndex}"]`)?.scrollIntoView({ block: 'nearest' });
+    } else if (event.key === 'Enter' && globalSearchState.visible[globalSearchState.activeIndex]) {
+        event.preventDefault();
+        executarResultadoBuscaGlobal(globalSearchState.visible[globalSearchState.activeIndex].id);
+    }
+}, true);
+
 document.addEventListener('keydown', event => {
     if (event.key !== 'Escape') return;
     if (elementoTelaCheiaMesaDocumentos()) return;
@@ -24369,6 +25712,9 @@ document.addEventListener('keydown', event => {
 // Roda assim que a página termina de carregar
 document.addEventListener('DOMContentLoaded', () => {
     restaurarEstadoNavegacao();
+    instalarHistoricoCompartilhado();
+    inicializarOtimizacoesVisuais();
+    atualizarInterfaceSincronizacao();
     inicializarRecortadorBanner();
     montarPortalMesaDocumentos();
     inicializarInteracoesMesaDocumentos();
