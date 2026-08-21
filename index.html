@@ -9978,9 +9978,17 @@ body.theme-umbral .content-library-modal {
 .content-library-tab:hover,.content-library-tab.active { color:#fff; border-color:var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 17%,#09080c); }
 .content-library-tab.active { box-shadow:inset 0 -2px var(--text-gold); }
 .content-library-tab:disabled { opacity:.36; cursor:not-allowed; }
-.content-library-campaigns { display:none; gap:8px; overflow-x:auto; overflow-y:hidden; padding:1px 1px 8px; margin:0 0 10px; scroll-snap-type:x proximity; }
+.content-library-campaign-picker { display:none; grid-template-columns:minmax(150px,190px) minmax(0,1fr); align-items:center; gap:14px; margin:0 0 10px; padding:9px; overflow:hidden; border:1px solid color-mix(in srgb,var(--text-gold) 30%,#302837); background:linear-gradient(90deg,rgba(212,175,55,.045),#0b0910 30%,#08070a); }
+.content-library-campaign-picker.active { display:grid; }
+.content-library-campaign-picker-copy { min-width:0; padding:2px 4px; }
+.content-library-campaign-picker-copy strong,.content-library-campaign-picker-copy small { display:block; }
+.content-library-campaign-picker-copy strong { color:var(--text-gold); font:700 .61rem Cinzel,serif; letter-spacing:1.15px; }
+.content-library-campaign-picker-copy small { margin-top:5px; color:#776e7d; font-size:.62rem; line-height:1.35; }
+.content-library-campaigns { display:none; min-width:0; gap:9px; overflow-x:auto; overflow-y:hidden; padding:2px 2px 9px; margin:0; scroll-snap-type:x proximity; overscroll-behavior-x:contain; }
 .content-library-campaigns.active { display:flex; }
-.content-library-campaign { position:relative; flex:0 0 min(245px,92%); scroll-snap-align:start; height:76px; padding:0; overflow:hidden; text-align:left; border:1px solid #302837; border-radius:4px; background:#0b0910; color:#b9afc1; cursor:pointer; transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease; }
+.content-library-campaigns.is-empty { display:block; overflow:hidden; padding:0; }
+.content-library-campaigns .content-library-empty { width:100%; min-height:72px; padding:14px 18px; box-sizing:border-box; }
+.content-library-campaign { position:relative; flex:0 0 min(276px,88vw); scroll-snap-align:start; height:82px; padding:0; overflow:hidden; text-align:left; border:1px solid #302837; border-radius:4px; background:#0b0910; color:#b9afc1; cursor:pointer; transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease; }
 .content-library-campaign-banner { position:absolute; inset:0; display:block; overflow:hidden; background:radial-gradient(circle at 78% 20%,color-mix(in srgb,var(--primary-purple) 26%,transparent),transparent 44%),linear-gradient(135deg,#19101f,#08070b); }
 .content-library-campaign-banner::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(6,4,9,.08),rgba(6,4,9,.9)); }
 .content-library-campaign-banner img { width:100%; height:100%; object-fit:cover; transition:transform .28s ease; }
@@ -9994,16 +10002,6 @@ body.theme-umbral .content-library-modal {
 .content-library-campaign:hover,.content-library-campaign.active { transform:translateY(-2px); border-color:var(--text-gold); box-shadow:0 8px 24px rgba(0,0,0,.36),0 0 18px color-mix(in srgb,var(--primary-purple) 18%,transparent); }
 .content-library-campaign:hover .content-library-campaign-banner img { transform:scale(1.035); }
 .content-library-campaign.active { box-shadow:inset 0 -2px var(--text-gold),0 8px 24px rgba(0,0,0,.36),0 0 18px color-mix(in srgb,var(--primary-purple) 22%,transparent); }
-.content-library-adminbar { position:relative; display:none; align-items:center; justify-content:space-between; gap:13px; padding:11px 14px; margin:2px 0 10px; overflow:hidden; border:1px solid color-mix(in srgb,var(--text-gold) 38%,#302837); background:linear-gradient(90deg,rgba(212,175,55,.055),rgba(116,52,156,.05)); }
-.content-library-adminbar::after { content:none; }
-.content-library-adminbar.active { display:flex; }
-.content-library-adminbar-copy strong,.content-library-adminbar-copy small { display:block; }
-.content-library-adminbar-copy strong { color:var(--text-gold); font:700 .68rem Cinzel,serif; letter-spacing:1px; }
-.content-library-adminbar-copy small { margin-top:3px; color:#82798a; font-size:.67rem; }
-.content-library-create { display:flex; align-items:center; gap:8px; }
-.content-library-create select { min-width:155px; margin:0; }
-.content-library-create .settings-primary { min-width:158px; min-height:40px; border:1px solid var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 32%,#0a080e); color:#fff; white-space:nowrap; }
-.content-library-create .settings-primary:hover { border-color:var(--ornament-color); background:color-mix(in srgb,var(--primary-purple) 48%,#0a080e); }
 .content-library-filterbar { display:flex; align-items:center; gap:17px; min-height:44px; margin:0 0 10px; padding:6px 9px; overflow-x:auto; overflow-y:hidden; border:1px solid #302837; background:linear-gradient(90deg,#0d0a10,#08070a); overscroll-behavior-x:contain; }
 .content-library-workspace { position:relative; display:grid; flex:1 1 auto; grid-template-columns:minmax(330px,405px) minmax(0,1fr); grid-template-areas:'browser detail'; min-height:0; border:1px solid color-mix(in srgb,var(--ornament-color) 26%,#2f2835); background:#08070a; box-shadow:inset 0 0 38px rgba(0,0,0,.28); }
 .content-library-browser { grid-area:browser; display:flex; flex-direction:column; min-width:0; min-height:0; padding:13px; border-right:1px solid #302837; background:linear-gradient(180deg,#0d0b11,#09080c); }
@@ -10063,8 +10061,17 @@ body.theme-umbral .content-library-modal {
 .content-library-actions button:hover { color:#fff; border-color:var(--light-purple); }
 .content-library-actions .primary { color:#fff; border-color:var(--primary-purple); background:color-mix(in srgb,var(--primary-purple) 31%,#08060b); }
 .content-library-actions .danger:hover { color:#ff7180; border-color:#b23b4a; }
-.content-library-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; padding-top:11px; border-top:1px solid #2a242f; }
+.content-library-footer { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; padding-top:11px; border-top:1px solid #2a242f; }
 .content-library-status { color:#756c7d; font-size:.63rem; }
+.content-library-footer-actions { display:flex; align-items:center; justify-content:flex-end; gap:8px; }
+.content-library-create-compact { position:relative; }
+#content-library-create-button { min-height:37px; padding:8px 13px; white-space:nowrap; border-color:color-mix(in srgb,var(--text-gold) 55%,var(--primary-purple)); background:color-mix(in srgb,var(--primary-purple) 28%,#09070c); }
+#content-library-create-button[hidden],.content-library-create-menu[hidden] { display:none !important; }
+.content-library-create-menu { position:absolute; z-index:20; right:0; bottom:calc(100% + 9px); display:grid; grid-template-columns:repeat(2,minmax(112px,1fr)); gap:6px; width:min(286px,calc(100vw - 48px)); padding:10px; border:1px solid color-mix(in srgb,var(--text-gold) 48%,#3a3040); background:linear-gradient(145deg,#100c14,#070609); box-shadow:0 16px 40px rgba(0,0,0,.58),0 0 22px color-mix(in srgb,var(--primary-purple) 17%,transparent); }
+.content-library-create-menu::after { content:''; position:absolute; right:21px; bottom:-6px; width:10px; height:10px; border-right:1px solid color-mix(in srgb,var(--text-gold) 48%,#3a3040); border-bottom:1px solid color-mix(in srgb,var(--text-gold) 48%,#3a3040); background:#08070a; transform:rotate(45deg); }
+.content-library-create-menu > span { grid-column:1/-1; padding:1px 2px 5px; color:var(--text-gold); font:700 .55rem Cinzel,serif; letter-spacing:1px; }
+.content-library-create-menu button { min-height:33px; padding:7px 9px; border:1px solid #3b3242; background:#0b0910; color:#aaa0b0; font:700 .56rem Cinzel,serif; cursor:pointer; }
+.content-library-create-menu button:hover { color:#fff; border-color:var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 22%,#09070d); }
 .catalog-entity-field,.catalog-type-field { display:none !important; }
 label.catalog-entity-field span,label.catalog-entity-field small,label.catalog-type-field span,label.catalog-type-field small { display:block; }
 label.catalog-entity-field,label.catalog-type-field { margin-top:11px; color:var(--text-gold); font:700 .7rem Cinzel,serif; }
@@ -10083,12 +10090,12 @@ label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px
 @media (max-width:760px) {
     .content-library-modal,body.theme-umbral .content-library-modal { width:calc(100vw - 30px); height:calc(100dvh - 30px); padding:18px; }
     .content-library-filterbar { align-items:flex-start; }
+    .content-library-campaign-picker { grid-template-columns:1fr; gap:8px; }
     .content-library-workspace { grid-template-columns:1fr; grid-template-areas:'browser' 'detail'; overflow:auto; }
     .content-library-browser { min-height:390px; border-right:0; border-bottom:1px solid #302837; }
     .content-library-detail { min-height:390px; overflow:visible; }
-    .content-library-adminbar { align-items:stretch; flex-direction:column; }
-    .content-library-create { flex-wrap:wrap; }
-    .content-library-footer { align-items:flex-start; }
+    .content-library-footer { align-items:flex-start; flex-wrap:wrap; }
+    .content-library-footer-actions { width:100%; }
 }
 @media (max-width:520px) {
     .content-library-detail-hero { grid-template-columns:1fr; }
@@ -11506,24 +11513,6 @@ label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px
         <button type="button" id="content-library-tab-abyss" class="content-library-tab active" role="tab" aria-selected="true" onclick="selecionarEscopoAcervo('abyss')">ACERVO ABYSS</button>
         <button type="button" id="content-library-tab-campaign" class="content-library-tab" role="tab" aria-selected="false" onclick="selecionarEscopoAcervo('campaign')">ACERVO DE CAMPANHAS</button>
     </div>
-    <div id="content-library-adminbar" class="content-library-adminbar">
-        <div class="content-library-adminbar-copy">
-            <strong id="content-library-admin-title">PUBLICAÇÃO AUTORIZADA</strong>
-            <small id="content-library-admin-note">Crie ou atualize conteúdos compartilhados.</small>
-        </div>
-        <div class="content-library-create">
-            <select id="content-library-create-type" class="modal-input" aria-label="Tipo do novo conteúdo">
-                <option value="item">Item</option>
-                <option value="ataque">Ataque</option>
-                <option value="poder">Poder</option>
-                <option value="habilidade">Habilidade</option>
-                <option value="feitico">Feitiço</option>
-                <option value="antecedencia">Antecedência</option>
-                <option value="raca">Raça</option>
-            </select>
-            <button type="button" class="settings-primary" onclick="criarConteudoNoAcervo()">＋ Criar conteúdo</button>
-        </div>
-    </div>
     <div class="content-library-filterbar" aria-label="Filtros do acervo">
         <div class="content-library-filter-group">
             <span class="content-library-filter-label">TIPO</span>
@@ -11534,9 +11523,15 @@ label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px
             <div id="content-library-entity-strip" class="content-library-entity-strip" aria-label="Filtrar por entidade"></div>
         </div>
     </div>
+    <section id="content-library-campaign-picker" class="content-library-campaign-picker" aria-hidden="true" aria-label="Campanhas disponíveis para esta ficha">
+        <div class="content-library-campaign-picker-copy">
+            <strong>CAMPANHA VINCULADA</strong>
+            <small>Escolha qual acervo preparado pelo Mestre deseja consultar.</small>
+        </div>
+        <div id="content-library-campaigns" class="content-library-campaigns" aria-label="Escolher campanha"></div>
+    </section>
     <div class="content-library-workspace">
         <aside class="content-library-browser" aria-label="Filtros e conteúdos do acervo">
-            <div id="content-library-campaigns" class="content-library-campaigns" aria-label="Escolher campanha"></div>
             <label class="content-library-search-wrap" for="content-library-search">
                 <span aria-hidden="true">⌕</span>
                 <input type="search" id="content-library-search" placeholder="Pesquisar por nome..." autocomplete="off" oninput="renderizarAcervoConteudos()">
@@ -11557,7 +11552,22 @@ label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px
     </div>
     <div class="content-library-footer">
         <span class="content-library-status">Conteúdos vinculados recebem revisões futuras automaticamente.</span>
-        <button type="button" class="settings-secondary" onclick="fecharAcervoConteudos()">Concluir</button>
+        <div class="content-library-footer-actions">
+            <div class="content-library-create-compact">
+                <button id="content-library-create-button" type="button" class="settings-primary" onclick="alternarMenuCriacaoAcervo(event)" hidden>＋ Criar algo no acervo</button>
+                <div id="content-library-create-menu" class="content-library-create-menu" hidden onclick="event.stopPropagation()">
+                    <span>O QUE DESEJA CRIAR?</span>
+                    <button type="button" onclick="criarConteudoNoAcervo('item')">Item</button>
+                    <button type="button" onclick="criarConteudoNoAcervo('ataque')">Ataque</button>
+                    <button type="button" onclick="criarConteudoNoAcervo('poder')">Poder</button>
+                    <button type="button" onclick="criarConteudoNoAcervo('habilidade')">Habilidade</button>
+                    <button type="button" onclick="criarConteudoNoAcervo('feitico')">Feitiço</button>
+                    <button type="button" onclick="criarConteudoNoAcervo('antecedencia')">Antecedência</button>
+                    <button type="button" onclick="criarConteudoNoAcervo('raca')">Raça</button>
+                </div>
+            </div>
+            <button type="button" class="settings-secondary" onclick="fecharAcervoConteudos()">Concluir</button>
+        </div>
     </div>
 </div>
 
@@ -15577,7 +15587,13 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function slotAtualTemVinculoComCampanha(campaignId) {
         const slotAtual = String(document.getElementById('save-slot')?.value || '1');
-        return Object.values(campaignState?.links?.[campaignId] || {}).some(link => String(link?.slot || '') === slotAtual);
+        const links = campaignState?.links?.[campaignId] || {};
+        if (String(links?.slot || '') === slotAtual) return true;
+        if (Object.values(links).some(link => String(link?.slot || '') === slotAtual)) return true;
+        if (campaignState?.activeId !== campaignId) return false;
+        return Object.values(campaignState?.activeCampaign?.characters || {}).some(character =>
+            character?.ownerUid === currentUser?.uid && String(character?.slot || '') === slotAtual
+        );
     }
 
     function usuarioEhMestreDaCampanhaAcervo(campaignId) {
@@ -15591,8 +15607,42 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function campanhasDisponiveisAoSlotNoAcervo() {
         if (!currentUser || typeof campaignState === 'undefined') return [];
         const porId = new Map();
+        Object.entries(campaignState.membershipRoles || {}).forEach(([idOriginal, papel]) => {
+            const id = String(idOriginal || '');
+            if (!id || papel !== 'mestre') return;
+            const conhecida = (campaignState.campaigns || []).find(campanha => String(campanha?.id || '') === id) || {};
+            const ativa = campaignState.activeId === id ? campaignState.activeCampaign?.meta || {} : {};
+            const meta = { ...conhecida, ...ativa };
+            porId.set(id, {
+                ...meta,
+                id,
+                role: 'mestre',
+                name: meta.name || `Campanha ${id.slice(-5).toUpperCase()}`,
+                banner: meta.banner || ''
+            });
+        });
+        if (campaignState.activeId && campaignState.role === 'mestre' && !porId.has(String(campaignState.activeId))) {
+            const id = String(campaignState.activeId);
+            const meta = campaignState.activeCampaign?.meta || {};
+            porId.set(id, { ...meta, id, role: 'mestre', name: meta.name || `Campanha ${id.slice(-5).toUpperCase()}`, banner: meta.banner || '' });
+        }
         (campaignState.campaigns || []).forEach(campanha => {
-            if (campanha.role === 'mestre' || slotAtualTemVinculoComCampanha(campanha.id)) porId.set(campanha.id, campanha);
+            const id = String(campanha?.id || '');
+            if (!id) return;
+            if (usuarioEhMestreDaCampanhaAcervo(id) || slotAtualTemVinculoComCampanha(id)) {
+                porId.set(id, { ...campanha, id, role: usuarioEhMestreDaCampanhaAcervo(id) ? 'mestre' : (campanha.role || 'jogador') });
+            }
+        });
+        Object.keys(campaignState.links || {}).forEach(idOriginal => {
+            const id = String(idOriginal || '');
+            if (!id || !slotAtualTemVinculoComCampanha(id) || porId.has(id)) return;
+            const ativa = campaignState.activeId === id ? campaignState.activeCampaign?.meta || {} : {};
+            porId.set(id, {
+                id,
+                role: usuarioEhMestreDaCampanhaAcervo(id) ? 'mestre' : 'jogador',
+                name: ativa.name || `Campanha ${id.slice(-5).toUpperCase()}`,
+                banner: ativa.banner || ''
+            });
         });
         if (campaignState.activeId && campaignState.activeCampaign?.meta && (campaignState.role === 'mestre' || slotAtualTemVinculoComCampanha(campaignState.activeId))) {
             porId.set(campaignState.activeId, {
@@ -15705,7 +15755,6 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function selecionarEscopoAcervo(escopo) {
         if (!['abyss', 'campaign'].includes(escopo)) return;
         const campanhas = campanhasDisponiveisAoSlotNoAcervo();
-        if (escopo === 'campaign' && !campanhas.length) return;
         contentCatalogState.scope = escopo;
         contentCatalogState.selectedEntryKey = '';
         if (escopo === 'campaign' && !campanhas.some(campanha => campanha.id === contentCatalogState.campaignId)) contentCatalogState.campaignId = campanhas[0]?.id || '';
@@ -15724,8 +15773,6 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function selecionarTipoAcervo(tipo = '') {
         contentCatalogState.type = CONTENT_CATALOG_TYPES.has(tipo) ? tipo : '';
-        const seletorCriacao = document.getElementById('content-library-create-type');
-        if (seletorCriacao && contentCatalogState.type) seletorCriacao.value = contentCatalogState.type;
         renderizarAcervoConteudos();
     }
 
@@ -15743,11 +15790,20 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function renderizarCampanhasAcervo() {
         const host = document.getElementById('content-library-campaigns');
-        if (!host) return;
+        const picker = document.getElementById('content-library-campaign-picker');
+        if (!host || !picker) return;
         const campanhas = campanhasDisponiveisAoSlotNoAcervo();
-        host.classList.toggle('active', contentCatalogState.scope === 'campaign');
+        const ativo = contentCatalogState.scope === 'campaign';
+        picker.classList.toggle('active', ativo);
+        picker.setAttribute('aria-hidden', String(!ativo));
+        host.classList.toggle('active', ativo);
+        host.classList.toggle('is-empty', ativo && !campanhas.length);
+        if (!ativo) {
+            host.innerHTML = '';
+            return;
+        }
         if (!campanhas.length) {
-            host.innerHTML = '<div class="content-library-empty">Esta ficha ainda não está vinculada a uma campanha com acervo disponível.</div>';
+            host.innerHTML = '<div class="content-library-empty">Esta ficha ainda não está vinculada a uma campanha. Vincule este slot a um personagem para acessar o acervo do Mestre.</div>';
             return;
         }
         host.innerHTML = campanhas.map(campanha => {
@@ -15829,7 +15885,6 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (contentCatalogState.scope === 'campaign' && !campanhas.some(campanha => campanha.id === contentCatalogState.campaignId)) {
             contentCatalogState.campaignId = campanhas[0]?.id || '';
             contentCatalogState.selectedEntryKey = '';
-            if (!contentCatalogState.campaignId) contentCatalogState.scope = 'abyss';
         }
         const escopo = contentCatalogState.scope;
         const campanha = campanhas.find(item => item.id === contentCatalogState.campaignId);
@@ -15839,11 +15894,11 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         tabAbyss.setAttribute('aria-selected', String(escopo === 'abyss'));
         tabCampanha.classList.toggle('active', escopo === 'campaign');
         tabCampanha.setAttribute('aria-selected', String(escopo === 'campaign'));
-        tabCampanha.disabled = !campanhas.length;
+        tabCampanha.disabled = false;
         renderizarCampanhasAcervo();
 
-        const tipos = [['', 'TODOS'], ['poder', 'PODER'], ['feitico', 'FEITIÇO'], ['habilidade', 'HABILIDADE'], ['antecedencia', 'ANTECEDÊNCIA'], ['raca', 'RAÇA'], ['item', 'ITEM']];
-        if (contentCatalogState.mode === 'manage' || contentCatalogState.type === 'ataque') tipos.splice(4, 0, ['ataque', 'ATAQUE']);
+        const tipos = [['', 'TODOS'], ['poder', 'PODER'], ['feitico', 'FEITIÇO'], ['antecedencia', 'ANTECEDÊNCIA'], ['raca', 'RAÇA'], ['item', 'ITEM']];
+        if (contentCatalogState.mode === 'manage' && !tipos.some(([valor]) => valor === contentCatalogState.type)) contentCatalogState.type = '';
         document.getElementById('content-library-type-strip').innerHTML = tipos.map(([valor, nome]) => `<button type="button" class="content-library-type ${contentCatalogState.type === valor ? 'active' : ''}" aria-pressed="${contentCatalogState.type === valor}" onclick="selecionarTipoAcervo('${valor}')">${nome}</button>`).join('');
 
         const entidades = [['', 'TODAS'], ...Object.entries(CONTENT_CATALOG_ENTITIES).map(([key, value]) => [key, value.label])];
@@ -15858,12 +15913,11 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const origemNome = escopo === 'abyss' ? 'ACERVO ABYSS' : `CAMPANHA • ${campanha?.name || 'NÃO SELECIONADA'}`;
         document.getElementById('content-library-origin-label').textContent = origemNome;
         const podeGerenciar = usuarioPodeGerenciarEscopoAcervo(escopo, contentCatalogState.campaignId);
-        const barraAdmin = document.getElementById('content-library-adminbar');
-        barraAdmin.classList.toggle('active', contentCatalogState.mode === 'manage' && podeGerenciar);
-        document.getElementById('content-library-admin-title').textContent = escopo === 'abyss' ? 'PUBLICAÇÃO GLOBAL AUTORIZADA' : 'OFICINA DO MESTRE';
-        document.getElementById('content-library-admin-note').textContent = escopo === 'abyss'
-            ? 'Alterações publicadas atualizam as fichas vinculadas em tempo real.'
-            : 'Somente personagens vinculados a esta campanha podem usar estas criações.';
+        const botaoCriar = document.getElementById('content-library-create-button');
+        const menuCriar = document.getElementById('content-library-create-menu');
+        const exibirCriacao = contentCatalogState.mode === 'manage' && podeGerenciar;
+        if (botaoCriar) botaoCriar.hidden = !exibirCriacao;
+        if (!exibirCriacao && menuCriar) menuCriar.hidden = true;
 
         const busca = String(document.getElementById('content-library-search')?.value || '').trim().toLocaleLowerCase('pt-BR');
         const mapa = escopo === 'abyss' ? contentCatalogState.abyss : (contentCatalogState.campaigns[contentCatalogState.campaignId] || {});
@@ -15921,8 +15975,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         intro.textContent = contentCatalogState.mode === 'manage'
             ? 'Publique, edite e balanceie conteúdos reutilizáveis sem precisar copiá-los manualmente entre fichas.'
             : 'Escolha conteúdo oficial do Abyss ou material preparado pelo Mestre para esta ficha.';
-        const seletorCriacao = document.getElementById('content-library-create-type');
-        if (seletorCriacao) seletorCriacao.value = contentCatalogState.type || 'habilidade';
+        escutarListaCampanhas();
+        escutarLinksPersonagens();
         sincronizarEscutasAcervosCampanha();
         abrirSuperficieFoco('#modal-content-library');
         renderizarAcervoConteudos();
@@ -15931,6 +15985,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function fecharAcervoConteudos() {
         tocarSom('click');
+        const menu = document.getElementById('content-library-create-menu');
+        if (menu) menu.hidden = true;
         fecharSuperficieFoco('#modal-content-library');
     }
 
@@ -15944,8 +16000,25 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         abrirAcervoConteudos('', 'manage', 'campaign', campaignState.activeId);
     }
 
-    function criarConteudoNoAcervo() {
-        const tipo = tipoConteudoAcervo(document.getElementById('content-library-create-type')?.value || contentCatalogState.type || 'habilidade');
+    function alternarMenuCriacaoAcervo(event) {
+        event?.stopPropagation();
+        const botao = document.getElementById('content-library-create-button');
+        const menu = document.getElementById('content-library-create-menu');
+        if (!botao || botao.hidden || !menu) return;
+        menu.hidden = !menu.hidden;
+    }
+
+    document.addEventListener('click', event => {
+        const menu = document.getElementById('content-library-create-menu');
+        const botao = document.getElementById('content-library-create-button');
+        if (!menu || menu.hidden || menu.contains(event.target) || botao?.contains(event.target)) return;
+        menu.hidden = true;
+    });
+
+    function criarConteudoNoAcervo(tipoSolicitado = '') {
+        const menu = document.getElementById('content-library-create-menu');
+        if (menu) menu.hidden = true;
+        const tipo = tipoConteudoAcervo(tipoSolicitado || contentCatalogState.type || 'habilidade');
         abrirEditorConteudoAcervo(contentCatalogState.scope, contentCatalogState.campaignId, tipo);
     }
 
@@ -20250,6 +20323,7 @@ function escutarLinksPersonagens() {
     campaignState.linksHandler = snapshot => {
         campaignState.links = snapshot.val() || {};
         sincronizarEscutasAcervosCampanha();
+        renderizarAcervoConteudos();
         campaignState.characterListeners.forEach(({ ref, handler }) => ref.off('value', handler));
         campaignState.characterListeners = [];
         Object.entries(campaignState.links).forEach(([campaignId, links]) => {
