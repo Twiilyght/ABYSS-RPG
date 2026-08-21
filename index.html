@@ -10120,7 +10120,284 @@ label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px
     .desk-document.is-dropping { animation: none !important; }
 }
 
-    </style>
+/* ================================================================
+   GLOW UP DE INTERFACES — A MESMA LINGUAGEM VISUAL DA FICHA
+   Camada exclusivamente visual: preserva estrutura e comportamento.
+   ================================================================ */
+body.theme-umbral {
+    --ui-ink: color-mix(in srgb, var(--container-bg) 94%, #050309);
+    --ui-surface: color-mix(in srgb, var(--container-bg) 88%, var(--primary-purple) 12%);
+    --ui-raised: color-mix(in srgb, var(--container-bg) 78%, #17111d 22%);
+    --ui-line: color-mix(in srgb, var(--border-color) 76%, var(--primary-purple) 24%);
+    --ui-gold-line: color-mix(in srgb, var(--text-gold) 42%, transparent);
+    --ui-muted: color-mix(in srgb, var(--text-color) 57%, transparent);
+    --ui-texture:
+        radial-gradient(circle at 9% 8%, color-mix(in srgb, var(--primary-purple) 10%, transparent) 0 1px, transparent 2px),
+        radial-gradient(circle at 88% 92%, color-mix(in srgb, var(--text-gold) 8%, transparent) 0 1px, transparent 2px),
+        linear-gradient(135deg, color-mix(in srgb, var(--primary-purple) 5%, transparent), transparent 34%),
+        repeating-linear-gradient(135deg, transparent 0 18px, rgba(255,255,255,.012) 19px 20px);
+}
+
+/* Superfícies principais: profundidade discreta, sem aparência 3D. */
+body.theme-umbral .modal:not(.content-library-modal),
+body.theme-umbral #theme-panel,
+body.theme-umbral #log-panel,
+body.theme-umbral .campaign-panel,
+body.theme-umbral .campaign-content-box,
+body.theme-umbral .campaign-shield,
+body.theme-umbral .campaign-viewer,
+body.theme-umbral .combat-panel,
+body.theme-umbral .custom-skill-workshop {
+    border: 1px solid var(--ui-line);
+    border-top-color: var(--ui-gold-line);
+    background-color: var(--ui-ink);
+    background-image: var(--ui-texture);
+    box-shadow: 0 22px 70px rgba(0,0,0,.52), inset 0 1px rgba(255,255,255,.025);
+}
+body.theme-umbral .modal:not(.content-library-modal) {
+    padding: clamp(24px, 3vw, 40px);
+    scrollbar-color: var(--primary-purple) color-mix(in srgb, var(--container-bg) 90%, transparent);
+    scrollbar-width: thin;
+}
+body.theme-umbral .modal:not(.content-library-modal)::-webkit-scrollbar,
+body.theme-umbral .campaign-panel::-webkit-scrollbar,
+body.theme-umbral .campaign-viewer::-webkit-scrollbar { width: 9px; height: 9px; }
+body.theme-umbral .modal:not(.content-library-modal)::-webkit-scrollbar-track,
+body.theme-umbral .campaign-panel::-webkit-scrollbar-track,
+body.theme-umbral .campaign-viewer::-webkit-scrollbar-track { background: color-mix(in srgb, var(--container-bg) 92%, transparent); }
+body.theme-umbral .modal:not(.content-library-modal)::-webkit-scrollbar-thumb,
+body.theme-umbral .campaign-panel::-webkit-scrollbar-thumb,
+body.theme-umbral .campaign-viewer::-webkit-scrollbar-thumb {
+    border: 2px solid color-mix(in srgb, var(--container-bg) 92%, transparent);
+    background: linear-gradient(var(--light-purple), var(--primary-purple));
+}
+
+/* Cabeçalhos e hierarquia editorial. */
+body.theme-umbral .settings-modal-header,
+body.theme-umbral .campaign-shield-header,
+body.theme-umbral .document-editor-header,
+body.theme-umbral .avatar-gallery-toolbar,
+body.theme-umbral .history-toolbar,
+body.theme-umbral .template-library-toolbar {
+    position: relative;
+    gap: 16px;
+    margin-bottom: 22px;
+    padding: 0 0 17px;
+    border-bottom: 0;
+}
+body.theme-umbral .settings-modal-header::after,
+body.theme-umbral .campaign-shield-header::after,
+body.theme-umbral .document-editor-header::after,
+body.theme-umbral .avatar-gallery-toolbar::after,
+body.theme-umbral .history-toolbar::after,
+body.theme-umbral .template-library-toolbar::after {
+    content: '';
+    position: absolute;
+    right: 0; bottom: 0; left: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--text-gold), var(--primary-purple) 38%, transparent 92%);
+    opacity: .62;
+}
+body.theme-umbral .modal h2,
+body.theme-umbral .modal h3,
+body.theme-umbral .campaign-panel h2,
+body.theme-umbral .campaign-content-box h3,
+body.theme-umbral .combat-panel-title {
+    color: #f3edf5;
+    font-family: 'Cinzel', serif;
+    text-wrap: balance;
+}
+body.theme-umbral .modal h2 { font-size: clamp(1.12rem, 2vw, 1.55rem); letter-spacing: .11em; }
+body.theme-umbral .modal h3,
+body.theme-umbral .campaign-content-box h3 { font-size: .78rem; letter-spacing: .14em; }
+body.theme-umbral .settings-intro,
+body.theme-umbral .campaign-panel-note,
+body.theme-umbral .combat-panel-note,
+body.theme-umbral .document-editor-hint { color: var(--ui-muted); line-height: 1.65; }
+
+/* Campos: uma única superfície legível, com foco claro e elegante. */
+body.theme-umbral .modal-input,
+body.theme-umbral .search-bar,
+body.theme-umbral .modal input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+body.theme-umbral .modal select,
+body.theme-umbral .modal textarea,
+body.theme-umbral .campaign-panel input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+body.theme-umbral .campaign-panel select,
+body.theme-umbral .campaign-panel textarea,
+body.theme-umbral .campaign-inline-form input,
+body.theme-umbral .campaign-inline-form select,
+body.theme-umbral .campaign-inline-form textarea {
+    border: 1px solid var(--ui-line);
+    border-radius: 3px;
+    color: #eee8f1;
+    background: color-mix(in srgb, var(--ui-ink) 90%, #000 10%);
+    box-shadow: inset 3px 0 color-mix(in srgb, var(--primary-purple) 42%, transparent);
+    transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease;
+}
+body.theme-umbral .modal input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):focus,
+body.theme-umbral .modal select:focus,
+body.theme-umbral .modal textarea:focus,
+body.theme-umbral .campaign-panel input:focus,
+body.theme-umbral .campaign-panel select:focus,
+body.theme-umbral .campaign-panel textarea:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--light-purple) 72%, var(--text-gold));
+    background-color: color-mix(in srgb, var(--ui-surface) 92%, #000 8%);
+    box-shadow: inset 3px 0 var(--text-gold), 0 0 0 2px color-mix(in srgb, var(--primary-purple) 16%, transparent);
+}
+body.theme-umbral .modal label,
+body.theme-umbral .campaign-panel label,
+body.theme-umbral .document-editor-field > span {
+    color: color-mix(in srgb, var(--text-gold) 88%, #fff);
+    letter-spacing: .1em;
+}
+
+/* Botões: 2D, coerentes e táteis sem brilho plástico. */
+body.theme-umbral .modal button:not(.modal-close):not(.content-library-tab):not(.content-library-filter),
+body.theme-umbral .campaign-panel button,
+body.theme-umbral .campaign-content-box button,
+body.theme-umbral .combat-panel button,
+body.theme-umbral #theme-panel button,
+body.theme-umbral #log-panel button {
+    border-radius: 3px;
+    transition: color .16s ease, border-color .16s ease, background-color .16s ease, transform .16s ease;
+}
+body.theme-umbral .modal button:not(.modal-close):not(:disabled):hover,
+body.theme-umbral .campaign-panel button:not(:disabled):hover,
+body.theme-umbral .campaign-content-box button:not(:disabled):hover,
+body.theme-umbral .combat-panel button:not(:disabled):hover {
+    transform: translateY(-1px);
+}
+body.theme-umbral .settings-primary,
+body.theme-umbral .btn-forge,
+body.theme-umbral .custom-skill-save,
+body.theme-umbral .file-picker-button {
+    border-color: color-mix(in srgb, var(--text-gold) 62%, var(--primary-purple));
+    color: #fff;
+    background: linear-gradient(90deg,
+        color-mix(in srgb, var(--primary-purple) 68%, #09070d),
+        color-mix(in srgb, var(--primary-purple) 42%, #151018));
+}
+body.theme-umbral .modal-close {
+    width: 38px; height: 38px;
+    border: 1px solid var(--ui-line);
+    border-radius: 2px;
+    color: var(--ui-muted);
+    background: color-mix(in srgb, var(--ui-ink) 90%, transparent);
+}
+body.theme-umbral .modal-close:hover { color: #fff; border-color: var(--text-gold); background: var(--ui-surface); }
+
+/* Menos caixas empilhadas: cartões viram registros com ritmo e acento lateral. */
+body.theme-umbral .audio-setting-row,
+body.theme-umbral .settings-checkbox-row,
+body.theme-umbral .history-entry,
+body.theme-umbral .slot-create-card,
+body.theme-umbral .slot-folder-card,
+body.theme-umbral .template-library-card,
+body.theme-umbral .global-search-result,
+body.theme-umbral .startup-slot-card,
+body.theme-umbral .avatar-gallery-card,
+body.theme-umbral .custom-skill-use-row,
+body.theme-umbral .note-card {
+    border: 0;
+    border-left: 2px solid color-mix(in srgb, var(--primary-purple) 65%, var(--text-gold));
+    border-radius: 2px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--primary-purple) 9%, var(--ui-surface)), transparent 78%);
+    box-shadow: none;
+}
+body.theme-umbral .audio-setting-row,
+body.theme-umbral .settings-checkbox-row,
+body.theme-umbral .history-entry,
+body.theme-umbral .template-library-card,
+body.theme-umbral .global-search-result,
+body.theme-umbral .avatar-gallery-card { padding: 15px 17px; }
+body.theme-umbral .history-list,
+body.theme-umbral .slot-manager-list,
+body.theme-umbral .template-library-grid,
+body.theme-umbral .avatar-gallery-list,
+body.theme-umbral .custom-skill-use-list { gap: 10px; }
+body.theme-umbral .slot-folder-card { overflow: hidden; }
+body.theme-umbral .slot-folder-header {
+    padding: 13px 15px;
+    border-bottom: 1px solid var(--ui-line);
+    background: color-mix(in srgb, var(--ui-surface) 78%, transparent);
+}
+body.theme-umbral .slot-row { padding: 12px 15px; border-top-color: color-mix(in srgb, var(--ui-line) 65%, transparent); }
+
+/* Campanhas e combate ganham o mesmo ritmo editorial da ficha. */
+body.theme-umbral .campaign-panel { padding: clamp(22px, 3vw, 38px); }
+body.theme-umbral .campaign-content-box,
+body.theme-umbral .combat-panel { padding: clamp(19px, 2.5vw, 30px); }
+body.theme-umbral .campaign-content-box h3,
+body.theme-umbral .combat-panel-title {
+    position: relative;
+    margin-bottom: 18px;
+    padding-bottom: 11px;
+}
+body.theme-umbral .campaign-content-box h3::after,
+body.theme-umbral .combat-panel-title::after {
+    content: '';
+    position: absolute; right: 0; bottom: 0; left: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--text-gold), var(--primary-purple), transparent 76%);
+    opacity: .52;
+}
+body.theme-umbral .campaign-card,
+body.theme-umbral .initiative-request-card {
+    border-color: var(--ui-line);
+    border-radius: 3px;
+    background-color: var(--ui-surface);
+    background-image: var(--ui-texture);
+    box-shadow: 0 12px 34px rgba(0,0,0,.28);
+}
+body.theme-umbral .campaign-card:hover { border-color: color-mix(in srgb, var(--text-gold) 48%, var(--primary-purple)); transform: translateY(-2px); }
+
+/* Painéis laterais flutuantes: finos, organizados e sem empurrar o site. */
+body.theme-umbral #theme-panel,
+body.theme-umbral #log-panel {
+    padding: 20px;
+    border-radius: 3px;
+    backdrop-filter: blur(14px);
+}
+body.theme-umbral #theme-panel h3,
+body.theme-umbral #log-panel h3 {
+    margin: 0 0 15px;
+    padding-bottom: 11px;
+    border-bottom: 1px solid var(--ui-gold-line);
+    color: #f2edf4;
+    letter-spacing: .12em;
+}
+
+/* Criação de perícias e notas: separa áreas sem criar novas caixas. */
+body.theme-umbral .custom-skill-workshop { padding: clamp(20px, 2.6vw, 31px); }
+body.theme-umbral .custom-skill-form {
+    padding-right: clamp(16px, 2.5vw, 30px);
+    border-right: 1px solid var(--ui-line);
+}
+body.theme-umbral .custom-skill-library { padding-left: clamp(16px, 2.5vw, 30px); }
+body.theme-umbral .note-card { padding: 17px 18px; }
+
+@media (max-width: 760px) {
+    body.theme-umbral .modal:not(.content-library-modal) { padding: 22px 18px; }
+    body.theme-umbral .campaign-panel { padding: 21px 16px; }
+    body.theme-umbral .custom-skill-form { padding: 0 0 20px; border-right: 0; border-bottom: 1px solid var(--ui-line); }
+    body.theme-umbral .custom-skill-library { padding: 20px 0 0; }
+    body.theme-umbral .settings-modal-header { align-items: flex-start; }
+}
+@media (max-width: 520px) {
+    body.theme-umbral .modal:not(.content-library-modal) { width: calc(100vw - 18px) !important; padding: 20px 14px; }
+    body.theme-umbral .modal h2 { font-size: 1rem; }
+    body.theme-umbral .audio-setting-row,
+    body.theme-umbral .settings-checkbox-row,
+    body.theme-umbral .history-entry,
+    body.theme-umbral .template-library-card,
+    body.theme-umbral .avatar-gallery-card { padding: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    body.theme-umbral .modal button,
+    body.theme-umbral .campaign-card { transition-duration: .01ms !important; transform: none !important; }
+}
+</style>
 </head>
 <body class="theme-umbral">
 <div id="ui-focus-backdrop" aria-hidden="true"></div>
