@@ -9951,8 +9951,8 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 /* ACERVOS ABYSS E DE CAMPANHA */
 .topbar-action[hidden], .sidebar-btn[hidden], .campaign-ghost-btn[hidden] { display:none !important; }
 .content-library-modal {
-    width:min(1220px,calc(100vw - 46px)); height:min(850px,calc(100vh - 54px)); max-height:none;
-    overflow:hidden; padding:clamp(18px,2.2vw,30px); background:linear-gradient(145deg,#0d0b11 0%,#070609 58%,#0b0810 100%);
+    width:min(1480px,calc(100vw - 20px)); height:min(940px,calc(100dvh - 20px)); max-height:none;
+    overflow:hidden; padding:clamp(20px,1.8vw,32px); background:linear-gradient(145deg,#0d0b11 0%,#070609 58%,#0b0810 100%);
 }
 .content-library-modal.ui-surface-visible { display:flex !important; flex-direction:column; }
 .content-library-header { display:flex; align-items:flex-start; justify-content:space-between; gap:22px; margin-bottom:9px; }
@@ -9978,7 +9978,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 .content-library-adminbar-copy small { margin-top:3px; color:#82798a; font-size:.67rem; }
 .content-library-create { display:flex; align-items:center; gap:8px; }
 .content-library-create select { min-width:130px; margin:0; }
-.content-library-workspace { display:grid; flex:1 1 auto; grid-template-columns:minmax(330px,42%) minmax(0,1fr); min-height:0; border:1px solid #2f2835; background:#08070a; }
+.content-library-workspace { display:grid; flex:1 1 auto; grid-template-columns:minmax(350px,36%) minmax(440px,1fr); min-height:0; border:1px solid #2f2835; background:#08070a; }
 .content-library-browser { display:flex; flex-direction:column; min-width:0; min-height:0; padding:15px; border-right:1px solid #302837; background:linear-gradient(180deg,#0d0b11,#09080c); }
 .content-library-search-wrap { display:grid; grid-template-columns:24px 1fr; align-items:center; gap:5px; padding:0 12px; border:1px solid #3b3243; background:#070609; color:#9d92a6; }
 .content-library-search-wrap:focus-within { border-color:var(--light-purple); box-shadow:0 0 0 2px color-mix(in srgb,var(--primary-purple) 14%,transparent); }
@@ -10010,14 +10010,15 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 .content-library-detail-empty > span { color:var(--text-gold); font-size:2rem; opacity:.55; }
 .content-library-detail-empty strong { margin-top:15px; color:#b6adb9; font:700 1rem Cinzel,serif; }
 .content-library-detail-empty p { max-width:430px; margin:8px auto 0; color:#706975; font-size:.78rem; line-height:1.6; }
-.content-library-detail-hero { display:grid; grid-template-columns:minmax(0,1fr) 112px; gap:22px; align-items:start; padding-bottom:20px; border-bottom:1px solid #302837; }
+.content-library-detail-hero { display:grid; grid-template-columns:minmax(0,1fr) 104px; gap:26px; align-items:start; padding-bottom:22px; border-bottom:1px solid #302837; }
+.content-library-detail-hero > div:first-child { min-width:0; }
 .content-library-detail-kicker { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-bottom:10px; }
 .content-library-badge,.content-library-entity-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 7px; border:1px solid #413747; color:#9c91a3; font:700 .52rem Cinzel,serif; letter-spacing:.8px; }
 .content-library-entity-badge { color:var(--entity-contrast,#ddd); border-color:var(--entity-color,#77717c); background:color-mix(in srgb,var(--entity-color,#77717c) 12%,transparent); }
 .content-library-entity-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--entity-color,#77717c); }
-.content-library-detail h4 { margin:0; color:#f7f1f8; font:700 clamp(1.2rem,2.2vw,1.8rem)/1.2 Cinzel,serif; }
+.content-library-detail h4 { margin:0; color:#f7f1f8; font:700 clamp(1.2rem,2.2vw,1.8rem)/1.2 Cinzel,serif; overflow-wrap:anywhere; }
 .content-library-detail-meta { margin-top:9px; color:#6e6673; font:700 .56rem Cinzel,serif; letter-spacing:.9px; }
-.content-library-detail-image { width:112px; height:112px; display:grid; place-items:center; object-fit:cover; border:1px solid color-mix(in srgb,var(--entity-color,#77717c) 58%,#3a333e); background:#070609; color:var(--entity-contrast,#ddd); font-size:1.6rem; }
+.content-library-detail-image { width:104px; height:104px; display:grid; place-items:center; object-fit:cover; border:1px solid color-mix(in srgb,var(--entity-color,#77717c) 58%,#3a333e); background:#070609; color:var(--entity-contrast,#ddd); font-size:1.6rem; }
 .content-library-detail-section { margin-top:20px; }
 .content-library-detail-section > span { display:block; margin-bottom:8px; color:var(--text-gold); font:700 .58rem Cinzel,serif; letter-spacing:1.2px; }
 .content-library-description { color:#c7beca; font:1rem/1.7 var(--font-reading); overflow-wrap:anywhere; }
@@ -10033,19 +10034,19 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 .content-library-actions .danger:hover { color:#ff7180; border-color:#b23b4a; }
 .content-library-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; padding-top:11px; border-top:1px solid #2a242f; }
 .content-library-status { color:#756c7d; font-size:.63rem; }
-.catalog-entity-field { display:none !important; }
-label.catalog-entity-field span,label.catalog-entity-field small { display:block; }
-label.catalog-entity-field { margin-top:11px; color:var(--text-gold); font:700 .7rem Cinzel,serif; }
-label.catalog-entity-field small { margin-top:3px; color:#766e7c; font:400 .62rem var(--font-reading); }
-.catalog-editor-mode .catalog-entity-field { display:block !important; }
+.catalog-entity-field,.catalog-type-field { display:none !important; }
+label.catalog-entity-field span,label.catalog-entity-field small,label.catalog-type-field span,label.catalog-type-field small { display:block; }
+label.catalog-entity-field,label.catalog-type-field { margin-top:11px; color:var(--text-gold); font:700 .7rem Cinzel,serif; }
+label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px; color:#766e7c; font:400 .62rem var(--font-reading); }
+.catalog-editor-mode .catalog-entity-field,.catalog-editor-mode .catalog-type-field { display:block !important; }
 .catalog-editor-mode .ability-separator-toggle,.catalog-editor-mode .ability-container-field,.catalog-editor-mode .ability-container-select,.catalog-editor-mode .ability-container-help { display:none !important; }
 .catalog-linked-badge { display:inline-flex; align-items:center; gap:4px; margin-left:7px; color:#c6a1f1; font-size:.56rem; letter-spacing:.7px; vertical-align:middle; }
 .catalog-linked-badge::before { content:'⌁'; color:var(--text-gold); }
-@media (max-width:820px) {
-    .content-library-modal { width:calc(100vw - 22px); height:calc(100vh - 28px); padding:17px; }
+@media (max-width:960px) {
+    .content-library-modal { width:calc(100vw - 14px); height:calc(100dvh - 14px); padding:18px; }
     .content-library-workspace { grid-template-columns:1fr; overflow:auto; }
-    .content-library-browser { min-height:430px; border-right:0; border-bottom:1px solid #302837; }
-    .content-library-detail { min-height:430px; overflow:visible; }
+    .content-library-browser { min-height:390px; border-right:0; border-bottom:1px solid #302837; }
+    .content-library-detail { min-height:390px; overflow:visible; }
     .content-library-adminbar { align-items:stretch; flex-direction:column; }
     .content-library-create { flex-wrap:wrap; }
     .content-library-footer { align-items:flex-start; }
@@ -11553,6 +11554,11 @@ label.catalog-entity-field small { margin-top:3px; color:#766e7c; font:400 .62re
         <input type="hidden" id="hab-tipo">
         <label style="color:var(--text-gold); font-size:0.8rem">NOME DA HABILIDADE</label>
         <input type="text" id="hab-nome" class="modal-input" oninput="atualizarPreviewSeparadorHab()">
+
+        <label class="catalog-type-field" for="hab-catalog-type"><span>CLASSIFICAÇÃO NO ACERVO</span><small>Pode ser alterada mesmo depois da publicação</small></label>
+        <select id="hab-catalog-type" class="modal-input catalog-type-field" onchange="atualizarTipoEditorConteudoAcervo(this.value)">
+            <option value="poder">Poder</option><option value="feitico">Feitiço</option><option value="habilidade">Habilidade</option><option value="ataque">Ataque</option>
+        </select>
 
         <label class="catalog-entity-field" for="hab-catalog-entity"><span>ENTIDADE</span><small>Opcional • define a identificação cromática no acervo</small></label>
         <select id="hab-catalog-entity" class="modal-input catalog-entity-field">
@@ -15916,6 +15922,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         document.getElementById('hab-mods-lista').innerHTML = '';
         document.getElementById('rolagens-extras-container').innerHTML = '';
         document.getElementById('hab-nome').value = dados.nome || entrada.name || '';
+        document.getElementById('hab-catalog-type').value = tipoConteudoAcervo(entrada.type || dados.tipoCatalogo || dados.tipo);
         document.getElementById('hab-catalog-entity').value = normalizarEntidadeAcervo(entrada.entity || dados.entity);
         document.getElementById('hab-desc').value = dados.desc || '';
         document.getElementById('hab-img').value = dados.img || '';
@@ -15933,6 +15940,19 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         atualizarPreviewImagem('hab-img', 'hab-img-preview');
         atualizarModoSeparadorHab();
         requestAnimationFrame(() => autoAjustarTextarea(document.getElementById('hab-desc')));
+    }
+
+    function atualizarTipoEditorConteudoAcervo(tipo) {
+        const contexto = contentCatalogState.editorContext;
+        if (!contexto) return;
+        const tipoNormalizado = tipoConteudoAcervo(tipo);
+        if (tipoNormalizado === 'item') return;
+        contexto.type = tipoNormalizado;
+        const tipoFicha = tipoNormalizado === 'poder' ? 'habilidade' : tipoNormalizado;
+        const campoTipo = document.getElementById('hab-tipo');
+        const titulo = document.getElementById('hab-modal-heading');
+        if (campoTipo) campoTipo.value = tipoFicha;
+        if (titulo) titulo.textContent = `${contexto.entryId ? 'Editar' : 'Criar'} ${nomeTipoConteudoAcervo(tipoNormalizado).toLocaleLowerCase('pt-BR')} • ${contexto.scope === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
     }
 
     function preencherEditorItemComEntradaAcervo(entrada) {
@@ -15988,6 +16008,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             abrirEditorHab(tipoFicha, null);
             contentCatalogState.editorContext = retorno;
             document.getElementById('modal-hab').classList.add('catalog-editor-mode');
+            document.getElementById('hab-catalog-type').value = tipoNormalizado;
             document.getElementById('hab-catalog-entity').value = '';
             document.getElementById('hab-modal-heading').textContent = `${entrada ? 'Editar' : 'Criar'} ${nomeTipoConteudoAcervo(tipoNormalizado).toLocaleLowerCase('pt-BR')} • ${escopo === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
             document.getElementById('hab-id-edicao').value = '';
@@ -16025,7 +16046,11 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             alert('Sua permissão para publicar neste acervo não está mais ativa.');
             return true;
         }
-        const dados = tipoEditor === 'item' ? dadosItemPublicavelDoEditor() : dadosAcaoPublicavelDoEditor(contexto.type);
+        const tipoPublicacao = tipoEditor === 'item'
+            ? 'item'
+            : tipoConteudoAcervo(document.getElementById('hab-catalog-type')?.value || contexto.type);
+        contexto.type = tipoPublicacao;
+        const dados = tipoEditor === 'item' ? dadosItemPublicavelDoEditor() : dadosAcaoPublicavelDoEditor(tipoPublicacao);
         const nome = String(dados.nome || '').trim();
         if (!nome) {
             document.getElementById(tipoEditor === 'item' ? 'item-nome' : 'hab-nome')?.focus();
@@ -16042,7 +16067,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const agora = Date.now();
         const payload = {
             id: entryId,
-            type: contexto.type,
+            type: tipoPublicacao,
             entity: normalizarEntidadeAcervo(dados.entity),
             name: nome,
             nameLower: nome.toLocaleLowerCase('pt-BR'),
@@ -16057,7 +16082,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             campaignId: contexto.scope === 'campaign' ? contexto.campaignId : '',
             schemaVersion: 2
         };
-        const retorno = { scope: contexto.scope, campaignId: contexto.campaignId, type: contexto.type, mode: contexto.returnMode || 'manage' };
+        const retorno = { scope: contexto.scope, campaignId: contexto.campaignId, type: tipoPublicacao, mode: contexto.returnMode || 'manage' };
         try {
             await database.ref(caminhoConteudoAcervo(contexto.scope, contexto.campaignId, entryId)).set(payload);
             contentCatalogState.editorContext = null;
