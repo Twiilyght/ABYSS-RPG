@@ -9947,6 +9947,84 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 .history-entry,
 .global-search-result { content-visibility: auto; contain-intrinsic-size: 72px; }
 
+/* ACERVOS ABYSS E DE CAMPANHA */
+.topbar-action[hidden], .campaign-ghost-btn[hidden] { display: none !important; }
+.content-library-modal {
+    width: min(1040px, calc(100vw - 56px));
+    max-height: min(820px, calc(100vh - 72px));
+    overflow: auto;
+    padding: clamp(20px, 3vw, 34px);
+}
+.content-library-header { display:flex; align-items:flex-start; justify-content:space-between; gap:22px; margin-bottom:18px; }
+.content-library-header .settings-eyebrow { color:var(--text-gold); letter-spacing:3px; font-size:.62rem; }
+.content-library-header h3 { margin:5px 0 0; color:#fff; font:700 clamp(1.2rem,2.4vw,1.75rem)/1.1 'Cinzel',serif; letter-spacing:2px; }
+.content-library-tabs { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 0 18px; }
+.content-library-tab {
+    min-height:48px; border:1px solid var(--border-color); background:rgba(5,4,8,.65); color:#91899b;
+    font:700 .7rem 'Cinzel',serif; letter-spacing:1.4px; cursor:pointer; transition:.18s ease;
+}
+.content-library-tab:hover, .content-library-tab.active { color:#fff; border-color:var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 18%,#09070d); }
+.content-library-tab.active { box-shadow:inset 0 -2px var(--text-gold); }
+.content-library-tab:disabled { opacity:.38; cursor:not-allowed; }
+.content-library-campaigns { display:none; gap:10px; overflow-x:auto; padding:3px 2px 12px; margin:-2px 0 14px; scroll-snap-type:x proximity; }
+.content-library-campaigns.active { display:flex; }
+.content-library-campaign {
+    flex:0 0 min(260px,74vw); scroll-snap-align:start; min-height:68px; padding:12px 14px; text-align:left;
+    border:1px solid #342b3d; border-radius:5px; background:linear-gradient(135deg,rgba(34,18,46,.72),rgba(8,8,12,.92)); color:#b9afc1; cursor:pointer;
+}
+.content-library-campaign strong, .content-library-campaign small { display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.content-library-campaign strong { color:#eee; font:700 .76rem 'Cinzel',serif; }
+.content-library-campaign small { margin-top:5px; color:#817789; font-size:.64rem; letter-spacing:1px; }
+.content-library-campaign.active { border-color:var(--text-gold); box-shadow:inset 3px 0 var(--primary-purple); }
+.content-library-toolbar { display:grid; grid-template-columns:minmax(180px,1fr) auto; align-items:center; gap:12px; margin-bottom:12px; }
+.content-library-toolbar .search-bar { margin:0; }
+.content-library-type-strip { display:flex; gap:7px; overflow-x:auto; padding:2px 1px 10px; margin-bottom:10px; }
+.content-library-type {
+    flex:0 0 auto; border:1px solid #39313f; border-radius:99px; padding:8px 12px; background:#0b090e; color:#8d8493;
+    font:700 .62rem 'Cinzel',serif; letter-spacing:.8px; cursor:pointer; transition:.16s ease;
+}
+.content-library-type:hover, .content-library-type.active { color:#fff; border-color:var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 22%,#09070d); }
+.content-library-adminbar { display:none; align-items:center; justify-content:space-between; gap:12px; padding:12px; margin:4px 0 16px; border:1px solid color-mix(in srgb,var(--text-gold) 38%,var(--border-color)); background:rgba(212,175,55,.045); }
+.content-library-adminbar.active { display:flex; }
+.content-library-adminbar-copy strong, .content-library-adminbar-copy small { display:block; }
+.content-library-adminbar-copy strong { color:var(--text-gold); font:700 .7rem 'Cinzel',serif; letter-spacing:1px; }
+.content-library-adminbar-copy small { margin-top:3px; color:#82798a; font-size:.68rem; }
+.content-library-create { display:flex; align-items:center; gap:8px; }
+.content-library-create select { min-width:130px; }
+.content-library-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; min-height:130px; }
+.content-library-card { position:relative; display:grid; grid-template-columns:64px minmax(0,1fr); gap:13px; padding:13px; border:1px solid #302837; background:linear-gradient(145deg,rgba(18,14,22,.94),rgba(7,6,9,.96)); border-radius:6px; }
+.content-library-card:hover { border-color:color-mix(in srgb,var(--light-purple) 65%,var(--border-color)); }
+.content-library-thumb { width:64px; height:64px; overflow:hidden; display:grid; place-items:center; border:1px solid #45374f; background:#08070a; color:var(--text-gold); font-size:1.35rem; }
+.content-library-thumb img { width:100%; height:100%; object-fit:cover; }
+.content-library-card-main { min-width:0; }
+.content-library-card-head { display:flex; align-items:center; gap:7px; min-width:0; }
+.content-library-card-head strong { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#f3edf7; font:700 .78rem 'Cinzel',serif; }
+.content-library-badge { flex:0 0 auto; color:var(--text-gold); border:1px solid color-mix(in srgb,var(--text-gold) 40%,transparent); padding:3px 5px; font:700 .5rem 'Cinzel',serif; letter-spacing:.7px; }
+.content-library-summary { height:34px; margin:7px 0 9px; overflow:hidden; color:#958c9c; font-size:.7rem; line-height:1.45; }
+.content-library-meta { color:#615969; font-size:.58rem; letter-spacing:.7px; text-transform:uppercase; }
+.content-library-actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
+.content-library-actions button { border:1px solid #413648; background:#0b090e; color:#b8adbf; padding:7px 9px; font:700 .58rem 'Cinzel',serif; cursor:pointer; }
+.content-library-actions button:hover { color:#fff; border-color:var(--light-purple); }
+.content-library-actions .primary { color:#fff; border-color:var(--primary-purple); background:color-mix(in srgb,var(--primary-purple) 30%,#08060b); }
+.content-library-actions .danger:hover { color:#ff7180; border-color:#b23b4a; }
+.content-library-empty { grid-column:1/-1; display:grid; place-items:center; min-height:150px; padding:25px; border:1px dashed #39303f; color:#817788; text-align:center; font-size:.78rem; line-height:1.6; }
+.content-library-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:18px; padding-top:14px; border-top:1px solid #2a242f; }
+.content-library-status { color:#756c7d; font-size:.66rem; }
+.catalog-editor-mode .ability-separator-toggle,
+.catalog-editor-mode .ability-container-field,
+.catalog-editor-mode .ability-container-select,
+.catalog-editor-mode .ability-container-help { display:none !important; }
+.catalog-linked-badge { display:inline-flex; align-items:center; gap:4px; margin-left:7px; color:#c6a1f1; font-size:.56rem; letter-spacing:.7px; vertical-align:middle; }
+.catalog-linked-badge::before { content:'⌁'; color:var(--text-gold); }
+@media (max-width:720px) {
+    .content-library-modal { width:calc(100vw - 26px); max-height:calc(100vh - 34px); }
+    .content-library-toolbar { grid-template-columns:1fr; }
+    .content-library-adminbar { align-items:stretch; flex-direction:column; }
+    .content-library-create { flex-wrap:wrap; }
+    .content-library-grid { grid-template-columns:1fr; }
+    .content-library-footer { align-items:flex-start; flex-direction:column; }
+}
+
 @media (max-width: 1050px) {
     .sync-copy small, .topbar-search-shortcut { display: none; }
     .sync-vine-indicator { grid-template-columns: 25px auto; padding-right: 8px; }
@@ -9987,6 +10065,9 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
             </button>
             <button class="topbar-action" id="btn-historico" type="button" onclick="abrirHistoricoAcoes()" title="Abrir histórico e desfazer ações">
                 <span class="topbar-action-icon" aria-hidden="true">🕘</span><span>Histórico / Desfazer</span>
+            </button>
+            <button class="topbar-action" id="btn-abyss-catalog-admin" type="button" onclick="abrirGestaoAcervoAbyss()" title="Administrar o Acervo Abyss" hidden>
+                <span class="topbar-action-icon" aria-hidden="true">✦</span><span>Acervo Abyss</span>
             </button>
             <button class="sync-vine-indicator" id="sync-vine-indicator" type="button" data-state="local" onclick="abrirPainelSincronizacao()" aria-live="polite" title="Ver estado da sincronização">
                 <span class="sync-d20" aria-hidden="true">20</span>
@@ -10380,6 +10461,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
             <div class="section-title">Ataques</div>
             <div class="ability-create-actions">
                 <button class="btn-forge" onclick="abrirEditorHab('ataque')">+ Forjar Novo Ataque</button>
+                <button class="btn-template-library" onclick="abrirAcervoConteudos('ataque')">＋ Adicionar Ataque</button>
                 <button class="btn-template-library" onclick="abrirModelosPessoais('ataque')">☆ Modelos</button>
                 <button class="btn-separator-create" onclick="abrirEditorSeparador('ataque')">— Separador</button>
             </div>
@@ -10392,6 +10474,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
             <div class="section-title">Habilidades</div>
             <div class="ability-create-actions">
                 <button class="btn-forge" onclick="abrirEditorHab('habilidade')">+ Forjar Nova Habilidade</button>
+                <button class="btn-template-library" onclick="abrirAcervoConteudos('habilidade')">＋ Adicionar Habilidade</button>
                 <button class="btn-template-library" onclick="abrirModelosPessoais('habilidade')">☆ Modelos</button>
                 <button class="btn-separator-create" onclick="abrirEditorSeparador('habilidade')">— Separador</button>
             </div>
@@ -10405,6 +10488,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
         <div class="section-title">Feitiços</div>
         <div class="ability-create-actions">
             <button class="btn-forge" onclick="abrirEditorHab('feitico')">+ Forjar Novo Feitiço</button>
+            <button class="btn-template-library" onclick="abrirAcervoConteudos('feitico')">＋ Adicionar Feitiço</button>
             <button class="btn-template-library" onclick="abrirModelosPessoais('feitico')">☆ Modelos</button>
             <button class="btn-separator-create" onclick="abrirEditorSeparador('feitico')">— Separador</button>
         </div>
@@ -10437,6 +10521,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
             </div>
             <div class="ability-create-actions" style="margin:0;">
                 <button class="btn-forge" onclick="abrirEditorItem()" style="width: auto; margin-bottom: 0; padding: 8px 15px;">+ Forjar Novo Item</button>
+                <button class="btn-template-library" onclick="abrirAcervoConteudos('item')">＋ Adicionar Item</button>
                 <button class="btn-template-library" onclick="abrirModelosPessoais('item')">☆ Modelos</button>
                 <button class="btn-separator-create" onclick="adicionarSeparadorInventario()">— Separador</button>
             </div>
@@ -10577,6 +10662,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
                 <button class="campaign-back-btn" onclick="voltarParaListaCampanhas()">← Todas as campanhas</button>
                 <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
                     <button id="campaign-edit-campaign-btn" class="campaign-ghost-btn" style="display:none;" onclick="abrirEditorCampanha()">✎ Editar campanha</button>
+                    <button id="campaign-content-library-btn" class="campaign-ghost-btn" style="display:none;" onclick="abrirGestaoAcervoCampanha()">✦ Acervo da campanha</button>
                     <button id="campaign-documents-btn" class="campaign-ghost-btn" onclick="abrirMesaDocumentosCampanha()">🗃 Mesa de Documentos</button>
                     <button id="campaign-start-combat-btn" class="campaign-submit-btn" style="display:none;" onclick="abrirPreparacaoCombate()">⚔ Iniciar combate</button>
                     <button class="gm-shield-btn" onclick="abrirEscudoMestre()">🛡 Escudo do mestre</button>
@@ -11338,6 +11424,48 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
     </section>
 </div>
 
+<div id="modal-content-library" class="modal content-library-modal" role="dialog" aria-modal="true" aria-labelledby="content-library-heading">
+    <div class="content-library-header">
+        <div>
+            <span class="settings-eyebrow">BIBLIOTECA COMPARTILHADA</span>
+            <h3 id="content-library-heading">Adicionar poder</h3>
+        </div>
+        <button type="button" class="settings-close" onclick="fecharAcervoConteudos()" aria-label="Fechar acervo">✕</button>
+    </div>
+    <p id="content-library-intro" class="settings-intro">Escolha conteúdo oficial do Abyss ou material preparado pelo Mestre para esta ficha.</p>
+    <div class="content-library-tabs" role="tablist" aria-label="Origem do conteúdo">
+        <button type="button" id="content-library-tab-abyss" class="content-library-tab active" role="tab" aria-selected="true" onclick="selecionarEscopoAcervo('abyss')">ACERVO ABYSS</button>
+        <button type="button" id="content-library-tab-campaign" class="content-library-tab" role="tab" aria-selected="false" onclick="selecionarEscopoAcervo('campaign')">ACERVO DE CAMPANHAS</button>
+    </div>
+    <div id="content-library-campaigns" class="content-library-campaigns" aria-label="Escolher campanha"></div>
+    <div class="content-library-toolbar">
+        <input type="search" id="content-library-search" class="search-bar" placeholder="Pesquisar por nome, descrição ou fórmula..." oninput="renderizarAcervoConteudos()">
+        <span id="content-library-origin-label" class="content-library-status">ACERVO ABYSS</span>
+    </div>
+    <div id="content-library-type-strip" class="content-library-type-strip" aria-label="Filtrar por tipo"></div>
+    <div id="content-library-adminbar" class="content-library-adminbar">
+        <div class="content-library-adminbar-copy">
+            <strong id="content-library-admin-title">PUBLICAÇÃO AUTORIZADA</strong>
+            <small id="content-library-admin-note">Crie ou atualize conteúdos compartilhados.</small>
+        </div>
+        <div class="content-library-create">
+            <select id="content-library-create-type" class="modal-input" aria-label="Tipo do novo conteúdo">
+                <option value="item">Item</option>
+                <option value="ataque">Ataque</option>
+                <option value="poder">Poder</option>
+                <option value="habilidade">Habilidade</option>
+                <option value="feitico">Feitiço</option>
+            </select>
+            <button type="button" class="settings-primary" onclick="criarConteudoNoAcervo()">＋ Criar conteúdo</button>
+        </div>
+    </div>
+    <div id="content-library-grid" class="content-library-grid" aria-live="polite"></div>
+    <div class="content-library-footer">
+        <span id="content-library-counter" class="content-library-status">0 conteúdos disponíveis</span>
+        <button type="button" class="settings-secondary" onclick="fecharAcervoConteudos()">Concluir</button>
+    </div>
+</div>
+
 <div id="modal-personal-templates" class="modal template-library-modal" role="dialog" aria-modal="true" aria-labelledby="template-library-heading">
     <div class="settings-modal-header">
         <div>
@@ -11590,6 +11718,12 @@ function atualizarGatilhosSuperficieFoco(elemento = null) {
 
 function concluirOcultacaoSuperficieFoco(elemento) {
     if (!elemento) return;
+    if ((elemento.id === 'modal-hab' || elemento.id === 'modal-item') && typeof contentCatalogState !== 'undefined') {
+        contentCatalogState.editorContext = null;
+        elemento.classList.remove('catalog-editor-mode');
+        const separador = document.getElementById('hab-is-separator');
+        if (separador) separador.disabled = false;
+    }
     if (elemento.id === 'log-panel') elemento.classList.remove('active');
     else elemento.style.display = 'none';
     elemento.classList.remove('ui-focus-surface', 'ui-surface-visible', 'ui-surface-closing');
@@ -14448,6 +14582,25 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         catch (_) { return {}; }
     })();
     let currentUser = null;
+    const ABYSS_CATALOG_ADMIN_EMAILS = new Set([
+        'zkyokoo007@gmail.com',
+        'anthonysousabr002@gmail.com'
+    ]);
+    const CONTENT_CATALOG_TYPES = new Set(['item', 'ataque', 'poder', 'habilidade', 'feitico']);
+    const contentCatalogState = {
+        abyss: {},
+        campaigns: {},
+        abyssRef: null,
+        abyssHandler: null,
+        campaignRefs: new Map(),
+        scope: 'abyss',
+        campaignId: '',
+        type: '',
+        mode: 'picker',
+        editorContext: null,
+        applyingLinkedUpdate: false,
+        activeUserUid: ''
+    };
     const syncClientId = (() => {
         try {
             let value = sessionStorage.getItem('abyssSyncClientV1');
@@ -14851,6 +15004,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         delete copia.itemIdRef;
         delete copia.idUnico;
         delete copia.containerId;
+        delete copia.catalogRef;
         copia.tipo = PERSONAL_TEMPLATE_TYPES.has(copia.tipo) && copia.tipo !== 'item' ? copia.tipo : 'habilidade';
         copia.ativa = false;
         copia.recolhido = false;
@@ -14861,6 +15015,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     function prepararItemReutilizavel(origem) {
         const copia = clonarParaHistorico(origem || {});
         delete copia.idUnico;
+        delete copia.catalogRef;
         copia.isSeparator = false;
         copia.equipado = false;
         copia.recolhido = false;
@@ -15187,11 +15342,682 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }
     }
 
+    /* ACERVO ABYSS E ACERVOS PRIVADOS DE CAMPANHA */
+    function emailAtualEhAdministradorAbyss() {
+        const email = String(currentUser?.email || '').trim().toLocaleLowerCase('en-US');
+        return Boolean(currentUser && currentUser.emailVerified !== false && ABYSS_CATALOG_ADMIN_EMAILS.has(email));
+    }
+
+    function atualizarAcessoAdministrativoAcervo() {
+        const botao = document.getElementById('btn-abyss-catalog-admin');
+        if (botao) botao.hidden = !emailAtualEhAdministradorAbyss();
+        const botaoCampanha = document.getElementById('campaign-content-library-btn');
+        if (botaoCampanha) botaoCampanha.style.display = campaignState?.role === 'mestre' ? 'inline-flex' : 'none';
+    }
+
+    function tipoConteudoAcervo(tipo) {
+        return CONTENT_CATALOG_TYPES.has(tipo) ? tipo : 'habilidade';
+    }
+
+    function nomeTipoConteudoAcervo(tipo) {
+        return ({ item: 'ITEM', ataque: 'ATAQUE', poder: 'PODER', habilidade: 'HABILIDADE', feitico: 'FEITIÇO' })[tipoConteudoAcervo(tipo)] || 'CONTEÚDO';
+    }
+
+    function iconeTipoConteudoAcervo(tipo) {
+        return ({ item: '◆', ataque: '⚔', poder: '✦', habilidade: '◈', feitico: '✧' })[tipoConteudoAcervo(tipo)] || '✦';
+    }
+
+    function normalizarEntradaConteudoAcervo(valor, idFallback = '', escopo = 'abyss', campaignId = '') {
+        if (!valor || typeof valor !== 'object' || !valor.data || typeof valor.data !== 'object') return null;
+        const type = tipoConteudoAcervo(valor.type || valor.subtype || valor.data.tipoCatalogo || valor.data.tipo);
+        const id = String(valor.id || idFallback || '').replace(/[^a-zA-Z0-9_-]/g, '_');
+        if (!id) return null;
+        const data = clonarParaHistorico(valor.data);
+        const name = String(valor.name || data.nome || 'Conteúdo sem nome').trim() || 'Conteúdo sem nome';
+        return {
+            id,
+            type,
+            name,
+            nameLower: String(valor.nameLower || name).toLocaleLowerCase('pt-BR'),
+            data,
+            revision: Math.max(1, Number(valor.revision) || 1),
+            createdAt: Number(valor.createdAt) || 0,
+            updatedAt: Number(valor.updatedAt) || Number(valor.createdAt) || 0,
+            createdByUid: String(valor.createdByUid || ''),
+            createdByName: String(valor.createdByName || ''),
+            updatedByUid: String(valor.updatedByUid || ''),
+            scope: escopo,
+            campaignId: escopo === 'campaign' ? String(campaignId || valor.campaignId || '') : '',
+            schemaVersion: Math.max(1, Number(valor.schemaVersion) || 1)
+        };
+    }
+
+    function normalizarMapaConteudoAcervo(raw, escopo = 'abyss', campaignId = '') {
+        const mapa = {};
+        Object.entries(raw && typeof raw === 'object' ? raw : {}).forEach(([id, valor]) => {
+            const entrada = normalizarEntradaConteudoAcervo(valor, id, escopo, campaignId);
+            if (entrada) mapa[entrada.id] = entrada;
+        });
+        return mapa;
+    }
+
+    function slotAtualTemVinculoComCampanha(campaignId) {
+        const slotAtual = String(document.getElementById('save-slot')?.value || '1');
+        return Object.values(campaignState?.links?.[campaignId] || {}).some(link => String(link?.slot || '') === slotAtual);
+    }
+
+    function usuarioEhMestreDaCampanhaAcervo(campaignId) {
+        if (!currentUser || !campaignId) return false;
+        const papel = campaignState?.membershipRoles?.[campaignId]
+            || (campaignState?.activeId === campaignId ? campaignState?.role : '')
+            || (campaignState?.campaigns || []).find(campanha => campanha.id === campaignId)?.role;
+        return papel === 'mestre';
+    }
+
+    function campanhasDisponiveisAoSlotNoAcervo() {
+        if (!currentUser || typeof campaignState === 'undefined') return [];
+        const porId = new Map();
+        (campaignState.campaigns || []).forEach(campanha => {
+            if (campanha.role === 'mestre' || slotAtualTemVinculoComCampanha(campanha.id)) porId.set(campanha.id, campanha);
+        });
+        if (campaignState.activeId && campaignState.activeCampaign?.meta && (campaignState.role === 'mestre' || slotAtualTemVinculoComCampanha(campaignState.activeId))) {
+            porId.set(campaignState.activeId, {
+                id: campaignState.activeId,
+                role: campaignState.role,
+                ...campaignState.activeCampaign.meta
+            });
+        }
+        return [...porId.values()].sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR'));
+    }
+
+    function usuarioPodeGerenciarEscopoAcervo(escopo = contentCatalogState.scope, campaignId = contentCatalogState.campaignId) {
+        return escopo === 'abyss' ? emailAtualEhAdministradorAbyss() : usuarioEhMestreDaCampanhaAcervo(campaignId);
+    }
+
+    function caminhoConteudoAcervo(escopo, campaignId = '', entryId = '') {
+        const base = escopo === 'campaign'
+            ? `campaignCatalogs/${String(campaignId || '')}`
+            : 'abyssCatalog';
+        return entryId ? `${base}/${entryId}` : base;
+    }
+
+    function entradaConteudoAcervo(escopo, campaignId, entryId) {
+        return escopo === 'campaign'
+            ? contentCatalogState.campaigns?.[campaignId]?.[entryId] || null
+            : contentCatalogState.abyss?.[entryId] || null;
+    }
+
+    function pararEscutasAcervoConteudos() {
+        if (contentCatalogState.abyssRef && contentCatalogState.abyssHandler) contentCatalogState.abyssRef.off('value', contentCatalogState.abyssHandler);
+        contentCatalogState.abyssRef = null;
+        contentCatalogState.abyssHandler = null;
+        contentCatalogState.campaignRefs.forEach(({ ref, handler }) => ref.off('value', handler));
+        contentCatalogState.campaignRefs.clear();
+        contentCatalogState.abyss = {};
+        contentCatalogState.campaigns = {};
+        contentCatalogState.activeUserUid = '';
+    }
+
+    function campanhasNecessariasParaAcervo() {
+        const ids = new Set(campanhasDisponiveisAoSlotNoAcervo().map(campanha => campanha.id));
+        [...(sheet?.habilidades || []), ...(sheet?.itens || [])].forEach(conteudo => {
+            if (conteudo?.catalogRef?.scope === 'campaign' && conteudo.catalogRef.campaignId) ids.add(String(conteudo.catalogRef.campaignId));
+        });
+        return ids;
+    }
+
+    function sincronizarEscutasAcervosCampanha() {
+        if (!currentUser) return;
+        const necessarias = campanhasNecessariasParaAcervo();
+        contentCatalogState.campaignRefs.forEach(({ ref, handler }, campaignId) => {
+            if (necessarias.has(campaignId)) return;
+            ref.off('value', handler);
+            contentCatalogState.campaignRefs.delete(campaignId);
+            delete contentCatalogState.campaigns[campaignId];
+        });
+        necessarias.forEach(campaignId => {
+            if (contentCatalogState.campaignRefs.has(campaignId)) return;
+            const ref = database.ref(caminhoConteudoAcervo('campaign', campaignId));
+            const handler = snapshot => {
+                contentCatalogState.campaigns[campaignId] = normalizarMapaConteudoAcervo(snapshot.val(), 'campaign', campaignId);
+                sincronizarConteudosVinculadosDaFicha();
+                renderizarAcervoConteudos();
+            };
+            ref.on('value', handler, erro => {
+                console.warn(`Não foi possível acessar o acervo da campanha ${campaignId}.`, erro);
+                contentCatalogState.campaigns[campaignId] = {};
+                renderizarAcervoConteudos();
+            });
+            contentCatalogState.campaignRefs.set(campaignId, { ref, handler });
+        });
+    }
+
+    function inicializarAcervoConteudos(user = currentUser) {
+        pararEscutasAcervoConteudos();
+        atualizarAcessoAdministrativoAcervo();
+        if (!user) return;
+        contentCatalogState.activeUserUid = user.uid;
+        contentCatalogState.abyssRef = database.ref('abyssCatalog');
+        contentCatalogState.abyssHandler = snapshot => {
+            if (currentUser?.uid !== contentCatalogState.activeUserUid) return;
+            contentCatalogState.abyss = normalizarMapaConteudoAcervo(snapshot.val(), 'abyss');
+            sincronizarConteudosVinculadosDaFicha();
+            renderizarAcervoConteudos();
+        };
+        contentCatalogState.abyssRef.on('value', contentCatalogState.abyssHandler, erro => {
+            console.warn('Não foi possível acessar o Acervo Abyss.', erro);
+            contentCatalogState.abyss = {};
+            renderizarAcervoConteudos();
+        });
+        sincronizarEscutasAcervosCampanha();
+    }
+
+    function resumoConteudoAcervo(entrada) {
+        const dados = entrada?.data || {};
+        const rolagens = normalizarRolagensPrincipais(dados, entrada?.type === 'item' && dados.isWeapon);
+        if (rolagens.length) return rolagens.slice(0, 2).map(rolagem => `${rolagem.nome}: ${rolagem.formula}${rolagem.atributo ? ` +${rolagem.atributo}` : ''}`).join(' • ');
+        const custos = normalizarCustosAcao(dados);
+        if (custos.length) return `Gastos: ${custos.map(custo => `${custo.valor} ${String(custo.tipo || '').toUpperCase()}`).join(' • ')}`;
+        return String(dados.desc || 'Conteúdo compartilhado do sistema.').replace(/<[^>]+>|[*_~#]/g, '').replace(/\s+/g, ' ').trim();
+    }
+
+    function conteudoAcervoJaAdicionado(entrada) {
+        const colecao = entrada?.type === 'item' ? sheet?.itens : sheet?.habilidades;
+        return (colecao || []).some(item => item?.catalogRef?.scope === entrada.scope
+            && String(item.catalogRef.entryId || '') === entrada.id
+            && String(item.catalogRef.campaignId || '') === String(entrada.campaignId || ''));
+    }
+
+    function selecionarEscopoAcervo(escopo) {
+        if (!['abyss', 'campaign'].includes(escopo)) return;
+        const campanhas = campanhasDisponiveisAoSlotNoAcervo();
+        if (escopo === 'campaign' && !campanhas.length) return;
+        contentCatalogState.scope = escopo;
+        if (escopo === 'campaign' && !campanhas.some(campanha => campanha.id === contentCatalogState.campaignId)) contentCatalogState.campaignId = campanhas[0]?.id || '';
+        sincronizarEscutasAcervosCampanha();
+        renderizarAcervoConteudos();
+    }
+
+    function selecionarCampanhaAcervo(campaignId) {
+        if (!campanhasDisponiveisAoSlotNoAcervo().some(campanha => campanha.id === campaignId)) return;
+        contentCatalogState.scope = 'campaign';
+        contentCatalogState.campaignId = campaignId;
+        sincronizarEscutasAcervosCampanha();
+        renderizarAcervoConteudos();
+    }
+
+    function selecionarTipoAcervo(tipo = '') {
+        contentCatalogState.type = CONTENT_CATALOG_TYPES.has(tipo) ? tipo : '';
+        const seletorCriacao = document.getElementById('content-library-create-type');
+        if (seletorCriacao && contentCatalogState.type) seletorCriacao.value = contentCatalogState.type;
+        renderizarAcervoConteudos();
+    }
+
+    function renderizarCampanhasAcervo() {
+        const host = document.getElementById('content-library-campaigns');
+        if (!host) return;
+        const campanhas = campanhasDisponiveisAoSlotNoAcervo();
+        host.classList.toggle('active', contentCatalogState.scope === 'campaign');
+        if (!campanhas.length) {
+            host.innerHTML = '<div class="content-library-empty">Esta ficha ainda não está vinculada a uma campanha com acervo disponível.</div>';
+            return;
+        }
+        host.innerHTML = campanhas.map(campanha => `
+            <button type="button" class="content-library-campaign ${campanha.id === contentCatalogState.campaignId ? 'active' : ''}" onclick="selecionarCampanhaAcervo('${escapeCampaignHtml(campanha.id)}')">
+                <strong>${escapeCampaignHtml(campanha.name || 'Campanha sem nome')}</strong>
+                <small>${campanha.role === 'mestre' ? 'VOCÊ É O MESTRE' : 'FICHA VINCULADA'}</small>
+            </button>`).join('');
+    }
+
+    function renderizarAcervoConteudos() {
+        const modal = document.getElementById('modal-content-library');
+        const grid = document.getElementById('content-library-grid');
+        if (!modal || !grid) return;
+        const aberto = modal.style.display !== 'none' && getComputedStyle(modal).display !== 'none';
+        if (!aberto && !modal.classList.contains('ui-surface-visible')) return;
+        const campanhas = campanhasDisponiveisAoSlotNoAcervo();
+        if (contentCatalogState.scope === 'campaign' && !campanhas.some(campanha => campanha.id === contentCatalogState.campaignId)) {
+            contentCatalogState.campaignId = campanhas[0]?.id || '';
+            if (!contentCatalogState.campaignId) contentCatalogState.scope = 'abyss';
+        }
+        const escopo = contentCatalogState.scope;
+        const campanha = campanhas.find(item => item.id === contentCatalogState.campaignId);
+        const tabAbyss = document.getElementById('content-library-tab-abyss');
+        const tabCampanha = document.getElementById('content-library-tab-campaign');
+        tabAbyss.classList.toggle('active', escopo === 'abyss');
+        tabAbyss.setAttribute('aria-selected', String(escopo === 'abyss'));
+        tabCampanha.classList.toggle('active', escopo === 'campaign');
+        tabCampanha.setAttribute('aria-selected', String(escopo === 'campaign'));
+        tabCampanha.disabled = !campanhas.length;
+        renderizarCampanhasAcervo();
+
+        const tipos = [
+            ['', 'TODOS'], ['item', 'ITENS'], ['ataque', 'ATAQUES'], ['poder', 'PODERES'], ['habilidade', 'HABILIDADES'], ['feitico', 'FEITIÇOS']
+        ];
+        document.getElementById('content-library-type-strip').innerHTML = tipos.map(([valor, nome]) => `
+            <button type="button" class="content-library-type ${contentCatalogState.type === valor ? 'active' : ''}" onclick="selecionarTipoAcervo('${valor}')">${nome}</button>`).join('');
+
+        const origemNome = escopo === 'abyss' ? 'ACERVO ABYSS' : `CAMPANHA • ${campanha?.name || 'NÃO SELECIONADA'}`;
+        document.getElementById('content-library-origin-label').textContent = origemNome;
+        const podeGerenciar = usuarioPodeGerenciarEscopoAcervo(escopo, contentCatalogState.campaignId);
+        const barraAdmin = document.getElementById('content-library-adminbar');
+        barraAdmin.classList.toggle('active', podeGerenciar);
+        document.getElementById('content-library-admin-title').textContent = escopo === 'abyss' ? 'PUBLICAÇÃO GLOBAL AUTORIZADA' : 'OFICINA DO MESTRE';
+        document.getElementById('content-library-admin-note').textContent = escopo === 'abyss'
+            ? 'Alterações publicadas atualizam as fichas vinculadas em tempo real.'
+            : 'Somente personagens vinculados a esta campanha podem usar estas criações.';
+
+        const busca = String(document.getElementById('content-library-search')?.value || '').trim().toLocaleLowerCase('pt-BR');
+        const mapa = escopo === 'abyss' ? contentCatalogState.abyss : (contentCatalogState.campaigns[contentCatalogState.campaignId] || {});
+        const entradas = Object.values(mapa).filter(entrada => {
+            if (contentCatalogState.type && entrada.type !== contentCatalogState.type) return false;
+            if (!busca) return true;
+            const alvo = `${entrada.name} ${nomeTipoConteudoAcervo(entrada.type)} ${resumoConteudoAcervo(entrada)} ${entrada.data?.desc || ''}`.toLocaleLowerCase('pt-BR');
+            return alvo.includes(busca);
+        }).sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt-BR'));
+
+        document.getElementById('content-library-counter').textContent = `${entradas.length} ${entradas.length === 1 ? 'conteúdo disponível' : 'conteúdos disponíveis'}`;
+        if (!entradas.length) {
+            const mensagem = escopo === 'campaign' && !contentCatalogState.campaignId
+                ? 'Selecione uma campanha vinculada para consultar o acervo.'
+                : (podeGerenciar ? 'Nenhum conteúdo corresponde aos filtros. Use “Criar conteúdo” para publicar o primeiro.' : 'Nenhum conteúdo corresponde aos filtros selecionados.');
+            grid.innerHTML = `<div class="content-library-empty">${mensagem}</div>`;
+            return;
+        }
+
+        const modoAdicionar = contentCatalogState.mode === 'picker';
+        grid.innerHTML = entradas.map(entrada => {
+            const imagem = entrada.data?.img
+                ? `<img src="${escapeCampaignHtml(entrada.data.img)}" alt="">`
+                : `<span aria-hidden="true">${iconeTipoConteudoAcervo(entrada.type)}</span>`;
+            const jaAdicionado = conteudoAcervoJaAdicionado(entrada);
+            const campanhaId = escapeCampaignHtml(entrada.campaignId || '');
+            return `<article class="content-library-card">
+                <div class="content-library-thumb">${imagem}</div>
+                <div class="content-library-card-main">
+                    <div class="content-library-card-head"><span class="content-library-badge">${nomeTipoConteudoAcervo(entrada.type)}</span><strong title="${escapeCampaignHtml(entrada.name)}">${escapeCampaignHtml(entrada.name)}</strong></div>
+                    <div class="content-library-summary">${escapeCampaignHtml(resumoConteudoAcervo(entrada))}</div>
+                    <div class="content-library-meta">REVISÃO ${entrada.revision}${jaAdicionado ? ' • JÁ VINCULADO' : ''}</div>
+                    <div class="content-library-actions">
+                        ${modoAdicionar ? `<button type="button" class="primary" onclick="adicionarConteudoAcervo('${entrada.scope}','${campanhaId}','${escapeCampaignHtml(entrada.id)}')">${jaAdicionado ? '＋ Adicionar novamente' : '＋ Adicionar à ficha'}</button>` : ''}
+                        ${podeGerenciar ? `<button type="button" onclick="editarConteudoNoAcervo('${entrada.scope}','${campanhaId}','${escapeCampaignHtml(entrada.id)}')">Editar</button><button type="button" class="danger" onclick="excluirConteudoDoAcervo('${entrada.scope}','${campanhaId}','${escapeCampaignHtml(entrada.id)}')">Excluir</button>` : ''}
+                    </div>
+                </div>
+            </article>`;
+        }).join('');
+        acompanharPortaisOrnamentoUmbral(420);
+    }
+
+    function abrirAcervoConteudos(tipo = '', modo = 'picker', escopo = 'abyss', campaignId = '') {
+        tocarSom('click');
+        if (!currentUser) {
+            alert('Faça login com o Google para acessar os acervos compartilhados.');
+            toggleLogin();
+            return;
+        }
+        contentCatalogState.mode = modo === 'manage' ? 'manage' : 'picker';
+        contentCatalogState.type = CONTENT_CATALOG_TYPES.has(tipo) ? tipo : '';
+        contentCatalogState.scope = escopo === 'campaign' ? 'campaign' : 'abyss';
+        contentCatalogState.campaignId = campaignId || contentCatalogState.campaignId;
+        const busca = document.getElementById('content-library-search');
+        if (busca) busca.value = '';
+        const heading = document.getElementById('content-library-heading');
+        const intro = document.getElementById('content-library-intro');
+        heading.textContent = contentCatalogState.mode === 'manage' ? 'Administrar acervo' : `Adicionar ${tipo ? nomeTipoConteudoAcervo(tipo).toLocaleLowerCase('pt-BR') : 'poder'}`;
+        intro.textContent = contentCatalogState.mode === 'manage'
+            ? 'Publique, edite e balanceie conteúdos reutilizáveis sem precisar copiá-los manualmente entre fichas.'
+            : 'Escolha conteúdo oficial do Abyss ou material preparado pelo Mestre para esta ficha.';
+        const seletorCriacao = document.getElementById('content-library-create-type');
+        if (seletorCriacao) seletorCriacao.value = contentCatalogState.type || 'habilidade';
+        sincronizarEscutasAcervosCampanha();
+        abrirSuperficieFoco('#modal-content-library');
+        renderizarAcervoConteudos();
+        requestAnimationFrame(() => busca?.focus());
+    }
+
+    function fecharAcervoConteudos() {
+        tocarSom('click');
+        fecharSuperficieFoco('#modal-content-library');
+    }
+
+    function abrirGestaoAcervoAbyss() {
+        if (!emailAtualEhAdministradorAbyss()) return alert('Esta conta não possui permissão para publicar no Acervo Abyss.');
+        abrirAcervoConteudos('', 'manage', 'abyss');
+    }
+
+    function abrirGestaoAcervoCampanha() {
+        if (!campaignState?.activeId || campaignState.role !== 'mestre') return alert('Somente o Mestre pode administrar o acervo desta campanha.');
+        abrirAcervoConteudos('', 'manage', 'campaign', campaignState.activeId);
+    }
+
+    function criarConteudoNoAcervo() {
+        const tipo = tipoConteudoAcervo(document.getElementById('content-library-create-type')?.value || contentCatalogState.type || 'habilidade');
+        abrirEditorConteudoAcervo(contentCatalogState.scope, contentCatalogState.campaignId, tipo);
+    }
+
+    function dadosAcaoPublicavelDoEditor(tipoPublicacao) {
+        const custos = coletarCustos('hab');
+        const rolagensPrincipais = coletarRolagensPrincipais('hab');
+        const rolagensExtras = coletarRolagensExtrasDOM('hab');
+        const primeiraRolagem = rolagensPrincipais[0] || {};
+        return {
+            tipo: tipoPublicacao === 'poder' ? 'habilidade' : tipoPublicacao,
+            tipoCatalogo: tipoPublicacao,
+            nome: document.getElementById('hab-nome').value.trim(),
+            isSeparator: false,
+            dano: primeiraRolagem.formula || '',
+            danoAtributo: primeiraRolagem.atributo || '',
+            rolagensPrincipais,
+            custoTipo: custos[0]?.tipo || '',
+            custoValor: custos[0]?.valor || 0,
+            custos,
+            desc: document.getElementById('hab-desc').value,
+            img: document.getElementById('hab-img').value.trim(),
+            temCrit: primeiraRolagem.temCrit === true,
+            critMargem: primeiraRolagem.critMargem || 20,
+            critDano: primeiraRolagem.critDano || '',
+            mods: document.getElementById('hab-tem-mod').checked ? getModsFromDOM('hab') : [],
+            extras: rolagensExtras.map(rolagem => rolagem.formula),
+            rolagensExtras,
+            ativa: false,
+            recolhido: false
+        };
+    }
+
+    function dadosItemPublicavelDoEditor() {
+        const custos = coletarCustos('item');
+        const isWeapon = document.getElementById('item-is-weapon').checked;
+        const rolagensPrincipais = isWeapon ? coletarRolagensPrincipais('item') : [];
+        const primeiraRolagem = rolagensPrincipais[0] || {};
+        const rolagensExtras = coletarRolagensExtrasDOM('item');
+        return {
+            tipoCatalogo: 'item',
+            nome: document.getElementById('item-nome').value.trim(),
+            img: document.getElementById('item-img').value.trim(),
+            peso: parseInt(document.getElementById('item-peso').value) || 0,
+            custoTipo: custos[0]?.tipo || '',
+            custoValor: custos[0]?.valor || 0,
+            custos,
+            desc: document.getElementById('item-desc').value || '',
+            equipado: false,
+            recolhido: false,
+            ataqueRecolhido: false,
+            extras: rolagensExtras.map(rolagem => rolagem.formula),
+            rolagensExtras,
+            mods: document.getElementById('item-tem-mod').checked ? getModsFromDOM('item') : [],
+            isWeapon,
+            rolagensPrincipais,
+            weapDano: primeiraRolagem.formula || '',
+            weapAtributo: primeiraRolagem.atributo || '',
+            weapSec: document.getElementById('item-weap-sec').value,
+            weapCritMargem: primeiraRolagem.critMargem || 20,
+            weapCritDano: primeiraRolagem.critDano || '',
+            isSeparator: false
+        };
+    }
+
+    function preencherEditorAcaoComEntradaAcervo(entrada) {
+        const dados = entrada?.data;
+        if (!dados) return;
+        document.getElementById('hab-main-rolls').innerHTML = '';
+        document.getElementById('hab-cost-list').innerHTML = '';
+        document.getElementById('hab-mods-lista').innerHTML = '';
+        document.getElementById('rolagens-extras-container').innerHTML = '';
+        document.getElementById('hab-nome').value = dados.nome || entrada.name || '';
+        document.getElementById('hab-desc').value = dados.desc || '';
+        document.getElementById('hab-img').value = dados.img || '';
+        document.getElementById('hab-is-separator').checked = false;
+        document.getElementById('hab-is-separator').disabled = true;
+        const principais = normalizarRolagensPrincipais(dados);
+        (principais.length ? principais : [{ nome: 'Dano principal', formula: '', critMargem: 20 }]).forEach(rolagem => addInputRolagemPrincipal('hab', rolagem));
+        normalizarCustosAcao(dados).forEach(custo => addInputCusto('hab', custo));
+        normalizarRolagensExtras(dados).forEach(rolagem => addInputRolagem(rolagem));
+        const mods = Array.isArray(dados.mods) ? dados.mods : [];
+        document.getElementById('hab-tem-mod').checked = Boolean(mods.length);
+        document.getElementById('hab-mod-container').style.display = mods.length ? 'block' : 'none';
+        mods.forEach(mod => addInputModificador('hab', mod));
+        atualizarEstadoListaCustos('hab');
+        atualizarPreviewImagem('hab-img', 'hab-img-preview');
+        atualizarModoSeparadorHab();
+        requestAnimationFrame(() => autoAjustarTextarea(document.getElementById('hab-desc')));
+    }
+
+    function preencherEditorItemComEntradaAcervo(entrada) {
+        const dados = entrada?.data;
+        if (!dados) return;
+        document.getElementById('item-main-rolls').innerHTML = '';
+        document.getElementById('item-cost-list').innerHTML = '';
+        document.getElementById('item-mods-lista').innerHTML = '';
+        document.getElementById('item-rolagens-container').innerHTML = '';
+        document.getElementById('item-nome').value = dados.nome || entrada.name || '';
+        document.getElementById('item-img').value = dados.img || '';
+        document.getElementById('item-peso').value = Number(dados.peso) || 0;
+        document.getElementById('item-desc').value = dados.desc || '';
+        document.getElementById('item-is-weapon').checked = dados.isWeapon === true;
+        document.getElementById('item-weapon-container').style.display = dados.isWeapon ? 'block' : 'none';
+        const principais = normalizarRolagensPrincipais(dados, dados.isWeapon);
+        (principais.length ? principais : [{ nome: 'Dano da arma', formula: '', critMargem: 20 }]).forEach(rolagem => addInputRolagemPrincipal('item', rolagem));
+        document.getElementById('item-weap-sec').value = dados.weapSec || '';
+        normalizarCustosAcao(dados).forEach(custo => addInputCusto('item', custo));
+        normalizarRolagensExtras(dados).forEach(rolagem => addInputRolagemItem(rolagem));
+        const mods = Array.isArray(dados.mods) ? dados.mods : [];
+        document.getElementById('item-tem-mod').checked = Boolean(mods.length);
+        document.getElementById('item-mod-container').style.display = mods.length ? 'block' : 'none';
+        mods.forEach(mod => addInputModificador('item', mod));
+        atualizarEstadoListaCustos('item');
+        atualizarPreviewImagem('item-img', 'item-img-preview');
+        requestAnimationFrame(() => autoAjustarTextarea(document.getElementById('item-desc')));
+    }
+
+    function abrirEditorConteudoAcervo(escopo, campaignId, tipo, entryId = '') {
+        const tipoNormalizado = tipoConteudoAcervo(tipo);
+        if (!usuarioPodeGerenciarEscopoAcervo(escopo, campaignId)) return alert('Sua conta não pode publicar neste acervo.');
+        const entrada = entryId ? entradaConteudoAcervo(escopo, campaignId, entryId) : null;
+        if (entryId && !entrada) return alert('Este conteúdo não está mais disponível.');
+        const retorno = {
+            scope: escopo,
+            campaignId: escopo === 'campaign' ? campaignId : '',
+            type: tipoNormalizado,
+            entryId: entrada?.id || '',
+            returnMode: contentCatalogState.mode
+        };
+        if (tipoNormalizado === 'item') {
+            abrirEditorItem(null);
+            contentCatalogState.editorContext = retorno;
+            document.getElementById('modal-item').classList.add('catalog-editor-mode');
+            document.getElementById('item-modal-heading').textContent = `${entrada ? 'Editar' : 'Criar'} item • ${escopo === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
+            document.getElementById('item-id-edicao').value = '';
+            if (entrada) preencherEditorItemComEntradaAcervo(entrada);
+        } else {
+            const tipoFicha = tipoNormalizado === 'poder' ? 'habilidade' : tipoNormalizado;
+            abrirEditorHab(tipoFicha, null);
+            contentCatalogState.editorContext = retorno;
+            document.getElementById('modal-hab').classList.add('catalog-editor-mode');
+            document.getElementById('hab-modal-heading').textContent = `${entrada ? 'Editar' : 'Criar'} ${nomeTipoConteudoAcervo(tipoNormalizado).toLocaleLowerCase('pt-BR')} • ${escopo === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
+            document.getElementById('hab-id-edicao').value = '';
+            document.getElementById('hab-tipo').value = tipoFicha;
+            if (entrada) preencherEditorAcaoComEntradaAcervo(entrada);
+            else document.getElementById('hab-is-separator').disabled = true;
+        }
+        acompanharPortaisOrnamentoUmbral(520);
+    }
+
+    function editarConteudoNoAcervo(escopo, campaignId, entryId) {
+        const entrada = entradaConteudoAcervo(escopo, campaignId, entryId);
+        if (!entrada) return alert('Este conteúdo não está mais disponível.');
+        abrirEditorConteudoAcervo(escopo, campaignId, entrada.type, entryId);
+    }
+
+    async function salvarConteudoAcervoDoEditor(tipoEditor) {
+        const contexto = contentCatalogState.editorContext;
+        if (!contexto) return false;
+        if (!usuarioPodeGerenciarEscopoAcervo(contexto.scope, contexto.campaignId)) {
+            alert('Sua permissão para publicar neste acervo não está mais ativa.');
+            return true;
+        }
+        const dados = tipoEditor === 'item' ? dadosItemPublicavelDoEditor() : dadosAcaoPublicavelDoEditor(contexto.type);
+        const nome = String(dados.nome || '').trim();
+        if (!nome) {
+            document.getElementById(tipoEditor === 'item' ? 'item-nome' : 'hab-nome')?.focus();
+            return true;
+        }
+        const tamanho = new Blob([JSON.stringify(dados)]).size;
+        if (tamanho > 900000) {
+            alert('Este conteúdo ficou grande demais para o acervo. Use uma imagem por URL ou uma imagem recortada menor.');
+            return true;
+        }
+        const anterior = contexto.entryId ? entradaConteudoAcervo(contexto.scope, contexto.campaignId, contexto.entryId) : null;
+        const baseRef = database.ref(caminhoConteudoAcervo(contexto.scope, contexto.campaignId));
+        const entryId = anterior?.id || baseRef.push().key;
+        const agora = Date.now();
+        const payload = {
+            id: entryId,
+            type: contexto.type,
+            name: nome,
+            nameLower: nome.toLocaleLowerCase('pt-BR'),
+            data: dados,
+            revision: (anterior?.revision || 0) + 1,
+            createdAt: anterior?.createdAt || agora,
+            updatedAt: firebase.database.ServerValue.TIMESTAMP,
+            createdByUid: anterior?.createdByUid || currentUser.uid,
+            createdByName: anterior?.createdByName || nomeExibicaoAtual(),
+            updatedByUid: currentUser.uid,
+            updatedByName: nomeExibicaoAtual(),
+            campaignId: contexto.scope === 'campaign' ? contexto.campaignId : '',
+            schemaVersion: 2
+        };
+        const retorno = { scope: contexto.scope, campaignId: contexto.campaignId, type: contexto.type, mode: contexto.returnMode || 'manage' };
+        try {
+            await database.ref(caminhoConteudoAcervo(contexto.scope, contexto.campaignId, entryId)).set(payload);
+            contentCatalogState.editorContext = null;
+            document.getElementById(tipoEditor === 'item' ? 'modal-item' : 'modal-hab')?.classList.remove('catalog-editor-mode');
+            fecharSuperficieFoco(tipoEditor === 'item' ? '#modal-item' : '#modal-hab');
+            setTimeout(() => abrirAcervoConteudos(retorno.type, retorno.mode, retorno.scope, retorno.campaignId), UI_SURFACE_TRANSITION_MS + 30);
+            spawnPopup('ACERVO', nome, `R${payload.revision}`, '#d4af37', anterior ? 'CONTEÚDO ATUALIZADO' : 'CONTEÚDO PUBLICADO', anterior ? 'As fichas vinculadas receberão esta revisão em tempo real.' : 'Já está disponível para ser adicionado às fichas autorizadas.');
+        } catch (erro) {
+            console.error('Erro ao publicar conteúdo no acervo:', erro);
+            alert('Não foi possível publicar. Verifique as regras de acesso do Firebase e tente novamente.');
+        }
+        return true;
+    }
+
+    async function excluirConteudoDoAcervo(escopo, campaignId, entryId) {
+        const entrada = entradaConteudoAcervo(escopo, campaignId, entryId);
+        if (!entrada || !usuarioPodeGerenciarEscopoAcervo(escopo, campaignId)) return;
+        const confirmado = await confirmarAbyss(`Excluir “${entrada.name}” do acervo? As fichas que já o adicionaram manterão a última versão recebida.`, {
+            sobretitulo: escopo === 'abyss' ? 'ACERVO ABYSS' : 'ACERVO DA CAMPANHA',
+            titulo: 'Excluir conteúdo',
+            rotuloConfirmar: 'Excluir',
+            tom: 'perigo',
+            restaurarAoCancelar: true
+        });
+        if (!confirmado) return;
+        try {
+            await database.ref(caminhoConteudoAcervo(escopo, campaignId, entryId)).remove();
+            renderizarAcervoConteudos();
+        } catch (erro) {
+            console.error('Erro ao excluir conteúdo do acervo:', erro);
+            alert('Não foi possível excluir este conteúdo.');
+        }
+    }
+
+    function referenciaCatalogoDaEntrada(entrada) {
+        return {
+            scope: entrada.scope,
+            campaignId: entrada.campaignId || '',
+            entryId: entrada.id,
+            revision: entrada.revision
+        };
+    }
+
+    function prepararItemVinculadoAoAcervo(entrada, atual = null) {
+        const item = prepararItemReutilizavel(entrada.data);
+        item.idUnico = atual?.idUnico || gerarIdConteudoFicha('item');
+        item.equipado = atual?.equipado === true;
+        item.recolhido = atual?.recolhido === true;
+        item.ataqueRecolhido = atual?.ataqueRecolhido === true;
+        item.tipoCatalogo = entrada.type;
+        item.catalogRef = referenciaCatalogoDaEntrada(entrada);
+        return item;
+    }
+
+    function prepararAcaoVinculadaAoAcervo(entrada, atual = null) {
+        const acao = prepararAcaoReutilizavel(entrada.data);
+        acao.idUnico = atual?.idUnico || gerarIdConteudoFicha('action');
+        acao.tipo = entrada.type === 'poder' ? 'habilidade' : entrada.type;
+        acao.tipoCatalogo = entrada.type;
+        acao.containerId = atual?.containerId && containerCombatePorId(atual.containerId) ? atual.containerId : '';
+        acao.ativa = atual?.ativa === true;
+        acao.recolhido = atual?.recolhido === true;
+        acao.catalogRef = referenciaCatalogoDaEntrada(entrada);
+        return acao;
+    }
+
+    function adicionarConteudoAcervo(escopo, campaignId, entryId) {
+        tocarSom('click');
+        const entrada = entradaConteudoAcervo(escopo, campaignId, entryId);
+        if (!entrada) return alert('Este conteúdo não está mais disponível.');
+        if (escopo === 'campaign' && !usuarioEhMestreDaCampanhaAcervo(campaignId) && !slotAtualTemVinculoComCampanha(campaignId)) {
+            return alert('A ficha atual não está vinculada a esta campanha.');
+        }
+        if (entrada.type === 'item') {
+            const item = prepararItemVinculadoAoAcervo(entrada);
+            sheet.itens.push(item);
+            atualizarVisualModificadoresGlobais();
+            atualizarPainelInventario();
+            registrarHistoricoItemCriado(item, sheet.itens.length - 1);
+        } else {
+            const acao = prepararAcaoVinculadaAoAcervo(entrada);
+            sheet.habilidades.push(acao);
+            renderAbilities();
+            registrarHistoricoAcao({
+                categoria: 'conteudo',
+                titulo: `Acervo: ${acao.nome || entrada.name}`,
+                detalhes: `${nomeTipoConteudoAcervo(entrada.type)} vinculado à ficha`,
+                undo: { tipo: 'habilidade-remover', idUnico: acao.idUnico }
+            });
+        }
+        marcarAlteracao();
+        renderizarAcervoConteudos();
+        spawnPopup('ACERVO', entrada.name, '✓', '#00c875', 'ADICIONADO À FICHA', `Vinculado à revisão ${entrada.revision}; futuras alterações serão recebidas automaticamente.`);
+    }
+
+    function sincronizarConteudosVinculadosDaFicha() {
+        if (!sheet || contentCatalogState.applyingLinkedUpdate) return;
+        let alterou = false;
+        sheet.habilidades = (sheet.habilidades || []).map(atual => {
+            const ref = atual?.catalogRef;
+            if (!ref?.entryId) return atual;
+            const entrada = entradaConteudoAcervo(ref.scope, ref.campaignId || '', ref.entryId);
+            if (!entrada || Number(ref.revision) === Number(entrada.revision)) return atual;
+            alterou = true;
+            return prepararAcaoVinculadaAoAcervo(entrada, atual);
+        });
+        sheet.itens = (sheet.itens || []).map(atual => {
+            const ref = atual?.catalogRef;
+            if (!ref?.entryId) return atual;
+            const entrada = entradaConteudoAcervo(ref.scope, ref.campaignId || '', ref.entryId);
+            if (!entrada || Number(ref.revision) === Number(entrada.revision)) return atual;
+            alterou = true;
+            return prepararItemVinculadoAoAcervo(entrada, atual);
+        });
+        if (!alterou) return;
+        contentCatalogState.applyingLinkedUpdate = true;
+        sheet.itens.filter(item => item?.catalogRef && item.equipado && item.isWeapon).forEach(sincronizarAtaqueGeradoDoItem);
+        atualizarVisualModificadoresGlobais();
+        atualizarPainelInventario();
+        renderAbilities();
+        contentCatalogState.applyingLinkedUpdate = false;
+        marcarAlteracao();
+        spawnPopup('ACERVO', 'Balanceamento recebido', 'SYNC', '#38d9ff', 'CONTEÚDOS ATUALIZADOS', 'A ficha recebeu as revisões mais recentes dos acervos vinculados.');
+    }
+
     firebase.auth().onAuthStateChanged((user) => {
         const uidAnterior = currentUser?.uid || null;
         currentUser = user;
         const btnLogin = document.getElementById('btn-login');
         if (user) {
+            inicializarAcervoConteudos(user);
             if (uidAnterior !== user.uid) seletorInicialConcluidoParaUid = null;
             btnLogin.innerText = "🔓";
             btnLogin.title = "Sair (" + nomeExibicaoAtual() + ")";
@@ -15218,6 +16044,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 else definirEstadoSincronizacao('offline');
             });
         } else {
+            inicializarAcervoConteudos(null);
             desanexarObservadorSincronizacaoSlot();
             syncState.conflict = null;
             syncState.pending = 0;
@@ -16733,6 +17560,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function abrirEditorHab(t, idxEdicao = null, containerId = '') { 
         tocarSom('click');
+        contentCatalogState.editorContext = null;
+        document.getElementById('modal-hab')?.classList.remove('catalog-editor-mode');
+        document.getElementById('hab-is-separator').disabled = false;
         document.getElementById('hab-tipo').value = t; 
         const nomesTipo = { ataque: 'ataque', habilidade: 'habilidade', feitico: 'feitiço' };
         document.getElementById('hab-modal-heading').textContent = `${idxEdicao !== null ? 'Editar' : 'Criar'} ${nomesTipo[t] || 'conteúdo'}`;
@@ -16820,6 +17650,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function salvarHabilidade() {
         tocarSom('click');
+        if (contentCatalogState.editorContext) {
+            salvarConteudoAcervoDoEditor('action');
+            return;
+        }
         const idEdicao = document.getElementById('hab-id-edicao').value;
         const habilidadeAnterior = idEdicao !== "" ? sheet.habilidades[parseInt(idEdicao)] : null;
         const isSeparator = document.getElementById('hab-is-separator').checked;
@@ -16869,7 +17703,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             extras: rolagensExtras.map(rolagem => rolagem.formula),
             rolagensExtras,
             ativa: habilidadeAnterior?.ativa || false,
-            recolhido: habilidadeAnterior?.recolhido || false
+            recolhido: habilidadeAnterior?.recolhido || false,
+            tipoCatalogo: habilidadeAnterior?.tipoCatalogo || document.getElementById('hab-tipo').value,
+            catalogRef: habilidadeAnterior?.catalogRef || null
         };
         if (idEdicao !== "") sheet.habilidades[parseInt(idEdicao)] = h;
         else sheet.habilidades.push(h);
@@ -17079,7 +17915,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
             card.innerHTML = `
                 <div class="adaptive-card-header">
-                    <h3 class="adaptive-card-title" style="font-family:Cinzel; color:var(--text-gold);">${escapeCampaignHtml(h.nome || 'Sem nome')} ${badgeCustoAcao(h)}</h3>
+                    <h3 class="adaptive-card-title" style="font-family:Cinzel; color:var(--text-gold);">${escapeCampaignHtml(h.nome || 'Sem nome')} ${badgeCustoAcao(h)} ${h.catalogRef ? `<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO R${Number(h.catalogRef.revision) || 1}</span>` : ''}</h3>
                     <div class="adaptive-card-actions">${htmlControles}</div>
                 </div>
                 <div class="collapsible-card-body" ${recolhido ? 'hidden' : ''}>
@@ -17099,6 +17935,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function abrirEditorItem(idxEdicao = null) {
         tocarSom('click');
+        contentCatalogState.editorContext = null;
+        document.getElementById('modal-item')?.classList.remove('catalog-editor-mode');
         document.getElementById('item-modal-heading').textContent = idxEdicao !== null ? 'Editar item' : 'Criar item';
         document.getElementById('item-rolagens-container').innerHTML = '';
         document.getElementById('item-mods-lista').innerHTML = '';
@@ -17154,7 +17992,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         atualizarEstadoListaCustos('item');
         document.getElementById('item-img-file').value = '';
         atualizarPreviewImagem('item-img', 'item-img-preview');
-        document.getElementById('modal-item').style.display = 'block';
+        abrirSuperficieFoco('#modal-item');
         requestAnimationFrame(() => autoAjustarTextarea(document.getElementById('item-desc')));
     }
 
@@ -17205,6 +18043,10 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function salvarItemInventario() {
         tocarSom('click');
+        if (contentCatalogState.editorContext) {
+            salvarConteudoAcervoDoEditor('item');
+            return;
+        }
         const idEdicao = document.getElementById('item-id-edicao').value;
         const isEditing = idEdicao !== "";
         const originalItem = isEditing ? sheet.itens[parseInt(idEdicao)] : null;
@@ -17245,7 +18087,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             weapSec: document.getElementById('item-weap-sec').value,
             weapCritMargem: primeiraRolagem.critMargem || 20,
             weapCritDano: primeiraRolagem.critDano || '',
-            idUnico: originalItem?.idUnico || Date.now() + Math.random().toString(36).substr(2, 9)
+            idUnico: originalItem?.idUnico || Date.now() + Math.random().toString(36).substr(2, 9),
+            tipoCatalogo: originalItem?.tipoCatalogo || 'item',
+            catalogRef: originalItem?.catalogRef || null
         };
 
         if (isEditing) sheet.itens[parseInt(idEdicao)] = item;
@@ -17325,7 +18169,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             card.className = `item-card ${item.equipado ? 'equipped' : ''} ${recolhido ? 'is-collapsed' : ''}`;
             card.innerHTML = `
                 <div class="adaptive-card-header">
-                    <h4 class="adaptive-card-title" style="font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${escapeCampaignHtml(item.nome || 'Item sem nome')} ${badgeCustoAcao(item)}</h4>
+                    <h4 class="adaptive-card-title" style="font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${escapeCampaignHtml(item.nome || 'Item sem nome')} ${badgeCustoAcao(item)} ${item.catalogRef ? `<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO R${Number(item.catalogRef.revision) || 1}</span>` : ''}</h4>
                     <div class="adaptive-card-actions">
                         <span class="inventory-order-actions"><button onclick="moverItemInventario(${i}, -1)" title="Mover para cima">↑</button><button onclick="moverItemInventario(${i}, 1)" title="Mover para baixo">↓</button></span>
                         <button class="card-collapse-toggle" onclick="alternarCartaoItem(${i})" title="${recolhido ? 'Abrir conteúdo' : 'Recolher conteúdo'}" aria-expanded="${!recolhido}">${recolhido ? '▸' : '▾'}</button>
@@ -18123,6 +18967,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     render();
     renderAbilities();
     renderizarCondicoes();
+    sincronizarEscutasAcervosCampanha();
+    sincronizarConteudosVinculadosDaFicha();
 }
 
     window.onload = () => {
@@ -18343,7 +19189,9 @@ function escutarListaCampanhas() {
             campaignState.campaigns = [];
             campaignState.membershipRoles = {};
             pararEscutaCombates();
+            sincronizarEscutasAcervosCampanha();
             renderizarListaCampanhas();
+            renderizarAcervoConteudos();
             sincronizarAcessoMesaDocumentos();
             return;
         }
@@ -18362,7 +19210,9 @@ function escutarListaCampanhas() {
         }));
         if (currentUser?.uid !== uid) return;
         campaignState.campaigns = resolved.filter(Boolean).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        sincronizarEscutasAcervosCampanha();
         renderizarListaCampanhas();
+        renderizarAcervoConteudos();
         sincronizarAcessoMesaDocumentos();
     };
     campaignState.listRef.on('value', campaignState.listHandler);
@@ -18892,6 +19742,9 @@ function renderizarDetalheCampanha() {
     const meta = campaign.meta;
     const isMaster = campaignState.role === 'mestre';
     document.getElementById('campaign-edit-campaign-btn').style.display = isMaster ? 'inline-flex' : 'none';
+    const botaoAcervo = document.getElementById('campaign-content-library-btn');
+    if (botaoAcervo) botaoAcervo.style.display = isMaster ? 'inline-flex' : 'none';
+    atualizarAcessoAdministrativoAcervo();
     const activeCombat = campaign.combat && campaign.combat.phase;
     const combatButton = document.getElementById('campaign-start-combat-btn');
     combatButton.style.display = (isMaster || activeCombat) ? 'inline-flex' : 'none';
@@ -19094,6 +19947,7 @@ function escutarLinksPersonagens() {
     campaignState.linksRef = database.ref(`users/${uid}/campaignLinks`);
     campaignState.linksHandler = snapshot => {
         campaignState.links = snapshot.val() || {};
+        sincronizarEscutasAcervosCampanha();
         campaignState.characterListeners.forEach(({ ref, handler }) => ref.off('value', handler));
         campaignState.characterListeners = [];
         Object.entries(campaignState.links).forEach(([campaignId, links]) => {
