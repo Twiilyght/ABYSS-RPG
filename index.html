@@ -8447,8 +8447,12 @@ body.ui-theme-preview-open #ui-focus-backdrop {
     visibility: hidden !important;
     pointer-events: none !important;
 }
-body.ui-focus-open,
-body.ui-focus-open.ui-theme-preview-open { overflow-x: hidden; overflow-y: auto; }
+body.ui-focus-open:not(.ui-theme-preview-open) { overflow:hidden !important; overscroll-behavior:none; }
+body.ui-focus-open.ui-theme-preview-open { overflow-x:hidden; overflow-y:auto; }
+html.ui-focus-scroll-lock,
+html.ui-focus-scroll-lock body { overflow:hidden !important; overscroll-behavior:none !important; }
+.modal.ui-focus-surface,
+#log-panel.ui-focus-surface { overscroll-behavior:contain; }
 
 /* Popups entram e saem lateralmente, sem salto brusco. */
 #central-popup {
@@ -10000,26 +10004,23 @@ body.theme-umbral .content-library-modal {
 .content-library-create select { min-width:155px; margin:0; }
 .content-library-create .settings-primary { min-width:158px; min-height:40px; border:1px solid var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 32%,#0a080e); color:#fff; white-space:nowrap; }
 .content-library-create .settings-primary:hover { border-color:var(--ornament-color); background:color-mix(in srgb,var(--primary-purple) 48%,#0a080e); }
-.content-library-workspace { position:relative; display:grid; flex:1 1 auto; grid-template-columns:104px minmax(315px,390px) minmax(0,1fr); grid-template-areas:'rail browser detail'; min-height:0; border:1px solid color-mix(in srgb,var(--ornament-color) 26%,#2f2835); background:#08070a; box-shadow:inset 0 0 38px rgba(0,0,0,.28); }
-.content-library-filter-rail { grid-area:rail; display:flex; flex-direction:column; gap:13px; min-width:0; min-height:0; overflow-x:hidden; overflow-y:auto; padding:12px 8px; border-right:1px solid #302837; background:linear-gradient(180deg,#100c13,#08070a); }
+.content-library-filterbar { display:flex; align-items:center; gap:17px; min-height:44px; margin:0 0 10px; padding:6px 9px; overflow-x:auto; overflow-y:hidden; border:1px solid #302837; background:linear-gradient(90deg,#0d0a10,#08070a); overscroll-behavior-x:contain; }
+.content-library-workspace { position:relative; display:grid; flex:1 1 auto; grid-template-columns:minmax(330px,405px) minmax(0,1fr); grid-template-areas:'browser detail'; min-height:0; border:1px solid color-mix(in srgb,var(--ornament-color) 26%,#2f2835); background:#08070a; box-shadow:inset 0 0 38px rgba(0,0,0,.28); }
 .content-library-browser { grid-area:browser; display:flex; flex-direction:column; min-width:0; min-height:0; padding:13px; border-right:1px solid #302837; background:linear-gradient(180deg,#0d0b11,#09080c); }
 .content-library-search-wrap { display:grid; grid-template-columns:24px 1fr; align-items:center; gap:5px; min-height:44px; padding:0 12px; border:1px solid #3b3243; background:#070609; color:#9d92a6; }
 .content-library-search-wrap:focus-within { border-color:var(--light-purple); box-shadow:0 0 0 2px color-mix(in srgb,var(--primary-purple) 14%,transparent); }
 .content-library-search-wrap input { width:100%; height:42px; margin:0 !important; padding:0 4px !important; border:0 !important; outline:0; box-shadow:none !important; background:transparent !important; color:#eee7f1; font:700 .75rem Cinzel,serif; }
 .content-library-search-wrap input::placeholder { color:#6f6675; }
-.content-library-filter-group { margin:0; }
-.content-library-filter-label { display:flex; align-items:center; justify-content:center; gap:4px; margin:0 0 7px; color:#8d8393; font:700 .49rem Cinzel,serif; letter-spacing:1px; text-align:center; }
+.content-library-filter-group { display:flex; align-items:center; flex:0 0 auto; gap:7px; margin:0; }
+.content-library-filter-label { display:flex; align-items:center; justify-content:center; gap:4px; margin:0; color:#8d8393; font:700 .49rem Cinzel,serif; letter-spacing:1px; text-align:center; white-space:nowrap; }
 .content-library-filter-label small { display:none; }
-.content-library-type-strip,.content-library-entity-strip { display:grid; grid-template-columns:repeat(2,42px); gap:5px; overflow:visible; padding:0; }
-.content-library-type,.content-library-entity { position:relative; display:grid; place-items:center; width:42px; height:42px; min-height:42px; padding:0; border:1px solid #39313f; border-radius:3px; background:#0a090d; color:#89808f; font:700 .9rem Cinzel,serif; cursor:pointer; transition:transform .14s ease,border-color .14s ease,background .14s ease,color .14s ease; }
-.content-library-type { --entity-color:var(--primary-purple); }
-.content-library-filter-icon { display:grid; place-items:center; width:100%; height:100%; font-size:1rem; line-height:1; }
+.content-library-type-strip,.content-library-entity-strip { display:flex; align-items:center; gap:5px; overflow:visible; padding:0; }
+.content-library-type { position:relative; display:inline-flex; align-items:center; justify-content:center; width:auto; height:29px; min-height:29px; padding:5px 9px; border:1px solid #39313f; border-radius:3px; background:#0a090d; color:#89808f; font:700 .51rem Cinzel,serif; letter-spacing:.55px; white-space:nowrap; cursor:pointer; transition:transform .14s ease,border-color .14s ease,background .14s ease,color .14s ease; }
+.content-library-entity { position:relative; display:grid; place-items:center; width:31px; height:31px; min-height:31px; padding:0; border:1px solid #39313f; border-radius:3px; background:#0a090d; color:#89808f; cursor:pointer; transition:transform .14s ease,border-color .14s ease,background .14s ease,color .14s ease; }
 .content-library-type:hover,.content-library-type.active { color:#fff; border-color:var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 23%,#09070d); }
 .content-library-type:hover,.content-library-entity:hover { transform:translateY(-2px); }
-.content-library-entity { display:inline-flex; align-items:center; gap:7px; min-height:36px; padding:4px 9px 4px 5px; }
-.content-library-filter-rail .content-library-entity { display:grid; width:42px; height:42px; min-height:42px; padding:0; }
 .content-library-entity::before { content:none; }
-.content-library-entity-symbol { position:relative; display:grid; place-items:center; flex:0 0 30px; width:30px; height:30px; overflow:hidden; border:1px solid color-mix(in srgb,var(--entity-color,#77717c) 56%,#322a38); background:#030204; color:var(--entity-contrast,#ddd); font-size:.75rem; }
+.content-library-entity-symbol { position:relative; display:grid; place-items:center; flex:0 0 23px; width:23px; height:23px; overflow:hidden; border:1px solid color-mix(in srgb,var(--entity-color,#77717c) 56%,#322a38); background:#030204; color:var(--entity-contrast,#ddd); font-size:.68rem; }
 .content-library-entity-symbol img { width:100%; height:100%; object-fit:contain; }
 .content-library-entity:hover,.content-library-entity.active { color:var(--entity-contrast,#fff); border-color:var(--entity-color,#77717c); background:color-mix(in srgb,var(--entity-color,#77717c) 16%,#09080c); }
 .content-library-list-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:11px 0 7px; padding-top:9px; border-top:1px solid #28222d; color:#706777; font:700 .54rem Cinzel,serif; letter-spacing:.8px; }
@@ -10069,15 +10070,20 @@ label.catalog-entity-field span,label.catalog-entity-field small,label.catalog-t
 label.catalog-entity-field,label.catalog-type-field { margin-top:11px; color:var(--text-gold); font:700 .7rem Cinzel,serif; }
 label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px; color:#766e7c; font:400 .62rem var(--font-reading); }
 .catalog-editor-mode .catalog-entity-field,.catalog-editor-mode .catalog-type-field { display:block !important; }
+.catalog-entity-picker { grid-template-columns:repeat(auto-fit,minmax(105px,1fr)); gap:7px; margin-top:7px; }
+.catalog-editor-mode .catalog-entity-picker { display:grid !important; }
+.catalog-entity-option { --entity-color:#77717c; position:relative; display:grid; grid-template-columns:30px minmax(0,1fr); align-items:center; gap:8px; min-height:42px; padding:5px 8px; border:1px solid #39313f; background:#09080c; color:#8d8492; cursor:pointer; transition:.15s ease; }
+.catalog-entity-option input { position:absolute; opacity:0; pointer-events:none; }
+.catalog-entity-option .content-library-entity-symbol { width:28px; height:28px; }
+.catalog-entity-option strong { overflow:hidden; font:700 .56rem Cinzel,serif; text-overflow:ellipsis; }
+.catalog-entity-option:has(input:checked) { color:#fff; border-color:var(--entity-color); background:color-mix(in srgb,var(--entity-color) 16%,#09080c); box-shadow:inset 3px 0 var(--entity-color); }
 .catalog-editor-mode .ability-separator-toggle,.catalog-editor-mode .ability-container-field,.catalog-editor-mode .ability-container-select,.catalog-editor-mode .ability-container-help { display:none !important; }
 .catalog-linked-badge { display:inline-flex; align-items:center; gap:4px; margin-left:7px; color:#c6a1f1; font-size:.56rem; letter-spacing:.7px; vertical-align:middle; }
 .catalog-linked-badge::before { content:'⌁'; color:var(--text-gold); }
 @media (max-width:760px) {
     .content-library-modal,body.theme-umbral .content-library-modal { width:calc(100vw - 30px); height:calc(100dvh - 30px); padding:18px; }
-    .content-library-workspace { grid-template-columns:1fr; grid-template-areas:'rail' 'browser' 'detail'; overflow:auto; }
-    .content-library-filter-rail { flex-direction:row; align-items:flex-start; gap:14px; overflow-x:auto; overflow-y:hidden; padding:9px; border-right:0; border-bottom:1px solid #302837; }
-    .content-library-filter-group { flex:0 0 auto; }
-    .content-library-type-strip,.content-library-entity-strip { display:flex; }
+    .content-library-filterbar { align-items:flex-start; }
+    .content-library-workspace { grid-template-columns:1fr; grid-template-areas:'browser' 'detail'; overflow:auto; }
     .content-library-browser { min-height:390px; border-right:0; border-bottom:1px solid #302837; }
     .content-library-detail { min-height:390px; overflow:visible; }
     .content-library-adminbar { align-items:stretch; flex-direction:column; }
@@ -11518,17 +11524,17 @@ label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px
             <button type="button" class="settings-primary" onclick="criarConteudoNoAcervo()">＋ Criar conteúdo</button>
         </div>
     </div>
+    <div class="content-library-filterbar" aria-label="Filtros do acervo">
+        <div class="content-library-filter-group">
+            <span class="content-library-filter-label">TIPO</span>
+            <div id="content-library-type-strip" class="content-library-type-strip" aria-label="Filtrar por tipo"></div>
+        </div>
+        <div class="content-library-filter-group">
+            <span class="content-library-filter-label">ENTIDADE</span>
+            <div id="content-library-entity-strip" class="content-library-entity-strip" aria-label="Filtrar por entidade"></div>
+        </div>
+    </div>
     <div class="content-library-workspace">
-        <nav class="content-library-filter-rail" aria-label="Filtros do acervo">
-            <div class="content-library-filter-group">
-                <span class="content-library-filter-label">TIPO</span>
-                <div id="content-library-type-strip" class="content-library-type-strip" aria-label="Filtrar por tipo"></div>
-            </div>
-            <div class="content-library-filter-group">
-                <span class="content-library-filter-label">ENTIDADE <small>OPCIONAL</small></span>
-                <div id="content-library-entity-strip" class="content-library-entity-strip" aria-label="Filtrar por entidade"></div>
-            </div>
-        </nav>
         <aside class="content-library-browser" aria-label="Filtros e conteúdos do acervo">
             <div id="content-library-campaigns" class="content-library-campaigns" aria-label="Escolher campanha"></div>
             <label class="content-library-search-wrap" for="content-library-search">
@@ -11597,10 +11603,8 @@ label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px
             <option value="poder">Poder</option><option value="feitico">Feitiço</option><option value="habilidade">Habilidade</option><option value="ataque">Ataque</option><option value="antecedencia">Antecedência</option><option value="raca">Raça</option>
         </select>
 
-        <label class="catalog-entity-field" for="hab-catalog-entity"><span>ENTIDADE</span><small>Opcional • define a identificação cromática no acervo</small></label>
-        <select id="hab-catalog-entity" class="modal-input catalog-entity-field">
-            <option value="">Sem entidade</option><option value="lumen">Lumen</option><option value="umbra">Umbra</option><option value="caos">Caos</option><option value="eter">Éter</option><option value="ley">Ley</option>
-        </select>
+        <label class="catalog-entity-field"><span>ENTIDADES</span><small>Opcional • selecione uma ou mais entidades relacionadas</small></label>
+        <div id="hab-catalog-entity" class="catalog-entity-picker catalog-entity-field" role="group" aria-label="Entidades da publicação"></div>
 
         <label class="ability-container-field" for="hab-container-id">ORGANIZAR EM</label>
         <select id="hab-container-id" class="modal-input ability-container-select"></select>
@@ -11695,10 +11699,8 @@ label.catalog-entity-field small,label.catalog-type-field small { margin-top:3px
     <label style="color:var(--text-gold); font-size:0.8rem">NOME DO ITEM</label>
     <input type="text" id="item-nome" class="modal-input" placeholder="Ex: Espada de Ébano">
 
-    <label class="catalog-entity-field" for="item-catalog-entity"><span>ENTIDADE</span><small>Opcional • define a identificação cromática no acervo</small></label>
-    <select id="item-catalog-entity" class="modal-input catalog-entity-field">
-        <option value="">Sem entidade</option><option value="lumen">Lumen</option><option value="umbra">Umbra</option><option value="caos">Caos</option><option value="eter">Éter</option><option value="ley">Ley</option>
-    </select>
+    <label class="catalog-entity-field"><span>ENTIDADES</span><small>Opcional • selecione uma ou mais entidades relacionadas</small></label>
+    <div id="item-catalog-entity" class="catalog-entity-picker catalog-entity-field" role="group" aria-label="Entidades do item publicado"></div>
 
     <label style="color:var(--text-gold); font-size:0.8rem">IMAGEM / ÍCONE DO ITEM</label>
     <input type="text" id="item-img" class="modal-input" placeholder="https://link-da-imagem.png" oninput="atualizarPreviewImagem('item-img', 'item-img-preview')">
@@ -11853,6 +11855,7 @@ function finalizarFocoSeNecessario() {
     superficieFocoAtiva?.classList.remove('ui-focus-surface');
     superficieFocoAtiva = null;
     document.body.classList.remove('ui-focus-open', 'ui-focus-required', 'ui-theme-preview-open');
+    document.documentElement.classList.remove('ui-focus-scroll-lock');
     document.getElementById('ui-focus-backdrop')?.setAttribute('aria-hidden', 'true');
     atualizarGatilhosSuperficieFoco();
 }
@@ -11879,6 +11882,7 @@ function abrirSuperficieFoco(alvo) {
     elemento.setAttribute('aria-hidden', 'false');
     superficieFocoAtiva = elemento;
     document.body.classList.add('ui-focus-open');
+    document.documentElement.classList.toggle('ui-focus-scroll-lock', elemento.id !== 'theme-panel');
     document.body.classList.toggle('ui-focus-required', superficieFocoExigeEscolha(elemento));
     document.body.classList.toggle('ui-theme-preview-open', elemento.id === 'theme-panel');
     document.getElementById('ui-focus-backdrop')?.setAttribute('aria-hidden', 'false');
@@ -15490,6 +15494,36 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         return Object.prototype.hasOwnProperty.call(CONTENT_CATALOG_ENTITIES, chave) ? chave : '';
     }
 
+    function normalizarEntidadesAcervo(entidades) {
+        const origem = Array.isArray(entidades)
+            ? entidades
+            : (entidades && typeof entidades === 'object'
+                ? Object.entries(entidades).filter(([, ativo]) => Boolean(ativo)).map(([chave]) => chave)
+                : [entidades]);
+        return [...new Set(origem.map(normalizarEntidadeAcervo).filter(Boolean))].slice(0, Object.keys(CONTENT_CATALOG_ENTITIES).length);
+    }
+
+    function entidadesDaEntradaAcervo(entrada) {
+        return normalizarEntidadesAcervo(entrada?.entities || entrada?.data?.entities || entrada?.entity || entrada?.data?.entity);
+    }
+
+    function renderizarSeletorEntidadesEditorAcervo(containerId, selecionadas = []) {
+        const host = document.getElementById(containerId);
+        if (!host) return;
+        const marcadas = new Set(normalizarEntidadesAcervo(selecionadas));
+        host.innerHTML = Object.entries(CONTENT_CATALOG_ENTITIES).map(([chave, dados]) => `
+            <label class="catalog-entity-option" style="--entity-color:${dados.color}">
+                <input type="checkbox" value="${chave}" ${marcadas.has(chave) ? 'checked' : ''}>
+                <span class="content-library-entity-symbol"><img src="${escapeCampaignHtml(dados.icon)}" alt=""></span>
+                <strong>${dados.label}</strong>
+            </label>`).join('');
+    }
+
+    function coletarEntidadesEditorAcervo(containerId) {
+        const host = document.getElementById(containerId);
+        return normalizarEntidadesAcervo([...host?.querySelectorAll('input[type="checkbox"]:checked') || []].map(input => input.value));
+    }
+
     function dadosEntidadeAcervo(entidade) {
         const chave = normalizarEntidadeAcervo(entidade);
         return chave
@@ -15508,12 +15542,15 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (!id) return null;
         const data = clonarParaHistorico(valor.data);
         const name = String(valor.name || data.nome || 'Conteúdo sem nome').trim() || 'Conteúdo sem nome';
-        const entity = normalizarEntidadeAcervo(valor.entity || data.entity);
+        const entities = normalizarEntidadesAcervo(valor.entities || data.entities || valor.entity || data.entity);
+        const entity = entities[0] || '';
+        data.entities = entities;
         data.entity = entity;
         return {
             id,
             type,
             entity,
+            entities,
             name,
             nameLower: String(valor.nameLower || name).toLocaleLowerCase('pt-BR'),
             data,
@@ -15747,7 +15784,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function htmlDetalheConteudoAcervo(entrada, podeGerenciar) {
         if (!entrada) return `<div class="content-library-detail-empty"><span aria-hidden="true">✦</span><strong>Selecione um conhecimento</strong><p>Os títulos permanecem retraídos. Escolha um deles ao lado para expandir descrição, fórmulas e ações.</p></div>`;
-        const entidade = dadosEntidadeAcervo(entrada.entity);
+        const entidades = entidadesDaEntradaAcervo(entrada).map(dadosEntidadeAcervo);
+        const entidade = entidades[0] || dadosEntidadeAcervo('');
         const fatos = fatosConteudoAcervo(entrada);
         const jaAdicionado = conteudoAcervoJaAdicionado(entrada);
         const campanhaId = escapeCampaignHtml(entrada.campaignId || '');
@@ -15759,11 +15797,13 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             : (entidade.icon
                 ? `<img class="content-library-detail-image" src="${escapeCampaignHtml(entidade.icon)}" alt="Símbolo de ${entidade.label}">`
                 : `<div class="content-library-detail-image" aria-hidden="true">${iconeTipoConteudoAcervo(entrada.type)}</div>`);
-        const simboloEntidade = entidade.icon ? `<img src="${escapeCampaignHtml(entidade.icon)}" alt="">` : '';
+        const badgesEntidades = entidades.length
+            ? entidades.map(item => `<span class="content-library-entity-badge" style="--entity-color:${item.color};--entity-contrast:${item.contrast}">${item.icon ? `<img src="${escapeCampaignHtml(item.icon)}" alt="">` : ''}${item.label}</span>`).join('')
+            : `<span class="content-library-entity-badge">SEM ENTIDADE</span>`;
         return `<div style="--entity-color:${entidade.color};--entity-contrast:${entidade.contrast}">
             <div class="content-library-detail-hero">
                 <div>
-                    <div class="content-library-detail-kicker"><span class="content-library-badge">${nomeTipoConteudoAcervo(entrada.type)}</span><span class="content-library-entity-badge">${simboloEntidade}${entidade.label}</span></div>
+                    <div class="content-library-detail-kicker"><span class="content-library-badge">${nomeTipoConteudoAcervo(entrada.type)}</span>${badgesEntidades}</div>
                     <h4>${escapeCampaignHtml(entrada.name)}</h4>
                     <div class="content-library-detail-meta">REVISÃO ${entrada.revision}${jaAdicionado ? ' • JÁ VINCULADO À FICHA' : ''}</div>
                 </div>
@@ -15804,10 +15844,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
         const tipos = [['', 'TODOS'], ['poder', 'PODER'], ['feitico', 'FEITIÇO'], ['habilidade', 'HABILIDADE'], ['antecedencia', 'ANTECEDÊNCIA'], ['raca', 'RAÇA'], ['item', 'ITEM']];
         if (contentCatalogState.mode === 'manage' || contentCatalogState.type === 'ataque') tipos.splice(4, 0, ['ataque', 'ATAQUE']);
-        document.getElementById('content-library-type-strip').innerHTML = tipos.map(([valor, nome]) => {
-            const icone = valor ? iconeTipoConteudoAcervo(valor) : '✦';
-            return `<button type="button" class="content-library-type ${contentCatalogState.type === valor ? 'active' : ''}" title="${nome}" aria-label="${nome}" aria-pressed="${contentCatalogState.type === valor}" onclick="selecionarTipoAcervo('${valor}')"><span class="content-library-filter-icon" aria-hidden="true">${icone}</span></button>`;
-        }).join('');
+        document.getElementById('content-library-type-strip').innerHTML = tipos.map(([valor, nome]) => `<button type="button" class="content-library-type ${contentCatalogState.type === valor ? 'active' : ''}" aria-pressed="${contentCatalogState.type === valor}" onclick="selecionarTipoAcervo('${valor}')">${nome}</button>`).join('');
 
         const entidades = [['', 'TODAS'], ...Object.entries(CONTENT_CATALOG_ENTITIES).map(([key, value]) => [key, value.label])];
         document.getElementById('content-library-entity-strip').innerHTML = entidades.map(([valor, nome]) => {
@@ -15832,7 +15869,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const mapa = escopo === 'abyss' ? contentCatalogState.abyss : (contentCatalogState.campaigns[contentCatalogState.campaignId] || {});
         const entradas = Object.values(mapa).filter(entrada => {
             if (contentCatalogState.type && entrada.type !== contentCatalogState.type) return false;
-            if (contentCatalogState.entity && entrada.entity !== contentCatalogState.entity) return false;
+            if (contentCatalogState.entity && !entidadesDaEntradaAcervo(entrada).includes(contentCatalogState.entity)) return false;
             return !busca || entrada.name.toLocaleLowerCase('pt-BR').includes(busca);
         }).sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt-BR'));
 
@@ -15846,17 +15883,19 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             grid.innerHTML = `<div class="content-library-empty">${mensagem}</div>`;
         } else {
             grid.innerHTML = entradas.map(entrada => {
-                const entidade = dadosEntidadeAcervo(entrada.entity);
+                const entidadesEntrada = entidadesDaEntradaAcervo(entrada).map(dadosEntidadeAcervo);
+                const entidade = entidadesEntrada[0] || dadosEntidadeAcervo('');
+                const nomesEntidades = entidadesEntrada.length ? entidadesEntrada.map(item => item.label).join(' + ') : 'SEM ENTIDADE';
                 const ativa = chaveEntradaConteudoAcervo(entrada) === contentCatalogState.selectedEntryKey;
                 const imagem = entrada.data?.img
                     ? `<img src="${escapeCampaignHtml(entrada.data.img)}" alt="">`
                     : (entidade.icon ? `<img src="${escapeCampaignHtml(entidade.icon)}" alt="">` : `<span aria-hidden="true">${iconeTipoConteudoAcervo(entrada.type)}</span>`);
                 return `<button type="button" class="content-library-entry ${ativa ? 'active' : ''}" style="--entity-color:${entidade.color};--entity-contrast:${entidade.contrast}" onclick="selecionarEntradaAcervo('${entrada.scope}','${escapeCampaignHtml(entrada.campaignId || '')}','${escapeCampaignHtml(entrada.id)}')">
-                    <span class="content-library-entry-thumb">${imagem}</span><span class="content-library-entry-copy"><strong>${escapeCampaignHtml(entrada.name)}</strong><small>${nomeTipoConteudoAcervo(entrada.type)} • ${entidade.label}</small></span><span class="content-library-entry-arrow" aria-hidden="true">›</span>
+                    <span class="content-library-entry-thumb">${imagem}</span><span class="content-library-entry-copy"><strong>${escapeCampaignHtml(entrada.name)}</strong><small>${nomeTipoConteudoAcervo(entrada.type)} • ${nomesEntidades}</small></span><span class="content-library-entry-arrow" aria-hidden="true">›</span>
                 </button>`;
             }).join('');
         }
-        detalhe.style.setProperty('--entity-color', selecionada ? dadosEntidadeAcervo(selecionada.entity).color : '#77717c');
+        detalhe.style.setProperty('--entity-color', selecionada ? dadosEntidadeAcervo(entidadesDaEntradaAcervo(selecionada)[0]).color : '#77717c');
         detalhe.innerHTML = htmlDetalheConteudoAcervo(selecionada, podeGerenciar);
         acompanharPortaisOrnamentoUmbral(420);
     }
@@ -15915,10 +15954,12 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const rolagensPrincipais = coletarRolagensPrincipais('hab');
         const rolagensExtras = coletarRolagensExtrasDOM('hab');
         const primeiraRolagem = rolagensPrincipais[0] || {};
+        const entities = coletarEntidadesEditorAcervo('hab-catalog-entity');
         return {
             tipo: tipoFichaDoConteudoAcervo(tipoPublicacao),
             tipoCatalogo: tipoPublicacao,
-            entity: normalizarEntidadeAcervo(document.getElementById('hab-catalog-entity')?.value),
+            entities,
+            entity: entities[0] || '',
             nome: document.getElementById('hab-nome').value.trim(),
             isSeparator: false,
             dano: primeiraRolagem.formula || '',
@@ -15946,9 +15987,11 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const rolagensPrincipais = isWeapon ? coletarRolagensPrincipais('item') : [];
         const primeiraRolagem = rolagensPrincipais[0] || {};
         const rolagensExtras = coletarRolagensExtrasDOM('item');
+        const entities = coletarEntidadesEditorAcervo('item-catalog-entity');
         return {
             tipoCatalogo: 'item',
-            entity: normalizarEntidadeAcervo(document.getElementById('item-catalog-entity')?.value),
+            entities,
+            entity: entities[0] || '',
             nome: document.getElementById('item-nome').value.trim(),
             img: document.getElementById('item-img').value.trim(),
             peso: parseInt(document.getElementById('item-peso').value) || 0,
@@ -15982,7 +16025,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         document.getElementById('rolagens-extras-container').innerHTML = '';
         document.getElementById('hab-nome').value = dados.nome || entrada.name || '';
         document.getElementById('hab-catalog-type').value = tipoConteudoAcervo(entrada.type || dados.tipoCatalogo || dados.tipo);
-        document.getElementById('hab-catalog-entity').value = normalizarEntidadeAcervo(entrada.entity || dados.entity);
+        renderizarSeletorEntidadesEditorAcervo('hab-catalog-entity', entidadesDaEntradaAcervo(entrada));
         document.getElementById('hab-desc').value = dados.desc || '';
         document.getElementById('hab-img').value = dados.img || '';
         document.getElementById('hab-is-separator').checked = false;
@@ -16022,7 +16065,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         document.getElementById('item-mods-lista').innerHTML = '';
         document.getElementById('item-rolagens-container').innerHTML = '';
         document.getElementById('item-nome').value = dados.nome || entrada.name || '';
-        document.getElementById('item-catalog-entity').value = normalizarEntidadeAcervo(entrada.entity || dados.entity);
+        renderizarSeletorEntidadesEditorAcervo('item-catalog-entity', entidadesDaEntradaAcervo(entrada));
         document.getElementById('item-img').value = dados.img || '';
         document.getElementById('item-peso').value = Number(dados.peso) || 0;
         document.getElementById('item-desc').value = dados.desc || '';
@@ -16058,7 +16101,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             abrirEditorItem(null);
             contentCatalogState.editorContext = retorno;
             document.getElementById('modal-item').classList.add('catalog-editor-mode');
-            document.getElementById('item-catalog-entity').value = '';
+            renderizarSeletorEntidadesEditorAcervo('item-catalog-entity', []);
             document.getElementById('item-modal-heading').textContent = `${entrada ? 'Editar' : 'Criar'} item • ${escopo === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
             document.getElementById('item-id-edicao').value = '';
             if (entrada) preencherEditorItemComEntradaAcervo(entrada);
@@ -16068,7 +16111,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             contentCatalogState.editorContext = retorno;
             document.getElementById('modal-hab').classList.add('catalog-editor-mode');
             document.getElementById('hab-catalog-type').value = tipoNormalizado;
-            document.getElementById('hab-catalog-entity').value = '';
+            renderizarSeletorEntidadesEditorAcervo('hab-catalog-entity', []);
             document.getElementById('hab-modal-heading').textContent = `${entrada ? 'Editar' : 'Criar'} ${nomeTipoConteudoAcervo(tipoNormalizado).toLocaleLowerCase('pt-BR')} • ${escopo === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
             document.getElementById('hab-id-edicao').value = '';
             document.getElementById('hab-tipo').value = tipoFicha;
@@ -16110,6 +16153,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             : tipoConteudoAcervo(document.getElementById('hab-catalog-type')?.value || contexto.type);
         contexto.type = tipoPublicacao;
         const dados = tipoEditor === 'item' ? dadosItemPublicavelDoEditor() : dadosAcaoPublicavelDoEditor(tipoPublicacao);
+        const entities = normalizarEntidadesAcervo(dados.entities || dados.entity);
+        dados.entities = entities;
+        dados.entity = entities[0] || '';
         const nome = String(dados.nome || '').trim();
         if (!nome) {
             document.getElementById(tipoEditor === 'item' ? 'item-nome' : 'hab-nome')?.focus();
@@ -16127,7 +16173,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const payload = {
             id: entryId,
             type: tipoPublicacao,
-            entity: normalizarEntidadeAcervo(dados.entity),
+            entities,
+            entity: entities[0] || '',
             name: nome,
             nameLower: nome.toLocaleLowerCase('pt-BR'),
             data: dados,
@@ -16139,7 +16186,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             updatedByUid: currentUser.uid,
             updatedByName: nomeExibicaoAtual(),
             campaignId: contexto.scope === 'campaign' ? contexto.campaignId : '',
-            schemaVersion: 2
+            schemaVersion: 3
         };
         const retorno = { scope: contexto.scope, campaignId: contexto.campaignId, type: tipoPublicacao, mode: contexto.returnMode || 'manage' };
         try {
