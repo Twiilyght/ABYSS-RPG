@@ -3894,6 +3894,7 @@ body.theme-umbral #btn-combate::after { content: "Combate"; }
 body.theme-umbral #btn-inventario::after { content: "Inventário"; }
 body.theme-umbral #btn-notas::after { content: "Crônicas"; }
 body.theme-umbral #btn-save-cloud::after { content: "Salvar"; }
+body.theme-umbral #btn-abyss-catalog-admin::after { content: "Acervo Abyss"; }
 
 body.theme-umbral .sidebar-btn:hover,
 body.theme-umbral .sidebar-btn.active {
@@ -9948,81 +9949,111 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 .global-search-result { content-visibility: auto; contain-intrinsic-size: 72px; }
 
 /* ACERVOS ABYSS E DE CAMPANHA */
-.topbar-action[hidden], .campaign-ghost-btn[hidden] { display: none !important; }
+.topbar-action[hidden], .sidebar-btn[hidden], .campaign-ghost-btn[hidden] { display:none !important; }
 .content-library-modal {
-    width: min(1040px, calc(100vw - 56px));
-    max-height: min(820px, calc(100vh - 72px));
-    overflow: auto;
-    padding: clamp(20px, 3vw, 34px);
+    width:min(1220px,calc(100vw - 46px)); height:min(850px,calc(100vh - 54px)); max-height:none;
+    overflow:hidden; padding:clamp(18px,2.2vw,30px); background:linear-gradient(145deg,#0d0b11 0%,#070609 58%,#0b0810 100%);
 }
-.content-library-header { display:flex; align-items:flex-start; justify-content:space-between; gap:22px; margin-bottom:18px; }
-.content-library-header .settings-eyebrow { color:var(--text-gold); letter-spacing:3px; font-size:.62rem; }
-.content-library-header h3 { margin:5px 0 0; color:#fff; font:700 clamp(1.2rem,2.4vw,1.75rem)/1.1 'Cinzel',serif; letter-spacing:2px; }
-.content-library-tabs { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 0 18px; }
-.content-library-tab {
-    min-height:48px; border:1px solid var(--border-color); background:rgba(5,4,8,.65); color:#91899b;
-    font:700 .7rem 'Cinzel',serif; letter-spacing:1.4px; cursor:pointer; transition:.18s ease;
-}
-.content-library-tab:hover, .content-library-tab.active { color:#fff; border-color:var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 18%,#09070d); }
+.content-library-modal.ui-surface-visible { display:flex !important; flex-direction:column; }
+.content-library-header { display:flex; align-items:flex-start; justify-content:space-between; gap:22px; margin-bottom:9px; }
+.content-library-header .settings-eyebrow { color:var(--text-gold); letter-spacing:3px; font-size:.6rem; }
+.content-library-header h3 { margin:5px 0 0; color:#fff; font:700 clamp(1.2rem,2.4vw,1.78rem)/1.1 Cinzel,serif; letter-spacing:2px; }
+.content-library-modal > .settings-intro { margin:0 0 14px; color:#837b88; }
+.content-library-tabs { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0 0 10px; }
+.content-library-tab { min-height:42px; border:1px solid #342c3a; background:#09080c; color:#8f8697; font:700 .68rem Cinzel,serif; letter-spacing:1.3px; cursor:pointer; transition:border-color .16s ease,background .16s ease,color .16s ease; }
+.content-library-tab:hover,.content-library-tab.active { color:#fff; border-color:var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 17%,#09080c); }
 .content-library-tab.active { box-shadow:inset 0 -2px var(--text-gold); }
-.content-library-tab:disabled { opacity:.38; cursor:not-allowed; }
-.content-library-campaigns { display:none; gap:10px; overflow-x:auto; padding:3px 2px 12px; margin:-2px 0 14px; scroll-snap-type:x proximity; }
+.content-library-tab:disabled { opacity:.36; cursor:not-allowed; }
+.content-library-campaigns { display:none; gap:8px; overflow-x:auto; padding:2px 1px 9px; margin:0 0 7px; scroll-snap-type:x proximity; }
 .content-library-campaigns.active { display:flex; }
-.content-library-campaign {
-    flex:0 0 min(260px,74vw); scroll-snap-align:start; min-height:68px; padding:12px 14px; text-align:left;
-    border:1px solid #342b3d; border-radius:5px; background:linear-gradient(135deg,rgba(34,18,46,.72),rgba(8,8,12,.92)); color:#b9afc1; cursor:pointer;
-}
-.content-library-campaign strong, .content-library-campaign small { display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-.content-library-campaign strong { color:#eee; font:700 .76rem 'Cinzel',serif; }
-.content-library-campaign small { margin-top:5px; color:#817789; font-size:.64rem; letter-spacing:1px; }
-.content-library-campaign.active { border-color:var(--text-gold); box-shadow:inset 3px 0 var(--primary-purple); }
-.content-library-toolbar { display:grid; grid-template-columns:minmax(180px,1fr) auto; align-items:center; gap:12px; margin-bottom:12px; }
-.content-library-toolbar .search-bar { margin:0; }
-.content-library-type-strip { display:flex; gap:7px; overflow-x:auto; padding:2px 1px 10px; margin-bottom:10px; }
-.content-library-type {
-    flex:0 0 auto; border:1px solid #39313f; border-radius:99px; padding:8px 12px; background:#0b090e; color:#8d8493;
-    font:700 .62rem 'Cinzel',serif; letter-spacing:.8px; cursor:pointer; transition:.16s ease;
-}
-.content-library-type:hover, .content-library-type.active { color:#fff; border-color:var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 22%,#09070d); }
-.content-library-adminbar { display:none; align-items:center; justify-content:space-between; gap:12px; padding:12px; margin:4px 0 16px; border:1px solid color-mix(in srgb,var(--text-gold) 38%,var(--border-color)); background:rgba(212,175,55,.045); }
+.content-library-campaign { flex:0 0 min(245px,72vw); scroll-snap-align:start; min-height:58px; padding:10px 13px; text-align:left; border:1px solid #302837; border-radius:4px; background:#0b0910; color:#b9afc1; cursor:pointer; transition:.15s ease; }
+.content-library-campaign strong,.content-library-campaign small { display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.content-library-campaign strong { color:#eee; font:700 .72rem Cinzel,serif; }
+.content-library-campaign small { margin-top:4px; color:#766d7d; font-size:.58rem; letter-spacing:1px; }
+.content-library-campaign:hover,.content-library-campaign.active { border-color:var(--text-gold); background:color-mix(in srgb,var(--primary-purple) 12%,#0b0910); }
+.content-library-adminbar { display:none; align-items:center; justify-content:space-between; gap:13px; padding:11px 13px; margin:2px 0 11px; border:1px solid color-mix(in srgb,var(--text-gold) 38%,#302837); background:rgba(212,175,55,.045); }
 .content-library-adminbar.active { display:flex; }
-.content-library-adminbar-copy strong, .content-library-adminbar-copy small { display:block; }
-.content-library-adminbar-copy strong { color:var(--text-gold); font:700 .7rem 'Cinzel',serif; letter-spacing:1px; }
-.content-library-adminbar-copy small { margin-top:3px; color:#82798a; font-size:.68rem; }
+.content-library-adminbar-copy strong,.content-library-adminbar-copy small { display:block; }
+.content-library-adminbar-copy strong { color:var(--text-gold); font:700 .68rem Cinzel,serif; letter-spacing:1px; }
+.content-library-adminbar-copy small { margin-top:3px; color:#82798a; font-size:.67rem; }
 .content-library-create { display:flex; align-items:center; gap:8px; }
-.content-library-create select { min-width:130px; }
-.content-library-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; min-height:130px; }
-.content-library-card { position:relative; display:grid; grid-template-columns:64px minmax(0,1fr); gap:13px; padding:13px; border:1px solid #302837; background:linear-gradient(145deg,rgba(18,14,22,.94),rgba(7,6,9,.96)); border-radius:6px; }
-.content-library-card:hover { border-color:color-mix(in srgb,var(--light-purple) 65%,var(--border-color)); }
-.content-library-thumb { width:64px; height:64px; overflow:hidden; display:grid; place-items:center; border:1px solid #45374f; background:#08070a; color:var(--text-gold); font-size:1.35rem; }
-.content-library-thumb img { width:100%; height:100%; object-fit:cover; }
-.content-library-card-main { min-width:0; }
-.content-library-card-head { display:flex; align-items:center; gap:7px; min-width:0; }
-.content-library-card-head strong { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#f3edf7; font:700 .78rem 'Cinzel',serif; }
-.content-library-badge { flex:0 0 auto; color:var(--text-gold); border:1px solid color-mix(in srgb,var(--text-gold) 40%,transparent); padding:3px 5px; font:700 .5rem 'Cinzel',serif; letter-spacing:.7px; }
-.content-library-summary { height:34px; margin:7px 0 9px; overflow:hidden; color:#958c9c; font-size:.7rem; line-height:1.45; }
-.content-library-meta { color:#615969; font-size:.58rem; letter-spacing:.7px; text-transform:uppercase; }
-.content-library-actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
-.content-library-actions button { border:1px solid #413648; background:#0b090e; color:#b8adbf; padding:7px 9px; font:700 .58rem 'Cinzel',serif; cursor:pointer; }
+.content-library-create select { min-width:130px; margin:0; }
+.content-library-workspace { display:grid; flex:1 1 auto; grid-template-columns:minmax(330px,42%) minmax(0,1fr); min-height:0; border:1px solid #2f2835; background:#08070a; }
+.content-library-browser { display:flex; flex-direction:column; min-width:0; min-height:0; padding:15px; border-right:1px solid #302837; background:linear-gradient(180deg,#0d0b11,#09080c); }
+.content-library-search-wrap { display:grid; grid-template-columns:24px 1fr; align-items:center; gap:5px; padding:0 12px; border:1px solid #3b3243; background:#070609; color:#9d92a6; }
+.content-library-search-wrap:focus-within { border-color:var(--light-purple); box-shadow:0 0 0 2px color-mix(in srgb,var(--primary-purple) 14%,transparent); }
+.content-library-search-wrap input { width:100%; height:43px; border:0; outline:0; background:transparent; color:#eee7f1; font:700 .75rem Cinzel,serif; }
+.content-library-search-wrap input::placeholder { color:#6f6675; }
+.content-library-filter-group { margin-top:13px; }
+.content-library-filter-label { display:flex; align-items:center; gap:7px; margin-bottom:7px; color:#8d8393; font:700 .56rem Cinzel,serif; letter-spacing:1.2px; }
+.content-library-filter-label small { color:#5e5663; font-size:.49rem; }
+.content-library-type-strip,.content-library-entity-strip { display:flex; flex-wrap:wrap; gap:6px; }
+.content-library-type,.content-library-entity { min-height:29px; padding:6px 9px; border:1px solid #39313f; border-radius:3px; background:#0a090d; color:#89808f; font:700 .55rem Cinzel,serif; letter-spacing:.65px; cursor:pointer; transition:.14s ease; }
+.content-library-type:hover,.content-library-type.active { color:#fff; border-color:var(--light-purple); background:color-mix(in srgb,var(--primary-purple) 23%,#09070d); }
+.content-library-entity { display:inline-flex; align-items:center; gap:6px; }
+.content-library-entity::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--entity-color,#77717c); box-shadow:0 0 8px color-mix(in srgb,var(--entity-color,#77717c) 65%,transparent); }
+.content-library-entity:hover,.content-library-entity.active { color:var(--entity-contrast,#fff); border-color:var(--entity-color,#77717c); background:color-mix(in srgb,var(--entity-color,#77717c) 16%,#09080c); }
+.content-library-list-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:14px 0 7px; padding-top:10px; border-top:1px solid #28222d; color:#706777; font:700 .54rem Cinzel,serif; letter-spacing:.8px; }
+.content-library-grid { display:flex; flex:1 1 auto; flex-direction:column; gap:6px; min-height:120px; overflow:auto; padding:1px 4px 12px 1px; }
+.content-library-entry { --entity-color:#77717c; position:relative; display:grid; grid-template-columns:44px minmax(0,1fr) auto; align-items:center; gap:10px; width:100%; min-height:55px; padding:7px 10px 7px 8px; overflow:hidden; text-align:left; border:1px solid #302937; border-left:4px solid var(--entity-color); border-radius:4px; background:linear-gradient(90deg,color-mix(in srgb,var(--entity-color) 13%,#0b0910),#0b0910 72%); color:#dcd4e0; cursor:pointer; transition:transform .14s ease,border-color .14s ease,background .14s ease; }
+.content-library-entry:hover { transform:translateX(3px); border-color:color-mix(in srgb,var(--entity-color) 70%,#5c5363); }
+.content-library-entry.active { border-color:var(--entity-color); background:linear-gradient(90deg,color-mix(in srgb,var(--entity-color) 24%,#0c0a10),#100c14 78%); box-shadow:inset 0 0 24px rgba(255,255,255,.025); }
+.content-library-entry-thumb { width:42px; height:42px; display:grid; place-items:center; overflow:hidden; border:1px solid color-mix(in srgb,var(--entity-color) 60%,#423a47); background:#070609; color:var(--entity-contrast,#ddd); font-size:1.05rem; }
+.content-library-entry-thumb img { width:100%; height:100%; object-fit:cover; }
+.content-library-entry-copy { min-width:0; }
+.content-library-entry-copy strong { display:block; overflow:hidden; color:#f1ebf3; font:700 .73rem Cinzel,serif; text-overflow:ellipsis; white-space:nowrap; }
+.content-library-entry-copy small { display:block; margin-top:4px; color:#7d7384; font-size:.56rem; letter-spacing:.7px; }
+.content-library-entry-arrow { color:var(--entity-contrast,#908696); font-size:.9rem; }
+.content-library-empty { display:grid; place-items:center; min-height:150px; padding:25px; border:1px dashed #39303f; color:#817788; text-align:center; font-size:.76rem; line-height:1.6; }
+.content-library-detail { position:relative; min-width:0; min-height:0; overflow:auto; padding:clamp(22px,3vw,38px); background:radial-gradient(circle at 85% 12%,color-mix(in srgb,var(--entity-color,#77717c) 11%,transparent),transparent 34%),linear-gradient(145deg,#0a090d,#070609); }
+.content-library-detail-empty { display:grid; place-items:center; align-content:center; min-height:100%; color:#77707b; text-align:center; }
+.content-library-detail-empty > span { color:var(--text-gold); font-size:2rem; opacity:.55; }
+.content-library-detail-empty strong { margin-top:15px; color:#b6adb9; font:700 1rem Cinzel,serif; }
+.content-library-detail-empty p { max-width:430px; margin:8px auto 0; color:#706975; font-size:.78rem; line-height:1.6; }
+.content-library-detail-hero { display:grid; grid-template-columns:minmax(0,1fr) 112px; gap:22px; align-items:start; padding-bottom:20px; border-bottom:1px solid #302837; }
+.content-library-detail-kicker { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-bottom:10px; }
+.content-library-badge,.content-library-entity-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 7px; border:1px solid #413747; color:#9c91a3; font:700 .52rem Cinzel,serif; letter-spacing:.8px; }
+.content-library-entity-badge { color:var(--entity-contrast,#ddd); border-color:var(--entity-color,#77717c); background:color-mix(in srgb,var(--entity-color,#77717c) 12%,transparent); }
+.content-library-entity-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--entity-color,#77717c); }
+.content-library-detail h4 { margin:0; color:#f7f1f8; font:700 clamp(1.2rem,2.2vw,1.8rem)/1.2 Cinzel,serif; }
+.content-library-detail-meta { margin-top:9px; color:#6e6673; font:700 .56rem Cinzel,serif; letter-spacing:.9px; }
+.content-library-detail-image { width:112px; height:112px; display:grid; place-items:center; object-fit:cover; border:1px solid color-mix(in srgb,var(--entity-color,#77717c) 58%,#3a333e); background:#070609; color:var(--entity-contrast,#ddd); font-size:1.6rem; }
+.content-library-detail-section { margin-top:20px; }
+.content-library-detail-section > span { display:block; margin-bottom:8px; color:var(--text-gold); font:700 .58rem Cinzel,serif; letter-spacing:1.2px; }
+.content-library-description { color:#c7beca; font:1rem/1.7 var(--font-reading); overflow-wrap:anywhere; }
+.content-library-facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.content-library-fact { padding:10px 11px; border-left:2px solid var(--entity-color,#77717c); background:#0b0910; }
+.content-library-fact strong,.content-library-fact small { display:block; }
+.content-library-fact strong { color:#e4dce7; font:700 .69rem Cinzel,serif; }
+.content-library-fact small { margin-top:4px; color:#817788; font-size:.66rem; }
+.content-library-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }
+.content-library-actions button { min-height:37px; padding:8px 12px; border:1px solid #413648; background:#0b090e; color:#b8adbf; font:700 .6rem Cinzel,serif; cursor:pointer; }
 .content-library-actions button:hover { color:#fff; border-color:var(--light-purple); }
-.content-library-actions .primary { color:#fff; border-color:var(--primary-purple); background:color-mix(in srgb,var(--primary-purple) 30%,#08060b); }
+.content-library-actions .primary { color:#fff; border-color:var(--primary-purple); background:color-mix(in srgb,var(--primary-purple) 31%,#08060b); }
 .content-library-actions .danger:hover { color:#ff7180; border-color:#b23b4a; }
-.content-library-empty { grid-column:1/-1; display:grid; place-items:center; min-height:150px; padding:25px; border:1px dashed #39303f; color:#817788; text-align:center; font-size:.78rem; line-height:1.6; }
-.content-library-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:18px; padding-top:14px; border-top:1px solid #2a242f; }
-.content-library-status { color:#756c7d; font-size:.66rem; }
-.catalog-editor-mode .ability-separator-toggle,
-.catalog-editor-mode .ability-container-field,
-.catalog-editor-mode .ability-container-select,
-.catalog-editor-mode .ability-container-help { display:none !important; }
+.content-library-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; padding-top:11px; border-top:1px solid #2a242f; }
+.content-library-status { color:#756c7d; font-size:.63rem; }
+.catalog-entity-field { display:none !important; }
+label.catalog-entity-field span,label.catalog-entity-field small { display:block; }
+label.catalog-entity-field { margin-top:11px; color:var(--text-gold); font:700 .7rem Cinzel,serif; }
+label.catalog-entity-field small { margin-top:3px; color:#766e7c; font:400 .62rem var(--font-reading); }
+.catalog-editor-mode .catalog-entity-field { display:block !important; }
+.catalog-editor-mode .ability-separator-toggle,.catalog-editor-mode .ability-container-field,.catalog-editor-mode .ability-container-select,.catalog-editor-mode .ability-container-help { display:none !important; }
 .catalog-linked-badge { display:inline-flex; align-items:center; gap:4px; margin-left:7px; color:#c6a1f1; font-size:.56rem; letter-spacing:.7px; vertical-align:middle; }
 .catalog-linked-badge::before { content:'⌁'; color:var(--text-gold); }
-@media (max-width:720px) {
-    .content-library-modal { width:calc(100vw - 26px); max-height:calc(100vh - 34px); }
-    .content-library-toolbar { grid-template-columns:1fr; }
+@media (max-width:820px) {
+    .content-library-modal { width:calc(100vw - 22px); height:calc(100vh - 28px); padding:17px; }
+    .content-library-workspace { grid-template-columns:1fr; overflow:auto; }
+    .content-library-browser { min-height:430px; border-right:0; border-bottom:1px solid #302837; }
+    .content-library-detail { min-height:430px; overflow:visible; }
     .content-library-adminbar { align-items:stretch; flex-direction:column; }
     .content-library-create { flex-wrap:wrap; }
-    .content-library-grid { grid-template-columns:1fr; }
-    .content-library-footer { align-items:flex-start; flex-direction:column; }
+    .content-library-footer { align-items:flex-start; }
+}
+@media (max-width:520px) {
+    .content-library-detail-hero { grid-template-columns:1fr; }
+    .content-library-detail-image { width:88px; height:88px; grid-row:1; }
+    .content-library-facts { grid-template-columns:1fr; }
 }
 
 @media (max-width: 1050px) {
@@ -10066,9 +10097,6 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
             <button class="topbar-action" id="btn-historico" type="button" onclick="abrirHistoricoAcoes()" title="Abrir histórico e desfazer ações">
                 <span class="topbar-action-icon" aria-hidden="true">🕘</span><span>Histórico / Desfazer</span>
             </button>
-            <button class="topbar-action" id="btn-abyss-catalog-admin" type="button" onclick="abrirGestaoAcervoAbyss()" title="Administrar o Acervo Abyss" hidden>
-                <span class="topbar-action-icon" aria-hidden="true">✦</span><span>Acervo Abyss</span>
-            </button>
             <button class="sync-vine-indicator" id="sync-vine-indicator" type="button" data-state="local" onclick="abrirPainelSincronizacao()" aria-live="polite" title="Ver estado da sincronização">
                 <span class="sync-d20" aria-hidden="true">20</span>
                 <span class="sync-copy"><strong id="sync-indicator-label">Local</strong><small id="sync-indicator-detail">Entre para sincronizar</small></span>
@@ -10101,6 +10129,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
         <button class="sidebar-btn area-nav-btn" id="btn-notas" onclick="mudarArea('notas')" title="Anotações">📚</button>
         <button class="sidebar-btn" id="btn-documentos" onclick="abrirMesaDocumentosDaFicha()" title="Documentos">🗃️</button>
         <button class="sidebar-btn" id="btn-save-cloud" onclick="confirmarSalvar()" title="Salvar na Nuvem">💾</button>
+        <button class="sidebar-btn" id="btn-abyss-catalog-admin" onclick="abrirGestaoAcervoAbyss()" title="Administrar o Acervo Abyss" hidden>✦</button>
     </div>
 </aside>
 
@@ -11427,7 +11456,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 <div id="modal-content-library" class="modal content-library-modal" role="dialog" aria-modal="true" aria-labelledby="content-library-heading">
     <div class="content-library-header">
         <div>
-            <span class="settings-eyebrow">BIBLIOTECA COMPARTILHADA</span>
+            <span class="settings-eyebrow">ARQUIVO DE CONHECIMENTOS</span>
             <h3 id="content-library-heading">Adicionar poder</h3>
         </div>
         <button type="button" class="settings-close" onclick="fecharAcervoConteudos()" aria-label="Fechar acervo">✕</button>
@@ -11438,11 +11467,6 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
         <button type="button" id="content-library-tab-campaign" class="content-library-tab" role="tab" aria-selected="false" onclick="selecionarEscopoAcervo('campaign')">ACERVO DE CAMPANHAS</button>
     </div>
     <div id="content-library-campaigns" class="content-library-campaigns" aria-label="Escolher campanha"></div>
-    <div class="content-library-toolbar">
-        <input type="search" id="content-library-search" class="search-bar" placeholder="Pesquisar por nome, descrição ou fórmula..." oninput="renderizarAcervoConteudos()">
-        <span id="content-library-origin-label" class="content-library-status">ACERVO ABYSS</span>
-    </div>
-    <div id="content-library-type-strip" class="content-library-type-strip" aria-label="Filtrar por tipo"></div>
     <div id="content-library-adminbar" class="content-library-adminbar">
         <div class="content-library-adminbar-copy">
             <strong id="content-library-admin-title">PUBLICAÇÃO AUTORIZADA</strong>
@@ -11459,9 +11483,36 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
             <button type="button" class="settings-primary" onclick="criarConteudoNoAcervo()">＋ Criar conteúdo</button>
         </div>
     </div>
-    <div id="content-library-grid" class="content-library-grid" aria-live="polite"></div>
+    <div class="content-library-workspace">
+        <aside class="content-library-browser" aria-label="Filtros e conteúdos do acervo">
+            <label class="content-library-search-wrap" for="content-library-search">
+                <span aria-hidden="true">⌕</span>
+                <input type="search" id="content-library-search" placeholder="Pesquisar por nome..." autocomplete="off" oninput="renderizarAcervoConteudos()">
+            </label>
+            <div class="content-library-filter-group">
+                <span class="content-library-filter-label">TIPO</span>
+                <div id="content-library-type-strip" class="content-library-type-strip" aria-label="Filtrar por tipo"></div>
+            </div>
+            <div class="content-library-filter-group">
+                <span class="content-library-filter-label">ENTIDADE <small>OPCIONAL</small></span>
+                <div id="content-library-entity-strip" class="content-library-entity-strip" aria-label="Filtrar por entidade"></div>
+            </div>
+            <div class="content-library-list-head">
+                <span id="content-library-origin-label">ACERVO ABYSS</span>
+                <span id="content-library-counter">0 conteúdos</span>
+            </div>
+            <div id="content-library-grid" class="content-library-grid" aria-live="polite"></div>
+        </aside>
+        <section id="content-library-detail" class="content-library-detail" aria-live="polite">
+            <div class="content-library-detail-empty">
+                <span aria-hidden="true">✦</span>
+                <strong>Selecione um conhecimento</strong>
+                <p>Os títulos permanecem retraídos. Escolha um deles ao lado para expandir descrição, fórmulas e ações.</p>
+            </div>
+        </section>
+    </div>
     <div class="content-library-footer">
-        <span id="content-library-counter" class="content-library-status">0 conteúdos disponíveis</span>
+        <span class="content-library-status">Conteúdos vinculados recebem revisões futuras automaticamente.</span>
         <button type="button" class="settings-secondary" onclick="fecharAcervoConteudos()">Concluir</button>
     </div>
 </div>
@@ -11491,7 +11542,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 </div>
 
 <div id="modal-hab" class="modal creation-modal" role="dialog" aria-modal="true" aria-labelledby="hab-modal-heading">
-    <div class="creation-modal-heading"><div><span>OFICINA DA FICHA</span><h3 id="hab-modal-heading">Criar conteúdo</h3></div><button type="button" onclick="fecharSuperficieFoco('#modal-hab')" aria-label="Fechar">✕</button></div>
+    <div class="creation-modal-heading"><div><span>OFICINA DA FICHA</span><h3 id="hab-modal-heading">Criar conteúdo</h3></div><button type="button" onclick="cancelarEditorCatalogoOuFechar('action')" aria-label="Fechar">✕</button></div>
     <div class="modal-tabs">
         <button class="tab-btn active" onclick="switchTab('tab-info')">Informações</button>
         <button class="tab-btn" id="hab-media-tab" onclick="switchTab('tab-media')">Mídia/Imagem</button>
@@ -11502,6 +11553,11 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
         <input type="hidden" id="hab-tipo">
         <label style="color:var(--text-gold); font-size:0.8rem">NOME DA HABILIDADE</label>
         <input type="text" id="hab-nome" class="modal-input" oninput="atualizarPreviewSeparadorHab()">
+
+        <label class="catalog-entity-field" for="hab-catalog-entity"><span>ENTIDADE</span><small>Opcional • define a identificação cromática no acervo</small></label>
+        <select id="hab-catalog-entity" class="modal-input catalog-entity-field">
+            <option value="">Sem entidade</option><option value="umbra">Umbra</option><option value="lumen">Lumen</option><option value="caos">Caos</option><option value="eter">Éter</option><option value="ley">Ley</option>
+        </select>
 
         <label class="ability-container-field" for="hab-container-id">ORGANIZAR EM</label>
         <select id="hab-container-id" class="modal-input ability-container-select"></select>
@@ -11556,7 +11612,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
     </div>
 
     <button onclick="salvarHabilidade()" style="width:100%; padding:15px; background:var(--primary-purple); color:#fff; border:none; font-family:'Cinzel', serif; cursor:pointer;">GRAVAR NO GRIMÓRIO</button>
-    <button onclick="fecharSuperficieFoco('#modal-hab')" style="width:100%; margin-top:10px; background:none; border:1px solid #333; color:#eee; padding:10px; cursor:pointer; font-family: 'Cinzel', serif;">Cancelar</button>
+    <button onclick="cancelarEditorCatalogoOuFechar('action')" style="width:100%; margin-top:10px; background:none; border:1px solid #333; color:#eee; padding:10px; cursor:pointer; font-family: 'Cinzel', serif;">Cancelar</button>
 </div>
 
 <div id="modal-custom-container" class="modal custom-container-modal" role="dialog" aria-modal="true" aria-labelledby="custom-container-heading">
@@ -11587,7 +11643,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
 </div>
 
 <div id="modal-item" class="modal creation-modal" role="dialog" aria-modal="true" aria-labelledby="item-modal-heading">
-    <div class="creation-modal-heading"><div><span>MOCHILA E EQUIPAMENTOS</span><h3 id="item-modal-heading">Criar item</h3></div><button type="button" onclick="document.getElementById('modal-item').style.display='none'" aria-label="Fechar">✕</button></div>
+    <div class="creation-modal-heading"><div><span>MOCHILA E EQUIPAMENTOS</span><h3 id="item-modal-heading">Criar item</h3></div><button type="button" onclick="cancelarEditorCatalogoOuFechar('item')" aria-label="Fechar">✕</button></div>
     <div class="modal-tabs">
         <button class="tab-btn active">Configuração de Item</button>
     </div>
@@ -11595,6 +11651,11 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
     
     <label style="color:var(--text-gold); font-size:0.8rem">NOME DO ITEM</label>
     <input type="text" id="item-nome" class="modal-input" placeholder="Ex: Espada de Ébano">
+
+    <label class="catalog-entity-field" for="item-catalog-entity"><span>ENTIDADE</span><small>Opcional • define a identificação cromática no acervo</small></label>
+    <select id="item-catalog-entity" class="modal-input catalog-entity-field">
+        <option value="">Sem entidade</option><option value="umbra">Umbra</option><option value="lumen">Lumen</option><option value="caos">Caos</option><option value="eter">Éter</option><option value="ley">Ley</option>
+    </select>
 
     <label style="color:var(--text-gold); font-size:0.8rem">IMAGEM / ÍCONE DO ITEM</label>
     <input type="text" id="item-img" class="modal-input" placeholder="https://link-da-imagem.png" oninput="atualizarPreviewImagem('item-img', 'item-img-preview')">
@@ -11646,7 +11707,7 @@ body.document-desk-open #document-desk-app #document-desk-board * { cursor: none
     <button onclick="addInputRolagemItem()" style="background:none; border:1px solid var(--primary-purple); color:var(--light-purple); cursor:pointer; padding:5px; margin-bottom:15px; width:100%; font-family: 'Cinzel', serif;">+ Adicionar Rolagem Opcional ao Item</button>
 
     <button onclick="salvarItemInventario()" style="width:100%; padding:15px; background:var(--primary-purple); color:#fff; border:none; font-family:'Cinzel', serif; cursor:pointer;">GUARDAR NA MOCHILA</button>
-    <button onclick="document.getElementById('modal-item').style.display='none'" style="width:100%; margin-top:10px; background:none; border:1px solid #333; color:#eee; padding:10px; cursor:pointer; font-family: 'Cinzel', serif;">Cancelar</button>
+    <button onclick="cancelarEditorCatalogoOuFechar('item')" style="width:100%; margin-top:10px; background:none; border:1px solid #333; color:#eee; padding:10px; cursor:pointer; font-family: 'Cinzel', serif;">Cancelar</button>
 </div>
 
 <div id="modal-skill" class="modal" style="width: 500px;">
@@ -14587,6 +14648,13 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         'anthonysousabr002@gmail.com'
     ]);
     const CONTENT_CATALOG_TYPES = new Set(['item', 'ataque', 'poder', 'habilidade', 'feitico']);
+    const CONTENT_CATALOG_ENTITIES = Object.freeze({
+        umbra: { label: 'UMBRA', color: '#151318', contrast: '#d4ced8' },
+        lumen: { label: 'LUMEN', color: '#e3bd32', contrast: '#fff3ae' },
+        caos: { label: 'CAOS', color: '#31c86d', contrast: '#b9ffd2' },
+        eter: { label: 'ÉTER', color: '#9b63e8', contrast: '#dfc7ff' },
+        ley: { label: 'LEY', color: '#378ee7', contrast: '#c2e2ff' }
+    });
     const contentCatalogState = {
         abyss: {},
         campaigns: {},
@@ -14596,6 +14664,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         scope: 'abyss',
         campaignId: '',
         type: '',
+        entity: '',
+        selectedEntryKey: '',
         mode: 'picker',
         editorContext: null,
         applyingLinkedUpdate: false,
@@ -15367,6 +15437,22 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         return ({ item: '◆', ataque: '⚔', poder: '✦', habilidade: '◈', feitico: '✧' })[tipoConteudoAcervo(tipo)] || '✦';
     }
 
+    function normalizarEntidadeAcervo(entidade) {
+        const chave = String(entidade || '').trim().toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        return Object.prototype.hasOwnProperty.call(CONTENT_CATALOG_ENTITIES, chave) ? chave : '';
+    }
+
+    function dadosEntidadeAcervo(entidade) {
+        const chave = normalizarEntidadeAcervo(entidade);
+        return chave
+            ? { key: chave, ...CONTENT_CATALOG_ENTITIES[chave] }
+            : { key: '', label: 'SEM ENTIDADE', color: '#77717c', contrast: '#d8d1dc' };
+    }
+
+    function chaveEntradaConteudoAcervo(entrada) {
+        return entrada ? `${entrada.scope}:${entrada.campaignId || ''}:${entrada.id}` : '';
+    }
+
     function normalizarEntradaConteudoAcervo(valor, idFallback = '', escopo = 'abyss', campaignId = '') {
         if (!valor || typeof valor !== 'object' || !valor.data || typeof valor.data !== 'object') return null;
         const type = tipoConteudoAcervo(valor.type || valor.subtype || valor.data.tipoCatalogo || valor.data.tipo);
@@ -15374,9 +15460,12 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (!id) return null;
         const data = clonarParaHistorico(valor.data);
         const name = String(valor.name || data.nome || 'Conteúdo sem nome').trim() || 'Conteúdo sem nome';
+        const entity = normalizarEntidadeAcervo(valor.entity || data.entity);
+        data.entity = entity;
         return {
             id,
             type,
+            entity,
             name,
             nameLower: String(valor.nameLower || name).toLocaleLowerCase('pt-BR'),
             data,
@@ -15533,6 +15622,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const campanhas = campanhasDisponiveisAoSlotNoAcervo();
         if (escopo === 'campaign' && !campanhas.length) return;
         contentCatalogState.scope = escopo;
+        contentCatalogState.selectedEntryKey = '';
         if (escopo === 'campaign' && !campanhas.some(campanha => campanha.id === contentCatalogState.campaignId)) contentCatalogState.campaignId = campanhas[0]?.id || '';
         sincronizarEscutasAcervosCampanha();
         renderizarAcervoConteudos();
@@ -15542,6 +15632,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         if (!campanhasDisponiveisAoSlotNoAcervo().some(campanha => campanha.id === campaignId)) return;
         contentCatalogState.scope = 'campaign';
         contentCatalogState.campaignId = campaignId;
+        contentCatalogState.selectedEntryKey = '';
         sincronizarEscutasAcervosCampanha();
         renderizarAcervoConteudos();
     }
@@ -15550,6 +15641,18 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         contentCatalogState.type = CONTENT_CATALOG_TYPES.has(tipo) ? tipo : '';
         const seletorCriacao = document.getElementById('content-library-create-type');
         if (seletorCriacao && contentCatalogState.type) seletorCriacao.value = contentCatalogState.type;
+        renderizarAcervoConteudos();
+    }
+
+    function selecionarEntidadeAcervo(entidade = '') {
+        contentCatalogState.entity = normalizarEntidadeAcervo(entidade);
+        renderizarAcervoConteudos();
+    }
+
+    function selecionarEntradaAcervo(escopo, campaignId, entryId) {
+        const entrada = entradaConteudoAcervo(escopo, campaignId, entryId);
+        if (!entrada) return;
+        contentCatalogState.selectedEntryKey = chaveEntradaConteudoAcervo(entrada);
         renderizarAcervoConteudos();
     }
 
@@ -15569,15 +15672,66 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             </button>`).join('');
     }
 
+    function fatosConteudoAcervo(entrada) {
+        const dados = entrada?.data || {};
+        const fatos = [];
+        normalizarRolagensPrincipais(dados, entrada?.type === 'item' && dados.isWeapon).forEach(rolagem => {
+            const formula = `${rolagem.formula || '—'}${rolagem.atributo ? ` + ${rolagem.atributo}` : ''}`;
+            fatos.push({ nome: rolagem.nome || 'Rolagem principal', valor: formula });
+        });
+        normalizarCustosAcao(dados).forEach(custo => {
+            fatos.push({ nome: `Usar ${custo.nome || entrada.name}`, valor: `${Number(custo.valor) || 0} ${String(custo.tipo || '').toUpperCase()}` });
+        });
+        normalizarRolagensExtras(dados).forEach(rolagem => fatos.push({ nome: rolagem.nome || 'Rolagem extra', valor: rolagem.formula || '—' }));
+        (Array.isArray(dados.mods) ? dados.mods : []).forEach(mod => {
+            const valor = Number(mod.valor) || 0;
+            fatos.push({ nome: `Modificador • ${mod.tipo || 'efeito'}`, valor: `${valor >= 0 ? '+' : ''}${valor} em ${mod.alvo || 'alvo não definido'}` });
+        });
+        if (entrada?.type === 'item' && Number(dados.peso)) fatos.push({ nome: 'Espaços ocupados', valor: String(Number(dados.peso)) });
+        return fatos;
+    }
+
+    function htmlDetalheConteudoAcervo(entrada, podeGerenciar) {
+        if (!entrada) return `<div class="content-library-detail-empty"><span aria-hidden="true">✦</span><strong>Selecione um conhecimento</strong><p>Os títulos permanecem retraídos. Escolha um deles ao lado para expandir descrição, fórmulas e ações.</p></div>`;
+        const entidade = dadosEntidadeAcervo(entrada.entity);
+        const fatos = fatosConteudoAcervo(entrada);
+        const jaAdicionado = conteudoAcervoJaAdicionado(entrada);
+        const campanhaId = escapeCampaignHtml(entrada.campaignId || '');
+        const id = escapeCampaignHtml(entrada.id);
+        const modoAdicionar = contentCatalogState.mode === 'picker';
+        const modoGerenciar = contentCatalogState.mode === 'manage' && podeGerenciar;
+        const imagem = entrada.data?.img
+            ? `<img class="content-library-detail-image" src="${escapeCampaignHtml(entrada.data.img)}" alt="Imagem de ${escapeCampaignHtml(entrada.name)}">`
+            : `<div class="content-library-detail-image" aria-hidden="true">${iconeTipoConteudoAcervo(entrada.type)}</div>`;
+        return `<div style="--entity-color:${entidade.color};--entity-contrast:${entidade.contrast}">
+            <div class="content-library-detail-hero">
+                <div>
+                    <div class="content-library-detail-kicker"><span class="content-library-badge">${nomeTipoConteudoAcervo(entrada.type)}</span><span class="content-library-entity-badge">${entidade.label}</span></div>
+                    <h4>${escapeCampaignHtml(entrada.name)}</h4>
+                    <div class="content-library-detail-meta">REVISÃO ${entrada.revision}${jaAdicionado ? ' • JÁ VINCULADO À FICHA' : ''}</div>
+                </div>
+                ${imagem}
+            </div>
+            <div class="content-library-detail-section"><span>DESCRIÇÃO</span><div class="content-library-description">${renderMarkdown(entrada.data?.desc || 'Nenhuma descrição foi registrada para este conteúdo.')}</div></div>
+            ${fatos.length ? `<div class="content-library-detail-section"><span>INFORMAÇÕES E FÓRMULAS</span><div class="content-library-facts">${fatos.map(fato => `<div class="content-library-fact"><strong>${escapeCampaignHtml(fato.nome)}</strong><small>${escapeCampaignHtml(fato.valor)}</small></div>`).join('')}</div></div>` : ''}
+            <div class="content-library-actions">
+                ${modoAdicionar ? `<button type="button" class="primary" onclick="adicionarConteudoAcervo('${entrada.scope}','${campanhaId}','${id}')">${jaAdicionado ? '＋ Adicionar novamente' : '＋ Adicionar à ficha'}</button>` : ''}
+                ${modoGerenciar ? `<button type="button" onclick="editarConteudoNoAcervo('${entrada.scope}','${campanhaId}','${id}')">✎ Editar conteúdo</button><button type="button" class="danger" onclick="excluirConteudoDoAcervo('${entrada.scope}','${campanhaId}','${id}')">Excluir</button>` : ''}
+            </div>
+        </div>`;
+    }
+
     function renderizarAcervoConteudos() {
         const modal = document.getElementById('modal-content-library');
         const grid = document.getElementById('content-library-grid');
-        if (!modal || !grid) return;
+        const detalhe = document.getElementById('content-library-detail');
+        if (!modal || !grid || !detalhe) return;
         const aberto = modal.style.display !== 'none' && getComputedStyle(modal).display !== 'none';
         if (!aberto && !modal.classList.contains('ui-surface-visible')) return;
         const campanhas = campanhasDisponiveisAoSlotNoAcervo();
         if (contentCatalogState.scope === 'campaign' && !campanhas.some(campanha => campanha.id === contentCatalogState.campaignId)) {
             contentCatalogState.campaignId = campanhas[0]?.id || '';
+            contentCatalogState.selectedEntryKey = '';
             if (!contentCatalogState.campaignId) contentCatalogState.scope = 'abyss';
         }
         const escopo = contentCatalogState.scope;
@@ -15591,17 +15745,21 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         tabCampanha.disabled = !campanhas.length;
         renderizarCampanhasAcervo();
 
-        const tipos = [
-            ['', 'TODOS'], ['item', 'ITENS'], ['ataque', 'ATAQUES'], ['poder', 'PODERES'], ['habilidade', 'HABILIDADES'], ['feitico', 'FEITIÇOS']
-        ];
-        document.getElementById('content-library-type-strip').innerHTML = tipos.map(([valor, nome]) => `
-            <button type="button" class="content-library-type ${contentCatalogState.type === valor ? 'active' : ''}" onclick="selecionarTipoAcervo('${valor}')">${nome}</button>`).join('');
+        const tipos = [['', 'TODOS'], ['poder', 'PODER'], ['feitico', 'FEITIÇO'], ['habilidade', 'HABILIDADE'], ['item', 'ITEM']];
+        if (contentCatalogState.mode === 'manage' || contentCatalogState.type === 'ataque') tipos.splice(4, 0, ['ataque', 'ATAQUE']);
+        document.getElementById('content-library-type-strip').innerHTML = tipos.map(([valor, nome]) => `<button type="button" class="content-library-type ${contentCatalogState.type === valor ? 'active' : ''}" onclick="selecionarTipoAcervo('${valor}')">${nome}</button>`).join('');
+
+        const entidades = [['', 'TODAS'], ...Object.entries(CONTENT_CATALOG_ENTITIES).map(([key, value]) => [key, value.label])];
+        document.getElementById('content-library-entity-strip').innerHTML = entidades.map(([valor, nome]) => {
+            const dados = dadosEntidadeAcervo(valor);
+            return `<button type="button" class="content-library-entity ${contentCatalogState.entity === valor ? 'active' : ''}" style="--entity-color:${dados.color};--entity-contrast:${dados.contrast}" onclick="selecionarEntidadeAcervo('${valor}')">${nome}</button>`;
+        }).join('');
 
         const origemNome = escopo === 'abyss' ? 'ACERVO ABYSS' : `CAMPANHA • ${campanha?.name || 'NÃO SELECIONADA'}`;
         document.getElementById('content-library-origin-label').textContent = origemNome;
         const podeGerenciar = usuarioPodeGerenciarEscopoAcervo(escopo, contentCatalogState.campaignId);
         const barraAdmin = document.getElementById('content-library-adminbar');
-        barraAdmin.classList.toggle('active', podeGerenciar);
+        barraAdmin.classList.toggle('active', contentCatalogState.mode === 'manage' && podeGerenciar);
         document.getElementById('content-library-admin-title').textContent = escopo === 'abyss' ? 'PUBLICAÇÃO GLOBAL AUTORIZADA' : 'OFICINA DO MESTRE';
         document.getElementById('content-library-admin-note').textContent = escopo === 'abyss'
             ? 'Alterações publicadas atualizam as fichas vinculadas em tempo real.'
@@ -15611,40 +15769,30 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const mapa = escopo === 'abyss' ? contentCatalogState.abyss : (contentCatalogState.campaigns[contentCatalogState.campaignId] || {});
         const entradas = Object.values(mapa).filter(entrada => {
             if (contentCatalogState.type && entrada.type !== contentCatalogState.type) return false;
-            if (!busca) return true;
-            const alvo = `${entrada.name} ${nomeTipoConteudoAcervo(entrada.type)} ${resumoConteudoAcervo(entrada)} ${entrada.data?.desc || ''}`.toLocaleLowerCase('pt-BR');
-            return alvo.includes(busca);
+            if (contentCatalogState.entity && entrada.entity !== contentCatalogState.entity) return false;
+            return !busca || entrada.name.toLocaleLowerCase('pt-BR').includes(busca);
         }).sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt-BR'));
 
-        document.getElementById('content-library-counter').textContent = `${entradas.length} ${entradas.length === 1 ? 'conteúdo disponível' : 'conteúdos disponíveis'}`;
+        document.getElementById('content-library-counter').textContent = `${entradas.length} ${entradas.length === 1 ? 'REGISTRO' : 'REGISTROS'}`;
+        const selecionada = entradas.find(entrada => chaveEntradaConteudoAcervo(entrada) === contentCatalogState.selectedEntryKey) || null;
+        if (!selecionada && contentCatalogState.selectedEntryKey) contentCatalogState.selectedEntryKey = '';
         if (!entradas.length) {
             const mensagem = escopo === 'campaign' && !contentCatalogState.campaignId
                 ? 'Selecione uma campanha vinculada para consultar o acervo.'
-                : (podeGerenciar ? 'Nenhum conteúdo corresponde aos filtros. Use “Criar conteúdo” para publicar o primeiro.' : 'Nenhum conteúdo corresponde aos filtros selecionados.');
+                : (contentCatalogState.mode === 'manage' && podeGerenciar ? 'Nenhum conteúdo corresponde aos filtros. Use “Criar conteúdo” para publicar o primeiro.' : 'Nenhum conteúdo corresponde aos filtros selecionados.');
             grid.innerHTML = `<div class="content-library-empty">${mensagem}</div>`;
-            return;
+        } else {
+            grid.innerHTML = entradas.map(entrada => {
+                const entidade = dadosEntidadeAcervo(entrada.entity);
+                const ativa = chaveEntradaConteudoAcervo(entrada) === contentCatalogState.selectedEntryKey;
+                const imagem = entrada.data?.img ? `<img src="${escapeCampaignHtml(entrada.data.img)}" alt="">` : `<span aria-hidden="true">${iconeTipoConteudoAcervo(entrada.type)}</span>`;
+                return `<button type="button" class="content-library-entry ${ativa ? 'active' : ''}" style="--entity-color:${entidade.color};--entity-contrast:${entidade.contrast}" onclick="selecionarEntradaAcervo('${entrada.scope}','${escapeCampaignHtml(entrada.campaignId || '')}','${escapeCampaignHtml(entrada.id)}')">
+                    <span class="content-library-entry-thumb">${imagem}</span><span class="content-library-entry-copy"><strong>${escapeCampaignHtml(entrada.name)}</strong><small>${nomeTipoConteudoAcervo(entrada.type)} • ${entidade.label}</small></span><span class="content-library-entry-arrow" aria-hidden="true">›</span>
+                </button>`;
+            }).join('');
         }
-
-        const modoAdicionar = contentCatalogState.mode === 'picker';
-        grid.innerHTML = entradas.map(entrada => {
-            const imagem = entrada.data?.img
-                ? `<img src="${escapeCampaignHtml(entrada.data.img)}" alt="">`
-                : `<span aria-hidden="true">${iconeTipoConteudoAcervo(entrada.type)}</span>`;
-            const jaAdicionado = conteudoAcervoJaAdicionado(entrada);
-            const campanhaId = escapeCampaignHtml(entrada.campaignId || '');
-            return `<article class="content-library-card">
-                <div class="content-library-thumb">${imagem}</div>
-                <div class="content-library-card-main">
-                    <div class="content-library-card-head"><span class="content-library-badge">${nomeTipoConteudoAcervo(entrada.type)}</span><strong title="${escapeCampaignHtml(entrada.name)}">${escapeCampaignHtml(entrada.name)}</strong></div>
-                    <div class="content-library-summary">${escapeCampaignHtml(resumoConteudoAcervo(entrada))}</div>
-                    <div class="content-library-meta">REVISÃO ${entrada.revision}${jaAdicionado ? ' • JÁ VINCULADO' : ''}</div>
-                    <div class="content-library-actions">
-                        ${modoAdicionar ? `<button type="button" class="primary" onclick="adicionarConteudoAcervo('${entrada.scope}','${campanhaId}','${escapeCampaignHtml(entrada.id)}')">${jaAdicionado ? '＋ Adicionar novamente' : '＋ Adicionar à ficha'}</button>` : ''}
-                        ${podeGerenciar ? `<button type="button" onclick="editarConteudoNoAcervo('${entrada.scope}','${campanhaId}','${escapeCampaignHtml(entrada.id)}')">Editar</button><button type="button" class="danger" onclick="excluirConteudoDoAcervo('${entrada.scope}','${campanhaId}','${escapeCampaignHtml(entrada.id)}')">Excluir</button>` : ''}
-                    </div>
-                </div>
-            </article>`;
-        }).join('');
+        detalhe.style.setProperty('--entity-color', selecionada ? dadosEntidadeAcervo(selecionada.entity).color : '#77717c');
+        detalhe.innerHTML = htmlDetalheConteudoAcervo(selecionada, podeGerenciar);
         acompanharPortaisOrnamentoUmbral(420);
     }
 
@@ -15657,13 +15805,15 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }
         contentCatalogState.mode = modo === 'manage' ? 'manage' : 'picker';
         contentCatalogState.type = CONTENT_CATALOG_TYPES.has(tipo) ? tipo : '';
+        contentCatalogState.entity = '';
+        contentCatalogState.selectedEntryKey = '';
         contentCatalogState.scope = escopo === 'campaign' ? 'campaign' : 'abyss';
         contentCatalogState.campaignId = campaignId || contentCatalogState.campaignId;
         const busca = document.getElementById('content-library-search');
         if (busca) busca.value = '';
         const heading = document.getElementById('content-library-heading');
         const intro = document.getElementById('content-library-intro');
-        heading.textContent = contentCatalogState.mode === 'manage' ? 'Administrar acervo' : `Adicionar ${tipo ? nomeTipoConteudoAcervo(tipo).toLocaleLowerCase('pt-BR') : 'poder'}`;
+        heading.textContent = contentCatalogState.mode === 'manage' ? 'Oficina do Acervo' : `Adicionar ${tipo ? nomeTipoConteudoAcervo(tipo).toLocaleLowerCase('pt-BR') : 'conhecimento'}`;
         intro.textContent = contentCatalogState.mode === 'manage'
             ? 'Publique, edite e balanceie conteúdos reutilizáveis sem precisar copiá-los manualmente entre fichas.'
             : 'Escolha conteúdo oficial do Abyss ou material preparado pelo Mestre para esta ficha.';
@@ -15703,6 +15853,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         return {
             tipo: tipoPublicacao === 'poder' ? 'habilidade' : tipoPublicacao,
             tipoCatalogo: tipoPublicacao,
+            entity: normalizarEntidadeAcervo(document.getElementById('hab-catalog-entity')?.value),
             nome: document.getElementById('hab-nome').value.trim(),
             isSeparator: false,
             dano: primeiraRolagem.formula || '',
@@ -15732,6 +15883,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const rolagensExtras = coletarRolagensExtrasDOM('item');
         return {
             tipoCatalogo: 'item',
+            entity: normalizarEntidadeAcervo(document.getElementById('item-catalog-entity')?.value),
             nome: document.getElementById('item-nome').value.trim(),
             img: document.getElementById('item-img').value.trim(),
             peso: parseInt(document.getElementById('item-peso').value) || 0,
@@ -15764,6 +15916,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         document.getElementById('hab-mods-lista').innerHTML = '';
         document.getElementById('rolagens-extras-container').innerHTML = '';
         document.getElementById('hab-nome').value = dados.nome || entrada.name || '';
+        document.getElementById('hab-catalog-entity').value = normalizarEntidadeAcervo(entrada.entity || dados.entity);
         document.getElementById('hab-desc').value = dados.desc || '';
         document.getElementById('hab-img').value = dados.img || '';
         document.getElementById('hab-is-separator').checked = false;
@@ -15790,6 +15943,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         document.getElementById('item-mods-lista').innerHTML = '';
         document.getElementById('item-rolagens-container').innerHTML = '';
         document.getElementById('item-nome').value = dados.nome || entrada.name || '';
+        document.getElementById('item-catalog-entity').value = normalizarEntidadeAcervo(entrada.entity || dados.entity);
         document.getElementById('item-img').value = dados.img || '';
         document.getElementById('item-peso').value = Number(dados.peso) || 0;
         document.getElementById('item-desc').value = dados.desc || '';
@@ -15825,6 +15979,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             abrirEditorItem(null);
             contentCatalogState.editorContext = retorno;
             document.getElementById('modal-item').classList.add('catalog-editor-mode');
+            document.getElementById('item-catalog-entity').value = '';
             document.getElementById('item-modal-heading').textContent = `${entrada ? 'Editar' : 'Criar'} item • ${escopo === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
             document.getElementById('item-id-edicao').value = '';
             if (entrada) preencherEditorItemComEntradaAcervo(entrada);
@@ -15833,6 +15988,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             abrirEditorHab(tipoFicha, null);
             contentCatalogState.editorContext = retorno;
             document.getElementById('modal-hab').classList.add('catalog-editor-mode');
+            document.getElementById('hab-catalog-entity').value = '';
             document.getElementById('hab-modal-heading').textContent = `${entrada ? 'Editar' : 'Criar'} ${nomeTipoConteudoAcervo(tipoNormalizado).toLocaleLowerCase('pt-BR')} • ${escopo === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
             document.getElementById('hab-id-edicao').value = '';
             document.getElementById('hab-tipo').value = tipoFicha;
@@ -15846,6 +16002,20 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const entrada = entradaConteudoAcervo(escopo, campaignId, entryId);
         if (!entrada) return alert('Este conteúdo não está mais disponível.');
         abrirEditorConteudoAcervo(escopo, campaignId, entrada.type, entryId);
+    }
+
+    function cancelarEditorCatalogoOuFechar(tipoEditor) {
+        const seletor = tipoEditor === 'item' ? '#modal-item' : '#modal-hab';
+        const contexto = contentCatalogState.editorContext;
+        if (!contexto) {
+            fecharSuperficieFoco(seletor);
+            return;
+        }
+        const retorno = { scope: contexto.scope, campaignId: contexto.campaignId, type: contexto.type, mode: contexto.returnMode || 'manage' };
+        contentCatalogState.editorContext = null;
+        document.querySelector(seletor)?.classList.remove('catalog-editor-mode');
+        fecharSuperficieFoco(seletor);
+        setTimeout(() => abrirAcervoConteudos(retorno.type, retorno.mode, retorno.scope, retorno.campaignId), UI_SURFACE_TRANSITION_MS + 30);
     }
 
     async function salvarConteudoAcervoDoEditor(tipoEditor) {
@@ -15873,6 +16043,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const payload = {
             id: entryId,
             type: contexto.type,
+            entity: normalizarEntidadeAcervo(dados.entity),
             name: nome,
             nameLower: nome.toLocaleLowerCase('pt-BR'),
             data: dados,
