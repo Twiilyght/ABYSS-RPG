@@ -10670,6 +10670,29 @@ body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 2
     body.theme-umbral .content-library-filterbar { overflow-x: auto; }
     body.theme-umbral .content-library-campaign-picker { grid-template-columns: 1fr; }
 }
+
+/* Lixeira segura e recuperação de fichas. */
+.slot-recovery-section {
+    margin-top: 22px;
+    padding: 18px;
+    border: 1px solid color-mix(in srgb, var(--text-gold) 28%, var(--border-color));
+    background: linear-gradient(105deg, color-mix(in srgb, var(--primary-purple) 8%, var(--container-bg)), var(--container-bg));
+}
+.slot-recovery-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.slot-recovery-heading strong { display: block; margin-top: 5px; color: #eee8f1; font: 700 .72rem 'Cinzel', serif; letter-spacing: .7px; }
+.slot-recovery-section > p { margin: 9px 0 0; color: var(--ui-muted, #918997); font-size: .78rem; line-height: 1.5; }
+.slot-recovery-list { display: grid; gap: 8px; margin-top: 14px; }
+.slot-recovery-list:empty { display: none; }
+.slot-recovery-empty { padding: 13px; border-left: 2px solid var(--border-color); color: var(--ui-muted, #918997); background: rgba(0,0,0,.18); font-size: .76rem; }
+.slot-recovery-card { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 15px; padding: 13px 15px; border-left: 2px solid var(--text-gold); background: rgba(0,0,0,.24); }
+.slot-recovery-card strong,.slot-recovery-card small { display: block; }
+.slot-recovery-card strong { color: #f0e9f2; font: 700 .69rem 'Cinzel',serif; }
+.slot-recovery-card small { margin-top: 4px; color: var(--ui-muted, #918997); font-size: .7rem; }
+.slot-recovery-card button { min-height: 34px; padding: 7px 12px; border: 1px solid color-mix(in srgb,var(--text-gold) 55%,var(--border-color)); color: var(--text-gold); background: transparent; cursor: pointer; }
+@media (max-width: 620px) {
+    .slot-recovery-heading,.slot-recovery-card { align-items: stretch; grid-template-columns: 1fr; flex-direction: column; }
+    .slot-recovery-heading { display: flex; }
+}
 </style>
 </head>
 <body class="theme-umbral">
@@ -11964,6 +11987,14 @@ body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 2
         </div>
     </section>
     <div id="slot-manager-list" class="slot-manager-list"></div>
+    <section class="slot-recovery-section">
+        <div class="slot-recovery-heading">
+            <div><span class="settings-eyebrow">RECUPERAÇÃO</span><strong>Fichas protegidas e cópias de campanha</strong></div>
+            <button type="button" class="settings-secondary" onclick="procurarFichasRecuperaveis()">⌕ Procurar fichas</button>
+        </div>
+        <p>Procura slots enviados à lixeira e cópias dos seus personagens que ainda existam em campanhas.</p>
+        <div id="slot-recovery-list" class="slot-recovery-list" aria-live="polite"></div>
+    </section>
 </div>
 
 <div id="modal-avatar" class="modal media-modal">
@@ -15065,12 +15096,138 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         renderizarSeletorInicialFichas();
     }
 
+    const slotRecoveryState = { items: [] };
+
+    function renderizarFichasRecuperaveis() {
+        const lista = document.getElementById('slot-recovery-list');
+        if (!lista) return;
+        if (!slotRecoveryState.items.length) {
+            lista.innerHTML = '<div class="slot-recovery-empty">Nenhuma ficha recuperável foi encontrada na lixeira ou nas suas campanhas.</div>';
+            return;
+        }
+        lista.innerHTML = slotRecoveryState.items.map((item, index) => `
+            <div class="slot-recovery-card">
+                <div><strong>${escapeCampaignHtml(item.name || 'Ficha sem nome')}</strong><small>${escapeCampaignHtml(item.detail || 'Cópia protegida')}</small></div>
+                <button type="button" onclick="restaurarFichaRecuperavel(${index})">Restaurar ficha</button>
+            </div>`).join('');
+    }
+
+    async function procurarFichasRecuperaveis() {
+        const lista = document.getElementById('slot-recovery-list');
+        if (!currentUser || !lista) return;
+        lista.innerHTML = '<div class="slot-recovery-empty">Procurando cópias seguras…</div>';
+        try {
+            const uid = currentUser.uid;
+            const [lixeiraSnapshot, campanhasSnapshot, slotsSnapshot] = await Promise.all([
+                database.ref(`users/${uid}/deletedSlots`).once('value'),
+                database.ref(`userCampaigns/${uid}`).once('value'),
+                database.ref(`users/${uid}/slots`).once('value')
+            ]);
+            const slotsAtuais = slotsSnapshot.val() || {};
+            const encontrados = [];
+            Object.entries(lixeiraSnapshot.val() || {}).forEach(([trashId, registro]) => {
+                if (!registro?.sheet || typeof registro.sheet !== 'object') return;
+                encontrados.push({
+                    source: 'trash', trashId, slotId: String(registro.slotId || ''),
+                    name: registro.slotName || registro.sheet.nickname || 'Ficha excluída',
+                    detail: `Lixeira • ${registro.deletedAt ? new Date(registro.deletedAt).toLocaleString('pt-BR') : 'cópia protegida'}`,
+                    sheet: registro.sheet,
+                    folderId: registro.folderId || SLOT_FOLDER_DEFAULT,
+                    order: Number(registro.order) || Date.now()
+                });
+            });
+            const campaignIds = Object.keys(campanhasSnapshot.val() || {}).slice(0, 40);
+            const resultados = await Promise.allSettled(campaignIds.map(async campaignId => {
+                const snapshot = await database.ref(`campaigns/${campaignId}`).once('value');
+                return { campaignId, campaign: snapshot.val() || {} };
+            }));
+            resultados.forEach(resultado => {
+                if (resultado.status !== 'fulfilled') return;
+                const { campaignId, campaign } = resultado.value;
+                Object.entries(campaign.characters || {}).forEach(([characterId, character]) => {
+                    if (character?.ownerUid !== uid || !character.sheet || typeof character.sheet !== 'object') return;
+                    const slotOriginal = String(character.slot || '');
+                    const atual = extrairFichaDoPayloadSincronizacao(slotsAtuais[slotOriginal]);
+                    const slotAtualPreenchido = Boolean(atual && (
+                        String(atual.nickname || '').trim() || String(atual.avatar || '').trim() ||
+                        (Array.isArray(atual.habilidades) && atual.habilidades.length) ||
+                        (Array.isArray(atual.itens) && atual.itens.length) ||
+                        (Array.isArray(atual.notas) && atual.notas.length)
+                    ));
+                    if (slotOriginal && slotAtualPreenchido) return;
+                    encontrados.push({
+                        source: 'campaign', campaignId, characterId, slotId: slotOriginal,
+                        name: character.name || character.sheet.nickname || 'Personagem da campanha',
+                        detail: `Cópia em campanha • ${campaign.meta?.name || campaign.name || 'Campanha'}`,
+                        sheet: character.sheet,
+                        folderId: SLOT_FOLDER_DEFAULT,
+                        order: Date.now()
+                    });
+                });
+            });
+            const vistos = new Set();
+            slotRecoveryState.items = encontrados.filter(item => {
+                const chave = `${item.source}:${item.slotId}:${hashFichaSincronizacao(extrairFichaDoPayloadSincronizacao(item.sheet))}`;
+                if (vistos.has(chave)) return false;
+                vistos.add(chave);
+                return true;
+            });
+            renderizarFichasRecuperaveis();
+        } catch (erro) {
+            console.error('Erro ao procurar fichas recuperáveis:', erro);
+            lista.innerHTML = '<div class="slot-recovery-empty">Não foi possível consultar as cópias agora. Verifique a conexão e tente novamente.</div>';
+        }
+    }
+
+    async function restaurarFichaRecuperavel(index) {
+        const item = slotRecoveryState.items[Number(index)];
+        if (!currentUser || !item?.sheet) return;
+        const nome = String(item.name || item.sheet.nickname || 'Ficha recuperada').trim();
+        if (!confirm(`Restaurar "${nome}" como uma ficha na sua conta?`)) return;
+        const uid = currentUser.uid;
+        const idPreferido = String(item.slotId || '');
+        const slotId = idPreferido && !slotManagerState.slots[idPreferido]
+            ? idPreferido
+            : `slot_recuperado_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+        const folderId = slotManagerState.folders[item.folderId] ? item.folderId : (pastasOrdenadas()[0]?.id || SLOT_FOLDER_DEFAULT);
+        const ficha = extrairFichaDoPayloadSincronizacao(item.sheet) || item.sheet;
+        const revision = `restore-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+        const payload = { ...JSON.parse(JSON.stringify(ficha)), syncMeta: { clientId: syncClientId, revision, updatedAt: Date.now(), restored: true } };
+        const estadoAnterior = JSON.parse(JSON.stringify(slotManagerState));
+        slotManagerState.slots[slotId] = { id: slotId, name: nome, folderId, order: Date.now() };
+        const updates = {
+            [`users/${uid}/slots/${slotId}`]: payload,
+            [`users/${uid}/slotConfig`]: slotManagerState
+        };
+        if (item.source === 'trash' && item.trashId) updates[`users/${uid}/deletedSlots/${item.trashId}`] = null;
+        if (item.source === 'campaign' && item.campaignId && item.characterId) {
+            updates[`users/${uid}/campaignLinks/${item.campaignId}/${item.characterId}`] = { slot: slotId };
+            updates[`campaigns/${item.campaignId}/characters/${item.characterId}/slot`] = slotId;
+        }
+        try {
+            await database.ref().update(updates);
+            atualizarPreviewSlotComFicha(slotId, ficha);
+            slotRecoveryState.items.splice(Number(index), 1);
+            renderizarSeletoresSlots(document.getElementById('save-slot')?.value);
+            renderizarGerenciadorSlots();
+            renderizarFichasRecuperaveis();
+            spawnPopup('RECUPERAÇÃO', nome, '✓', '#00d98b', 'FICHA RESTAURADA', 'A cópia voltou para a sua lista de personagens e já está protegida na nuvem.');
+        } catch (erro) {
+            console.error('Erro ao restaurar ficha:', erro);
+            slotManagerState = estadoAnterior;
+            renderizarGerenciadorSlots();
+            alert('Não foi possível restaurar esta ficha agora. Nenhuma cópia foi removida.');
+        }
+    }
+
     function abrirGerenciadorSlots() {
         if (!currentUser) {
             alert('Faça login com o Google para criar e organizar fichas.');
             return;
         }
         renderizarGerenciadorSlots();
+        const recuperacao = document.getElementById('slot-recovery-list');
+        if (recuperacao) recuperacao.innerHTML = '';
         abrirSuperficieFoco('#modal-slot-manager');
     }
 
@@ -15183,17 +15340,19 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const avisoCampanha = Object.values(campaignState?.links || {}).some(links =>
             Object.values(links || {}).some(link => String(link?.slot || '') === slotId)
         ) ? '\n\nAs cópias já colocadas em campanhas serão preservadas, mas deixarão de sincronizar com este slot.' : '';
-        if (!confirm(`Excluir definitivamente "${slot.name}" e todos os dados salvos nessa ficha?${avisoAlteracoes}${avisoCampanha}`)) return;
+        if (!confirm(`Mover "${slot.name}" para a lixeira?${avisoAlteracoes}${avisoCampanha}\n\nA ficha poderá ser restaurada pelo gerenciador de slots.`)) return;
+        const confirmacaoNome = prompt(`Para evitar uma exclusão acidental, digite exatamente o nome da ficha:\n\n${slot.name}`);
+        if (confirmacaoNome !== slot.name) {
+            if (confirmacaoNome !== null) alert('O nome digitado não corresponde. A ficha não foi removida.');
+            return;
+        }
 
         const estadoAnterior = JSON.parse(JSON.stringify(slotManagerState));
         const previewAnterior = slotPreviewState[slotId];
         delete slotManagerState.slots[slotId];
         delete slotPreviewState[slotId];
         const proximo = slotsOrdenados()[0];
-        const updates = {
-            [`users/${currentUser.uid}/slots/${slotId}`]: null,
-            [`users/${currentUser.uid}/slotConfig`]: slotManagerState
-        };
+        const updates = { [`users/${currentUser.uid}/slotConfig`]: slotManagerState };
         Object.entries(campaignState?.links || {}).forEach(([campaignId, links]) => {
             Object.entries(links || {}).forEach(([characterId, link]) => {
                 if (String(link?.slot || '') === slotId) {
@@ -15203,7 +15362,23 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         });
 
         try {
-            const linksSnapshot = await database.ref(`users/${currentUser.uid}/campaignLinks`).once('value');
+            const [slotSnapshot, linksSnapshot] = await Promise.all([
+                database.ref(`users/${currentUser.uid}/slots/${slotId}`).once('value'),
+                database.ref(`users/${currentUser.uid}/campaignLinks`).once('value')
+            ]);
+            const dadosProtegidos = slotSnapshot.val();
+            if (dadosProtegidos && typeof dadosProtegidos === 'object') {
+                const trashId = `${Date.now()}_${slotId.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
+                updates[`users/${currentUser.uid}/deletedSlots/${trashId}`] = {
+                    slotId,
+                    slotName: slot.name,
+                    folderId: slot.folderId || SLOT_FOLDER_DEFAULT,
+                    order: Number(slot.order) || Date.now(),
+                    deletedAt: firebase.database.ServerValue.TIMESTAMP,
+                    sheet: dadosProtegidos
+                };
+            }
+            updates[`users/${currentUser.uid}/slots/${slotId}`] = null;
             Object.entries(linksSnapshot.val() || {}).forEach(([campaignId, links]) => {
                 Object.entries(links || {}).forEach(([characterId, link]) => {
                     if (String(link?.slot || '') === slotId) {
@@ -15223,7 +15398,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             }
             renderizarGerenciadorSlots();
             renderizarSeletorInicialFichas();
-            spawnPopup('FICHA EXCLUÍDA', slot.name, '✕', '#ff6464', 'SLOT REMOVIDO', 'As demais fichas e as cópias existentes em campanhas foram preservadas.');
+            spawnPopup('FICHA NA LIXEIRA', slot.name, '↶', '#ffca55', 'REMOÇÃO RECUPERÁVEL', 'A ficha saiu da lista, mas pode ser restaurada em Organizar fichas → Recuperação.');
         } catch (erro) {
             console.error('Erro ao excluir slot:', erro);
             slotManagerState = estadoAnterior;
