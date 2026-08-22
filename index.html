@@ -10693,6 +10693,188 @@ body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 2
     .slot-recovery-heading,.slot-recovery-card { align-items: stretch; grid-template-columns: 1fr; flex-direction: column; }
     .slot-recovery-heading { display: flex; }
 }
+
+/* Navegação em camadas previsíveis: barras nunca atravessam modais. */
+body.theme-umbral .top-utility-bar {
+    left: var(--sidebar-width) !important;
+    z-index: 1210;
+    max-width: calc(100vw - var(--sidebar-width));
+}
+body.theme-umbral .sidebar { z-index: 1200; }
+body.theme-umbral .sidebar-nav-items { padding-top: calc(var(--topbar-height) + 24px); }
+body.theme-umbral.sidebar-collapsed .top-utility-bar {
+    left: var(--sidebar-collapsed-rail) !important;
+    max-width: calc(100vw - var(--sidebar-collapsed-rail));
+}
+body.theme-umbral.topbar-collapsed .sidebar-nav-items { padding-top: 42px; }
+body.ui-focus-open:not(.document-desk-open) > .top-utility-bar,
+body.ui-focus-open:not(.document-desk-open) > .sidebar {
+    z-index: 1100 !important;
+    pointer-events: none !important;
+}
+body.ui-focus-open:not(.ui-theme-preview-open) > .top-utility-bar,
+body.ui-focus-open:not(.ui-theme-preview-open) > .sidebar { filter: saturate(.55) brightness(.48); }
+body.ui-focus-open.ui-theme-preview-open > .top-utility-bar,
+body.ui-focus-open.ui-theme-preview-open > .sidebar { z-index: 1100 !important; }
+
+/* Editores de criação: cabeçalho e ações fixos; somente o formulário rola. */
+body.theme-umbral .creation-modal,
+body.theme-umbral .creation-modal.ui-focus-surface {
+    display: flex !important;
+    flex-direction: column;
+    width: min(1060px, calc(100vw - 38px)) !important;
+    height: min(900px, calc(100dvh - 34px));
+    max-height: calc(100dvh - 34px) !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+body.theme-umbral .creation-modal:not(.ui-focus-surface) { display: none !important; }
+body.theme-umbral .creation-modal::before { display: none !important; }
+body.theme-umbral .creation-modal-heading {
+    position: relative;
+    top: auto;
+    z-index: 3;
+    flex: 0 0 auto;
+    min-height: 88px;
+    margin: 0 !important;
+    padding: 21px clamp(20px, 3vw, 36px) 17px !important;
+    border-bottom: 1px solid var(--umbral-line);
+    background:
+        linear-gradient(90deg, color-mix(in srgb,var(--primary-purple) 12%,#0d0a0f), transparent 64%),
+        #0d0b0e !important;
+}
+body.theme-umbral .creation-modal.catalog-editor-mode .creation-modal-heading {
+    background:
+        linear-gradient(90deg, color-mix(in srgb,var(--text-gold) 10%,#0d0a0f), color-mix(in srgb,var(--primary-purple) 8%,#0d0a0f) 64%),
+        #0d0b0e !important;
+}
+body.theme-umbral .creation-modal-heading::after { right: clamp(20px,3vw,36px); left: clamp(20px,3vw,36px); }
+body.theme-umbral .creation-modal-heading > div { min-width: 0; }
+body.theme-umbral .creation-modal-heading span { display: block; margin-bottom: 6px; font-size: .55rem; }
+body.theme-umbral .creation-modal-heading h3 {
+    max-width: 850px;
+    margin: 0;
+    overflow-wrap: anywhere;
+    font-size: clamp(.95rem, 2vw, 1.24rem);
+    line-height: 1.28;
+}
+body.theme-umbral .creation-modal-heading > button { flex: 0 0 38px; width: 38px; height: 38px; }
+body.theme-umbral .creation-modal .modal-tabs {
+    position: relative;
+    top: auto;
+    z-index: 2;
+    flex: 0 0 auto;
+    min-height: 45px;
+    margin: 0 !important;
+    padding: 0 clamp(18px, 3vw, 34px);
+    background: #0b090c !important;
+}
+body.theme-umbral .creation-modal .tab-btn { min-height: 44px; padding: 10px 13px; }
+body.theme-umbral .creation-modal-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 24px clamp(18px, 3.2vw, 38px) 30px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+body.theme-umbral .creation-modal-actions {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    gap: 10px;
+    min-height: 70px;
+    padding: 13px clamp(18px, 3vw, 34px);
+    border-top: 1px solid var(--umbral-line);
+    background: color-mix(in srgb, var(--container-bg) 96%, #000);
+    box-shadow: 0 -14px 30px rgba(0,0,0,.22);
+}
+body.theme-umbral .creation-modal-actions button { width: auto !important; min-width: 170px; min-height: 43px; margin: 0 !important; }
+body.theme-umbral .creation-modal .main-roll-editor,
+body.theme-umbral .creation-modal .action-cost-editor { margin: 18px 0; padding: 18px; }
+body.theme-umbral .creation-modal .main-roll-row { grid-template-columns: minmax(150px,.85fr) minmax(210px,1.25fr) minmax(135px,.7fr) 38px; gap: 10px; padding: 13px; }
+body.theme-umbral .creation-modal .action-cost-row { grid-template-columns: minmax(160px,1.2fr) minmax(125px,.75fr) 100px 36px; gap: 10px; }
+body.theme-umbral .creation-modal .catalog-entity-picker { grid-template-columns: repeat(5,minmax(115px,1fr)); gap: 9px; margin-bottom: 17px; }
+
+/* Acervo adapta-se pela altura disponível; o rodapé nunca sai da tela. */
+body.theme-umbral .content-library-modal,
+body.theme-umbral .content-library-modal.ui-focus-surface {
+    display: flex !important;
+    flex-direction: column;
+    width: min(96vw, 1720px) !important;
+    height: calc(100dvh - 28px) !important;
+    max-height: calc(100dvh - 28px) !important;
+    padding: clamp(17px, 2vw, 29px) !important;
+    overflow: hidden !important;
+}
+body.theme-umbral .content-library-modal:not(.ui-focus-surface) { display: none !important; }
+body.theme-umbral .content-library-header,
+body.theme-umbral .content-library-modal > .settings-intro,
+body.theme-umbral .content-library-tabs,
+body.theme-umbral .content-library-filterbar,
+body.theme-umbral .content-library-campaign-picker,
+body.theme-umbral .content-library-footer { flex: 0 0 auto; }
+body.theme-umbral .content-library-workspace { flex: 1 1 0; min-height: 0 !important; }
+body.theme-umbral .content-library-footer {
+    position: relative;
+    z-index: 4;
+    margin-top: 10px;
+    padding-top: 10px;
+    background: #08070a;
+}
+body.theme-umbral #content-library-create-button { min-height: 39px; }
+
+@media (max-height: 820px) {
+    body.theme-umbral .content-library-header { margin-bottom: 5px; padding-bottom: 11px; }
+    body.theme-umbral .content-library-header h3 { font-size: 1.2rem; }
+    body.theme-umbral .content-library-modal > .settings-intro { margin-bottom: 6px; font-size: .7rem; line-height: 1.25; }
+    body.theme-umbral .content-library-tabs { margin-bottom: 7px; }
+    body.theme-umbral .content-library-tab { min-height: 39px; }
+    body.theme-umbral .content-library-filterbar { min-height: 43px; margin-bottom: 7px; padding: 5px 8px; }
+    body.theme-umbral .content-library-campaign-picker { min-height: 70px; margin-bottom: 7px; padding: 7px 9px; }
+    body.theme-umbral .content-library-campaign { height: 61px; }
+    body.theme-umbral .content-library-browser { padding: 12px; }
+    body.theme-umbral .content-library-search-wrap { min-height: 40px; margin-bottom: 9px; }
+    body.theme-umbral .content-library-entry { min-height: 57px; padding: 7px 10px; }
+    body.theme-umbral .content-library-entry-thumb { width: 39px; height: 39px; }
+    body.theme-umbral .content-library-detail { padding: clamp(21px,3vw,38px); }
+    body.theme-umbral .content-library-footer { min-height: 47px; }
+}
+@media (max-height: 650px) {
+    body.theme-umbral .content-library-modal > .settings-intro { display: none; }
+    body.theme-umbral .content-library-header .settings-eyebrow { display: none; }
+    body.theme-umbral .content-library-header h3 { margin-top: 0; }
+    body.theme-umbral .content-library-filter-label { display: none; }
+    body.theme-umbral .content-library-status { display: none; }
+}
+
+@media (max-width: 1120px) {
+    body.theme-umbral .topbar-heading { display: none; }
+    body.theme-umbral .topbar-content { grid-template-columns: minmax(0,1fr); padding-right: 14px; padding-left: 14px; }
+    body.theme-umbral .topbar-actions { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+    body.theme-umbral .topbar-actions::-webkit-scrollbar { display: none; }
+}
+@media (max-width: 820px) {
+    body.theme-umbral .creation-modal,
+    body.theme-umbral .creation-modal.ui-focus-surface { width: calc(100vw - 18px) !important; height: calc(100dvh - 18px); max-height: calc(100dvh - 18px) !important; }
+    body.theme-umbral .creation-modal .main-roll-row { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+    body.theme-umbral .creation-modal .main-roll-row > .remove-repeatable { min-height: 39px; }
+    body.theme-umbral .creation-modal .main-roll-row .roll-crit-fields { grid-column: 1 / -1; }
+    body.theme-umbral .creation-modal .action-cost-row { grid-template-columns: minmax(0,1fr) minmax(110px,.6fr); }
+    body.theme-umbral .creation-modal .catalog-entity-picker { grid-template-columns: repeat(auto-fit,minmax(110px,1fr)); }
+}
+@media (max-width: 620px) {
+    body.theme-umbral .top-utility-bar { left: var(--sidebar-width) !important; max-width: calc(100vw - var(--sidebar-width)); }
+    body.theme-umbral .creation-modal-heading { min-height: 80px; padding: 17px 16px 14px !important; }
+    body.theme-umbral .creation-modal .modal-tabs { padding: 0 10px; overflow-x: auto; }
+    body.theme-umbral .creation-modal-scroll { padding: 18px 13px 24px; }
+    body.theme-umbral .creation-modal-actions { display: grid; grid-template-columns: 1fr 1.35fr; min-height: 65px; padding: 10px 12px; }
+    body.theme-umbral .creation-modal-actions button { min-width: 0; }
+    body.theme-umbral .creation-modal .main-roll-row,
+    body.theme-umbral .creation-modal .action-cost-row { grid-template-columns: 1fr; }
+    body.theme-umbral .creation-modal .main-roll-row .roll-crit-fields { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body class="theme-umbral">
@@ -12177,12 +12359,13 @@ body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 2
 </div>
 
 <div id="modal-hab" class="modal creation-modal" role="dialog" aria-modal="true" aria-labelledby="hab-modal-heading">
-    <div class="creation-modal-heading"><div><span>OFICINA DA FICHA</span><h3 id="hab-modal-heading">Criar conteúdo</h3></div><button type="button" onclick="cancelarEditorCatalogoOuFechar('action')" aria-label="Fechar">✕</button></div>
+    <div class="creation-modal-heading"><div><span id="hab-modal-eyebrow">OFICINA DA FICHA</span><h3 id="hab-modal-heading">Criar conteúdo</h3></div><button type="button" onclick="cancelarEditorCatalogoOuFechar('action')" aria-label="Fechar">✕</button></div>
     <div class="modal-tabs">
         <button class="tab-btn active" onclick="switchTab('tab-info')">Informações</button>
         <button class="tab-btn" id="hab-media-tab" onclick="switchTab('tab-media')">Mídia/Imagem</button>
     </div>
 
+    <div class="creation-modal-scroll">
     <div id="tab-info">
         <input type="hidden" id="hab-id-edicao" value="">
         <input type="hidden" id="hab-tipo">
@@ -12248,9 +12431,12 @@ body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 2
         <label class="file-picker-button wide">📁 Escolher e recortar imagem<input type="file" id="hab-img-file" accept="image/*" onchange="abrirRecorteMidia(this, 'hab-img', 'hab-img-preview', 'content')"></label>
         <div class="media-preview-frame"><img id="hab-img-preview" alt="Prévia da habilidade"></div>
     </div>
+    </div>
 
-    <button onclick="salvarHabilidade()" style="width:100%; padding:15px; background:var(--primary-purple); color:#fff; border:none; font-family:'Cinzel', serif; cursor:pointer;">GRAVAR NO GRIMÓRIO</button>
-    <button onclick="cancelarEditorCatalogoOuFechar('action')" style="width:100%; margin-top:10px; background:none; border:1px solid #333; color:#eee; padding:10px; cursor:pointer; font-family: 'Cinzel', serif;">Cancelar</button>
+    <div class="creation-modal-actions">
+        <button class="settings-secondary" onclick="cancelarEditorCatalogoOuFechar('action')">Cancelar</button>
+        <button class="settings-primary" onclick="salvarHabilidade()">GRAVAR NO GRIMÓRIO</button>
+    </div>
 </div>
 
 <div id="modal-custom-container" class="modal custom-container-modal" role="dialog" aria-modal="true" aria-labelledby="custom-container-heading">
@@ -12281,10 +12467,11 @@ body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 2
 </div>
 
 <div id="modal-item" class="modal creation-modal" role="dialog" aria-modal="true" aria-labelledby="item-modal-heading">
-    <div class="creation-modal-heading"><div><span>MOCHILA E EQUIPAMENTOS</span><h3 id="item-modal-heading">Criar item</h3></div><button type="button" onclick="cancelarEditorCatalogoOuFechar('item')" aria-label="Fechar">✕</button></div>
+    <div class="creation-modal-heading"><div><span id="item-modal-eyebrow">MOCHILA E EQUIPAMENTOS</span><h3 id="item-modal-heading">Criar item</h3></div><button type="button" onclick="cancelarEditorCatalogoOuFechar('item')" aria-label="Fechar">✕</button></div>
     <div class="modal-tabs">
         <button class="tab-btn active">Configuração de Item</button>
     </div>
+    <div class="creation-modal-scroll">
     <input type="hidden" id="item-id-edicao" value="">
     
     <label style="color:var(--text-gold); font-size:0.8rem">NOME DO ITEM</label>
@@ -12341,9 +12528,12 @@ body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 2
     
     <div id="item-rolagens-container"></div>
     <button onclick="addInputRolagemItem()" style="background:none; border:1px solid var(--primary-purple); color:var(--light-purple); cursor:pointer; padding:5px; margin-bottom:15px; width:100%; font-family: 'Cinzel', serif;">+ Adicionar Rolagem Opcional ao Item</button>
+    </div>
 
-    <button onclick="salvarItemInventario()" style="width:100%; padding:15px; background:var(--primary-purple); color:#fff; border:none; font-family:'Cinzel', serif; cursor:pointer;">GUARDAR NA MOCHILA</button>
-    <button onclick="cancelarEditorCatalogoOuFechar('item')" style="width:100%; margin-top:10px; background:none; border:1px solid #333; color:#eee; padding:10px; cursor:pointer; font-family: 'Cinzel', serif;">Cancelar</button>
+    <div class="creation-modal-actions">
+        <button class="settings-secondary" onclick="cancelarEditorCatalogoOuFechar('item')">Cancelar</button>
+        <button class="settings-primary" onclick="salvarItemInventario()">GUARDAR NA MOCHILA</button>
+    </div>
 </div>
 
 <div id="modal-skill" class="modal" style="width: 500px;">
@@ -16922,6 +17112,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             abrirEditorItem(null);
             contentCatalogState.editorContext = retorno;
             document.getElementById('modal-item').classList.add('catalog-editor-mode');
+            document.getElementById('item-modal-eyebrow').textContent = escopo === 'abyss' ? 'OFICINA DO ACERVO ABYSS' : 'OFICINA DO MESTRE';
             renderizarSeletorEntidadesEditorAcervo('item-catalog-entity', []);
             document.getElementById('item-modal-heading').textContent = `${entrada ? 'Editar' : 'Criar'} item • ${escopo === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
             document.getElementById('item-id-edicao').value = '';
@@ -16931,6 +17122,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             abrirEditorHab(tipoFicha, null);
             contentCatalogState.editorContext = retorno;
             document.getElementById('modal-hab').classList.add('catalog-editor-mode');
+            document.getElementById('hab-modal-eyebrow').textContent = escopo === 'abyss' ? 'OFICINA DO ACERVO ABYSS' : 'OFICINA DO MESTRE';
             document.getElementById('hab-catalog-type').value = tipoNormalizado;
             renderizarSeletorEntidadesEditorAcervo('hab-catalog-entity', []);
             document.getElementById('hab-modal-heading').textContent = `${entrada ? 'Editar' : 'Criar'} ${nomeTipoConteudoAcervo(tipoNormalizado).toLocaleLowerCase('pt-BR')} • ${escopo === 'abyss' ? 'Acervo Abyss' : 'Campanha'}`;
@@ -18685,6 +18877,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         tocarSom('click');
         contentCatalogState.editorContext = null;
         document.getElementById('modal-hab')?.classList.remove('catalog-editor-mode');
+        document.getElementById('hab-modal-eyebrow').textContent = 'OFICINA DA FICHA';
         document.getElementById('hab-is-separator').disabled = false;
         document.getElementById('hab-tipo').value = t; 
         const nomesTipo = { ataque: 'ataque', habilidade: 'habilidade', feitico: 'feitiço' };
@@ -19060,6 +19253,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         tocarSom('click');
         contentCatalogState.editorContext = null;
         document.getElementById('modal-item')?.classList.remove('catalog-editor-mode');
+        document.getElementById('item-modal-eyebrow').textContent = 'MOCHILA E EQUIPAMENTOS';
         document.getElementById('item-modal-heading').textContent = idxEdicao !== null ? 'Editar item' : 'Criar item';
         document.getElementById('item-rolagens-container').innerHTML = '';
         document.getElementById('item-mods-lista').innerHTML = '';
