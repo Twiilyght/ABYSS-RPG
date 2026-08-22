@@ -10397,6 +10397,279 @@ body.theme-umbral .note-card { padding: 17px 18px; }
     body.theme-umbral .modal button,
     body.theme-umbral .campaign-card { transition-duration: .01ms !important; transform: none !important; }
 }
+
+/* ==================================================================
+   REDESENHO DAS ÁREAS SECUNDÁRIAS
+   Inventário, Crônicas, Campanhas e Acervo recebem composição própria.
+   A ficha permanece intocada; Combate recebe somente acabamento.
+   ================================================================== */
+
+/* Capítulos secundários: mais presença e um início visual inequívoco. */
+body.theme-umbral #area-inventario,
+body.theme-umbral #area-notas {
+    width: min(100%, 1640px);
+}
+body.theme-umbral #area-inventario .page-chapter,
+body.theme-umbral #area-notas .page-chapter {
+    min-height: 185px;
+    margin-bottom: 34px;
+    padding: 38px clamp(28px, 4vw, 68px) 32px 112px;
+    overflow: hidden;
+    border: 1px solid var(--umbral-line);
+    background:
+        linear-gradient(90deg, rgba(7,5,9,.96) 0 52%, rgba(7,5,9,.66)),
+        radial-gradient(circle at 88% 30%, color-mix(in srgb, var(--primary-purple) 18%, transparent), transparent 26rem),
+        repeating-linear-gradient(120deg, transparent 0 14px, rgba(255,255,255,.012) 15px 16px),
+        #0a080c;
+}
+body.theme-umbral #area-inventario .page-chapter::after,
+body.theme-umbral #area-notas .page-chapter::after {
+    content: '';
+    position: absolute;
+    top: -44px; right: clamp(24px, 7vw, 115px);
+    width: 210px; height: 250px;
+    opacity: .12;
+    border: 1px solid var(--umbral-bronze);
+    transform: rotate(8deg);
+    background: repeating-radial-gradient(circle at 50% 50%, transparent 0 24px, var(--umbral-bronze) 25px 26px);
+    clip-path: polygon(50% 0, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+    pointer-events: none;
+}
+body.theme-umbral #area-inventario .page-chapter::before,
+body.theme-umbral #area-notas .page-chapter::before { left: 79px; top: 28px; bottom: 28px; }
+body.theme-umbral #area-inventario .page-chapter-index,
+body.theme-umbral #area-notas .page-chapter-index { left: 22px; top: 34px; }
+body.theme-umbral #area-inventario .page-chapter h1,
+body.theme-umbral #area-notas .page-chapter h1 { font-size: clamp(2.35rem, 4vw, 4rem); }
+body.theme-umbral #area-inventario .page-chapter p,
+body.theme-umbral #area-notas .page-chapter p { position: relative; z-index: 1; max-width: 430px; justify-self: end; font-size: 1.08rem; }
+
+/* Inventário: painel de comando separado da coleção, com cartões respirando. */
+body.theme-umbral #area-inventario > .section-box {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: clamp(24px, 3vw, 42px);
+    border: 1px solid var(--umbral-line);
+    background:
+        linear-gradient(145deg, rgba(157,118,59,.045), transparent 35%),
+        repeating-linear-gradient(135deg, transparent 0 22px, rgba(255,255,255,.009) 23px 24px),
+        #09080b;
+}
+body.theme-umbral #area-inventario .section-title,
+body.theme-umbral #area-notas .section-title {
+    margin-bottom: 28px;
+    font-size: .84rem;
+}
+body.theme-umbral #area-inventario .inv-header-dashboard {
+    grid-template-columns: minmax(240px, .72fr) minmax(0, 1.28fr);
+    min-height: 104px;
+    margin: 0 0 26px;
+    padding: 20px clamp(20px, 2.5vw, 34px);
+    border: 0;
+    border-left: 3px solid var(--umbral-bronze);
+    background:
+        linear-gradient(90deg, rgba(157,118,59,.12), transparent 44%),
+        color-mix(in srgb, var(--container-bg) 91%, #17100b);
+}
+body.theme-umbral #area-inventario .inv-weight-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 7px;
+    font-size: .65rem;
+}
+body.theme-umbral #area-inventario .inv-weight-box::before {
+    content: 'CAPACIDADE';
+    flex-basis: 100%;
+    margin-bottom: 5px;
+    color: var(--umbral-bronze-bright);
+    font-size: .5rem;
+    letter-spacing: 2px;
+}
+body.theme-umbral #area-inventario .ability-create-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+body.theme-umbral #area-inventario .ability-create-actions button { min-height: 39px; margin: 0; white-space: nowrap; }
+body.theme-umbral #area-inventario > .section-box > .search-bar {
+    width: min(100%, 680px);
+    min-height: 46px;
+    margin: 0 0 31px;
+    padding-left: 18px;
+    border-left: 2px solid var(--primary-purple);
+}
+body.theme-umbral #area-inventario .item-grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 390px), 1fr));
+    gap: 20px 24px;
+}
+body.theme-umbral #area-inventario .item-card {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--umbral-line-soft);
+    border-left: 3px solid color-mix(in srgb, var(--primary-purple) 68%, var(--umbral-bronze));
+    background: linear-gradient(118deg, rgba(82,38,104,.065), transparent 38%), #0b090d;
+}
+body.theme-umbral #area-inventario .item-card:hover {
+    border-color: color-mix(in srgb, var(--primary-purple) 60%, var(--umbral-line));
+    border-left-color: var(--umbral-bronze-bright);
+    transform: translateY(-2px);
+}
+
+/* Crônicas: sensação de arquivo, com uma barra de trabalho clara e páginas largas. */
+body.theme-umbral #area-notas > .section-box {
+    padding: clamp(24px, 3vw, 42px);
+    border: 1px solid var(--umbral-line);
+    background:
+        linear-gradient(120deg, rgba(85,42,106,.055), transparent 42%),
+        repeating-linear-gradient(0deg, transparent 0 31px, rgba(189,151,82,.018) 32px),
+        #09080b;
+}
+body.theme-umbral #area-notas .notes-toolbar {
+    grid-template-columns: minmax(280px, 1fr) auto;
+    gap: 18px;
+    margin-bottom: 32px;
+    padding: 0 0 24px;
+}
+body.theme-umbral #area-notas .notes-toolbar .search-bar { min-height: 47px; padding-left: 18px; }
+body.theme-umbral #area-notas .notes-toolbar .btn-forge { min-width: 185px; min-height: 47px; }
+body.theme-umbral #area-notas .notes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+}
+body.theme-umbral #area-notas .note-card {
+    position: relative;
+    padding: 24px 25px 26px;
+    border: 1px solid var(--umbral-line-soft);
+    border-top: 2px solid color-mix(in srgb, var(--umbral-bronze) 65%, var(--primary-purple));
+    border-left-width: 1px;
+    background:
+        repeating-linear-gradient(0deg, transparent 0 29px, rgba(189,151,82,.025) 30px),
+        linear-gradient(145deg, #100d10, #0a090b);
+}
+body.theme-umbral #area-notas .note-card::before {
+    content: '';
+    position: absolute;
+    top: 8px; right: 9px;
+    width: 28px; height: 28px;
+    border-top: 1px solid var(--umbral-bronze-dark);
+    border-right: 1px solid var(--umbral-bronze-dark);
+    opacity: .7;
+    pointer-events: none;
+}
+body.theme-umbral #area-notas .note-card-title { min-height: 41px; padding: 8px 11px; font-size: 1.12rem; }
+body.theme-umbral #area-notas .note-card textarea { min-height: 190px; padding: 13px 4px; border: 0; box-shadow: none; background: transparent !important; }
+
+/* Campanhas: ações viram portal; conteúdo usa uma grade editorial ampla. */
+body.theme-umbral .campaign-shell { max-width: 1640px; padding-right: clamp(22px, 4.5vw, 76px); padding-left: clamp(22px, 4.5vw, 76px); }
+body.theme-umbral .campaign-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(250px, 360px));
+    justify-content: center;
+    gap: 16px;
+    margin: 4px auto 46px;
+}
+body.theme-umbral .campaign-primary-btn {
+    width: 100%;
+    min-height: 68px;
+    border-radius: 2px;
+    text-align: left;
+}
+body.theme-umbral .campaign-panel {
+    padding: clamp(28px, 3.5vw, 52px);
+    border-color: var(--umbral-line);
+    background:
+        linear-gradient(135deg, rgba(97,42,125,.07), transparent 38%),
+        repeating-linear-gradient(125deg, transparent 0 22px, rgba(255,255,255,.008) 23px 24px),
+        #09080b;
+}
+body.theme-umbral .campaign-section-heading { margin-bottom: 27px; padding-bottom: 17px; }
+body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 24px; }
+body.theme-umbral .campaign-card { height: 230px; }
+body.theme-umbral .campaign-card-name { left: 23px; right: 23px; bottom: 23px; font-size: 1.13rem; }
+body.theme-umbral .campaign-detail-grid { grid-template-columns: minmax(0, 1fr) minmax(350px, 420px); gap: 28px; margin-top: 28px; }
+body.theme-umbral .campaign-content-box { padding: clamp(24px, 2.7vw, 38px); }
+body.theme-umbral .campaign-character-mini { padding: 13px; gap: 14px; border: 0; border-bottom: 1px solid var(--umbral-line-soft); background: transparent; }
+body.theme-umbral .campaign-character-mini:last-child { border-bottom: 0; }
+body.theme-umbral .campaign-hero { min-height: 340px; }
+body.theme-umbral .campaign-hero-content { max-width: 760px; padding: clamp(42px, 5vw, 72px); }
+
+/* Acervo: janela horizontal realmente espaçosa, biblioteca à esquerda e leitura à direita. */
+body.theme-umbral .content-library-modal {
+    width: min(96vw, 1720px) !important;
+    max-width: none !important;
+    height: min(92vh, 980px) !important;
+    max-height: 92vh !important;
+    padding: clamp(24px, 2.5vw, 42px) !important;
+    border-color: color-mix(in srgb, var(--ornament-color) 48%, var(--primary-purple)) !important;
+    background:
+        radial-gradient(circle at 94% 8%, color-mix(in srgb, var(--primary-purple) 12%, transparent), transparent 28rem),
+        repeating-linear-gradient(135deg, transparent 0 21px, rgba(255,255,255,.009) 22px 23px),
+        #08070a !important;
+}
+body.theme-umbral .content-library-header { margin-bottom: 12px; padding-bottom: 18px; }
+body.theme-umbral .content-library-tabs { gap: 14px; margin-bottom: 16px; }
+body.theme-umbral .content-library-tab { min-height: 52px; }
+body.theme-umbral .content-library-filterbar {
+    min-height: 56px;
+    gap: 24px;
+    margin-bottom: 14px;
+    padding: 9px 14px;
+    overflow: visible;
+}
+body.theme-umbral .content-library-campaign-picker { grid-template-columns: 205px minmax(0, 1fr); min-height: 96px; margin-bottom: 14px; padding: 12px 15px; }
+body.theme-umbral .content-library-workspace {
+    grid-template-columns: minmax(390px, 34%) minmax(0, 66%);
+    min-height: 390px;
+}
+body.theme-umbral .content-library-browser { padding: 20px; }
+body.theme-umbral .content-library-search-wrap { min-height: 48px; margin-bottom: 17px; }
+body.theme-umbral .content-library-list-head { margin-bottom: 12px; padding: 0 2px 12px; }
+body.theme-umbral .content-library-grid { gap: 9px; padding-right: 9px; }
+body.theme-umbral .content-library-entry { min-height: 68px; padding: 11px 14px 11px 10px; gap: 13px; }
+body.theme-umbral .content-library-entry-thumb { width: 47px; height: 47px; }
+body.theme-umbral .content-library-detail { padding: clamp(34px, 4vw, 68px); }
+body.theme-umbral .content-library-detail-hero { grid-template-columns: minmax(0,1fr) 132px; gap: 34px; padding-bottom: 29px; }
+body.theme-umbral .content-library-detail-image { width: 132px; height: 132px; }
+body.theme-umbral .content-library-detail-section { margin-top: 28px; }
+body.theme-umbral .content-library-description { max-width: 900px; font-size: .98rem; line-height: 1.75; }
+body.theme-umbral .content-library-footer { min-height: 55px; margin-top: 14px; padding-top: 14px; }
+
+/* Combate: apenas acabamento e respiro; estrutura permanece igual. */
+body.theme-umbral #area-combate .section-box { margin-bottom: 62px; }
+body.theme-umbral #area-combate .combat-grid,
+body.theme-umbral #area-combate .dual-grid { gap: clamp(24px, 3vw, 42px); }
+body.theme-umbral #area-combate .ability-create-actions { margin-bottom: 18px; gap: 8px; }
+body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 20px; }
+
+@media (max-width: 1050px) {
+    body.theme-umbral #area-inventario .inv-header-dashboard { grid-template-columns: 1fr; }
+    body.theme-umbral #area-inventario .ability-create-actions { justify-content: flex-start; flex-wrap: wrap; }
+    body.theme-umbral .campaign-detail-grid { grid-template-columns: 1fr; }
+    body.theme-umbral .content-library-workspace { grid-template-columns: minmax(320px, 42%) minmax(0, 58%); }
+}
+@media (max-width: 780px) {
+    body.theme-umbral #area-inventario .page-chapter,
+    body.theme-umbral #area-notas .page-chapter { grid-template-columns: 1fr; min-height: 0; padding: 30px 20px 28px 86px; }
+    body.theme-umbral #area-inventario .page-chapter p,
+    body.theme-umbral #area-notas .page-chapter p { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 16px; text-align: left; }
+    body.theme-umbral #area-inventario .page-chapter::before,
+    body.theme-umbral #area-notas .page-chapter::before { left: 65px; }
+    body.theme-umbral #area-inventario .page-chapter-index,
+    body.theme-umbral #area-notas .page-chapter-index { left: 9px; }
+    body.theme-umbral #area-inventario > .section-box,
+    body.theme-umbral #area-notas > .section-box { padding: 20px 15px; }
+    body.theme-umbral #area-notas .notes-grid { grid-template-columns: 1fr; }
+    body.theme-umbral .campaign-actions { grid-template-columns: 1fr; }
+    body.theme-umbral .campaign-card-grid { grid-template-columns: 1fr; }
+    body.theme-umbral .content-library-modal { width: calc(100vw - 12px) !important; height: calc(100vh - 12px) !important; max-height: calc(100vh - 12px) !important; padding: 18px 14px !important; }
+    body.theme-umbral .content-library-workspace { grid-template-columns: 1fr; grid-template-rows: minmax(260px, 42%) minmax(300px, 58%); grid-template-areas: 'browser' 'detail'; }
+    body.theme-umbral .content-library-browser { border-right: 0; border-bottom: 1px solid #302837; }
+    body.theme-umbral .content-library-filterbar { overflow-x: auto; }
+    body.theme-umbral .content-library-campaign-picker { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body class="theme-umbral">
