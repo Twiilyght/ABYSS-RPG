@@ -12515,7 +12515,7 @@ function mostrarDialogoAbyss(opcoes = {}) {
     const modo = opcoes.modo === 'aviso' ? 'aviso' : (opcoes.modo === 'entrada' ? 'entrada' : 'confirmacao');
     modal.classList.toggle('is-danger', opcoes.tom === 'perigo');
     modal.classList.toggle('is-warning', opcoes.tom === 'aviso');
-    document.getElementById('abyss-dialog-eyebrow').textContent = opcoes.sobretitulo || 'MESA DE DOCUMENTOS';
+    document.getElementById('abyss-dialog-eyebrow').textContent = opcoes.sobretitulo || 'ABYSS RPG';
     document.getElementById('abyss-dialog-title').textContent = opcoes.titulo || (modo === 'aviso' ? 'Atenção' : (modo === 'entrada' ? 'Informar valor' : 'Confirmar ação'));
     document.getElementById('abyss-dialog-message').textContent = String(opcoes.mensagem || '');
     const cancelar = document.getElementById('abyss-dialog-cancel');
@@ -12588,6 +12588,11 @@ function avisarAbyss(mensagem, opcoes = {}) {
 function pedirTextoAbyss(mensagem, opcoes = {}) {
     return mostrarDialogoAbyss({ ...opcoes, mensagem, modo: 'entrada' });
 }
+
+/* Mensagens legadas também usam a interface do Abyss em vez da janela do navegador. */
+window.alert = function alertaVisualAbyss(mensagem) {
+    avisarAbyss(String(mensagem ?? ''), { sobretitulo: 'ABYSS RPG', titulo: 'Aviso', rotuloConfirmar: 'Entendi' });
+};
 
 document.getElementById('ui-focus-backdrop')?.addEventListener('click', () => {
     if (!superficieFocoExigeEscolha()) fecharSuperficieFoco();
@@ -13322,8 +13327,8 @@ function resetarConfiguracoesAudio() {
         };
     }
 
-    function resetarSlot() {
-    if (confirm("Você tem certeza que deseja resetar este slot? A ficha ficará completamente vazia e todos os dados não salvos na nuvem serão perdidos.")) {
+    async function resetarSlot() {
+    if (await confirmarAbyss("A ficha ficará completamente vazia e os dados ainda não salvos serão perdidos. Deseja continuar?", { titulo: 'Resetar ficha', sobretitulo: 'ARQUIVO DOS REENCARNADOS', tom: 'perigo', rotuloConfirmar: 'Resetar ficha' })) {
         // Zera o objeto principal da ficha
         sheet = getFichaZerada();
         
@@ -13561,10 +13566,10 @@ function resetarConfiguracoesAudio() {
         document.getElementById('custom-skill-name').focus({ preventScroll: true });
     }
 
-    function removerPericiaCustomizada(idCodificado) {
+    async function removerPericiaCustomizada(idCodificado) {
         const id = decodeURIComponent(idCodificado);
         const pericia = obterPericiaPorReferencia(id);
-        if (!pericia?.custom || !confirm(`Remover a perícia “${pericia.n}”? Os modificadores vinculados a ela também serão removidos.`)) return;
+        if (!pericia?.custom || !(await confirmarAbyss(`Remover a perícia “${pericia.n}”? Os modificadores vinculados a ela também serão removidos.`, { titulo: 'Remover perícia', tom: 'perigo', rotuloConfirmar: 'Remover' }))) return;
         removerModificadoresDaPericia(pericia.n);
         sheet.pericias = normalizarPericiasDaFicha().filter(item => item.id !== id);
         if (document.getElementById('custom-skill-id').value === id) limparEditorPericiaCustomizada({ focar: false });
@@ -14288,18 +14293,18 @@ function resetarConfiguracoesAudio() {
         }).join('');
     }
 
-    function limparHistoricoAcoes() {
+    async function limparHistoricoAcoes() {
         if (!normalizarHistoricoAcoes().length) return;
-        if (!confirm('Limpar todo o histórico desta ficha? As ações antigas não poderão mais ser desfeitas.')) return;
+        if (!(await confirmarAbyss('Limpar todo o histórico desta ficha? As ações antigas não poderão mais ser desfeitas.', { titulo: 'Limpar histórico', tom: 'perigo', rotuloConfirmar: 'Limpar' }))) return;
         sheet.historicoAcoes = [];
         marcarAlteracao();
         renderizarHistoricoAcoes();
     }
 
-    function desfazerHistoricoAcao(entryId) {
+    async function desfazerHistoricoAcao(entryId) {
         const entrada = normalizarHistoricoAcoes().find(item => item.id === entryId);
         if (!entrada || entrada.desfeito || !entrada.undo) return;
-        if (!confirm(`Desfazer "${entrada.titulo}" e restaurar o estado anterior?`)) return;
+        if (!(await confirmarAbyss(`Desfazer “${entrada.titulo}” e restaurar o estado anterior?`, { titulo: 'Desfazer alteração', rotuloConfirmar: 'Desfazer' }))) return;
         let concluido = false;
         let inventarioAlterado = false;
         let habilidadesAlteradas = false;
@@ -15034,7 +15039,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             fecharSuperficieFoco(modal);
             return;
         }
-        if (modoTroca && alteracoesNaoSalvas && !confirm('Trocar de ficha sem salvar as alterações atuais?')) return;
+        if (modoTroca && alteracoesNaoSalvas && !(await confirmarAbyss('Trocar de ficha sem salvar as alterações atuais?', { titulo: 'Alterações não salvas', tom: 'aviso', rotuloConfirmar: 'Trocar mesmo assim' }))) return;
         const uid = currentUser.uid;
         seletorInicialConcluidoParaUid = uid;
         renderizarSeletoresSlots(slotId);
@@ -15118,8 +15123,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         lista.innerHTML = '<div class="slot-recovery-empty">Procurando cópias seguras…</div>';
         try {
             const uid = currentUser.uid;
-            const [lixeiraSnapshot, campanhasSnapshot, slotsSnapshot] = await Promise.all([
+            const [lixeiraSnapshot, backupsSnapshot, campanhasSnapshot, slotsSnapshot] = await Promise.all([
                 database.ref(`users/${uid}/deletedSlots`).once('value'),
+                database.ref(`users/${uid}/slotBackups`).once('value'),
                 database.ref(`userCampaigns/${uid}`).once('value'),
                 database.ref(`users/${uid}/slots`).once('value')
             ]);
@@ -15135,6 +15141,23 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                     folderId: registro.folderId || SLOT_FOLDER_DEFAULT,
                     order: Number(registro.order) || Date.now()
                 });
+            });
+            Object.entries(backupsSnapshot.val() || {}).forEach(([backupSlotId, versoes]) => {
+                Object.entries(versoes || {})
+                    .map(([backupId, registro]) => ({ backupId, registro }))
+                    .filter(item => item.registro?.sheet && typeof item.registro.sheet === 'object')
+                    .sort((a, b) => (Number(b.registro.createdAt) || 0) - (Number(a.registro.createdAt) || 0))
+                    .slice(0, SLOT_BACKUP_LIMIT)
+                    .forEach(({ backupId, registro }) => {
+                        encontrados.push({
+                            source: 'backup', backupId, slotId: String(registro.slotId || backupSlotId || ''),
+                            name: registro.slotName || registro.nickname || registro.sheet?.nickname || 'Versão anterior',
+                            detail: `Backup • ${registro.createdAt ? new Date(registro.createdAt).toLocaleString('pt-BR') : 'data indisponível'} • ${registro.reason || 'sincronização'}`,
+                            sheet: registro.sheet,
+                            folderId: slotManagerState.slots?.[backupSlotId]?.folderId || SLOT_FOLDER_DEFAULT,
+                            order: Date.now()
+                        });
+                    });
             });
             const campaignIds = Object.keys(campanhasSnapshot.val() || {}).slice(0, 40);
             const resultados = await Promise.allSettled(campaignIds.map(async campaignId => {
@@ -15183,7 +15206,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const item = slotRecoveryState.items[Number(index)];
         if (!currentUser || !item?.sheet) return;
         const nome = String(item.name || item.sheet.nickname || 'Ficha recuperada').trim();
-        if (!confirm(`Restaurar "${nome}" como uma ficha na sua conta?`)) return;
+        if (!(await confirmarAbyss(`Restaurar “${nome}” como uma ficha na sua conta?`, { titulo: 'Restaurar ficha', sobretitulo: 'ARQUIVO DOS REENCARNADOS', rotuloConfirmar: 'Restaurar' }))) return;
         const uid = currentUser.uid;
         const idPreferido = String(item.slotId || '');
         const slotId = idPreferido && !slotManagerState.slots[idPreferido]
@@ -15340,8 +15363,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const avisoCampanha = Object.values(campaignState?.links || {}).some(links =>
             Object.values(links || {}).some(link => String(link?.slot || '') === slotId)
         ) ? '\n\nAs cópias já colocadas em campanhas serão preservadas, mas deixarão de sincronizar com este slot.' : '';
-        if (!confirm(`Mover "${slot.name}" para a lixeira?${avisoAlteracoes}${avisoCampanha}\n\nA ficha poderá ser restaurada pelo gerenciador de slots.`)) return;
-        const confirmacaoNome = prompt(`Para evitar uma exclusão acidental, digite exatamente o nome da ficha:\n\n${slot.name}`);
+        if (!(await confirmarAbyss(`Mover “${slot.name}” para a lixeira?${avisoAlteracoes}${avisoCampanha}\n\nA ficha poderá ser restaurada pelo gerenciador de slots.`, { titulo: 'Mover ficha para a lixeira', sobretitulo: 'ARQUIVO DOS REENCARNADOS', tom: 'perigo', rotuloConfirmar: 'Continuar' }))) return;
+        const confirmacaoNome = await pedirTextoAbyss(`Para evitar uma exclusão acidental, digite exatamente o nome da ficha:\n\n${slot.name}`, { titulo: 'Confirmar nome da ficha', sobretitulo: 'ARQUIVO DOS REENCARNADOS', rotuloEntrada: 'NOME EXATO', placeholder: slot.name, maxLength: 90, rotuloConfirmar: 'Mover para a lixeira' });
         if (confirmacaoNome !== slot.name) {
             if (confirmacaoNome !== null) alert('O nome digitado não corresponde. A ficha não foi removida.');
             return;
@@ -16077,7 +16100,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         tocarSom('click');
         const modelo = modelosPessoais.find(item => item.id === id);
         if (!modelo) return;
-        const nome = prompt('Nome deste modelo pessoal:', modelo.name);
+        const nome = await pedirTextoAbyss('Escolha o novo nome deste modelo pessoal.', { titulo: 'Renomear modelo', rotuloEntrada: 'NOME DO MODELO', valorInicial: modelo.name, maxLength: 70, rotuloConfirmar: 'Renomear' });
         if (nome === null || !nome.trim()) return;
         const anterior = modelo.name;
         modelo.name = nome.trim();
@@ -16095,7 +16118,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
     async function excluirModeloPessoal(id) {
         tocarSom('click');
         const modelo = modelosPessoais.find(item => item.id === id);
-        if (!modelo || !confirm(`Excluir o modelo pessoal “${modelo.name}”?`)) return;
+        if (!modelo || !(await confirmarAbyss(`Excluir o modelo pessoal “${modelo.name}”?`, { titulo: 'Excluir modelo', tom: 'perigo', rotuloConfirmar: 'Excluir' }))) return;
         const anteriores = modelosPessoais.slice();
         modelosPessoais = modelosPessoais.filter(item => item.id !== id);
         try {
@@ -17166,9 +17189,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }
     });
 
-    function toggleLogin() {
+    async function toggleLogin() {
         if (currentUser) {
-            if(confirm("Deseja realmente deslogar?")) {
+            if(await confirmarAbyss('Deseja realmente sair da sua conta?', { titulo: 'Encerrar sessão', rotuloConfirmar: 'Sair' })) {
                 firebase.auth().signOut().then(() => alert("Deslogado com sucesso!"));
             }
         } else {
@@ -17985,9 +18008,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         marcarAlteracao();
     }
 
-    function excluirRetratoAlternativo(id) {
+    async function excluirRetratoAlternativo(id) {
         const retrato = normalizarRetratosAlternativos(sheet).find(item => item.id === id);
-        if (!retrato || !confirm(`Excluir o retrato “${retrato.nome}”?`)) return;
+        if (!retrato || !(await confirmarAbyss(`Excluir o retrato “${retrato.nome}”?`, { titulo: 'Excluir retrato', tom: 'perigo', rotuloConfirmar: 'Excluir' }))) return;
         sheet.avatarAlternativos = sheet.avatarAlternativos.filter(item => item.id !== id);
         sheet.avatarAlternativos.forEach((item, index) => { item.ordem = index; });
         if (String(sheet.avatarManualId || '') === id) sheet.avatarManualId = null;
@@ -18589,12 +18612,12 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         marcarAlteracao();
     }
 
-    function excluirContainerCombate(id) {
+    async function excluirContainerCombate(id) {
         const container = containerCombatePorId(id);
         if (!container) return;
         const quantidade = (sheet.habilidades || []).filter(habilidade => habilidade.containerId === container.id).length;
         const complemento = quantidade ? ` Os ${quantidade} conteúdos voltarão às seções padrão de seus tipos.` : '';
-        if (!confirm(`Excluir o container "${container.nome}"?${complemento}`)) return;
+        if (!(await confirmarAbyss(`Excluir o container “${container.nome}”?${complemento}`, { titulo: 'Excluir container', tom: 'perigo', rotuloConfirmar: 'Excluir' }))) return;
         sheet.habilidades.forEach(habilidade => {
             if (habilidade.containerId === container.id) delete habilidade.containerId;
         });
@@ -18816,8 +18839,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         marcarAlteracao();
     }
 
-    function removerHab(i) { 
-        if(confirm("Apagar esta habilidade/ataque?")) {
+    async function removerHab(i) { 
+        if(await confirmarAbyss('Apagar esta habilidade ou ataque?', { titulo: 'Excluir conteúdo', tom: 'perigo', rotuloConfirmar: 'Apagar' })) {
             sheet.habilidades.splice(i, 1); 
             atualizarVisualModificadoresGlobais(); 
             renderAbilities(); 
@@ -18911,9 +18934,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         });
     }
 
-    function adicionarSeparadorInventario(indice = null) {
+    async function adicionarSeparadorInventario(indice = null) {
         const atual = indice === null ? '' : (sheet.itens[indice]?.nome || '');
-        const nome = prompt(indice === null ? 'Nome do separador:' : 'Editar nome do separador:', atual);
+        const nome = await pedirTextoAbyss(indice === null ? 'Dê um nome ao novo separador.' : 'Edite o nome deste separador.', { titulo: indice === null ? 'Novo separador' : 'Editar separador', rotuloEntrada: 'NOME', valorInicial: atual, maxLength: 60, rotuloConfirmar: indice === null ? 'Criar' : 'Salvar' });
         if (nome === null || !nome.trim()) return;
         if (indice === null) {
             const separador = { isSeparator: true, nome: nome.trim(), idUnico: `separator-${Date.now()}-${Math.random().toString(36).slice(2, 8)}` };
@@ -19221,8 +19244,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         marcarAlteracao();
     }
 
-    function removerItem(idx) { 
-        if(confirm("Deseja deletar este item?")) {
+    async function removerItem(idx) { 
+        if(await confirmarAbyss('Deseja excluir este item do inventário?', { titulo: 'Excluir item', tom: 'perigo', rotuloConfirmar: 'Excluir' })) {
             let item = sheet.itens[idx];
             const itemAntesHistorico = clonarParaHistorico(item);
             if (item.idUnico) {
@@ -19820,8 +19843,8 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         marcarAlteracao();
     }
 
-    function removerNota(idx) {
-        if (confirm("Deseja apagar este bloco de notas?")) {
+    async function removerNota(idx) {
+        if (await confirmarAbyss('Deseja apagar este bloco de notas?', { titulo: 'Apagar anotação', tom: 'perigo', rotuloConfirmar: 'Apagar' })) {
             sheet.notas.splice(idx, 1);
             renderNotas();
             marcarAlteracao();
@@ -19966,6 +19989,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         definirEstadoSincronizacao('saving');
         syncState.lastLocalRevision = pacote.revision;
         try {
+            await protegerVersaoSlotAntesDeSobrescrever(slot, pacote.payload, silencioso ? 'Salvamento automático' : 'Salvamento manual');
             await database.ref(pacote.path).set(pacote.payload);
             await removerSincronizacaoEnfileirada(pacote.key);
             syncState.lastSavedAt = Date.now();
@@ -20907,13 +20931,13 @@ function renderizarPersonagemMini(character, showOwnerControls = false, showMast
     `;
 }
 
-function copiarCodigoCampanha() {
+async function copiarCodigoCampanha() {
     const code = campaignState.activeCampaign?.meta?.code || '';
     if (!code) return;
     if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(code).then(() => alert('Código copiado!')).catch(() => prompt('Copie o código:', code));
+        navigator.clipboard.writeText(code).then(() => alert('Código copiado!')).catch(() => pedirTextoAbyss('A cópia automática não foi permitida. Copie o código abaixo.', { titulo: 'Código da campanha', rotuloEntrada: 'CÓDIGO', valorInicial: code, obrigatorio: false, rotuloConfirmar: 'Concluir' }));
     } else {
-        prompt('Copie o código:', code);
+        await pedirTextoAbyss('Copie o código abaixo.', { titulo: 'Código da campanha', rotuloEntrada: 'CÓDIGO', valorInicial: code, obrigatorio: false, rotuloConfirmar: 'Concluir' });
     }
 }
 
@@ -21015,7 +21039,7 @@ async function removerPersonagemCampanha(characterId) {
         return;
     }
     const name = character.name || character.sheet?.nickname || 'este personagem';
-    if (!confirm(`Remover "${name}" desta campanha? A ficha original no slot não será apagada.`)) return;
+    if (!(await confirmarAbyss(`Remover “${name}” desta campanha? A ficha original no slot não será apagada.`, { titulo: 'Remover personagem', sobretitulo: 'CAMPANHA', tom: 'perigo', rotuloConfirmar: 'Remover' }))) return;
     try {
         const updates = {};
         updates[`campaigns/${campaignState.activeId}/characters/${characterId}`] = null;
@@ -21088,6 +21112,7 @@ function escutarLinksPersonagens() {
                     const revision = `campaign-${updateKey}`;
                     const payload = { ...fichaRemota, syncMeta: { clientId: `campaign-${character.updatedBy}`, revision, updatedAt: Date.now() } };
                     try {
+                        await protegerVersaoSlotAntesDeSobrescrever(slot, payload, 'Atualização recebida da campanha');
                         await database.ref(`users/${uid}/slots/${slot}`).set(payload);
                     } catch (error) {
                         console.error('Erro ao refletir alteração do Mestre no slot:', error);
@@ -22311,7 +22336,7 @@ async function apagarRolagemDestaqueCombate(rollId) {
     const combat = combateAtivoDaCampanha();
     const rolagens = rolagensDoTurnoAtual(combat);
     const indice = rolagens.findIndex(roll => roll.id === rollId);
-    if (indice < 0 || !confirm(`Apagar a rolagem “${rolagens[indice].title || 'Rolagem'}” do combate?`)) return;
+    if (indice < 0 || !(await confirmarAbyss(`Apagar a rolagem “${rolagens[indice].title || 'Rolagem'}” do combate?`, { titulo: 'Apagar rolagem', sobretitulo: 'COMBATE', tom: 'perigo', rotuloConfirmar: 'Apagar' }))) return;
     const proxima = rolagens[indice - 1] || rolagens[indice + 1] || null;
     const updates = {};
     updates[`campaigns/${campaignState.activeId}/combat/rolls/${rollId}`] = null;
@@ -22875,7 +22900,7 @@ async function adicionarNpcAoCombate(event) {
 
 async function encerrarCombate() {
     if (campaignState.role !== 'mestre') return;
-    if (!confirm('Encerrar o combate atual? A ordem e a rodada serão apagadas.')) return;
+    if (!(await confirmarAbyss('Encerrar o combate atual? A ordem e a rodada serão apagadas.', { titulo: 'Encerrar combate', sobretitulo: 'CAMPANHA', tom: 'perigo', rotuloConfirmar: 'Encerrar' }))) return;
     await database.ref(`campaigns/${campaignState.activeId}/combat`).set(null);
     voltarDoCombate();
 }
@@ -26758,6 +26783,46 @@ function hashFichaSincronizacao(valor) {
     return (hash >>> 0).toString(36);
 }
 
+const SLOT_BACKUP_LIMIT = 5;
+
+async function protegerVersaoSlotAntesDeSobrescrever(slot, proximoPayload, motivo = 'Sincronização') {
+    if (!currentUser || !slot) return false;
+    const uid = currentUser.uid;
+    try {
+        const slotRef = database.ref(`users/${uid}/slots/${slot}`);
+        const snapshot = await slotRef.once('value');
+        const atualBruto = snapshot.val();
+        const atual = extrairFichaDoPayloadSincronizacao(atualBruto);
+        const proximo = extrairFichaDoPayloadSincronizacao(proximoPayload);
+        if (!atual || hashFichaSincronizacao(atual) === hashFichaSincronizacao(proximo)) return false;
+        const backupsRef = database.ref(`users/${uid}/slotBackups/${slot}`);
+        const backupRef = backupsRef.push();
+        await backupRef.set({
+            slotId: String(slot),
+            slotName: nomeDoSlot(slot),
+            nickname: String(atual.nickname || '').trim(),
+            reason: String(motivo || 'Sincronização').slice(0, 80),
+            hash: hashFichaSincronizacao(atual),
+            createdAt: firebase.database.ServerValue.TIMESTAMP,
+            sheet: atualBruto
+        });
+        const listaSnapshot = await backupsRef.once('value');
+        const versoes = Object.entries(listaSnapshot.val() || {})
+            .map(([id, valor]) => ({ id, createdAt: Number(valor?.createdAt) || 0 }))
+            .sort((a, b) => b.createdAt - a.createdAt);
+        if (versoes.length > SLOT_BACKUP_LIMIT) {
+            const remocoes = {};
+            versoes.slice(SLOT_BACKUP_LIMIT).forEach(item => { remocoes[`${item.id}`] = null; });
+            await backupsRef.update(remocoes);
+        }
+        return true;
+    } catch (erro) {
+        /* O backup nunca deve impedir o salvamento atual; o erro fica explícito no console. */
+        console.warn('Não foi possível criar a versão de segurança deste slot.', erro);
+        return false;
+    }
+}
+
 function criarPacoteSincronizacao(slot) {
     const ficha = clonarFichaParaSincronizacao(sheet);
     const revision = `${Date.now()}-${syncClientId}-${Math.random().toString(36).slice(2, 7)}`;
@@ -26923,6 +26988,7 @@ async function processarFilaSincronizacao() {
         for (const pacote of fila) {
             if (!syncState.connected) break;
             syncState.lastLocalRevision = pacote.revision;
+            await protegerVersaoSlotAntesDeSobrescrever(pacote.slot, pacote.payload, 'Fila offline reenviada');
             await database.ref(pacote.path).set(pacote.payload);
             await removerSincronizacaoEnfileirada(pacote.key);
             syncState.lastSavedAt = Date.now();
