@@ -10875,6 +10875,313 @@ body.theme-umbral #content-library-create-button { min-height: 39px; }
     body.theme-umbral .creation-modal .action-cost-row { grid-template-columns: 1fr; }
     body.theme-umbral .creation-modal .main-roll-row .roll-crit-fields { grid-template-columns: 1fr; }
 }
+
+/* ================================================================
+   CAMPANHAS V2 — COMPOSIÇÃO ABYSS, MAIS AMPLA E RESPIRÁVEL
+   ================================================================ */
+body.theme-umbral #campaign-app {
+    background:
+        radial-gradient(circle at 52% -8%, color-mix(in srgb,var(--primary-purple) 22%,transparent), transparent 34%),
+        linear-gradient(180deg, rgba(6,4,8,.97), rgba(3,3,5,.99));
+}
+body.theme-umbral #campaign-app .campaign-shell {
+    width: min(100%, 1660px);
+    max-width: none;
+    min-height: 100%;
+    margin: 0 auto;
+    padding: clamp(18px,2.5vw,38px) clamp(18px,3.4vw,58px) 64px;
+}
+body.theme-umbral #campaign-app .campaign-header {
+    position: sticky;
+    z-index: 18;
+    top: 0;
+    display: grid;
+    grid-template-columns: minmax(160px,1fr) auto minmax(160px,1fr);
+    align-items: center;
+    min-height: 76px;
+    margin: calc(clamp(18px,2.5vw,38px) * -1) calc(clamp(18px,3.4vw,58px) * -1) 34px;
+    padding: 15px clamp(18px,3.4vw,58px);
+    border-bottom: 1px solid color-mix(in srgb,var(--text-gold) 27%,var(--border-color));
+    background: color-mix(in srgb,var(--container-bg) 94%,transparent);
+    backdrop-filter: blur(13px);
+}
+body.theme-umbral #campaign-app .campaign-brand h1 { font-size: clamp(1.1rem,2vw,1.55rem); letter-spacing: .38em; }
+body.theme-umbral #campaign-home,
+body.theme-umbral #campaign-detail,
+body.theme-umbral #campaign-combat { max-width: 1480px; margin: 0 auto; }
+body.theme-umbral #campaign-home .campaign-actions {
+    justify-content: flex-start;
+    gap: 10px;
+    margin: 0 0 28px;
+    padding: 11px;
+    border: 1px solid var(--ui-line);
+    background: color-mix(in srgb,var(--container-bg) 92%,transparent);
+}
+body.theme-umbral #campaign-home .campaign-primary-btn { min-width: 0; padding: 11px 18px; }
+body.theme-umbral #campaign-home .campaign-panel {
+    width: min(100%, 980px);
+    margin: 0 0 34px;
+    padding: clamp(24px,3.2vw,44px);
+}
+body.theme-umbral #campaign-home .campaign-panel.active form {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(300px,.72fr);
+    gap: 0 30px;
+    align-items: start;
+}
+body.theme-umbral #campaign-home .campaign-panel.active .campaign-field:has(textarea),
+body.theme-umbral #campaign-home .campaign-panel.active .campaign-form-actions { grid-column: 1; }
+body.theme-umbral #campaign-home .campaign-panel.active .campaign-field:has(.campaign-banner-picker) { grid-column: 2; grid-row: 1 / span 3; }
+body.theme-umbral #campaign-home #campaign-join-panel.active form { display: block; max-width: 620px; }
+body.theme-umbral #campaign-home .campaign-banner-picker { min-height: 235px; }
+body.theme-umbral .campaign-section-heading { margin-top: 34px; padding: 0 2px 14px; }
+body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill,minmax(310px,1fr)); gap: 22px; }
+body.theme-umbral .campaign-card {
+    height: clamp(210px,22vw,285px);
+    border-color: color-mix(in srgb,var(--border-color) 76%,var(--text-gold) 24%);
+}
+body.theme-umbral .campaign-card::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    inset: 9px;
+    border: 1px solid rgba(255,255,255,.08);
+    pointer-events: none;
+}
+body.theme-umbral .campaign-card-name { left: 24px; right: 24px; bottom: 24px; font-size: clamp(.9rem,1.4vw,1.12rem); }
+body.theme-umbral .campaign-role-badge { top: 18px; right: 18px; padding: 6px 10px; }
+
+body.theme-umbral #campaign-detail .campaign-detail-top {
+    position: sticky;
+    z-index: 14;
+    top: 78px;
+    align-items: center;
+    margin: 0 0 18px;
+    padding: 10px;
+    border: 1px solid var(--ui-line);
+    background: color-mix(in srgb,var(--container-bg) 93%,transparent);
+    backdrop-filter: blur(11px);
+}
+body.theme-umbral #campaign-detail .campaign-detail-top > div {
+    display: flex !important;
+    flex: 1 1 auto;
+    gap: 7px !important;
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none;
+}
+body.theme-umbral #campaign-detail .campaign-detail-top > div::-webkit-scrollbar { display: none; }
+body.theme-umbral #campaign-detail .campaign-detail-top button { flex: 0 0 auto; min-height: 38px; }
+body.theme-umbral #campaign-detail .campaign-hero {
+    min-height: clamp(330px,38vw,510px);
+    border-color: color-mix(in srgb,var(--text-gold) 30%,var(--border-color));
+}
+body.theme-umbral #campaign-detail .campaign-hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: clamp(330px,38vw,510px);
+    max-width: 840px;
+    padding: clamp(34px,5.5vw,76px);
+}
+body.theme-umbral #campaign-detail .campaign-hero-content h2 { font-size: clamp(1.8rem,4vw,3.5rem); line-height: 1.05; }
+body.theme-umbral #campaign-detail .campaign-hero-content p { max-width: 720px; font-size: .98rem; }
+body.theme-umbral #campaign-detail .campaign-detail-grid {
+    grid-template-columns: minmax(0,1.55fr) minmax(300px,.72fr);
+    gap: 24px;
+    margin-top: 24px;
+}
+body.theme-umbral #campaign-detail .campaign-content-box { padding: clamp(22px,2.5vw,34px); }
+body.theme-umbral #campaign-character-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(275px,1fr));
+    gap: 10px;
+}
+body.theme-umbral #campaign-detail .campaign-character-mini {
+    min-height: 76px;
+    padding: 13px;
+    border-left: 2px solid color-mix(in srgb,var(--text-gold) 55%,var(--primary-purple));
+}
+body.theme-umbral #campaign-detail .campaign-character-mini .campaign-avatar { width: 50px; height: 50px; flex-basis: 50px; }
+
+/* Combate conserva a organização, com leitura e espaçamento refinados. */
+body.theme-umbral #campaign-combat .combat-topbar {
+    position: sticky;
+    z-index: 12;
+    top: 78px;
+    margin-bottom: 18px;
+    padding: 10px;
+    border: 1px solid var(--ui-line);
+    background: color-mix(in srgb,var(--container-bg) 94%,transparent);
+}
+body.theme-umbral #campaign-combat .combat-panel { padding: clamp(22px,3vw,38px); }
+body.theme-umbral #campaign-combat .combat-select-grid,
+body.theme-umbral #campaign-combat .combat-waiting-grid { gap: 10px; }
+body.theme-umbral #campaign-combat .combat-select-card,
+body.theme-umbral #campaign-combat .combat-wait-card,
+body.theme-umbral #campaign-combat .combat-order-item { min-height: 68px; padding: 11px 13px; }
+body.theme-umbral #campaign-combat .combat-arena { gap: 22px; }
+
+body.theme-umbral #campaign-shield-overlay { padding: 18px; }
+body.theme-umbral #campaign-shield-overlay .campaign-shield {
+    width: min(1480px, calc(100vw - 36px));
+    max-width: none;
+    min-height: min(720px, calc(100dvh - 36px));
+    padding: clamp(22px,3vw,38px);
+}
+body.theme-umbral #campaign-shield-overlay .shield-character-grid {
+    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+    gap: 16px;
+}
+body.theme-umbral #campaign-shield-overlay .shield-card {
+    min-height: 360px;
+    padding: 22px;
+    border-top-color: color-mix(in srgb,var(--text-gold) 45%,var(--border-color));
+    background: linear-gradient(160deg,color-mix(in srgb,var(--primary-purple) 8%,var(--container-bg)),var(--container-bg));
+}
+body.theme-umbral #campaign-shield-overlay .shield-card-actions { margin-top: auto; }
+
+/* Visualizador de personagem: resumo ou ficha completa, sempre somente leitura. */
+body.theme-umbral #campaign-viewer-overlay {
+    padding: 18px;
+    overflow: hidden;
+}
+body.theme-umbral #campaign-viewer-overlay.active { display: grid; place-items: center; }
+body.theme-umbral #campaign-viewer-overlay .campaign-viewer {
+    display: flex;
+    flex-direction: column;
+    width: min(1500px, calc(100vw - 36px));
+    max-width: none;
+    height: min(940px, calc(100dvh - 36px));
+    max-height: calc(100dvh - 36px);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.campaign-viewer-toolbar {
+    display: grid;
+    grid-template-columns: minmax(180px,1fr) auto auto;
+    align-items: center;
+    gap: 16px;
+    flex: 0 0 auto;
+    min-height: 78px;
+    padding: 14px clamp(18px,2.6vw,34px);
+    border-bottom: 1px solid color-mix(in srgb,var(--text-gold) 30%,var(--border-color));
+    background: linear-gradient(90deg,color-mix(in srgb,var(--primary-purple) 12%,var(--container-bg)),var(--container-bg));
+}
+.campaign-viewer-toolbar-copy span,.campaign-viewer-toolbar-copy strong { display: block; }
+.campaign-viewer-toolbar-copy span { color: var(--text-gold); font: 700 .52rem Cinzel,serif; letter-spacing: .18em; }
+.campaign-viewer-toolbar-copy strong { margin-top: 5px; color: #eee8f1; font: 700 .76rem Cinzel,serif; letter-spacing: .1em; }
+.campaign-viewer-mode-controls { display: inline-grid; grid-template-columns: 1fr 1fr; padding: 3px; border: 1px solid var(--border-color); background: rgba(0,0,0,.28); }
+.campaign-viewer-mode-controls[hidden] { display: none !important; }
+.campaign-viewer-mode-controls button {
+    min-width: 106px;
+    min-height: 34px;
+    padding: 7px 12px;
+    border: 0;
+    background: transparent;
+    color: #817886;
+    font: 700 .61rem Cinzel,serif;
+    cursor: pointer;
+}
+.campaign-viewer-mode-controls button.active { background: color-mix(in srgb,var(--primary-purple) 38%,#100c14); color: #fff; box-shadow: inset 0 -2px var(--text-gold); }
+body.theme-umbral #campaign-viewer-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    padding: clamp(22px,3.4vw,52px);
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+body.theme-umbral #campaign-viewer-content[data-view-mode="parcial"] { max-width: 1040px; width: 100%; margin: 0 auto; }
+.campaign-viewer-kicker { display: block; margin-bottom: 7px; color: var(--text-gold); font: 700 .55rem Cinzel,serif; letter-spacing: .17em; }
+.campaign-viewer-resources { width: 100%; max-width: none !important; }
+.campaign-readonly-sheet { display: grid; gap: 18px; width: min(100%,1380px); margin: 0 auto; }
+.campaign-readonly-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: 112px minmax(0,1fr) 64px;
+    align-items: center;
+    gap: 24px;
+    min-height: 168px;
+    padding: clamp(22px,3vw,38px);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb,var(--text-gold) 34%,var(--border-color));
+    background: radial-gradient(circle at 88% 20%,color-mix(in srgb,var(--primary-purple) 22%,transparent),transparent 34%),var(--ui-ink,#0b090d);
+}
+.campaign-readonly-hero::after { content:''; position:absolute; right:0; bottom:0; left:0; height:2px; background:linear-gradient(90deg,var(--text-gold),var(--primary-purple),transparent); }
+.campaign-readonly-hero .campaign-avatar { width: 108px; height: 108px; flex-basis: 108px; border-radius: 50%; border-color: var(--text-gold); }
+.campaign-readonly-hero h2 { margin: 0; color: #f6f0f8; font: 700 clamp(1.45rem,3vw,2.65rem)/1.1 Cinzel,serif; }
+.campaign-readonly-hero p { margin: 8px 0 0; color: #9e95a4; }
+.campaign-readonly-seal { display: grid; place-items: center; width: 58px; height: 58px; border: 1px solid color-mix(in srgb,var(--text-gold) 55%,transparent); border-radius: 50%; color: var(--text-gold); font-size: 1.45rem; }
+.campaign-readonly-dashboard { display: grid; grid-template-columns: 1.15fr .9fr 1fr; gap: 18px; }
+.campaign-readonly-dashboard-secondary { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.campaign-readonly-panel {
+    min-width: 0;
+    padding: clamp(18px,2.3vw,28px);
+    border: 1px solid var(--ui-line,var(--border-color));
+    background: linear-gradient(145deg,color-mix(in srgb,var(--primary-purple) 7%,var(--container-bg)),var(--container-bg));
+}
+.campaign-readonly-panel > h3 { margin: 0 0 16px; padding-bottom: 11px; border-bottom: 1px solid color-mix(in srgb,var(--text-gold) 27%,var(--border-color)); color: #eee7f1; font: 700 .72rem Cinzel,serif; letter-spacing: .16em; }
+.campaign-readonly-facts { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
+.campaign-readonly-facts > div { min-width: 0; padding: 9px 10px; border-left: 2px solid var(--primary-purple); background: rgba(0,0,0,.2); }
+.campaign-readonly-facts span,.campaign-readonly-facts strong { display: block; overflow-wrap: anywhere; }
+.campaign-readonly-facts span { color: #817886; font-size: .57rem; letter-spacing: .08em; }
+.campaign-readonly-facts strong { margin-top: 4px; color: #e9e2ec; font-size: .72rem; }
+.campaign-readonly-skill-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(185px,1fr)); gap: 7px; }
+.campaign-readonly-skill-grid > div { padding: 10px 11px; border: 1px solid var(--border-color); background: rgba(0,0,0,.2); }
+.campaign-readonly-skill-grid strong,.campaign-readonly-skill-grid span { display: block; }
+.campaign-readonly-skill-grid strong { color: #eee8f0; font-size: .7rem; }
+.campaign-readonly-skill-grid span { margin-top: 4px; color: #827988; font-size: .62rem; }
+.campaign-readonly-card-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(315px,1fr)); gap: 12px; }
+.campaign-readonly-content-card { min-width: 0; padding: 16px; border: 1px solid var(--border-color); border-left: 3px solid color-mix(in srgb,var(--primary-purple) 70%,var(--text-gold)); background: rgba(3,2,5,.34); }
+.campaign-readonly-content-card > header { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: start; }
+.campaign-readonly-content-card > header span { display: block; color: var(--text-gold); font-size: .52rem; letter-spacing: .1em; }
+.campaign-readonly-content-card > header h4 { margin: 5px 0 0; color: #f0e9f2; font: 700 .85rem Cinzel,serif; overflow-wrap: anywhere; }
+.campaign-readonly-content-card > header img { width: 54px; height: 54px; object-fit: cover; border: 1px solid var(--border-color); }
+.campaign-readonly-description { margin-top: 12px; color: #aaa1af; font-size: .85rem; line-height: 1.6; overflow-wrap: anywhere; }
+.campaign-readonly-notes { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 10px; }
+.campaign-readonly-notes article { padding: 14px; border-left: 2px solid var(--text-gold); background: rgba(0,0,0,.2); }
+.campaign-readonly-notes article > strong { display: block; margin-bottom: 7px; color: #eee7f1; font: 700 .7rem Cinzel,serif; }
+.campaign-readonly-notes article > div { color: #9d94a2; line-height: 1.55; }
+.campaign-readonly-footer { padding: 13px 16px; border: 1px dashed color-mix(in srgb,var(--text-gold) 28%,var(--border-color)); color: #807785; text-align: center; font-size: .7rem; }
+
+@media (max-width: 1080px) {
+    body.theme-umbral #campaign-home .campaign-panel.active form { grid-template-columns: 1fr; }
+    body.theme-umbral #campaign-home .campaign-panel.active .campaign-field:has(.campaign-banner-picker) { grid-column: 1; grid-row: auto; }
+    body.theme-umbral #campaign-detail .campaign-detail-grid { grid-template-columns: 1fr; }
+    .campaign-readonly-dashboard { grid-template-columns: 1fr 1fr; }
+    .campaign-readonly-vitals { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) {
+    body.theme-umbral #campaign-app .campaign-shell { padding: 10px 10px 44px; }
+    body.theme-umbral #campaign-app .campaign-header { grid-template-columns: auto 1fr; min-height: 62px; margin: -10px -10px 20px; padding: 10px 12px; }
+    body.theme-umbral #campaign-app .campaign-header > div:last-child { display:none; }
+    body.theme-umbral #campaign-app .campaign-brand { text-align: right; }
+    body.theme-umbral #campaign-home .campaign-actions { display: grid; grid-template-columns: 1fr; }
+    body.theme-umbral .campaign-card-grid { grid-template-columns: 1fr; }
+    body.theme-umbral #campaign-detail .campaign-detail-top,
+    body.theme-umbral #campaign-combat .combat-topbar { top: 62px; align-items: stretch; flex-direction: column; }
+    body.theme-umbral #campaign-detail .campaign-hero,
+    body.theme-umbral #campaign-detail .campaign-hero-content { min-height: 370px; }
+    body.theme-umbral #campaign-detail .campaign-hero-content { padding: 28px 22px; }
+    body.theme-umbral #campaign-character-preview { grid-template-columns: 1fr; }
+    body.theme-umbral #campaign-shield-overlay { padding: 7px; }
+    body.theme-umbral #campaign-shield-overlay .campaign-shield { width: calc(100vw - 14px); min-height: calc(100dvh - 14px); padding: 18px 12px; }
+    body.theme-umbral #campaign-shield-overlay .shield-character-grid { grid-template-columns: 1fr; }
+    body.theme-umbral #campaign-viewer-overlay { padding: 7px; }
+    body.theme-umbral #campaign-viewer-overlay .campaign-viewer { width: calc(100vw - 14px); height: calc(100dvh - 14px); max-height: calc(100dvh - 14px); }
+    .campaign-viewer-toolbar { grid-template-columns: minmax(0,1fr) auto; gap: 8px; min-height: 0; padding: 11px 12px; }
+    .campaign-viewer-mode-controls { grid-column: 1 / -1; grid-row: 2; width: 100%; }
+    .campaign-viewer-mode-controls button { min-width: 0; }
+    body.theme-umbral #campaign-viewer-content { padding: 16px 12px 26px; }
+    .campaign-readonly-hero { grid-template-columns: 76px minmax(0,1fr); gap: 15px; padding: 18px 15px; }
+    .campaign-readonly-hero .campaign-avatar { width: 74px; height: 74px; flex-basis: 74px; }
+    .campaign-readonly-seal { display: none; }
+    .campaign-readonly-dashboard,.campaign-readonly-dashboard-secondary { grid-template-columns: 1fr; }
+    .campaign-readonly-vitals { grid-column: auto; }
+    .campaign-readonly-card-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body class="theme-umbral">
@@ -11496,7 +11803,7 @@ body.theme-umbral #content-library-create-button { min-height: 39px; }
                     <button id="campaign-content-library-btn" class="campaign-ghost-btn" style="display:none;" onclick="abrirGestaoAcervoCampanha()">✦ Acervo da campanha</button>
                     <button id="campaign-documents-btn" class="campaign-ghost-btn" onclick="abrirMesaDocumentosCampanha()">🗃 Mesa de Documentos</button>
                     <button id="campaign-start-combat-btn" class="campaign-submit-btn" style="display:none;" onclick="abrirPreparacaoCombate()">⚔ Iniciar combate</button>
-                    <button class="gm-shield-btn" onclick="abrirEscudoMestre()">🛡 Escudo do mestre</button>
+                    <button id="campaign-shield-btn" class="gm-shield-btn" onclick="abrirEscudoMestre()">🛡 Escudo do mestre</button>
                 </div>
             </div>
             <section id="campaign-detail-hero" class="campaign-hero"></section>
@@ -11768,7 +12075,7 @@ body.theme-umbral #content-library-create-button { min-height: 39px; }
             <label id="document-editor-text-field" class="document-editor-field"><span>DESCRIÇÃO / CONTEÚDO DO DOCUMENTO</span><textarea id="document-editor-text" class="modal-input" data-auto-grow placeholder="Escreva a mensagem ou descrição completa que aparecerá junto do arquivo..."></textarea></label>
             <div id="document-editor-file-field" class="document-editor-field">
                 <span>ARQUIVO OPCIONAL</span>
-                <label class="document-file-drop"><strong id="document-editor-file-status">Clique ou arraste um arquivo</strong><small>Até 15 MB. Imagens são reconhecidas e otimizadas automaticamente.</small><input id="document-editor-file" type="file" onchange="prepararArquivoDocumentoMesa(this)"></label>
+                    <label class="document-file-drop"><strong id="document-editor-file-status">Clique ou arraste um arquivo</strong><small>Imagens até 15 MB; outros arquivos até 8 MB. Imagens são otimizadas automaticamente.</small><input id="document-editor-file" type="file" onchange="prepararArquivoDocumentoMesa(this)"></label>
                 <div class="document-editor-file-footer"><div class="document-editor-hint">Descrição e arquivo formam um único documento. Ambos aparecem juntos e entram na pesquisa da gaveta.</div><button id="document-editor-file-clear" type="button" class="settings-secondary" onclick="limparArquivoDocumentoMesa()" hidden>Remover arquivo</button></div>
             </div>
             <label class="document-frame-option" for="document-editor-frame">
@@ -11815,7 +12122,7 @@ body.theme-umbral #content-library-create-button { min-height: 39px; }
         <div class="campaign-shield" onclick="event.stopPropagation()">
             <div class="campaign-shield-header">
                 <div>
-                    <h2>🛡 ESCUDO DO MESTRE</h2>
+                    <h2 id="campaign-shield-heading">🛡 ESCUDO DO MESTRE</h2>
                     <p id="campaign-shield-subtitle">Visão em tempo real dos personagens da campanha.</p>
                 </div>
                 <button class="campaign-ghost-btn" onclick="fecharEscudoMestre()">Fechar ✕</button>
@@ -11826,7 +12133,15 @@ body.theme-umbral #content-library-create-button { min-height: 39px; }
 
     <div id="campaign-viewer-overlay" class="campaign-viewer-overlay" onclick="fecharVisualizadorPersonagem(event)">
         <div class="campaign-viewer" onclick="event.stopPropagation()">
-            <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+            <div class="campaign-viewer-toolbar">
+                <div class="campaign-viewer-toolbar-copy">
+                    <span>ARQUIVO DE PERSONAGEM</span>
+                    <strong id="campaign-viewer-mode-title">VISUALIZAÇÃO PARCIAL</strong>
+                </div>
+                <div id="campaign-viewer-mode-controls" class="campaign-viewer-mode-controls" role="group" aria-label="Tipo de visualização da ficha">
+                    <button id="campaign-viewer-mode-partial" type="button" onclick="definirModoVisualizacaoCampanha('parcial')">Parcial</button>
+                    <button id="campaign-viewer-mode-full" type="button" onclick="definirModoVisualizacaoCampanha('completa')">Completa</button>
+                </div>
                 <button class="campaign-ghost-btn" onclick="fecharVisualizadorPersonagem()">Fechar ✕</button>
             </div>
             <div id="campaign-viewer-content"></div>
@@ -16799,7 +17114,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 <div>
                     <div class="content-library-detail-kicker"><span class="content-library-badge">${nomeTipoConteudoAcervo(entrada.type)}</span>${badgesEntidades}</div>
                     <h4>${escapeCampaignHtml(entrada.name)}</h4>
-                    <div class="content-library-detail-meta">REVISÃO ${entrada.revision}${jaAdicionado ? ' • JÁ VINCULADO À FICHA' : ''}</div>
+                    ${jaAdicionado ? '<div class="content-library-detail-meta">JÁ VINCULADO À FICHA</div>' : ''}
                 </div>
                 ${imagem}
             </div>
@@ -17208,7 +17523,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             document.getElementById(tipoEditor === 'item' ? 'modal-item' : 'modal-hab')?.classList.remove('catalog-editor-mode');
             fecharSuperficieFoco(tipoEditor === 'item' ? '#modal-item' : '#modal-hab');
             setTimeout(() => abrirAcervoConteudos(retorno.type, retorno.mode, retorno.scope, retorno.campaignId), UI_SURFACE_TRANSITION_MS + 30);
-            spawnPopup('ACERVO', nome, `R${payload.revision}`, '#d4af37', anterior ? 'CONTEÚDO ATUALIZADO' : 'CONTEÚDO PUBLICADO', anterior ? 'As fichas vinculadas receberão esta revisão em tempo real.' : 'Já está disponível para ser adicionado às fichas autorizadas.');
+            spawnPopup('ACERVO', nome, '✓', '#d4af37', anterior ? 'CONTEÚDO ATUALIZADO' : 'CONTEÚDO PUBLICADO', anterior ? 'As fichas vinculadas receberão a atualização em tempo real.' : 'Já está disponível para ser adicionado às fichas autorizadas.');
         } catch (erro) {
             console.error('Erro ao publicar conteúdo no acervo:', erro);
             alert('Não foi possível publicar. Verifique as regras de acesso do Firebase e tente novamente.');
@@ -17294,7 +17609,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }
         marcarAlteracao();
         renderizarAcervoConteudos();
-        spawnPopup('ACERVO', entrada.name, '✓', '#00c875', 'ADICIONADO À FICHA', `Vinculado à revisão ${entrada.revision}; futuras alterações serão recebidas automaticamente.`);
+        spawnPopup('ACERVO', entrada.name, '✓', '#00c875', 'ADICIONADO À FICHA', 'Vinculado ao acervo; futuras alterações serão recebidas automaticamente.');
     }
 
     function sincronizarConteudosVinculadosDaFicha() {
@@ -19231,7 +19546,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
             card.innerHTML = `
                 <div class="adaptive-card-header">
-                    <h3 class="adaptive-card-title" style="font-family:Cinzel; color:var(--text-gold);">${escapeCampaignHtml(h.nome || 'Sem nome')} ${badgeCustoAcao(h)} ${h.catalogRef ? `<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO R${Number(h.catalogRef.revision) || 1}</span>` : ''}</h3>
+                    <h3 class="adaptive-card-title" style="font-family:Cinzel; color:var(--text-gold);">${escapeCampaignHtml(h.nome || 'Sem nome')} ${badgeCustoAcao(h)} ${h.catalogRef ? '<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO</span>' : ''}</h3>
                     <div class="adaptive-card-actions">${htmlControles}</div>
                 </div>
                 <div class="collapsible-card-body" ${recolhido ? 'hidden' : ''}>
@@ -19486,7 +19801,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             card.className = `item-card ${item.equipado ? 'equipped' : ''} ${recolhido ? 'is-collapsed' : ''}`;
             card.innerHTML = `
                 <div class="adaptive-card-header">
-                    <h4 class="adaptive-card-title" style="font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${escapeCampaignHtml(item.nome || 'Item sem nome')} ${badgeCustoAcao(item)} ${item.catalogRef ? `<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO R${Number(item.catalogRef.revision) || 1}</span>` : ''}</h4>
+                    <h4 class="adaptive-card-title" style="font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${escapeCampaignHtml(item.nome || 'Item sem nome')} ${badgeCustoAcao(item)} ${item.catalogRef ? '<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO</span>' : ''}</h4>
                     <div class="adaptive-card-actions">
                         <span class="inventory-order-actions"><button onclick="moverItemInventario(${i}, -1)" title="Mover para cima">↑</button><button onclick="moverItemInventario(${i}, 1)" title="Mover para baixo">↓</button></span>
                         <button class="card-collapse-toggle" onclick="alternarCartaoItem(${i})" title="${recolhido ? 'Abrir conteúdo' : 'Recolher conteúdo'}" aria-expanded="${!recolhido}">${recolhido ? '▸' : '▾'}</button>
@@ -21064,6 +21379,8 @@ function renderizarDetalheCampanha() {
     if (botaoAcervo) botaoAcervo.style.display = isMaster ? 'inline-flex' : 'none';
     atualizarAcessoAdministrativoAcervo();
     const activeCombat = campaign.combat && campaign.combat.phase;
+    const shieldButton = document.getElementById('campaign-shield-btn');
+    if (shieldButton) shieldButton.textContent = isMaster ? '🛡 Escudo do mestre' : '✦ Fichas da campanha';
     const combatButton = document.getElementById('campaign-start-combat-btn');
     combatButton.style.display = (isMaster || activeCombat) ? 'inline-flex' : 'none';
     combatButton.textContent = activeCombat ? '⚔ Ver combate' : '⚔ Iniciar combate';
@@ -21415,6 +21732,8 @@ function renderizarEscudoMestre() {
     const campaign = campaignState.activeCampaign;
     if (!campaign) return;
     const isMaster = campaignState.role === 'mestre';
+    const heading = document.getElementById('campaign-shield-heading');
+    if (heading) heading.textContent = isMaster ? '🛡 ESCUDO DO MESTRE' : '✦ FICHAS DA CAMPANHA';
     document.getElementById('campaign-shield-subtitle').textContent = isMaster
         ? 'Visão em tempo real. Como Mestre, você pode abrir e editar qualquer ficha.'
         : 'Visão em tempo real. Jogadores podem consultar, mas não editar estas fichas.';
@@ -21469,6 +21788,143 @@ function chipsFicha(items, emptyText) {
     return items.map(item => `<span class="viewer-chip">${escapeCampaignHtml(item)}</span>`).join('');
 }
 
+const CAMPAIGN_VIEWER_MODE_KEY = 'abyssCampaignViewerMode';
+let campaignViewerMode = (() => {
+    try { return localStorage.getItem(CAMPAIGN_VIEWER_MODE_KEY) === 'completa' ? 'completa' : 'parcial'; }
+    catch (_) { return 'parcial'; }
+})();
+
+function definirModoVisualizacaoCampanha(modo) {
+    if (!['parcial', 'completa'].includes(modo)) return;
+    campaignViewerMode = modo;
+    try { localStorage.setItem(CAMPAIGN_VIEWER_MODE_KEY, modo); } catch (_) {}
+    const characterId = document.getElementById('campaign-viewer-content')?.dataset.characterId;
+    if (characterId) visualizarPersonagemCampanha(characterId);
+}
+
+function atualizarControlesVisualizadorCampanha(modo, isMaster) {
+    const controls = document.getElementById('campaign-viewer-mode-controls');
+    const partial = document.getElementById('campaign-viewer-mode-partial');
+    const full = document.getElementById('campaign-viewer-mode-full');
+    const title = document.getElementById('campaign-viewer-mode-title');
+    if (controls) controls.hidden = isMaster;
+    if (partial) {
+        partial.classList.toggle('active', modo === 'parcial');
+        partial.setAttribute('aria-pressed', String(modo === 'parcial'));
+    }
+    if (full) {
+        full.classList.toggle('active', modo === 'completa');
+        full.setAttribute('aria-pressed', String(modo === 'completa'));
+    }
+    if (title) title.textContent = isMaster ? 'FICHA COMPLETA • VISÃO DO MESTRE' : `VISUALIZAÇÃO ${modo.toLocaleUpperCase('pt-BR')}`;
+}
+
+function valorFichaSomenteLeitura(valor) {
+    if (valor == null || valor === '') return '';
+    if (typeof valor === 'boolean') return valor ? 'Sim' : 'Não';
+    if (typeof valor === 'string' || typeof valor === 'number') return String(valor);
+    if (Array.isArray(valor)) return valor.map(valorFichaSomenteLeitura).filter(Boolean).join(' • ');
+    if (typeof valor === 'object') {
+        return Object.entries(valor)
+            .filter(([, item]) => item != null && item !== '' && typeof item !== 'object')
+            .map(([chave, item]) => `${chave}: ${valorFichaSomenteLeitura(item)}`)
+            .join(' • ');
+    }
+    return '';
+}
+
+function cartaoConteudoFichaSomenteLeitura(conteudo, tipo = 'habilidade') {
+    if (!conteudo || conteudo.isSeparator) return '';
+    const nome = conteudo.nome || conteudo.name || (tipo === 'item' ? 'Item sem nome' : 'Conteúdo sem nome');
+    const rolagens = normalizarRolagensPrincipais(conteudo, tipo === 'item' && conteudo.isWeapon);
+    const extras = normalizarRolagensExtras(conteudo);
+    const custos = normalizarCustosAcao(conteudo);
+    const modificadores = Array.isArray(conteudo.mods) ? conteudo.mods : [];
+    const etiquetas = [
+        conteudo.tipo ? String(conteudo.tipo).toLocaleUpperCase('pt-BR') : (tipo === 'item' ? 'ITEM' : 'HABILIDADE'),
+        tipo === 'item' && conteudo.equipado ? 'EQUIPADO' : '',
+        tipo === 'item' && Number(conteudo.peso) ? `${Number(conteudo.peso)} ESPAÇO${Number(conteudo.peso) === 1 ? '' : 'S'}` : ''
+    ].filter(Boolean);
+    const linhas = [
+        ...rolagens.map(rolagem => ({ rotulo: rolagem.nome || 'Rolagem', valor: `${rolagem.formula || '—'}${rolagem.atributo ? ` + ${rolagem.atributo}` : ''}` })),
+        ...extras.map(rolagem => ({ rotulo: rolagem.nome || 'Rolagem extra', valor: rolagem.formula || '—' })),
+        ...custos.map(custo => ({ rotulo: custo.nome || 'Gasto', valor: `${Number(custo.valor) || 0} ${String(custo.tipo || '').toLocaleUpperCase('pt-BR')}` })),
+        ...modificadores.map(mod => ({ rotulo: mod.alvo || mod.tipo || 'Modificador', valor: `${Number(mod.valor) >= 0 ? '+' : ''}${Number(mod.valor) || 0}` }))
+    ];
+    return `<article class="campaign-readonly-content-card">
+        <header><div><span>${etiquetas.map(escapeCampaignHtml).join(' • ')}</span><h4>${escapeCampaignHtml(nome)}</h4></div>${conteudo.img ? `<img src="${escapeCampaignHtml(conteudo.img)}" alt="">` : ''}</header>
+        <div class="campaign-readonly-description">${renderMarkdown(conteudo.desc || 'Nenhuma descrição registrada.')}</div>
+        ${linhas.length ? `<div class="campaign-readonly-facts">${linhas.map(linha => `<div><span>${escapeCampaignHtml(linha.rotulo)}</span><strong>${escapeCampaignHtml(linha.valor)}</strong></div>`).join('')}</div>` : ''}
+    </article>`;
+}
+
+function renderizarFichaParcialCampanha(character) {
+    const characterSheet = character.sheet || {};
+    const name = character.name || characterSheet.nickname || 'Personagem sem nome';
+    const pv = recursoPersonagem(character, 'pv');
+    const pa = recursoPersonagem(character, 'pa');
+    const sa = recursoPersonagem(character, 'sa');
+    const attributes = Object.entries(characterSheet.atributos || {});
+    const trainedSkills = (characterSheet.pericias || []).filter(skill => (parseInt(skill.t) || 0) > 0).map(skill => `${skill.n} +${skill.t}`);
+    const abilities = (characterSheet.habilidades || []).filter(item => !item?.isSeparator).map(ability => ability.nome).filter(Boolean);
+    const items = (characterSheet.itens || []).filter(item => !item?.isSeparator).map(item => item.nome).filter(Boolean);
+    return `
+        <div class="viewer-identity">
+            ${avatarCampanhaHtml(character)}
+            <div><span class="campaign-viewer-kicker">RESUMO PÚBLICO</span><h2>${escapeCampaignHtml(name)}</h2><p>${escapeCampaignHtml(character.ownerName || 'Jogador')} • ${escapeCampaignHtml(characterSheet.classe || 'Sem classe')} • Nível ${escapeCampaignHtml(characterSheet.nivel ?? 0)}</p>${characterSheet.antecedencia ? `<p>${escapeCampaignHtml(characterSheet.antecedencia)}</p>` : ''}</div>
+        </div>
+        <div class="shield-stats campaign-viewer-resources">
+            <div class="shield-stat"><span>PV</span><strong>${escapeCampaignHtml(pv.current)} / ${escapeCampaignHtml(pv.max)}</strong></div>
+            <div class="shield-stat"><span>PA</span><strong>${escapeCampaignHtml(pa.current)} / ${escapeCampaignHtml(pa.max)}</strong></div>
+            <div class="shield-stat"><span>SANIDADE</span><strong>${escapeCampaignHtml(sa.current)} / ${escapeCampaignHtml(sa.max)}</strong></div>
+        </div>
+        <section class="viewer-section"><h3>ATRIBUTOS</h3><div class="viewer-attribute-grid">${attributes.map(([key, value]) => `<div class="viewer-attribute"><span>${escapeCampaignHtml(key)}</span><strong>${escapeCampaignHtml(value)}</strong></div>`).join('')}</div></section>
+        <section class="viewer-section"><h3>PERÍCIAS TREINADAS</h3><div class="viewer-chip-list">${chipsFicha(trainedSkills, 'Nenhuma perícia treinada.')}</div></section>
+        <section class="viewer-section"><h3>ATAQUES, HABILIDADES E FEITIÇOS</h3><div class="viewer-chip-list">${chipsFicha(abilities, 'Nenhuma habilidade registrada.')}</div></section>
+        <section class="viewer-section"><h3>INVENTÁRIO</h3><div class="viewer-chip-list">${chipsFicha(items, 'Inventário vazio.')}</div></section>`;
+}
+
+function renderizarFichaCompletaCampanha(character) {
+    const characterSheet = character.sheet || {};
+    const name = character.name || characterSheet.nickname || 'Personagem sem nome';
+    const pv = recursoPersonagem(character, 'pv');
+    const pa = recursoPersonagem(character, 'pa');
+    const sa = recursoPersonagem(character, 'sa');
+    const attributes = Object.entries(characterSheet.atributos || {});
+    const skills = (characterSheet.pericias || []).filter(skill => (Number(skill.t) || Number(skill.m) || 0) > 0);
+    const abilities = (characterSheet.habilidades || []).filter(item => item && !item.isSeparator);
+    const items = (characterSheet.itens || []).filter(item => item && !item.isSeparator);
+    const conditions = (characterSheet.condicoes || []).map(item => valorFichaSomenteLeitura(item)).filter(Boolean);
+    const notes = (characterSheet.notas || []).filter(Boolean);
+    const resistances = [...(characterSheet.rds || []), ...(characterSheet.dts || [])].map(item => valorFichaSomenteLeitura(item)).filter(Boolean);
+    const combatFacts = [
+        ['DEFESA BASE', characterSheet.calculos?.defesa?.base],
+        ['BLOQUEIO BASE', characterSheet.bloqueioBase],
+        ['PA POR TURNO', characterSheet.paTurno],
+        ['CARGA BASE', characterSheet.cargaBase ?? characterSheet.limiteCarga],
+        ['DT DE FEITIÇOS', characterSheet.dtFeiticos],
+        ['DT DE HABILIDADES', characterSheet.dtHabilidades]
+    ].filter(([, value]) => value != null && value !== '');
+    return `<div class="campaign-readonly-sheet" aria-label="Ficha completa somente para leitura">
+        <header class="campaign-readonly-hero">
+            ${avatarCampanhaHtml(character)}
+            <div><span class="campaign-viewer-kicker">FICHA COMPLETA • SOMENTE LEITURA</span><h2>${escapeCampaignHtml(name)}</h2><p>${escapeCampaignHtml(character.ownerName || 'Jogador')} • ${escapeCampaignHtml(characterSheet.classe || 'Sem classe')} • Nível ${escapeCampaignHtml(characterSheet.nivel ?? 0)}</p>${characterSheet.antecedencia ? `<p>${escapeCampaignHtml(characterSheet.antecedencia)}</p>` : ''}</div>
+            <div class="campaign-readonly-seal" aria-hidden="true">✦</div>
+        </header>
+        <div class="campaign-readonly-dashboard">
+            <section class="campaign-readonly-panel campaign-readonly-vitals"><h3>RECURSOS</h3><div class="campaign-viewer-resources shield-stats"><div class="shield-stat"><span>PV</span><strong>${escapeCampaignHtml(pv.current)} / ${escapeCampaignHtml(pv.max)}</strong></div><div class="shield-stat"><span>PA</span><strong>${escapeCampaignHtml(pa.current)} / ${escapeCampaignHtml(pa.max)}</strong></div><div class="shield-stat"><span>SANIDADE</span><strong>${escapeCampaignHtml(sa.current)} / ${escapeCampaignHtml(sa.max)}</strong></div></div></section>
+            <section class="campaign-readonly-panel"><h3>ATRIBUTOS</h3><div class="viewer-attribute-grid">${attributes.map(([key, value]) => `<div class="viewer-attribute"><span>${escapeCampaignHtml(key)}</span><strong>${escapeCampaignHtml(value)}</strong></div>`).join('')}</div></section>
+            <section class="campaign-readonly-panel"><h3>COMBATE E LIMITES</h3><div class="campaign-readonly-facts">${combatFacts.map(([label, value]) => `<div><span>${escapeCampaignHtml(label)}</span><strong>${escapeCampaignHtml(value)}</strong></div>`).join('') || '<p>Nenhum valor adicional registrado.</p>'}</div></section>
+        </div>
+        <section class="campaign-readonly-panel"><h3>PERÍCIAS TREINADAS</h3><div class="campaign-readonly-skill-grid">${skills.map(skill => `<div><strong>${escapeCampaignHtml(skill.n || 'Perícia')}</strong><span>${escapeCampaignHtml(skill.a || 'VAR')} • Treino +${escapeCampaignHtml(Number(skill.t) || 0)}${Number(skill.m) ? ` • Mod. ${Number(skill.m) >= 0 ? '+' : ''}${escapeCampaignHtml(Number(skill.m))}` : ''}</span></div>`).join('') || '<p>Nenhuma perícia treinada.</p>'}</div></section>
+        <section class="campaign-readonly-panel"><h3>ATAQUES, HABILIDADES E FEITIÇOS</h3><div class="campaign-readonly-card-grid">${abilities.map(item => cartaoConteudoFichaSomenteLeitura(item, 'habilidade')).join('') || '<p>Nenhuma habilidade registrada.</p>'}</div></section>
+        <section class="campaign-readonly-panel"><h3>INVENTÁRIO</h3><div class="campaign-readonly-card-grid">${items.map(item => cartaoConteudoFichaSomenteLeitura(item, 'item')).join('') || '<p>Inventário vazio.</p>'}</div></section>
+        ${(conditions.length || resistances.length) ? `<div class="campaign-readonly-dashboard campaign-readonly-dashboard-secondary">${conditions.length ? `<section class="campaign-readonly-panel"><h3>CONDIÇÕES</h3><div class="viewer-chip-list">${chipsFicha(conditions, '')}</div></section>` : ''}${resistances.length ? `<section class="campaign-readonly-panel"><h3>RESISTÊNCIAS E REDUÇÕES</h3><div class="viewer-chip-list">${chipsFicha(resistances, '')}</div></section>` : ''}</div>` : ''}
+        ${notes.length ? `<section class="campaign-readonly-panel"><h3>ANOTAÇÕES DA FICHA</h3><div class="campaign-readonly-notes">${notes.map(note => { const titulo = note?.titulo || note?.title || note?.nome || 'Anotação'; const texto = note?.texto || note?.content || note?.desc || valorFichaSomenteLeitura(note); return `<article><strong>${escapeCampaignHtml(titulo)}</strong><div>${renderMarkdown(texto || '')}</div></article>`; }).join('')}</div></section>` : ''}
+        <footer class="campaign-readonly-footer">Esta cópia acompanha a ficha compartilhada da campanha. Todos os controles de edição, rolagem e gasto estão desativados.</footer>
+    </div>`;
+}
+
 function visualizarPersonagemCampanha(characterId) {
     const character = campaignState.activeCampaign?.characters?.[characterId];
     if (!character) return;
@@ -21478,42 +21934,17 @@ function visualizarPersonagemCampanha(characterId) {
         alert('O jogador ocultou esta ficha dos demais jogadores.');
         return;
     }
-    const characterSheet = character.sheet || {};
-    const name = character.name || characterSheet.nickname || 'Personagem sem nome';
-    const pv = recursoPersonagem(character, 'pv');
-    const pa = recursoPersonagem(character, 'pa');
-    const sa = recursoPersonagem(character, 'sa');
-    const attributes = Object.entries(characterSheet.atributos || {});
-    const trainedSkills = (characterSheet.pericias || []).filter(skill => (parseInt(skill.t) || 0) > 0).map(skill => `${skill.n} +${skill.t}`);
-    const abilities = (characterSheet.habilidades || []).map(ability => ability.nome).filter(Boolean);
-    const items = (characterSheet.itens || []).map(item => item.nome).filter(Boolean);
+    const isMaster = campaignState.role === 'mestre';
+    const modo = isMaster ? 'completa' : campaignViewerMode;
     const content = document.getElementById('campaign-viewer-content');
     content.dataset.characterId = characterId;
-    content.innerHTML = `
-        <div class="viewer-identity">
-            ${avatarCampanhaHtml(character)}
-            <div>
-                <h2>${escapeCampaignHtml(name)}</h2>
-                <p>${escapeCampaignHtml(character.ownerName || 'Jogador')} • ${escapeCampaignHtml(characterSheet.classe || 'Sem classe')} • Nível ${escapeCampaignHtml(characterSheet.nivel ?? 0)}</p>
-                ${characterSheet.antecedencia ? `<p style="margin-top:5px;">${escapeCampaignHtml(characterSheet.antecedencia)}</p>` : ''}
-            </div>
-        </div>
-        <div class="shield-stats" style="max-width:620px;">
-            <div class="shield-stat"><span>PV</span><strong>${escapeCampaignHtml(pv.current)} / ${escapeCampaignHtml(pv.max)}</strong></div>
-            <div class="shield-stat"><span>PA</span><strong>${escapeCampaignHtml(pa.current)} / ${escapeCampaignHtml(pa.max)}</strong></div>
-            <div class="shield-stat"><span>SANIDADE</span><strong>${escapeCampaignHtml(sa.current)} / ${escapeCampaignHtml(sa.max)}</strong></div>
-        </div>
-        <section class="viewer-section">
-            <h3>ATRIBUTOS</h3>
-            <div class="viewer-attribute-grid">
-                ${attributes.map(([key, value]) => `<div class="viewer-attribute"><span>${escapeCampaignHtml(key)}</span><strong>${escapeCampaignHtml(value)}</strong></div>`).join('')}
-            </div>
-        </section>
-        <section class="viewer-section"><h3>PERÍCIAS TREINADAS</h3><div class="viewer-chip-list">${chipsFicha(trainedSkills, 'Nenhuma perícia treinada.')}</div></section>
-        <section class="viewer-section"><h3>ATAQUES, HABILIDADES E FEITIÇOS</h3><div class="viewer-chip-list">${chipsFicha(abilities, 'Nenhuma habilidade registrada.')}</div></section>
-        <section class="viewer-section"><h3>INVENTÁRIO</h3><div class="viewer-chip-list">${chipsFicha(items, 'Inventário vazio.')}</div></section>
-    `;
-    document.getElementById('campaign-viewer-overlay').classList.add('active');
+    content.dataset.viewMode = modo;
+    content.innerHTML = modo === 'completa' ? renderizarFichaCompletaCampanha(character) : renderizarFichaParcialCampanha(character);
+    atualizarControlesVisualizadorCampanha(modo, isMaster);
+    const overlay = document.getElementById('campaign-viewer-overlay');
+    overlay.dataset.viewMode = modo;
+    overlay.classList.add('active');
+    overlay.scrollTop = 0;
 }
 
 function editarPersonagemCampanha(characterId) {
@@ -25480,10 +25911,10 @@ async function colocarDocumentoNaMesa(documentId) {
         selecionarDocumentoMesa(documentId);
         renderizarDocumentosNaMesa();
         renderizarGavetaDocumentos();
-        await database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`).set(payloadRemoto);
+        await executarEscritaMesaDocumentos(() => database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`).set(payloadRemoto));
         if (slotsAnteriores.length) {
             const resultados = await Promise.allSettled(slotsAnteriores.map(slotId =>
-                database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`).remove()
+                executarEscritaMesaDocumentos(() => database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`).remove())
             ));
             resultados.forEach((resultado, indice) => {
                 if (resultado.status === 'fulfilled') return;
@@ -25526,7 +25957,7 @@ async function guardarDocumentoNaGaveta(documentId) {
     renderizarDocumentosNaMesa();
     renderizarGavetaDocumentos();
     try {
-        await database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`).remove();
+        await executarEscritaMesaDocumentos(() => database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`).remove());
     } catch (error) {
         documentDeskState.placements[documentId] = anterior;
         documentDeskState.allPlacements[slotAtual] = {
@@ -26296,7 +26727,8 @@ async function prepararArquivoDocumentoMesa(input) {
     const status = document.getElementById('document-editor-file-status');
     if (status) status.textContent = 'Preparando arquivo...';
     try {
-        if (file.size > 15 * 1024 * 1024) throw new Error('Arquivos podem ter no máximo 15 MB.');
+        const limiteArquivo = file.type.startsWith('image/') ? 15 * 1024 * 1024 : 8 * 1024 * 1024;
+        if (file.size > limiteArquivo) throw new Error(file.type.startsWith('image/') ? 'Imagens podem ter no máximo 15 MB.' : 'Arquivos que não são imagens podem ter no máximo 8 MB.');
         if (file.type.startsWith('image/')) {
             documentDeskState.pendingFile = await comprimirImagemMesa(file);
         } else {
@@ -26328,6 +26760,49 @@ function limparArquivoDocumentoMesa() {
     if (limparArquivo) limparArquivo.hidden = true;
 }
 
+function erroPermissaoMesaDocumentos(error) {
+    const codigo = String(error?.code || '').toLocaleLowerCase('pt-BR');
+    const mensagem = String(error?.message || '').toLocaleLowerCase('pt-BR');
+    return codigo.includes('permission') || mensagem.includes('permission_denied') || mensagem.includes('permission denied');
+}
+
+function erroTransitorioMesaDocumentos(error) {
+    if (erroPermissaoMesaDocumentos(error)) return false;
+    const codigo = String(error?.code || '').toLocaleLowerCase('pt-BR');
+    const mensagem = String(error?.message || '').toLocaleLowerCase('pt-BR');
+    return ['network', 'disconnected', 'unavailable', 'timeout'].some(chave => codigo.includes(chave) || mensagem.includes(chave));
+}
+
+async function renovarAcessoMesaDocumentos() {
+    if (!currentUser || !documentDeskState.campaignId) return false;
+    try { await currentUser.getIdToken?.(true); } catch (_) {}
+    if (documentDeskState.role) return true;
+    try {
+        const memberSnapshot = await database.ref(`campaigns/${documentDeskState.campaignId}/members/${currentUser.uid}`).once('value');
+        const member = memberSnapshot.val();
+        if (!member) return false;
+        documentDeskState.role = member.role || 'jogador';
+        atualizarControlesMesaDocumentos();
+        return true;
+    } catch (error) {
+        console.warn('Não foi possível renovar o acesso à Mesa de Documentos.', error);
+        return false;
+    }
+}
+
+async function executarEscritaMesaDocumentos(acao) {
+    if (!await renovarAcessoMesaDocumentos()) throw Object.assign(new Error('A campanha não reconheceu este jogador como membro.'), { code: 'campaign-membership-missing' });
+    try {
+        return await acao();
+    } catch (error) {
+        if (!erroTransitorioMesaDocumentos(error)) throw error;
+        try { database.goOnline?.(); } catch (_) {}
+        await new Promise(resolve => setTimeout(resolve, 320));
+        try { await currentUser.getIdToken?.(true); } catch (_) {}
+        return acao();
+    }
+}
+
 async function salvarDocumentoMesa(event) {
     event.preventDefault();
     if (!documentDeskState.role || !currentUser) return;
@@ -26352,6 +26827,7 @@ async function salvarDocumentoMesa(event) {
     submit.textContent = 'Guardando...';
     const id = documentDeskState.editDocumentId || database.ref(`${caminhoBaseMesaDocumentos()}/documents`).push().key;
     let documentoSalvo = false;
+    let colocacaoSeparadaNecessaria = false;
     try {
         const payload = {
             title: title.slice(0, 90),
@@ -26368,12 +26844,47 @@ async function salvarDocumentoMesa(event) {
             updatedBy: currentUser.uid,
             updatedAt: firebase.database.ServerValue.TIMESTAMP
         };
-        await database.ref(`${caminhoBaseMesaDocumentos()}/documents/${id}`).set(payload);
+        const novoDocumento = !atual;
+        const slotId = documentDeskState.currentSlotId || 'principal';
+        const posicaoLocal = novoDocumento ? {
+            ...posicaoPadraoDocumentoMesa(),
+            frameEnabled: payload.frameEnabled !== false,
+            modifiedBy: currentUser.uid,
+            modifiedAt: Date.now(),
+            droppedAt: Date.now()
+        } : null;
+        const posicaoRemota = posicaoLocal ? {
+            ...posicaoLocal,
+            modifiedAt: firebase.database.ServerValue.TIMESTAMP,
+            droppedAt: firebase.database.ServerValue.TIMESTAMP
+        } : null;
+        const updates = { [`${caminhoBaseMesaDocumentos()}/documents/${id}`]: payload };
+        if (novoDocumento && posicaoRemota) updates[`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${id}`] = posicaoRemota;
+        try {
+            await executarEscritaMesaDocumentos(() => database.ref().update(updates));
+        } catch (atomicError) {
+            if (!novoDocumento) throw atomicError;
+            console.warn('A criação atômica não foi aceita; guardando o documento antes de tentar posicioná-lo.', atomicError);
+            await executarEscritaMesaDocumentos(() => database.ref(`${caminhoBaseMesaDocumentos()}/documents/${id}`).set(payload));
+            colocacaoSeparadaNecessaria = true;
+        }
         documentDeskState.documents[id] = {
             ...payload,
             createdAt: atual?.createdAt || Date.now(),
             updatedAt: Date.now()
         };
+        if (novoDocumento && posicaoLocal && !colocacaoSeparadaNecessaria) {
+            documentDeskState.allPlacements = documentDeskState.allPlacements || {};
+            documentDeskState.allPlacements[slotId] = {
+                ...(documentDeskState.allPlacements[slotId] || {}),
+                [id]: posicaoLocal
+            };
+            if (slotId === documentDeskState.currentSlotId) documentDeskState.placements = documentDeskState.allPlacements[slotId];
+            documentDeskState.localDropLocks.set(id, Date.now() + 1500);
+            selecionarDocumentoMesa(id);
+            animarQuedaDocumentoMesa(id);
+            renderizarDocumentosNaMesa();
+        }
         renderizarGavetaDocumentos();
         fecharSuperficieFoco('#modal-document-editor');
         documentDeskState.pendingFile = null;
@@ -26382,15 +26893,20 @@ async function salvarDocumentoMesa(event) {
         documentoSalvo = true;
     } catch (error) {
         console.error('Erro ao guardar documento:', error);
-        const mensagem = arquivo?.dataUrl
-            ? 'Não foi possível enviar este arquivo. Ele pode ter excedido o limite do armazenamento da campanha; tente uma versão menor ou mantenha somente a descrição.'
-            : 'Não foi possível sincronizar este documento de texto agora. Nada foi perdido no formulário; verifique sua conexão e tente novamente.';
+        const semMembro = String(error?.code || '') === 'campaign-membership-missing';
+        const mensagem = semMembro
+            ? 'Sua sessão não aparece mais entre os membros desta campanha. Volte à campanha, confirme o vínculo da ficha e abra a Mesa novamente.'
+            : (erroPermissaoMesaDocumentos(error)
+                ? 'A campanha reconheceu seu login, mas recusou a gravação deste jogador. Nada foi perdido no formulário; peça ao Mestre para confirmar sua participação e tente novamente.'
+                : (arquivo?.dataUrl
+                    ? 'Não foi possível enviar este arquivo. Nada foi perdido no formulário; tente uma versão menor ou mantenha somente a descrição.'
+                    : 'Não foi possível sincronizar este documento de texto agora. Nada foi perdido no formulário; a conexão será renovada na próxima tentativa.'));
         await avisarAbyss(mensagem, { titulo: 'Documento não foi guardado', tom: 'aviso' });
     } finally {
         submit.disabled = false;
         submit.textContent = 'Guardar documento';
     }
-    if (documentoSalvo && !atual) await colocarDocumentoNaMesa(id);
+    if (documentoSalvo && !atual && colocacaoSeparadaNecessaria) await colocarDocumentoNaMesa(id);
 }
 
 async function excluirDocumentoMesa(documentId) {
