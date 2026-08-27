@@ -10400,8 +10400,8 @@ body.theme-umbral .note-card { padding: 17px 18px; }
 
 /* ==================================================================
    REDESENHO DAS ÁREAS SECUNDÁRIAS
-   Inventário, Crônicas, Campanhas e Acervo recebem composição própria.
-   A ficha permanece intocada; Combate recebe somente acabamento.
+   Inventário, Crônicas e Acervo recebem composição própria.
+   Campanhas conserva sua composição original; Combate recebe somente acabamento.
    ================================================================== */
 
 /* Capítulos secundários: mais presença e um início visual inequívoco. */
@@ -10562,40 +10562,6 @@ body.theme-umbral #area-notas .note-card::before {
 body.theme-umbral #area-notas .note-card-title { min-height: 41px; padding: 8px 11px; font-size: 1.12rem; }
 body.theme-umbral #area-notas .note-card textarea { min-height: 190px; padding: 13px 4px; border: 0; box-shadow: none; background: transparent !important; }
 
-/* Campanhas: ações viram portal; conteúdo usa uma grade editorial ampla. */
-body.theme-umbral .campaign-shell { max-width: 1640px; padding-right: clamp(22px, 4.5vw, 76px); padding-left: clamp(22px, 4.5vw, 76px); }
-body.theme-umbral .campaign-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(250px, 360px));
-    justify-content: center;
-    gap: 16px;
-    margin: 4px auto 46px;
-}
-body.theme-umbral .campaign-primary-btn {
-    width: 100%;
-    min-height: 68px;
-    border-radius: 2px;
-    text-align: left;
-}
-body.theme-umbral .campaign-panel {
-    padding: clamp(28px, 3.5vw, 52px);
-    border-color: var(--umbral-line);
-    background:
-        linear-gradient(135deg, rgba(97,42,125,.07), transparent 38%),
-        repeating-linear-gradient(125deg, transparent 0 22px, rgba(255,255,255,.008) 23px 24px),
-        #09080b;
-}
-body.theme-umbral .campaign-section-heading { margin-bottom: 27px; padding-bottom: 17px; }
-body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 24px; }
-body.theme-umbral .campaign-card { height: 230px; }
-body.theme-umbral .campaign-card-name { left: 23px; right: 23px; bottom: 23px; font-size: 1.13rem; }
-body.theme-umbral .campaign-detail-grid { grid-template-columns: minmax(0, 1fr) minmax(350px, 420px); gap: 28px; margin-top: 28px; }
-body.theme-umbral .campaign-content-box { padding: clamp(24px, 2.7vw, 38px); }
-body.theme-umbral .campaign-character-mini { padding: 13px; gap: 14px; border: 0; border-bottom: 1px solid var(--umbral-line-soft); background: transparent; }
-body.theme-umbral .campaign-character-mini:last-child { border-bottom: 0; }
-body.theme-umbral .campaign-hero { min-height: 340px; }
-body.theme-umbral .campaign-hero-content { max-width: 760px; padding: clamp(42px, 5vw, 72px); }
-
 /* Acervo: janela horizontal realmente espaçosa, biblioteca à esquerda e leitura à direita. */
 body.theme-umbral .content-library-modal {
     width: min(96vw, 1720px) !important;
@@ -10647,7 +10613,6 @@ body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 2
 @media (max-width: 1050px) {
     body.theme-umbral #area-inventario .inv-header-dashboard { grid-template-columns: 1fr; }
     body.theme-umbral #area-inventario .ability-create-actions { justify-content: flex-start; flex-wrap: wrap; }
-    body.theme-umbral .campaign-detail-grid { grid-template-columns: 1fr; }
     body.theme-umbral .content-library-workspace { grid-template-columns: minmax(320px, 42%) minmax(0, 58%); }
 }
 @media (max-width: 780px) {
@@ -10662,8 +10627,6 @@ body.theme-umbral #area-combate .search-bar { min-height: 43px; margin-bottom: 2
     body.theme-umbral #area-inventario > .section-box,
     body.theme-umbral #area-notas > .section-box { padding: 20px 15px; }
     body.theme-umbral #area-notas .notes-grid { grid-template-columns: 1fr; }
-    body.theme-umbral .campaign-actions { grid-template-columns: 1fr; }
-    body.theme-umbral .campaign-card-grid { grid-template-columns: 1fr; }
     body.theme-umbral .content-library-modal { width: calc(100vw - 12px) !important; height: calc(100vh - 12px) !important; max-height: calc(100vh - 12px) !important; padding: 18px 14px !important; }
     body.theme-umbral .content-library-workspace { grid-template-columns: 1fr; grid-template-rows: minmax(260px, 42%) minmax(300px, 58%); grid-template-areas: 'browser' 'detail'; }
     body.theme-umbral .content-library-browser { border-right: 0; border-bottom: 1px solid #302837; }
@@ -10877,314 +10840,304 @@ body.theme-umbral #content-library-create-button { min-height: 39px; }
 }
 
 /* ================================================================
-   CAMPANHAS V2 — COMPOSIÇÃO ABYSS, MAIS AMPLA E RESPIRÁVEL
+   CAMPANHAS — ACABAMENTO ABYSS SEM ALTERAR O LAYOUT ORIGINAL
    ================================================================ */
 body.theme-umbral #campaign-app {
     background:
-        radial-gradient(circle at 52% -8%, color-mix(in srgb,var(--primary-purple) 22%,transparent), transparent 34%),
-        linear-gradient(180deg, rgba(6,4,8,.97), rgba(3,3,5,.99));
-}
-body.theme-umbral #campaign-app .campaign-shell {
-    width: min(100%, 1660px);
-    max-width: none;
-    min-height: 100%;
-    margin: 0 auto;
-    padding: clamp(18px,2.5vw,38px) clamp(18px,3.4vw,58px) 64px;
+        radial-gradient(circle at 50% -12%, color-mix(in srgb,var(--primary-purple) 14%,transparent), transparent 38%),
+        linear-gradient(180deg,#08060a,#030304);
 }
 body.theme-umbral #campaign-app .campaign-header {
-    position: sticky;
-    z-index: 18;
-    top: 0;
-    display: grid;
-    grid-template-columns: minmax(160px,1fr) auto minmax(160px,1fr);
-    align-items: center;
-    min-height: 76px;
-    margin: calc(clamp(18px,2.5vw,38px) * -1) calc(clamp(18px,3.4vw,58px) * -1) 34px;
-    padding: 15px clamp(18px,3.4vw,58px);
-    border-bottom: 1px solid color-mix(in srgb,var(--text-gold) 27%,var(--border-color));
-    background: color-mix(in srgb,var(--container-bg) 94%,transparent);
-    backdrop-filter: blur(13px);
+    padding-bottom: 18px;
+    border-bottom: 1px solid color-mix(in srgb,var(--text-gold) 26%,var(--border-color));
 }
-body.theme-umbral #campaign-app .campaign-brand h1 { font-size: clamp(1.1rem,2vw,1.55rem); letter-spacing: .38em; }
-body.theme-umbral #campaign-home,
-body.theme-umbral #campaign-detail,
-body.theme-umbral #campaign-combat { max-width: 1480px; margin: 0 auto; }
-body.theme-umbral #campaign-home .campaign-actions {
-    justify-content: flex-start;
-    gap: 10px;
-    margin: 0 0 28px;
-    padding: 11px;
-    border: 1px solid var(--ui-line);
-    background: color-mix(in srgb,var(--container-bg) 92%,transparent);
+body.theme-umbral #campaign-app .campaign-shell {
+    width:min(100%,1500px);
+    max-width:1500px;
+    padding:28px clamp(18px,3.8vw,58px) 84px;
 }
-body.theme-umbral #campaign-home .campaign-primary-btn { min-width: 0; padding: 11px 18px; }
-body.theme-umbral #campaign-home .campaign-panel {
-    width: min(100%, 980px);
-    margin: 0 0 34px;
-    padding: clamp(24px,3.2vw,44px);
+body.theme-umbral #campaign-app .campaign-brand small { color: var(--text-gold); opacity: .8; }
+body.theme-umbral #campaign-app .campaign-brand h1 { color: #f2ebf4; letter-spacing: .34em; }
+body.theme-umbral #campaign-app .campaign-actions {
+    display:flex;
+    grid-template-columns:none;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:14px;
+    margin:6px auto 48px;
 }
-body.theme-umbral #campaign-home .campaign-panel.active form {
-    display: grid;
-    grid-template-columns: minmax(0,1fr) minmax(300px,.72fr);
-    gap: 0 30px;
-    align-items: start;
+body.theme-umbral #campaign-app .campaign-primary-btn {
+    width:auto;
+    min-width:min(265px,100%);
+    min-height:54px;
+    padding:14px 24px;
+    text-align:center;
 }
-body.theme-umbral #campaign-home .campaign-panel.active .campaign-field:has(textarea),
-body.theme-umbral #campaign-home .campaign-panel.active .campaign-form-actions { grid-column: 1; }
-body.theme-umbral #campaign-home .campaign-panel.active .campaign-field:has(.campaign-banner-picker) { grid-column: 2; grid-row: 1 / span 3; }
-body.theme-umbral #campaign-home #campaign-join-panel.active form { display: block; max-width: 620px; }
-body.theme-umbral #campaign-home .campaign-banner-picker { min-height: 235px; }
-body.theme-umbral .campaign-section-heading { margin-top: 34px; padding: 0 2px 14px; }
-body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill,minmax(310px,1fr)); gap: 22px; }
-body.theme-umbral .campaign-card {
-    height: clamp(210px,22vw,285px);
-    border-color: color-mix(in srgb,var(--border-color) 76%,var(--text-gold) 24%);
+body.theme-umbral #campaign-app .campaign-primary-btn,
+body.theme-umbral #campaign-app .campaign-submit-btn,
+body.theme-umbral #campaign-app .campaign-back-btn,
+body.theme-umbral #campaign-app .campaign-ghost-btn,
+body.theme-umbral #campaign-app .gm-shield-btn {
+    border-radius: 3px;
+    letter-spacing: .08em;
+    box-shadow: none;
 }
-body.theme-umbral .campaign-card::before {
-    content: '';
-    position: absolute;
-    z-index: 2;
-    inset: 9px;
-    border: 1px solid rgba(255,255,255,.08);
-    pointer-events: none;
+body.theme-umbral #campaign-app .campaign-primary-btn,
+body.theme-umbral #campaign-app .campaign-submit-btn {
+    border: 1px solid color-mix(in srgb,var(--text-gold) 34%,var(--primary-purple));
+    background: color-mix(in srgb,var(--primary-purple) 40%,var(--container-bg));
 }
-body.theme-umbral .campaign-card-name { left: 24px; right: 24px; bottom: 24px; font-size: clamp(.9rem,1.4vw,1.12rem); }
-body.theme-umbral .campaign-role-badge { top: 18px; right: 18px; padding: 6px 10px; }
-
-body.theme-umbral #campaign-detail .campaign-detail-top {
-    position: sticky;
-    z-index: 14;
-    top: 78px;
-    align-items: center;
-    margin: 0 0 18px;
-    padding: 10px;
-    border: 1px solid var(--ui-line);
-    background: color-mix(in srgb,var(--container-bg) 93%,transparent);
-    backdrop-filter: blur(11px);
+body.theme-umbral #campaign-app .campaign-primary-btn:hover,
+body.theme-umbral #campaign-app .campaign-submit-btn:hover {
+    border-color: var(--text-gold);
+    background: color-mix(in srgb,var(--primary-purple) 54%,var(--container-bg));
 }
-body.theme-umbral #campaign-detail .campaign-detail-top > div {
-    display: flex !important;
-    flex: 1 1 auto;
-    gap: 7px !important;
-    overflow-x: auto;
-    flex-wrap: nowrap !important;
-    scrollbar-width: none;
+body.theme-umbral #campaign-app .campaign-panel,
+body.theme-umbral #campaign-app .campaign-content-box,
+body.theme-umbral #campaign-app .combat-panel {
+    border: 1px solid color-mix(in srgb,var(--border-color) 78%,var(--primary-purple));
+    border-top-color: color-mix(in srgb,var(--text-gold) 34%,var(--border-color));
+    background: linear-gradient(145deg,color-mix(in srgb,var(--primary-purple) 5%,var(--container-bg)),var(--container-bg));
 }
-body.theme-umbral #campaign-detail .campaign-detail-top > div::-webkit-scrollbar { display: none; }
-body.theme-umbral #campaign-detail .campaign-detail-top button { flex: 0 0 auto; min-height: 38px; }
-body.theme-umbral #campaign-detail .campaign-hero {
-    min-height: clamp(330px,38vw,510px);
-    border-color: color-mix(in srgb,var(--text-gold) 30%,var(--border-color));
+body.theme-umbral #campaign-app .campaign-panel {
+    max-width:900px;
+    margin:-8px auto 48px;
+    padding:34px clamp(22px,4vw,42px);
 }
-body.theme-umbral #campaign-detail .campaign-hero-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    min-height: clamp(330px,38vw,510px);
-    max-width: 840px;
-    padding: clamp(34px,5.5vw,76px);
+body.theme-umbral #campaign-app .campaign-panel h2,
+body.theme-umbral #campaign-app .campaign-content-box h3,
+body.theme-umbral #campaign-app .combat-panel-title {
+    color: #f0e9f2;
+    letter-spacing: .14em;
 }
-body.theme-umbral #campaign-detail .campaign-hero-content h2 { font-size: clamp(1.8rem,4vw,3.5rem); line-height: 1.05; }
-body.theme-umbral #campaign-detail .campaign-hero-content p { max-width: 720px; font-size: .98rem; }
-body.theme-umbral #campaign-detail .campaign-detail-grid {
-    grid-template-columns: minmax(0,1.55fr) minmax(300px,.72fr);
-    gap: 24px;
-    margin-top: 24px;
+body.theme-umbral #campaign-app .campaign-panel-note,
+body.theme-umbral #campaign-app .combat-panel-note { max-width: 780px; line-height: 1.65; }
+body.theme-umbral #campaign-app .campaign-field input,
+body.theme-umbral #campaign-app .campaign-field textarea,
+body.theme-umbral #campaign-app .campaign-field select {
+    border-radius: 3px;
+    border-color: color-mix(in srgb,var(--border-color) 86%,var(--primary-purple));
+    background: rgba(3,3,5,.62);
 }
-body.theme-umbral #campaign-detail .campaign-content-box { padding: clamp(22px,2.5vw,34px); }
-body.theme-umbral #campaign-character-preview {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(275px,1fr));
-    gap: 10px;
+body.theme-umbral #campaign-app .campaign-field input:focus,
+body.theme-umbral #campaign-app .campaign-field textarea:focus,
+body.theme-umbral #campaign-app .campaign-field select:focus {
+    border-color: var(--light-purple);
+    box-shadow: 0 0 0 2px color-mix(in srgb,var(--primary-purple) 13%,transparent);
 }
-body.theme-umbral #campaign-detail .campaign-character-mini {
-    min-height: 76px;
-    padding: 13px;
-    border-left: 2px solid color-mix(in srgb,var(--text-gold) 55%,var(--primary-purple));
+body.theme-umbral #campaign-app .campaign-card {
+    height:198px;
+    border-color: color-mix(in srgb,var(--border-color) 76%,var(--text-gold));
+    background: var(--container-bg);
+    box-shadow: 0 12px 30px rgba(0,0,0,.34);
 }
-body.theme-umbral #campaign-detail .campaign-character-mini .campaign-avatar { width: 50px; height: 50px; flex-basis: 50px; }
-
-/* Combate conserva a organização, com leitura e espaçamento refinados. */
+body.theme-umbral #campaign-app .campaign-card-grid {
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:20px;
+}
+body.theme-umbral #campaign-app .campaign-card-name {
+    right:18px;
+    bottom:17px;
+    left:18px;
+    font-size:1rem;
+}
+body.theme-umbral #campaign-app .campaign-card::before {
+    content:'';
+    position:absolute;
+    z-index:2;
+    inset:8px;
+    border:1px solid rgba(255,255,255,.07);
+    pointer-events:none;
+}
+body.theme-umbral #campaign-app .campaign-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--light-purple);
+    box-shadow: 0 16px 34px rgba(0,0,0,.4);
+}
+body.theme-umbral #campaign-app .campaign-role-badge {
+    border-color: color-mix(in srgb,var(--text-gold) 38%,transparent);
+    background: rgba(5,4,7,.82);
+}
+body.theme-umbral #campaign-app .campaign-detail-top,
 body.theme-umbral #campaign-combat .combat-topbar {
-    position: sticky;
-    z-index: 12;
-    top: 78px;
-    margin-bottom: 18px;
-    padding: 10px;
-    border: 1px solid var(--ui-line);
-    background: color-mix(in srgb,var(--container-bg) 94%,transparent);
+    padding-bottom: 12px;
+    border-bottom: 1px solid color-mix(in srgb,var(--text-gold) 22%,var(--border-color));
 }
-body.theme-umbral #campaign-combat .combat-panel { padding: clamp(22px,3vw,38px); }
-body.theme-umbral #campaign-combat .combat-select-grid,
-body.theme-umbral #campaign-combat .combat-waiting-grid { gap: 10px; }
+body.theme-umbral #campaign-app .campaign-hero {
+    min-height:300px;
+    border-color: color-mix(in srgb,var(--text-gold) 29%,var(--border-color));
+    box-shadow: 0 18px 42px rgba(0,0,0,.38);
+}
+body.theme-umbral #campaign-app .campaign-hero-content {
+    max-width:680px;
+    padding:48px clamp(28px,5vw,58px);
+}
+body.theme-umbral #campaign-app .campaign-detail-grid {
+    grid-template-columns:minmax(0,1fr) minmax(300px,360px);
+    gap:clamp(25px,4vw,42px);
+    margin-top:24px;
+}
+body.theme-umbral #campaign-app .campaign-content-box { padding:24px 18px 22px; }
+body.theme-umbral #campaign-app .campaign-character-mini {
+    min-height:0;
+    padding:10px 6px;
+    gap:11px;
+    border:0;
+    border-bottom:1px solid color-mix(in srgb,var(--border-color) 70%,transparent);
+    background:transparent;
+}
 body.theme-umbral #campaign-combat .combat-select-card,
 body.theme-umbral #campaign-combat .combat-wait-card,
-body.theme-umbral #campaign-combat .combat-order-item { min-height: 68px; padding: 11px 13px; }
-body.theme-umbral #campaign-combat .combat-arena { gap: 22px; }
-
-body.theme-umbral #campaign-shield-overlay { padding: 18px; }
-body.theme-umbral #campaign-shield-overlay .campaign-shield {
-    width: min(1480px, calc(100vw - 36px));
-    max-width: none;
-    min-height: min(720px, calc(100dvh - 36px));
-    padding: clamp(22px,3vw,38px);
+body.theme-umbral #campaign-combat .combat-order-item {
+    border-radius:3px;
+    border-color:var(--border-color);
+    background:rgba(0,0,0,.22);
 }
-body.theme-umbral #campaign-shield-overlay .shield-character-grid {
-    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
-    gap: 16px;
+body.theme-umbral #campaign-combat .combat-order-item.current {
+    border-color:var(--text-gold);
+    background:color-mix(in srgb,var(--primary-purple) 12%,rgba(0,0,0,.25));
 }
-body.theme-umbral #campaign-shield-overlay .shield-card {
-    min-height: 360px;
-    padding: 22px;
-    border-top-color: color-mix(in srgb,var(--text-gold) 45%,var(--border-color));
-    background: linear-gradient(160deg,color-mix(in srgb,var(--primary-purple) 8%,var(--container-bg)),var(--container-bg));
-}
-body.theme-umbral #campaign-shield-overlay .shield-card-actions { margin-top: auto; }
-
-/* Visualizador de personagem: resumo ou ficha completa, sempre somente leitura. */
-body.theme-umbral #campaign-viewer-overlay {
-    padding: 18px;
-    overflow: hidden;
-}
-body.theme-umbral #campaign-viewer-overlay.active { display: grid; place-items: center; }
+body.theme-umbral #campaign-shield-overlay .campaign-shield,
 body.theme-umbral #campaign-viewer-overlay .campaign-viewer {
-    display: flex;
-    flex-direction: column;
-    width: min(1500px, calc(100vw - 36px));
-    max-width: none;
-    height: min(940px, calc(100dvh - 36px));
-    max-height: calc(100dvh - 36px);
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+    border:1px solid color-mix(in srgb,var(--text-gold) 28%,var(--border-color));
+    background:radial-gradient(circle at 85% 0,color-mix(in srgb,var(--primary-purple) 10%,transparent),transparent 35%),var(--container-bg);
+}
+@media (max-width:1050px) {
+    body.theme-umbral #campaign-app .campaign-detail-grid { grid-template-columns:1fr; }
+}
+@media (max-width:780px) {
+    body.theme-umbral #campaign-app .campaign-shell { padding:18px 14px 62px; }
+    body.theme-umbral #campaign-app .campaign-actions { align-items:stretch; flex-direction:column; }
+    body.theme-umbral #campaign-app .campaign-primary-btn { width:100%; min-width:0; }
+    body.theme-umbral #campaign-app .campaign-card-grid { grid-template-columns:1fr; }
+}
+
+/* A ficha completa precisa de largura; o restante de Campanhas conserva a geometria antiga. */
+body.theme-umbral #campaign-viewer-overlay { padding:18px; }
+body.theme-umbral #campaign-viewer-overlay .campaign-viewer {
+    display:flex;
+    flex-direction:column;
+    width:min(1240px,calc(100vw - 36px));
+    max-width:1240px;
+    max-height:calc(100dvh - 36px);
+    padding:0;
+    overflow:hidden;
 }
 .campaign-viewer-toolbar {
-    display: grid;
-    grid-template-columns: minmax(180px,1fr) auto auto;
-    align-items: center;
-    gap: 16px;
-    flex: 0 0 auto;
-    min-height: 78px;
-    padding: 14px clamp(18px,2.6vw,34px);
-    border-bottom: 1px solid color-mix(in srgb,var(--text-gold) 30%,var(--border-color));
-    background: linear-gradient(90deg,color-mix(in srgb,var(--primary-purple) 12%,var(--container-bg)),var(--container-bg));
+    display:grid;
+    grid-template-columns:minmax(180px,1fr) auto auto;
+    align-items:center;
+    gap:14px;
+    flex:0 0 auto;
+    min-height:72px;
+    padding:13px clamp(18px,2.5vw,30px);
+    border-bottom:1px solid color-mix(in srgb,var(--text-gold) 28%,var(--border-color));
 }
-.campaign-viewer-toolbar-copy span,.campaign-viewer-toolbar-copy strong { display: block; }
-.campaign-viewer-toolbar-copy span { color: var(--text-gold); font: 700 .52rem Cinzel,serif; letter-spacing: .18em; }
-.campaign-viewer-toolbar-copy strong { margin-top: 5px; color: #eee8f1; font: 700 .76rem Cinzel,serif; letter-spacing: .1em; }
-.campaign-viewer-mode-controls { display: inline-grid; grid-template-columns: 1fr 1fr; padding: 3px; border: 1px solid var(--border-color); background: rgba(0,0,0,.28); }
-.campaign-viewer-mode-controls[hidden] { display: none !important; }
+.campaign-viewer-toolbar-copy span,.campaign-viewer-toolbar-copy strong { display:block; }
+.campaign-viewer-toolbar-copy span { color:var(--text-gold); font:700 .52rem Cinzel,serif; letter-spacing:.17em; }
+.campaign-viewer-toolbar-copy strong { margin-top:5px; color:#eee8f1; font:700 .72rem Cinzel,serif; letter-spacing:.1em; }
+.campaign-viewer-mode-controls {
+    display:inline-grid;
+    grid-template-columns:1fr 1fr;
+    padding:3px;
+    border:1px solid var(--border-color);
+    background:rgba(0,0,0,.28);
+}
+.campaign-viewer-mode-controls[hidden] { display:none !important; }
 .campaign-viewer-mode-controls button {
-    min-width: 106px;
-    min-height: 34px;
-    padding: 7px 12px;
-    border: 0;
-    background: transparent;
-    color: #817886;
-    font: 700 .61rem Cinzel,serif;
-    cursor: pointer;
+    min-width:100px;
+    min-height:33px;
+    padding:7px 11px;
+    border:0;
+    background:transparent;
+    color:#817886;
+    font:700 .59rem Cinzel,serif;
+    cursor:pointer;
 }
-.campaign-viewer-mode-controls button.active { background: color-mix(in srgb,var(--primary-purple) 38%,#100c14); color: #fff; box-shadow: inset 0 -2px var(--text-gold); }
+.campaign-viewer-mode-controls button.active {
+    color:#fff;
+    background:color-mix(in srgb,var(--primary-purple) 34%,#100c14);
+    box-shadow:inset 0 -2px var(--text-gold);
+}
 body.theme-umbral #campaign-viewer-content {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: auto;
-    padding: clamp(22px,3.4vw,52px);
-    overscroll-behavior: contain;
-    scrollbar-gutter: stable;
+    flex:1 1 auto;
+    min-height:0;
+    overflow:auto;
+    padding:clamp(20px,3vw,38px);
+    overscroll-behavior:contain;
+    scrollbar-gutter:stable;
 }
-body.theme-umbral #campaign-viewer-content[data-view-mode="parcial"] { max-width: 1040px; width: 100%; margin: 0 auto; }
-.campaign-viewer-kicker { display: block; margin-bottom: 7px; color: var(--text-gold); font: 700 .55rem Cinzel,serif; letter-spacing: .17em; }
-.campaign-viewer-resources { width: 100%; max-width: none !important; }
-.campaign-readonly-sheet { display: grid; gap: 18px; width: min(100%,1380px); margin: 0 auto; }
+body.theme-umbral #campaign-viewer-content[data-view-mode="parcial"] { width:100%; max-width:970px; margin:0 auto; }
+.campaign-viewer-kicker { display:block; margin-bottom:7px; color:var(--text-gold); font:700 .53rem Cinzel,serif; letter-spacing:.16em; }
+.campaign-viewer-resources { width:100%; max-width:none !important; }
+.campaign-readonly-sheet { display:grid; gap:15px; width:100%; }
 .campaign-readonly-hero {
-    position: relative;
-    display: grid;
-    grid-template-columns: 112px minmax(0,1fr) 64px;
-    align-items: center;
-    gap: 24px;
-    min-height: 168px;
-    padding: clamp(22px,3vw,38px);
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb,var(--text-gold) 34%,var(--border-color));
-    background: radial-gradient(circle at 88% 20%,color-mix(in srgb,var(--primary-purple) 22%,transparent),transparent 34%),var(--ui-ink,#0b090d);
+    position:relative;
+    display:grid;
+    grid-template-columns:96px minmax(0,1fr) 52px;
+    align-items:center;
+    gap:20px;
+    padding:clamp(20px,2.7vw,32px);
+    overflow:hidden;
+    border:1px solid color-mix(in srgb,var(--text-gold) 32%,var(--border-color));
+    background:radial-gradient(circle at 88% 18%,color-mix(in srgb,var(--primary-purple) 18%,transparent),transparent 36%),rgba(0,0,0,.2);
 }
 .campaign-readonly-hero::after { content:''; position:absolute; right:0; bottom:0; left:0; height:2px; background:linear-gradient(90deg,var(--text-gold),var(--primary-purple),transparent); }
-.campaign-readonly-hero .campaign-avatar { width: 108px; height: 108px; flex-basis: 108px; border-radius: 50%; border-color: var(--text-gold); }
-.campaign-readonly-hero h2 { margin: 0; color: #f6f0f8; font: 700 clamp(1.45rem,3vw,2.65rem)/1.1 Cinzel,serif; }
-.campaign-readonly-hero p { margin: 8px 0 0; color: #9e95a4; }
-.campaign-readonly-seal { display: grid; place-items: center; width: 58px; height: 58px; border: 1px solid color-mix(in srgb,var(--text-gold) 55%,transparent); border-radius: 50%; color: var(--text-gold); font-size: 1.45rem; }
-.campaign-readonly-dashboard { display: grid; grid-template-columns: 1.15fr .9fr 1fr; gap: 18px; }
-.campaign-readonly-dashboard-secondary { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.campaign-readonly-hero .campaign-avatar { width:92px; height:92px; flex-basis:92px; border-radius:50%; border-color:var(--text-gold); }
+.campaign-readonly-hero h2 { margin:0; color:#f4edf6; font:700 clamp(1.35rem,2.8vw,2.25rem)/1.1 Cinzel,serif; }
+.campaign-readonly-hero p { margin:7px 0 0; color:#9a919f; }
+.campaign-readonly-seal { display:grid; place-items:center; width:48px; height:48px; border:1px solid color-mix(in srgb,var(--text-gold) 52%,transparent); border-radius:50%; color:var(--text-gold); }
+.campaign-readonly-dashboard { display:grid; grid-template-columns:1.15fr .9fr 1fr; gap:14px; }
+.campaign-readonly-dashboard-secondary { grid-template-columns:repeat(2,minmax(0,1fr)); }
 .campaign-readonly-panel {
-    min-width: 0;
-    padding: clamp(18px,2.3vw,28px);
-    border: 1px solid var(--ui-line,var(--border-color));
-    background: linear-gradient(145deg,color-mix(in srgb,var(--primary-purple) 7%,var(--container-bg)),var(--container-bg));
+    min-width:0;
+    padding:clamp(17px,2vw,24px);
+    border:1px solid var(--border-color);
+    background:color-mix(in srgb,var(--primary-purple) 4%,rgba(0,0,0,.22));
 }
-.campaign-readonly-panel > h3 { margin: 0 0 16px; padding-bottom: 11px; border-bottom: 1px solid color-mix(in srgb,var(--text-gold) 27%,var(--border-color)); color: #eee7f1; font: 700 .72rem Cinzel,serif; letter-spacing: .16em; }
-.campaign-readonly-facts { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
-.campaign-readonly-facts > div { min-width: 0; padding: 9px 10px; border-left: 2px solid var(--primary-purple); background: rgba(0,0,0,.2); }
-.campaign-readonly-facts span,.campaign-readonly-facts strong { display: block; overflow-wrap: anywhere; }
-.campaign-readonly-facts span { color: #817886; font-size: .57rem; letter-spacing: .08em; }
-.campaign-readonly-facts strong { margin-top: 4px; color: #e9e2ec; font-size: .72rem; }
-.campaign-readonly-skill-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(185px,1fr)); gap: 7px; }
-.campaign-readonly-skill-grid > div { padding: 10px 11px; border: 1px solid var(--border-color); background: rgba(0,0,0,.2); }
-.campaign-readonly-skill-grid strong,.campaign-readonly-skill-grid span { display: block; }
-.campaign-readonly-skill-grid strong { color: #eee8f0; font-size: .7rem; }
-.campaign-readonly-skill-grid span { margin-top: 4px; color: #827988; font-size: .62rem; }
-.campaign-readonly-card-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(315px,1fr)); gap: 12px; }
-.campaign-readonly-content-card { min-width: 0; padding: 16px; border: 1px solid var(--border-color); border-left: 3px solid color-mix(in srgb,var(--primary-purple) 70%,var(--text-gold)); background: rgba(3,2,5,.34); }
-.campaign-readonly-content-card > header { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: start; }
-.campaign-readonly-content-card > header span { display: block; color: var(--text-gold); font-size: .52rem; letter-spacing: .1em; }
-.campaign-readonly-content-card > header h4 { margin: 5px 0 0; color: #f0e9f2; font: 700 .85rem Cinzel,serif; overflow-wrap: anywhere; }
-.campaign-readonly-content-card > header img { width: 54px; height: 54px; object-fit: cover; border: 1px solid var(--border-color); }
-.campaign-readonly-description { margin-top: 12px; color: #aaa1af; font-size: .85rem; line-height: 1.6; overflow-wrap: anywhere; }
-.campaign-readonly-notes { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 10px; }
-.campaign-readonly-notes article { padding: 14px; border-left: 2px solid var(--text-gold); background: rgba(0,0,0,.2); }
-.campaign-readonly-notes article > strong { display: block; margin-bottom: 7px; color: #eee7f1; font: 700 .7rem Cinzel,serif; }
-.campaign-readonly-notes article > div { color: #9d94a2; line-height: 1.55; }
-.campaign-readonly-footer { padding: 13px 16px; border: 1px dashed color-mix(in srgb,var(--text-gold) 28%,var(--border-color)); color: #807785; text-align: center; font-size: .7rem; }
-
-@media (max-width: 1080px) {
-    body.theme-umbral #campaign-home .campaign-panel.active form { grid-template-columns: 1fr; }
-    body.theme-umbral #campaign-home .campaign-panel.active .campaign-field:has(.campaign-banner-picker) { grid-column: 1; grid-row: auto; }
-    body.theme-umbral #campaign-detail .campaign-detail-grid { grid-template-columns: 1fr; }
-    .campaign-readonly-dashboard { grid-template-columns: 1fr 1fr; }
-    .campaign-readonly-vitals { grid-column: 1 / -1; }
+.campaign-readonly-panel > h3 { margin:0 0 14px; padding-bottom:10px; border-bottom:1px solid color-mix(in srgb,var(--text-gold) 25%,var(--border-color)); color:#eee7f1; font:700 .69rem Cinzel,serif; letter-spacing:.14em; }
+.campaign-readonly-facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
+.campaign-readonly-facts > div { min-width:0; padding:9px 10px; border-left:2px solid var(--primary-purple); background:rgba(0,0,0,.2); }
+.campaign-readonly-facts span,.campaign-readonly-facts strong { display:block; overflow-wrap:anywhere; }
+.campaign-readonly-facts span { color:#817886; font-size:.56rem; }
+.campaign-readonly-facts strong { margin-top:4px; color:#e9e2ec; font-size:.7rem; }
+.campaign-readonly-skill-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:7px; }
+.campaign-readonly-skill-grid > div,.campaign-readonly-content-card { border:1px solid var(--border-color); background:rgba(0,0,0,.2); }
+.campaign-readonly-skill-grid > div { padding:10px; }
+.campaign-readonly-skill-grid strong,.campaign-readonly-skill-grid span { display:block; }
+.campaign-readonly-skill-grid strong { color:#eee8f0; font-size:.68rem; }
+.campaign-readonly-skill-grid span { margin-top:4px; color:#827988; font-size:.61rem; }
+.campaign-readonly-card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:10px; }
+.campaign-readonly-content-card { min-width:0; padding:15px; border-left:3px solid color-mix(in srgb,var(--primary-purple) 70%,var(--text-gold)); }
+.campaign-readonly-content-card > header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; }
+.campaign-readonly-content-card > header span { display:block; color:var(--text-gold); font-size:.51rem; }
+.campaign-readonly-content-card > header h4 { margin:5px 0 0; color:#f0e9f2; font:700 .82rem Cinzel,serif; }
+.campaign-readonly-content-card > header img { width:50px; height:50px; object-fit:cover; border:1px solid var(--border-color); }
+.campaign-readonly-description { margin-top:11px; color:#aaa1af; font-size:.83rem; line-height:1.55; }
+.campaign-readonly-notes { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:9px; }
+.campaign-readonly-notes article { padding:13px; border-left:2px solid var(--text-gold); background:rgba(0,0,0,.2); }
+.campaign-readonly-footer { padding:12px 15px; border:1px dashed color-mix(in srgb,var(--text-gold) 27%,var(--border-color)); color:#807785; text-align:center; font-size:.69rem; }
+@media (max-width:980px) {
+    .campaign-readonly-dashboard { grid-template-columns:1fr 1fr; }
+    .campaign-readonly-vitals { grid-column:1 / -1; }
 }
-@media (max-width: 760px) {
-    body.theme-umbral #campaign-app .campaign-shell { padding: 10px 10px 44px; }
-    body.theme-umbral #campaign-app .campaign-header { grid-template-columns: auto 1fr; min-height: 62px; margin: -10px -10px 20px; padding: 10px 12px; }
-    body.theme-umbral #campaign-app .campaign-header > div:last-child { display:none; }
-    body.theme-umbral #campaign-app .campaign-brand { text-align: right; }
-    body.theme-umbral #campaign-home .campaign-actions { display: grid; grid-template-columns: 1fr; }
-    body.theme-umbral .campaign-card-grid { grid-template-columns: 1fr; }
-    body.theme-umbral #campaign-detail .campaign-detail-top,
-    body.theme-umbral #campaign-combat .combat-topbar { top: 62px; align-items: stretch; flex-direction: column; }
-    body.theme-umbral #campaign-detail .campaign-hero,
-    body.theme-umbral #campaign-detail .campaign-hero-content { min-height: 370px; }
-    body.theme-umbral #campaign-detail .campaign-hero-content { padding: 28px 22px; }
-    body.theme-umbral #campaign-character-preview { grid-template-columns: 1fr; }
-    body.theme-umbral #campaign-shield-overlay { padding: 7px; }
-    body.theme-umbral #campaign-shield-overlay .campaign-shield { width: calc(100vw - 14px); min-height: calc(100dvh - 14px); padding: 18px 12px; }
-    body.theme-umbral #campaign-shield-overlay .shield-character-grid { grid-template-columns: 1fr; }
-    body.theme-umbral #campaign-viewer-overlay { padding: 7px; }
-    body.theme-umbral #campaign-viewer-overlay .campaign-viewer { width: calc(100vw - 14px); height: calc(100dvh - 14px); max-height: calc(100dvh - 14px); }
-    .campaign-viewer-toolbar { grid-template-columns: minmax(0,1fr) auto; gap: 8px; min-height: 0; padding: 11px 12px; }
-    .campaign-viewer-mode-controls { grid-column: 1 / -1; grid-row: 2; width: 100%; }
-    .campaign-viewer-mode-controls button { min-width: 0; }
-    body.theme-umbral #campaign-viewer-content { padding: 16px 12px 26px; }
-    .campaign-readonly-hero { grid-template-columns: 76px minmax(0,1fr); gap: 15px; padding: 18px 15px; }
-    .campaign-readonly-hero .campaign-avatar { width: 74px; height: 74px; flex-basis: 74px; }
-    .campaign-readonly-seal { display: none; }
-    .campaign-readonly-dashboard,.campaign-readonly-dashboard-secondary { grid-template-columns: 1fr; }
-    .campaign-readonly-vitals { grid-column: auto; }
-    .campaign-readonly-card-grid { grid-template-columns: 1fr; }
+@media (max-width:760px) {
+    body.theme-umbral #campaign-viewer-overlay { padding:7px; }
+    body.theme-umbral #campaign-viewer-overlay .campaign-viewer { width:calc(100vw - 14px); max-height:calc(100dvh - 14px); }
+    .campaign-viewer-toolbar { grid-template-columns:minmax(0,1fr) auto; gap:8px; padding:10px 12px; }
+    .campaign-viewer-mode-controls { grid-column:1 / -1; grid-row:2; width:100%; }
+    .campaign-viewer-mode-controls button { min-width:0; }
+    body.theme-umbral #campaign-viewer-content { padding:15px 11px 24px; }
+    .campaign-readonly-hero { grid-template-columns:70px minmax(0,1fr); gap:13px; padding:16px 13px; }
+    .campaign-readonly-hero .campaign-avatar { width:68px; height:68px; flex-basis:68px; }
+    .campaign-readonly-seal { display:none; }
+    .campaign-readonly-dashboard,.campaign-readonly-dashboard-secondary { grid-template-columns:1fr; }
+    .campaign-readonly-vitals { grid-column:auto; }
+    .campaign-readonly-card-grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
-<body class="theme-umbral">
+<body class="theme-umbral sidebar-collapsed">
 <div id="ui-focus-backdrop" aria-hidden="true"></div>
 
 <header class="top-utility-bar" id="top-utility-bar" aria-label="Ações da conta e da ficha">
@@ -11227,9 +11180,9 @@ body.theme-umbral #campaign-viewer-content[data-view-mode="parcial"] { max-width
     <button class="topbar-collapse-toggle" id="topbar-collapse-toggle" type="button" onclick="alternarBarraSuperior()" aria-expanded="true" aria-controls="top-utility-bar" title="Recolher barra superior">⌃</button>
 </header>
 
-<aside class="sidebar" id="main-sidebar" aria-label="Navegação principal">
-    <button class="sidebar-collapse-toggle" id="sidebar-collapse-toggle" type="button" onclick="alternarBarraLateral()" aria-expanded="true" aria-controls="sidebar-nav-items" title="Recolher barra lateral">‹</button>
-    <div class="sidebar-nav-items" id="sidebar-nav-items">
+<aside class="sidebar is-collapsed" id="main-sidebar" aria-label="Navegação principal">
+    <button class="sidebar-collapse-toggle" id="sidebar-collapse-toggle" type="button" onclick="alternarBarraLateral()" aria-expanded="false" aria-controls="sidebar-nav-items" title="Expandir barra lateral">›</button>
+    <div class="sidebar-nav-items" id="sidebar-nav-items" aria-hidden="true">
         <button class="sidebar-btn" id="btn-login" onclick="toggleLogin()" title="Login Google">👤</button>
         <button class="sidebar-btn" id="btn-log" onclick="toggleLog()" title="Log do Servidor">🌍</button>
         <button class="sidebar-btn area-nav-btn active" id="btn-ficha" onclick="mudarArea('ficha')" title="Ficha">📜</button>
@@ -11891,7 +11844,7 @@ body.theme-umbral #campaign-viewer-content[data-view-mode="parcial"] { max-width
                     <div class="combat-quick-access-head">
                         <div class="combat-quick-access-title">
                             <span>ACESSO RÁPIDO</span>
-                            <small>Use suas ações e perícias sem sair do combate.</small>
+                            <small id="combat-quick-slot-label">Atalhos exclusivos do slot atual.</small>
                         </div>
                         <button type="button" class="campaign-ghost-btn" id="combat-quick-picker-toggle" aria-expanded="false" onclick="alternarSeletorAcessoRapidoCombate()">+ Escolher atalhos</button>
                     </div>
@@ -15666,8 +15619,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             });
             const campaignIds = Object.keys(campanhasSnapshot.val() || {}).slice(0, 40);
             const resultados = await Promise.allSettled(campaignIds.map(async campaignId => {
-                const snapshot = await database.ref(`campaigns/${campaignId}`).once('value');
-                return { campaignId, campaign: snapshot.val() || {} };
+                const [charactersSnapshot, metaSnapshot] = await Promise.all([
+                    database.ref(`campaigns/${campaignId}/characters`).once('value'),
+                    database.ref(`campaigns/${campaignId}/meta`).once('value')
+                ]);
+                return {
+                    campaignId,
+                    campaign: { characters: charactersSnapshot.val() || {}, meta: metaSnapshot.val() || {} }
+                };
             }));
             resultados.forEach(resultado => {
                 if (resultado.status !== 'fulfilled') return;
@@ -20220,10 +20179,9 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function restaurarEstadoNavegacao() {
         let topoRecolhido = false;
-        let lateralRecolhida = false;
+        const lateralRecolhida = true;
         try {
             topoRecolhido = localStorage.getItem(NAV_TOPBAR_STORAGE_KEY) === '1';
-            lateralRecolhida = localStorage.getItem(NAV_SIDEBAR_STORAGE_KEY) === '1';
         } catch (_) {}
         definirBarraSuperiorRecolhida(topoRecolhido, false);
         definirBarraLateralRecolhida(lateralRecolhida, false);
@@ -20544,6 +20502,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 slotPreviewState[slot] = { existe: false, nickname: '', antecedencia: '', avatar: '', classe: '' };
                 syncState.lastCloudHash = hashFichaSincronizacao(sheet);
             }
+            await carregarAcessoRapidoCombateDoSlot(slot);
             atualizarVisuaisDaFicha();
             publicarSonsDoPerfil().catch(erro => console.warn('Não foi possível publicar o áudio desta ficha.', erro));
             renderizarSeletorInicialFichas();
@@ -20561,6 +20520,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             const pendente = await obterSincronizacaoEnfileirada(chaveFilaSincronizacao(currentUser.uid, slot));
             if (pendente?.sheet) {
                 sheet = Object.assign(getFichaZerada(), pendente.sheet);
+                await carregarAcessoRapidoCombateDoSlot(slot);
                 atualizarVisuaisDaFicha();
                 alteracoesNaoSalvas = false;
             }
@@ -20708,6 +20668,7 @@ const campaignState = {
     listHandler: null,
     activeRef: null,
     activeHandler: null,
+    activeRefs: [],
     linksRef: null,
     linksHandler: null,
     links: {},
@@ -21242,7 +21203,7 @@ async function criarCampanha(event) {
         };
         updates[`userCampaigns/${currentUser.uid}/${campaignId}`] = { role: 'mestre' };
         updates[`campaignCodes/${code}`] = campaignId;
-        updates[`campaignDocumentDesks/${campaignId}/slots/principal`] = {
+        updates[`campaigns/${campaignId}/documentDesk/slots/principal`] = {
             name: 'Mesa Principal',
             order: 0,
             createdBy: currentUser.uid,
@@ -21315,6 +21276,8 @@ function pararCampanhaAtiva() {
     if (campaignState.activeRef && campaignState.activeHandler) {
         campaignState.activeRef.off('value', campaignState.activeHandler);
     }
+    (campaignState.activeRefs || []).forEach(({ ref, handler }) => ref.off('value', handler));
+    campaignState.activeRefs = [];
     campaignState.activeRef = null;
     campaignState.activeHandler = null;
 }
@@ -21327,21 +21290,25 @@ function abrirDetalheCampanha(campaignId) {
     document.getElementById('campaign-detail').style.display = 'block';
     document.getElementById('campaign-combat').style.display = 'none';
     document.getElementById('campaign-app').classList.add('active');
-    campaignState.activeRef = database.ref(`campaigns/${campaignId}`);
-    campaignState.activeHandler = snapshot => {
-        const data = snapshot.val();
-        if (!data) {
-            alert('Essa campanha não está mais disponível.');
+    campaignState.activeCampaign = { meta: {}, members: {}, characters: {}, combat: null };
+    const carregados = new Set();
+    let acessoRecusado = false;
+    const atualizarPainel = () => {
+        if (campaignState.activeId !== campaignId || acessoRecusado) return;
+        if (!carregados.has('meta') || !carregados.has('members')) return;
+        if (!campaignState.activeCampaign.meta || !Object.keys(campaignState.activeCampaign.meta).length) {
+            acessoRecusado = true;
+            avisarAbyss('Essa campanha não está mais disponível.', { titulo: 'Campanha indisponível', tom: 'aviso' });
             voltarParaListaCampanhas();
             return;
         }
-        const member = data.members?.[currentUser?.uid];
+        const member = campaignState.activeCampaign.members?.[currentUser?.uid];
         if (!member) {
-            alert('Você não faz parte desta campanha.');
+            acessoRecusado = true;
+            avisarAbyss('Você não faz parte desta campanha.', { titulo: 'Acesso encerrado', tom: 'aviso' });
             voltarParaListaCampanhas();
             return;
         }
-        campaignState.activeCampaign = data;
         campaignState.role = member.role || 'jogador';
         renderizarDetalheCampanha();
         if (document.getElementById('campaign-combat').style.display !== 'none') renderizarTelaCombate();
@@ -21351,7 +21318,18 @@ function abrirDetalheCampanha(campaignId) {
             if (openCharacterId) visualizarPersonagemCampanha(openCharacterId);
         }
     };
-    campaignState.activeRef.on('value', campaignState.activeHandler);
+    ['meta', 'members', 'characters', 'combat'].forEach(chave => {
+        const ref = database.ref(`campaigns/${campaignId}/${chave}`);
+        const handler = snapshot => {
+            if (campaignState.activeId !== campaignId || acessoRecusado) return;
+            const valor = snapshot.val();
+            campaignState.activeCampaign[chave] = valor ?? (chave === 'combat' ? null : {});
+            carregados.add(chave);
+            atualizarPainel();
+        };
+        ref.on('value', handler);
+        campaignState.activeRefs.push({ ref, handler });
+    });
 }
 
 function voltarParaListaCampanhas() {
@@ -22443,6 +22421,75 @@ const filtrosAcessoRapidoCombate = {
     acoes: { busca: '', tipo: '' },
     pericias: { busca: '', atributo: '', treino: '' }
 };
+const combatQuickAccessSlotState = {
+    values: new Map(),
+    remoteLoaded: new Set(),
+    saveTimers: new Map()
+};
+
+function slotAcessoRapidoCombate() {
+    return String(document.getElementById('save-slot')?.value || '1');
+}
+
+function chaveAcessoRapidoCombate(slot = slotAcessoRapidoCombate()) {
+    return `${currentUser?.uid || 'local'}:${String(slot || '1')}`;
+}
+
+function chaveLocalAcessoRapidoCombate(slot = slotAcessoRapidoCombate()) {
+    return `abyssCombatQuickAccess:${chaveAcessoRapidoCombate(slot)}`;
+}
+
+function listaLocalAcessoRapidoCombate(slot = slotAcessoRapidoCombate()) {
+    const chave = chaveAcessoRapidoCombate(slot);
+    if (combatQuickAccessSlotState.values.has(chave)) return combatQuickAccessSlotState.values.get(chave);
+    let lista = [];
+    try {
+        const armazenada = JSON.parse(localStorage.getItem(chaveLocalAcessoRapidoCombate(slot)) || '[]');
+        if (Array.isArray(armazenada)) lista = armazenada;
+    } catch (_) {}
+    combatQuickAccessSlotState.values.set(chave, lista);
+    return lista;
+}
+
+function definirAcessoRapidoCombateDoSlot(lista, { persistir = true, slot = slotAcessoRapidoCombate() } = {}) {
+    const normalizada = Array.isArray(lista) ? lista.map(item => ({ kind: item.kind, id: String(item.id || '') })).filter(item => item.id) : [];
+    const chave = chaveAcessoRapidoCombate(slot);
+    combatQuickAccessSlotState.values.set(chave, normalizada);
+    try { localStorage.setItem(chaveLocalAcessoRapidoCombate(slot), JSON.stringify(normalizada)); } catch (_) {}
+    if (String(slot) === slotAcessoRapidoCombate() && sheet) sheet.combatQuickAccess = normalizada;
+    if (!persistir || !currentUser) return normalizada;
+    const uid = currentUser.uid;
+    const slotSeguro = String(slot || '1');
+    clearTimeout(combatQuickAccessSlotState.saveTimers.get(chave));
+    combatQuickAccessSlotState.saveTimers.set(chave, setTimeout(() => {
+        combatQuickAccessSlotState.saveTimers.delete(chave);
+        database.ref(`users/${uid}/preferences/combatQuickAccessBySlot/${slotSeguro}`).set(normalizada).catch(error => {
+            console.warn(`O acesso rápido do slot ${slotSeguro} ficou salvo neste dispositivo, mas não pôde ser sincronizado agora.`, error);
+        });
+    }, 180));
+    return normalizada;
+}
+
+async function carregarAcessoRapidoCombateDoSlot(slot = slotAcessoRapidoCombate()) {
+    const slotSeguro = String(slot || '1');
+    const chave = chaveAcessoRapidoCombate(slotSeguro);
+    let lista = listaLocalAcessoRapidoCombate(slotSeguro);
+    const legado = Array.isArray(sheet?.combatQuickAccess) ? sheet.combatQuickAccess : [];
+    if (!lista.length && legado.length) lista = definirAcessoRapidoCombateDoSlot(legado, { persistir: false, slot: slotSeguro });
+    if (String(slotSeguro) === slotAcessoRapidoCombate()) renderizarAcessoRapidoCombate();
+    if (!currentUser || combatQuickAccessSlotState.remoteLoaded.has(chave)) return lista;
+    combatQuickAccessSlotState.remoteLoaded.add(chave);
+    try {
+        const snapshot = await database.ref(`users/${currentUser.uid}/preferences/combatQuickAccessBySlot/${slotSeguro}`).once('value');
+        if (snapshot.exists()) lista = definirAcessoRapidoCombateDoSlot(snapshot.val(), { persistir: false, slot: slotSeguro });
+        else if (lista.length) definirAcessoRapidoCombateDoSlot(lista, { slot: slotSeguro });
+    } catch (error) {
+        combatQuickAccessSlotState.remoteLoaded.delete(chave);
+        console.warn(`O acesso rápido do slot ${slotSeguro} não pôde ser carregado da nuvem.`, error);
+    }
+    if (String(slotSeguro) === slotAcessoRapidoCombate()) renderizarAcessoRapidoCombate();
+    return lista;
+}
 
 function garantirIdsConteudoAcessoRapido() {
     if (!Array.isArray(sheet.habilidades)) sheet.habilidades = [];
@@ -22458,16 +22505,15 @@ function garantirIdsConteudoAcessoRapido() {
 
 function normalizarAcessoRapidoCombate() {
     garantirIdsConteudoAcessoRapido();
-    const raw = Array.isArray(sheet.combatQuickAccess)
-        ? sheet.combatQuickAccess
-        : (sheet.combatQuickAccess && typeof sheet.combatQuickAccess === 'object' ? Object.values(sheet.combatQuickAccess) : []);
+    const origem = listaLocalAcessoRapidoCombate();
+    const raw = Array.isArray(origem) ? origem : [];
     const validos = new Set([
         ...sheet.habilidades.filter(item => !item.isSeparator).map(item => `habilidade:${item.idUnico}`),
         ...sheet.itens.filter(item => !item.isSeparator).map(item => `item:${item.idUnico}`),
         ...sheet.pericias.map(pericia => `pericia:${pericia.id}`)
     ]);
     const vistos = new Set();
-    sheet.combatQuickAccess = raw.map(entrada => ({
+    const normalizada = raw.map(entrada => ({
         kind: entrada?.kind === 'item' ? 'item' : (entrada?.kind === 'pericia' ? 'pericia' : 'habilidade'),
         id: String(entrada?.id || '')
     })).filter(entrada => {
@@ -22476,7 +22522,8 @@ function normalizarAcessoRapidoCombate() {
         vistos.add(chave);
         return true;
     });
-    return sheet.combatQuickAccess;
+    definirAcessoRapidoCombateDoSlot(normalizada, { persistir: false });
+    return normalizada;
 }
 
 function conteudosDisponiveisAcessoRapido(aba = abaAcessoRapidoCombate) {
@@ -22563,17 +22610,18 @@ function alternarTodosAcessoRapidoCombate() {
     const chavesVisiveis = new Set(visiveis.map(chaveEntradaAcessoRapido));
     const todosEscolhidos = [...chavesVisiveis].every(chave => chavesAtuais.has(chave));
     if (todosEscolhidos) {
-        sheet.combatQuickAccess = atuais.filter(entrada => !chavesVisiveis.has(`${entrada.kind}:${entrada.id}`));
+        definirAcessoRapidoCombateDoSlot(atuais.filter(entrada => !chavesVisiveis.has(`${entrada.kind}:${entrada.id}`)));
     } else {
-        sheet.combatQuickAccess = [...atuais];
+        const proximos = [...atuais];
         visiveis.forEach(entrada => {
             const id = referenciaEntradaAcessoRapido(entrada);
             const chave = `${entrada.kind}:${id}`;
             if (id && !chavesAtuais.has(chave)) {
-                sheet.combatQuickAccess.push({ kind: entrada.kind, id });
+                proximos.push({ kind: entrada.kind, id });
                 chavesAtuais.add(chave);
             }
         });
+        definirAcessoRapidoCombateDoSlot(proximos);
     }
     marcarAlteracao();
     renderizarAcessoRapidoCombate();
@@ -22600,7 +22648,7 @@ function alternarConteudoAcessoRapido(kind, idCodificado, selecionado) {
     const chave = `${kindNormalizado}:${id}`;
     const semAtual = entradas.filter(entrada => `${entrada.kind}:${entrada.id}` !== chave);
     if (selecionado) semAtual.push({ kind: kindNormalizado, id });
-    sheet.combatQuickAccess = semAtual;
+    definirAcessoRapidoCombateDoSlot(semAtual);
     marcarAlteracao();
     renderizarAcessoRapidoCombate();
 }
@@ -22778,6 +22826,9 @@ function renderizarAcessoRapidoCombate() {
     const selecionarTodosAcoes = document.getElementById('combat-quick-select-all-actions');
     const selecionarTodasPericias = document.getElementById('combat-quick-select-all-skills');
     if (!painel || !picker || !grid || !toggle || !tabAcoes || !tabPericias) return;
+    const slotAtual = slotAcessoRapidoCombate();
+    const rotuloSlot = document.getElementById('combat-quick-slot-label');
+    if (rotuloSlot) rotuloSlot.textContent = `${nomeDoSlot(slotAtual)} • atalhos exclusivos desta ficha.`;
 
     const selecionados = normalizarAcessoRapidoCombate();
     const selecionadosSet = new Set(selecionados.map(entrada => `${entrada.kind}:${entrada.id}`));
@@ -23538,11 +23589,20 @@ const documentDeskState = {
     role: null,
     campaignOptions: [],
     documents: {},
+    modernDocuments: {},
     slots: {},
     placements: {},
     allPlacements: {},
+    modernPlacements: {},
     drawings: {},
     allDrawings: {},
+    legacyDesk: {
+        documents: {},
+        slots: {},
+        placements: {},
+        drawings: {}
+    },
+    legacyTombstones: { documents: {}, placements: {} },
     presence: {},
     currentSlotId: 'principal',
     refs: [],
@@ -23608,7 +23668,51 @@ function montarPortalMesaDocumentos() {
 }
 
 function caminhoBaseMesaDocumentos(campaignId = documentDeskState.campaignId) {
+    return campaignId ? `campaigns/${campaignId}/documentDesk` : '';
+}
+
+function caminhoLegadoMesaDocumentos(campaignId = documentDeskState.campaignId) {
     return campaignId ? `campaignDocumentDesks/${campaignId}` : '';
+}
+
+function mesclarColecoesPorSlotMesa(legado = {}, atual = {}) {
+    const resultado = {};
+    Object.entries(legado || {}).forEach(([slotId, itens]) => {
+        resultado[slotId] = { ...(itens || {}) };
+    });
+    Object.entries(atual || {}).forEach(([slotId, itens]) => {
+        resultado[slotId] = { ...(resultado[slotId] || {}), ...(itens || {}) };
+    });
+    return resultado;
+}
+
+function mesclarPosicoesMesa(legado = {}, atual = {}, removidas = {}) {
+    const resultado = mesclarColecoesPorSlotMesa(legado, {});
+    Object.entries(removidas || {}).forEach(([slotId, documentos]) => {
+        Object.keys(documentos || {}).forEach(documentId => delete resultado[slotId]?.[documentId]);
+    });
+    const documentosModernos = new Set(
+        Object.values(atual || {}).flatMap(lista => Object.keys(lista || {}))
+    );
+    Object.keys(resultado).forEach(slotId => {
+        documentosModernos.forEach(documentId => delete resultado[slotId]?.[documentId]);
+    });
+    return mesclarColecoesPorSlotMesa(resultado, atual);
+}
+
+function reconstruirDocumentosMesa() {
+    const legado = { ...(documentDeskState.legacyDesk.documents || {}) };
+    Object.keys(documentDeskState.legacyTombstones.documents || {}).forEach(documentId => delete legado[documentId]);
+    documentDeskState.documents = { ...legado, ...(documentDeskState.modernDocuments || {}) };
+}
+
+function reconstruirPosicoesMesa() {
+    documentDeskState.allPlacements = mesclarPosicoesMesa(
+        documentDeskState.legacyDesk.placements,
+        documentDeskState.modernPlacements,
+        documentDeskState.legacyTombstones.placements
+    );
+    documentDeskState.placements = documentDeskState.allPlacements[documentDeskState.currentSlotId] || {};
 }
 
 function normalizarBuscaMesaDocumentos(valor) {
@@ -23882,8 +23986,10 @@ function atualizarOpcoesCampanhaMesaDocumentos() {
 
 function renderizarMesaDocumentosVazia(mensagem) {
     documentDeskState.documents = {};
+    documentDeskState.modernDocuments = {};
     documentDeskState.placements = {};
     documentDeskState.allPlacements = {};
+    documentDeskState.modernPlacements = {};
     documentDeskState.drawings = {};
     documentDeskState.allDrawings = {};
     documentDeskState.selectedDocumentId = null;
@@ -24065,13 +24171,19 @@ async function conectarMesaDocumentos(campaignId) {
     documentDeskState.allPlacements = {};
     documentDeskState.drawings = {};
     documentDeskState.allDrawings = {};
+    documentDeskState.legacyDesk = { documents: {}, slots: {}, placements: {}, drawings: {} };
+    documentDeskState.legacyTombstones = { documents: {}, placements: {} };
     documentDeskState.presence = {};
     renderizarMesaDocumentosVazia('Abrindo o arquivo da campanha...');
     atualizarOpcoesCampanhaMesaDocumentos();
     try {
-        const [memberSnapshot, metaSnapshot] = await Promise.all([
+        const [memberSnapshot, metaSnapshot, legacySnapshot] = await Promise.all([
             database.ref(`campaigns/${campaignId}/members/${currentUser.uid}`).once('value'),
-            database.ref(`campaigns/${campaignId}/meta`).once('value')
+            database.ref(`campaigns/${campaignId}/meta`).once('value'),
+            database.ref(caminhoLegadoMesaDocumentos(campaignId)).once('value').catch(error => {
+                if (!erroPermissaoMesaDocumentos(error)) console.warn('A mesa antiga não pôde ser consultada.', error);
+                return null;
+            })
         ]);
         const member = memberSnapshot.val();
         const meta = metaSnapshot.val();
@@ -24080,6 +24192,7 @@ async function conectarMesaDocumentos(campaignId) {
             return;
         }
         documentDeskState.role = member.role || 'jogador';
+        documentDeskState.legacyDesk = legacySnapshot?.val?.() || { documents: {}, slots: {}, placements: {}, drawings: {} };
         await carregarModoIconeCursorMesa();
         document.getElementById('document-desk-title').textContent = meta.name ? `Mesa de Documentos · ${meta.name}` : 'Mesa de Documentos';
         const option = documentDeskState.campaignOptions.find(item => item.id === campaignId);
@@ -24091,14 +24204,28 @@ async function conectarMesaDocumentos(campaignId) {
         const base = caminhoBaseMesaDocumentos(campaignId);
         const docsRef = database.ref(`${base}/documents`);
         registrarEscutaMesa(docsRef, 'value', snapshot => {
-            documentDeskState.documents = snapshot.val() || {};
+            documentDeskState.modernDocuments = snapshot.val() || {};
+            reconstruirDocumentosMesa();
+            renderizarDocumentosNaMesa();
+            renderizarGavetaDocumentos();
+        });
+
+        const tombstonesRef = database.ref(`${base}/legacyTombstones`);
+        registrarEscutaMesa(tombstonesRef, 'value', snapshot => {
+            const removidas = snapshot.val() || {};
+            documentDeskState.legacyTombstones = {
+                documents: removidas.documents || {},
+                placements: removidas.placements || {}
+            };
+            reconstruirDocumentosMesa();
+            reconstruirPosicoesMesa();
             renderizarDocumentosNaMesa();
             renderizarGavetaDocumentos();
         });
 
         const drawingsRef = database.ref(`${base}/drawings`);
         registrarEscutaMesa(drawingsRef, 'value', snapshot => {
-            const recebidos = snapshot.val() || {};
+            const recebidos = mesclarColecoesPorSlotMesa(documentDeskState.legacyDesk.drawings, snapshot.val() || {});
             if (documentDeskState.drag && ['move', 'selection'].includes(documentDeskState.drag.mode)) {
                 const locais = documentDeskState.drawings || {};
                 const idsLocais = new Set(Object.keys(documentDeskState.drag.initialDrawings || {}));
@@ -24114,7 +24241,10 @@ async function conectarMesaDocumentos(campaignId) {
 
         const slotsRef = database.ref(`${base}/slots`);
         registrarEscutaMesa(slotsRef, 'value', snapshot => {
-            const slots = snapshot.val() || {};
+            const slots = {
+                ...(documentDeskState.legacyDesk.slots || {}),
+                ...(snapshot.val() || {})
+            };
             documentDeskState.slots = Object.keys(slots).length ? slots : {
                 principal: { name: 'Mesa Principal', order: 0 }
             };
@@ -24125,13 +24255,13 @@ async function conectarMesaDocumentos(campaignId) {
             renderizarSlotsMesaDocumentos();
             renderizarDesenhosMesaDocumentos();
             escutarPosicoesSlotMesa(documentDeskState.currentSlotId);
-            if (!snapshot.exists() && documentDeskState.role === 'mestre') {
-                database.ref(`${base}/slots/principal`).set({
+            if (!Object.keys(slots).length) {
+                executarEscritaMesaDocumentos(() => database.ref(`${base}/slots/principal`).set({
                     name: 'Mesa Principal',
                     order: 0,
                     createdBy: currentUser.uid,
                     createdAt: firebase.database.ServerValue.TIMESTAMP
-                }).catch(error => console.error('Erro ao criar mesa principal:', error));
+                })).catch(error => console.error('Erro ao criar mesa principal:', error));
             }
         });
 
@@ -24218,7 +24348,8 @@ function escutarPosicoesSlotMesa(slotId) {
     const ref = database.ref(`${caminhoBaseMesaDocumentos()}/placements`);
     const handler = snapshot => {
         const anteriores = documentDeskState.placements || {};
-        documentDeskState.allPlacements = snapshot.val() || {};
+        documentDeskState.modernPlacements = snapshot.val() || {};
+        reconstruirPosicoesMesa();
         const atuais = documentDeskState.allPlacements[documentDeskState.currentSlotId] || {};
         Object.entries(atuais).forEach(([documentId, placement]) => {
             const quedaAnterior = anteriores[documentId]?.droppedAt;
@@ -25911,24 +26042,16 @@ async function colocarDocumentoNaMesa(documentId) {
         selecionarDocumentoMesa(documentId);
         renderizarDocumentosNaMesa();
         renderizarGavetaDocumentos();
-        await executarEscritaMesaDocumentos(() => database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`).set(payloadRemoto));
-        if (slotsAnteriores.length) {
-            const resultados = await Promise.allSettled(slotsAnteriores.map(slotId =>
-                executarEscritaMesaDocumentos(() => database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`).remove())
-            ));
-            resultados.forEach((resultado, indice) => {
-                if (resultado.status === 'fulfilled') return;
-                const slotId = slotsAnteriores[indice];
-                const placementAnterior = todosAntes?.[slotId]?.[documentId];
-                if (placementAnterior) {
-                    documentDeskState.allPlacements[slotId] = {
-                        ...(documentDeskState.allPlacements[slotId] || {}),
-                        [documentId]: placementAnterior
-                    };
-                }
-                console.warn(`O documento foi colocado na mesa atual, mas não pôde ser removido do slot ${slotId}.`, resultado.reason);
-            });
-        }
+        const atualizacoes = {
+            [`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`]: payloadRemoto
+        };
+        slotsAnteriores.forEach(slotId => {
+            atualizacoes[`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`] = null;
+            if (documentDeskState.legacyDesk.placements?.[slotId]?.[documentId]) {
+                atualizacoes[`${caminhoBaseMesaDocumentos()}/legacyTombstones/placements/${slotId}/${documentId}`] = true;
+            }
+        });
+        await executarEscritaMesaDocumentos(() => database.ref().update(atualizacoes));
         return true;
     } catch (error) {
         documentDeskState.placements = placementsAntes;
@@ -25957,7 +26080,13 @@ async function guardarDocumentoNaGaveta(documentId) {
     renderizarDocumentosNaMesa();
     renderizarGavetaDocumentos();
     try {
-        await executarEscritaMesaDocumentos(() => database.ref(`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`).remove());
+        const atualizacoes = {
+            [`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`]: null
+        };
+        if (documentDeskState.legacyDesk.placements?.[slotAtual]?.[documentId]) {
+            atualizacoes[`${caminhoBaseMesaDocumentos()}/legacyTombstones/placements/${slotAtual}/${documentId}`] = true;
+        }
+        await executarEscritaMesaDocumentos(() => database.ref().update(atualizacoes));
     } catch (error) {
         documentDeskState.placements[documentId] = anterior;
         documentDeskState.allPlacements[slotAtual] = {
@@ -26925,7 +27054,13 @@ async function excluirDocumentoMesa(documentId) {
         tom: 'perigo'
     })) return;
     try {
-        await database.ref(`${caminhoBaseMesaDocumentos()}/documents/${documentId}`).remove();
+        const updatesDocumento = {
+            [`${caminhoBaseMesaDocumentos()}/documents/${documentId}`]: null
+        };
+        if (documentDeskState.legacyDesk.documents?.[documentId]) {
+            updatesDocumento[`${caminhoBaseMesaDocumentos()}/legacyTombstones/documents/${documentId}`] = true;
+        }
+        await executarEscritaMesaDocumentos(() => database.ref().update(updatesDocumento));
     } catch (error) {
         console.error('Erro ao excluir documento:', error);
         await avisarAbyss('Não foi possível excluir este documento agora. Ele continua na campanha e nada foi removido.', {
@@ -26936,7 +27071,11 @@ async function excluirDocumentoMesa(documentId) {
     }
     const caminhosLimpeza = [];
     Object.entries(documentDeskState.allPlacements || {}).forEach(([slotId, lista]) => {
-        if (lista?.[documentId]) caminhosLimpeza.push(`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`);
+        if (!lista?.[documentId]) return;
+        caminhosLimpeza.push(`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`);
+        if (documentDeskState.legacyDesk.placements?.[slotId]?.[documentId]) {
+            caminhosLimpeza.push(`${caminhoBaseMesaDocumentos()}/legacyTombstones/placements/${slotId}/${documentId}`);
+        }
     });
     Object.entries(documentDeskState.allDrawings || {}).forEach(([slotId, desenhos]) => {
         Object.entries(desenhos || {}).forEach(([drawingId, desenho]) => {
@@ -26946,12 +27085,20 @@ async function excluirDocumentoMesa(documentId) {
         });
     });
     if (caminhosLimpeza.length) {
-        const resultados = await Promise.allSettled(caminhosLimpeza.map(caminho => database.ref(caminho).remove()));
+        const resultados = await Promise.allSettled(caminhosLimpeza.map(caminho =>
+            caminho.includes('/legacyTombstones/')
+                ? executarEscritaMesaDocumentos(() => database.ref(caminho).set(true))
+                : executarEscritaMesaDocumentos(() => database.ref(caminho).remove())
+        ));
         resultados.filter(resultado => resultado.status === 'rejected').forEach(resultado => {
             console.warn('Uma referência antiga do documento não pôde ser limpa.', resultado.reason);
         });
     }
     delete documentDeskState.documents[documentId];
+    delete documentDeskState.modernDocuments[documentId];
+    if (documentDeskState.legacyDesk.documents?.[documentId]) {
+        documentDeskState.legacyTombstones.documents[documentId] = true;
+    }
     Object.keys(documentDeskState.allPlacements || {}).forEach(slotId => {
         if (documentDeskState.allPlacements[slotId]) delete documentDeskState.allPlacements[slotId][documentId];
     });
@@ -27820,9 +27967,10 @@ async function enriquecerBuscaGlobalRemota(token = globalSearchState.openingToke
         const blocos = await Promise.allSettled(ids.map(async campaignId => {
             const cached = globalSearchState.remoteCache.get(campaignId);
             if (cached && agora - cached.timestamp < 60000) return cached.items;
-            const [charactersSnapshot, documentsSnapshot] = await Promise.all([
+            const [charactersSnapshot, documentsSnapshot, legacyDocumentsSnapshot] = await Promise.all([
                 database.ref(`campaigns/${campaignId}/characters`).once('value'),
-                database.ref(`campaignDocumentDesks/${campaignId}/documents`).once('value')
+                database.ref(`campaigns/${campaignId}/documentDesk/documents`).once('value'),
+                database.ref(`campaignDocumentDesks/${campaignId}/documents`).once('value').catch(() => null)
             ]);
             const campaignName = nomeCampanhaBusca(campaignId);
             const entries = [];
@@ -27835,7 +27983,11 @@ async function enriquecerBuscaGlobalRemota(token = globalSearchState.openingToke
                     data: { campaignId, characterId }
                 });
             });
-            Object.entries(documentsSnapshot.val() || {}).forEach(([documentId, documentData]) => {
+            const documentosCampanha = {
+                ...(legacyDocumentsSnapshot?.val?.() || {}),
+                ...(documentsSnapshot.val() || {})
+            };
+            Object.entries(documentosCampanha).forEach(([documentId, documentData]) => {
                 const title = String(documentData?.title || '').trim();
                 if (!title) return;
                 entries.push({
@@ -28187,6 +28339,9 @@ function caminhoUndoCampanhaPermitido(campaignId, path) {
     const normalizado = String(path || '').replace(/^\/+/, '');
     return normalizado.startsWith(`campaigns/${campaignId}/combat/`)
         || normalizado.startsWith(`campaigns/${campaignId}/characters/`)
+        || normalizado.startsWith(`campaigns/${campaignId}/documentDesk/documents/`)
+        || normalizado.startsWith(`campaigns/${campaignId}/documentDesk/placements/`)
+        || normalizado.startsWith(`campaigns/${campaignId}/documentDesk/drawings/`)
         || normalizado.startsWith(`campaignDocumentDesks/${campaignId}/documents/`)
         || normalizado.startsWith(`campaignDocumentDesks/${campaignId}/placements/`)
         || normalizado.startsWith(`campaignDocumentDesks/${campaignId}/drawings/`);
@@ -28328,8 +28483,8 @@ function instalarHistoricoCompartilhado() {
         const depois = novoId ? documentDeskState.documents?.[novoId] : null;
         if (!campaignId || !novoId || !depois) return;
         let undo = null;
-        if (!antes) undo = { updates: { [`campaignDocumentDesks/${campaignId}/documents/${novoId}`]: null } };
-        else if (JSON.stringify(antes).length <= HISTORICO_CAMPANHA_UNDO_MAX) undo = { updates: { [`campaignDocumentDesks/${campaignId}/documents/${novoId}`]: antes } };
+        if (!antes) undo = { updates: { [`campaigns/${campaignId}/documentDesk/documents/${novoId}`]: null } };
+        else if (JSON.stringify(antes).length <= HISTORICO_CAMPANHA_UNDO_MAX) undo = { updates: { [`campaigns/${campaignId}/documentDesk/documents/${novoId}`]: antes } };
         registrarHistoricoCampanha({ campaignId, category: 'documento', title: `${antes ? 'Documento editado' : 'Documento criado'}: ${depois.title || 'Sem título'}`, ownerUid: depois.createdBy || currentUser.uid, undo });
     };
 
@@ -28340,7 +28495,7 @@ function instalarHistoricoCompartilhado() {
         await originalExcluirDocumento(documentId);
         if (!campaignId || !antes || documentDeskState.documents?.[documentId]) return;
         const undo = JSON.stringify(antes).length <= HISTORICO_CAMPANHA_UNDO_MAX
-            ? { updates: { [`campaignDocumentDesks/${campaignId}/documents/${documentId}`]: antes } }
+            ? { updates: { [`campaigns/${campaignId}/documentDesk/documents/${documentId}`]: antes } }
             : null;
         registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento excluído: ${antes.title || 'Sem título'}`, ownerUid: antes.createdBy || '', undo });
     };
@@ -28354,7 +28509,7 @@ function instalarHistoricoCompartilhado() {
         if (!sucesso || !campaignId || !slotId) return sucesso;
         const updates = {};
         Object.keys(documentDeskState.allPlacements || {}).forEach(idSlot => {
-            updates[`campaignDocumentDesks/${campaignId}/placements/${idSlot}/${documentId}`] = antes?.[idSlot]?.[documentId] ?? null;
+            updates[`campaigns/${campaignId}/documentDesk/placements/${idSlot}/${documentId}`] = antes?.[idSlot]?.[documentId] ?? null;
         });
         registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento colocado na mesa: ${documentDeskState.documents?.[documentId]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[documentId]?.createdBy || '', undo: { updates } });
         return sucesso;
@@ -28367,7 +28522,7 @@ function instalarHistoricoCompartilhado() {
         const anterior = JSON.parse(JSON.stringify(documentDeskState.placements?.[documentId] || null));
         const resultado = await originalGuardarDocumento(documentId);
         if (campaignId && slotId && anterior && !documentDeskState.placements?.[documentId]) {
-            registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento guardado: ${documentDeskState.documents?.[documentId]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[documentId]?.createdBy || '', undo: { updates: { [`campaignDocumentDesks/${campaignId}/placements/${slotId}/${documentId}`]: anterior } } });
+            registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento guardado: ${documentDeskState.documents?.[documentId]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[documentId]?.createdBy || '', undo: { updates: { [`campaigns/${campaignId}/documentDesk/placements/${slotId}/${documentId}`]: anterior } } });
         }
         return resultado;
     };
@@ -28383,7 +28538,7 @@ function instalarHistoricoCompartilhado() {
         originalFinalizarMovimento(event);
         if (!mudou || !campaignId || !slotId || !ids.length) return;
         const updates = {};
-        ids.forEach(id => { updates[`campaignDocumentDesks/${campaignId}/placements/${slotId}/${id}`] = antes[id] ?? null; });
+        ids.forEach(id => { updates[`campaigns/${campaignId}/documentDesk/placements/${slotId}/${id}`] = antes[id] ?? null; });
         registrarHistoricoCampanha({ campaignId, category: 'documento', title: ids.length > 1 ? `${ids.length} documentos reorganizados` : `Documento movido: ${documentDeskState.documents?.[ids[0]]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[ids[0]]?.createdBy || '', undo: { updates } });
     };
 }
