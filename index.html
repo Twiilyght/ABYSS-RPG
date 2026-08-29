@@ -7194,6 +7194,23 @@ body.theme-umbral .custom-skills-collapse-toggle:focus-visible { border-color: v
 .combat-quick-access-title { min-width: 0; }
 .combat-quick-access-title span { display: block; color: var(--text-gold); font: 600 .62rem 'Cinzel', serif; letter-spacing: 1.8px; }
 .combat-quick-access-title small { display: block; margin-top: 4px; color: #8d8792; font-size: .72rem; }
+.combat-quick-access-tools { display: flex; flex: 0 1 auto; align-items: center; justify-content: flex-end; gap: 9px; min-width: 0; }
+.combat-quick-character-select {
+    min-width: min(260px, 34vw);
+    height: 38px;
+    padding: 0 34px 0 11px;
+    overflow: hidden;
+    border: 1px solid #3a3340;
+    border-radius: 3px;
+    background: #0b0910;
+    color: #e8e1ea;
+    font: 600 .62rem 'Cinzel', serif;
+    letter-spacing: .65px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.combat-quick-character-select:focus { border-color: var(--light-purple); outline: none; }
+.combat-quick-character-select:disabled { opacity: .55; cursor: not-allowed; }
 .combat-quick-tabs { display: flex; gap: 4px; margin-top: 15px; border-bottom: 1px solid var(--border-color); }
 .combat-quick-tab {
     min-height: 36px;
@@ -7436,6 +7453,8 @@ body.theme-umbral .custom-skill-library-heading { border-bottom-color: var(--umb
     .combat-quick-picker,
     .combat-quick-grid { grid-template-columns: 1fr; }
     .combat-quick-access-head { align-items: flex-start; flex-direction: column; }
+    .combat-quick-access-tools { align-items: stretch; flex-direction: column; width: 100%; }
+    .combat-quick-character-select { width: 100%; min-width: 0; }
     .combat-quick-filter-toolbar,
     .combat-quick-filter-toolbar.skills { grid-template-columns: 1fr; }
     .combat-featured-roll-head { grid-template-columns: 38px minmax(0, 1fr) auto; }
@@ -11012,6 +11031,22 @@ body.theme-umbral #campaign-viewer-overlay .campaign-viewer {
     body.theme-umbral #campaign-app .campaign-card-grid { grid-template-columns:1fr; }
 }
 
+/* Campanhas aparecem como banners panorâmicos, com largura suficiente para a arte respirar. */
+body.theme-umbral #campaign-app .campaign-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+    gap: 22px;
+}
+body.theme-umbral #campaign-app .campaign-card {
+    width: 100%;
+    height: auto;
+    min-height: 168px;
+    aspect-ratio: 16 / 7;
+}
+body.theme-umbral #campaign-app .campaign-card-banner { object-position: center; }
+@media (max-width: 540px) {
+    body.theme-umbral #campaign-app .campaign-card { min-height: 150px; aspect-ratio: 16 / 8; }
+}
+
 /* A ficha completa precisa de largura; o restante de Campanhas conserva a geometria antiga. */
 body.theme-umbral #campaign-viewer-overlay { padding:18px; }
 body.theme-umbral #campaign-viewer-overlay .campaign-viewer {
@@ -11844,9 +11879,12 @@ body.theme-umbral #campaign-viewer-content[data-view-mode="parcial"] { width:100
                     <div class="combat-quick-access-head">
                         <div class="combat-quick-access-title">
                             <span>ACESSO RÁPIDO</span>
-                            <small id="combat-quick-slot-label">Atalhos exclusivos do slot atual.</small>
+                            <small id="combat-quick-slot-label">Carregando a ficha do combatente...</small>
                         </div>
-                        <button type="button" class="campaign-ghost-btn" id="combat-quick-picker-toggle" aria-expanded="false" onclick="alternarSeletorAcessoRapidoCombate()">+ Escolher atalhos</button>
+                        <div class="combat-quick-access-tools">
+                            <select id="combat-quick-character-select" class="combat-quick-character-select" aria-label="Personagem usado pelo acesso rápido" onchange="selecionarPersonagemAcessoRapidoCombate(this.value)"></select>
+                            <button type="button" class="campaign-ghost-btn" id="combat-quick-picker-toggle" aria-expanded="false" onclick="alternarSeletorAcessoRapidoCombate()">+ Escolher atalhos</button>
+                        </div>
                     </div>
                     <div class="combat-quick-tabs" role="tablist" aria-label="Tipo de acesso rápido">
                         <button type="button" class="combat-quick-tab active" id="combat-quick-tab-actions" role="tab" aria-selected="true" onclick="mudarAbaAcessoRapidoCombate('acoes')">ITENS &amp; HABILIDADES</button>
@@ -17702,12 +17740,15 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
     function enviarRolagemParaServidor(titulo, subtitulo, total, corStatus, txtStatus, detalhes, eventoSom = null, natural = null) {
         if (modoSecreto) return; 
-        const nick = String(document.getElementById('user-nickname')?.value || sheet?.nickname || '').trim() || "Personagem sem nome";
+        const contextoCombate = combatQuickRollContext;
+        const fichaRoladora = contextoCombate?.ficha || sheet;
+        const nick = String(contextoCombate?.participant?.name || document.getElementById('user-nickname')?.value || fichaRoladora?.nickname || '').trim() || "Personagem sem nome";
         const sonsDoSlotRolador = obterSonsAudioSlotAtual();
         const dadosRolagem = {
             jogador: nick,
             jogadorUid: currentUser?.uid || '',
-            avatar: String(resolverRetratoPersonagem(sheet).url || '').trim(),
+            avatar: String(contextoCombate?.participant?.avatar || resolverRetratoPersonagem(fichaRoladora).url || '').trim(),
+            rollerCharacterId: contextoCombate?.participantId || '',
             titulo: titulo,
             subtitulo: subtitulo,
             total: total,
@@ -20685,6 +20726,8 @@ const campaignState = {
     conditionDockOpen: false,
     conditionCatalogOpen: false,
     conditionTargetId: null,
+    combatQuickTargetId: null,
+    combatQuickTurnKey: '',
     turnLossProcessing: new Set()
 };
 let campaignSyncTimer = null;
@@ -21984,6 +22027,8 @@ function pararEscutaCombates() {
     campaignState.combats = {};
     campaignState.initiativeRequest = null;
     campaignState.turnAlertKeys = {};
+    campaignState.combatQuickTargetId = null;
+    campaignState.combatQuickTurnKey = '';
     campaignState.turnLossProcessing.clear();
     const overlay = document.getElementById('initiative-request-overlay');
     if (overlay) overlay.classList.remove('active');
@@ -22491,6 +22536,116 @@ async function carregarAcessoRapidoCombateDoSlot(slot = slotAcessoRapidoCombate(
     return lista;
 }
 
+let combatQuickRollContext = null;
+const combatQuickCharacterSaveTimers = new Map();
+
+function participantesControlaveisAcessoRapidoCombate() {
+    const combat = combateAtivoDaCampanha();
+    if (!currentUser || !combat?.participants) return [];
+    return Object.entries(combat.participants).filter(([, participant]) => (
+        campaignState.role === 'mestre' || participant?.ownerUid === currentUser.uid
+    ));
+}
+
+function personagemAtualDoCombate(combat = combateAtivoDaCampanha()) {
+    const ordem = ordemCombateArray(combat?.order).filter(id => combat?.participants?.[id]);
+    if (!ordem.length) return '';
+    const indice = Math.min(Math.max(Number(combat?.currentIndex) || 0, 0), ordem.length - 1);
+    return ordem[indice] || '';
+}
+
+function contextoAcessoRapidoCombate() {
+    const combat = combateAtivoDaCampanha();
+    if (!combat?.participants) return null;
+    const controlaveis = participantesControlaveisAcessoRapidoCombate();
+    const idsControlaveis = new Set(controlaveis.map(([id]) => id));
+    const atualId = personagemAtualDoCombate(combat);
+    const turno = chaveTurnoCombate(combat);
+    /*
+     * O Mestre opera o combatente do turno. Isso impede que uma escolha antiga
+     * continue fornecendo ações de outra ficha enquanto um NPC está ativo.
+     * Jogadores com mais de um personagem ainda podem escolher entre os seus.
+     */
+    if (campaignState.role === 'mestre') {
+        campaignState.combatQuickTargetId = atualId || null;
+    }
+    if (turno && campaignState.combatQuickTurnKey !== turno) {
+        campaignState.combatQuickTurnKey = turno;
+        if (campaignState.role === 'mestre') campaignState.combatQuickTargetId = atualId;
+        else if (idsControlaveis.has(atualId)) campaignState.combatQuickTargetId = atualId;
+    }
+    if (!idsControlaveis.has(campaignState.combatQuickTargetId)) {
+        campaignState.combatQuickTargetId = idsControlaveis.has(atualId) ? atualId : (controlaveis[0]?.[0] || null);
+    }
+    const participantId = campaignState.combatQuickTargetId;
+    const participant = participantId ? combat.participants[participantId] : null;
+    const characterId = String(participant?.characterId || (campaignState.activeCampaign?.characters?.[participantId] ? participantId : ''));
+    const character = characterId ? campaignState.activeCampaign?.characters?.[characterId] : null;
+    const ficha = character?.sheet && typeof character.sheet === 'object' ? character.sheet : null;
+    return { combat, controlaveis, atualId, participantId, participant, characterId, character, ficha };
+}
+
+function selecionarPersonagemAcessoRapidoCombate(characterId) {
+    if (campaignState.role === 'mestre' && characterId !== personagemAtualDoCombate()) return;
+    const permitido = participantesControlaveisAcessoRapidoCombate().some(([id]) => id === characterId);
+    if (!permitido) return;
+    campaignState.combatQuickTargetId = characterId;
+    seletorAcessoRapidoCombateAberto = false;
+    tocarSom('click');
+    renderizarAcessoRapidoCombate();
+}
+
+function executarComFichaAcessoRapidoCombate(acao, contexto = contextoAcessoRapidoCombate()) {
+    if (!contexto?.ficha || typeof acao !== 'function') return undefined;
+    const fichaAnterior = sheet;
+    const contextoAnterior = combatQuickRollContext;
+    sheet = contexto.ficha;
+    combatQuickRollContext = contexto;
+    try {
+        return acao(contexto);
+    } finally {
+        sheet = fichaAnterior;
+        combatQuickRollContext = contextoAnterior;
+    }
+}
+
+function persistirAcessoRapidoDaFichaCombate(contexto, lista) {
+    if (!currentUser || !contexto?.characterId || !contexto?.ficha) return;
+    const chave = `${campaignState.activeId}:${contexto.characterId}`;
+    clearTimeout(combatQuickCharacterSaveTimers.get(chave));
+    const uid = currentUser.uid;
+    const campanhaId = campaignState.activeId;
+    const characterId = contexto.characterId;
+    const ownerUid = contexto.character?.ownerUid || contexto.participant?.ownerUid || '';
+    const slot = contexto.character?.slot;
+    const copia = JSON.parse(JSON.stringify(lista || []));
+    combatQuickCharacterSaveTimers.set(chave, setTimeout(() => {
+        combatQuickCharacterSaveTimers.delete(chave);
+        const updates = {
+            [`campaigns/${campanhaId}/characters/${characterId}/sheet/combatQuickAccess`]: copia,
+            [`campaigns/${campanhaId}/characters/${characterId}/updatedBy`]: uid,
+            [`campaigns/${campanhaId}/characters/${characterId}/updatedAt`]: firebase.database.ServerValue.TIMESTAMP
+        };
+        if (ownerUid === uid && slot !== undefined && slot !== null && String(slot) !== '') {
+            updates[`users/${uid}/slots/${slot}/combatQuickAccess`] = copia;
+        }
+        database.ref().update(updates).catch(error => {
+            console.warn('Os atalhos ficaram ativos neste combate, mas não puderam ser sincronizados.', error);
+        });
+    }, 180));
+}
+
+function definirAcessoRapidoCombateDaFicha(lista, { persistir = true } = {}) {
+    const normalizada = Array.isArray(lista)
+        ? lista.map(item => ({ kind: item.kind, id: String(item.id || '') })).filter(item => item.id)
+        : [];
+    sheet.combatQuickAccess = normalizada;
+    const contexto = contextoAcessoRapidoCombate();
+    if (contexto?.ficha) contexto.ficha.combatQuickAccess = normalizada;
+    if (persistir) persistirAcessoRapidoDaFichaCombate(contexto, normalizada);
+    return normalizada;
+}
+
 function garantirIdsConteudoAcessoRapido() {
     if (!Array.isArray(sheet.habilidades)) sheet.habilidades = [];
     if (!Array.isArray(sheet.itens)) sheet.itens = [];
@@ -22505,8 +22660,12 @@ function garantirIdsConteudoAcessoRapido() {
 
 function normalizarAcessoRapidoCombate() {
     garantirIdsConteudoAcessoRapido();
-    const origem = listaLocalAcessoRapidoCombate();
-    const raw = Array.isArray(origem) ? origem : [];
+    const contexto = contextoAcessoRapidoCombate();
+    let raw = Array.isArray(sheet.combatQuickAccess) ? sheet.combatQuickAccess : [];
+    if (!raw.length && contexto?.character?.ownerUid === currentUser?.uid && contexto.character.slot !== undefined) {
+        const legado = listaLocalAcessoRapidoCombate(String(contexto.character.slot));
+        if (legado.length) raw = legado;
+    }
     const validos = new Set([
         ...sheet.habilidades.filter(item => !item.isSeparator).map(item => `habilidade:${item.idUnico}`),
         ...sheet.itens.filter(item => !item.isSeparator).map(item => `item:${item.idUnico}`),
@@ -22522,7 +22681,7 @@ function normalizarAcessoRapidoCombate() {
         vistos.add(chave);
         return true;
     });
-    definirAcessoRapidoCombateDoSlot(normalizada, { persistir: false });
+    definirAcessoRapidoCombateDaFicha(normalizada, { persistir: false });
     return normalizada;
 }
 
@@ -22603,27 +22762,28 @@ function chaveEntradaAcessoRapido(entrada) {
 
 function alternarTodosAcessoRapidoCombate() {
     tocarSom('click');
-    const visiveis = filtrarConteudosAcessoRapido(conteudosDisponiveisAcessoRapido(abaAcessoRapidoCombate), abaAcessoRapidoCombate);
-    if (!visiveis.length) return;
-    const atuais = normalizarAcessoRapidoCombate();
-    const chavesAtuais = new Set(atuais.map(entrada => `${entrada.kind}:${entrada.id}`));
-    const chavesVisiveis = new Set(visiveis.map(chaveEntradaAcessoRapido));
-    const todosEscolhidos = [...chavesVisiveis].every(chave => chavesAtuais.has(chave));
-    if (todosEscolhidos) {
-        definirAcessoRapidoCombateDoSlot(atuais.filter(entrada => !chavesVisiveis.has(`${entrada.kind}:${entrada.id}`)));
-    } else {
-        const proximos = [...atuais];
-        visiveis.forEach(entrada => {
-            const id = referenciaEntradaAcessoRapido(entrada);
-            const chave = `${entrada.kind}:${id}`;
-            if (id && !chavesAtuais.has(chave)) {
-                proximos.push({ kind: entrada.kind, id });
-                chavesAtuais.add(chave);
-            }
-        });
-        definirAcessoRapidoCombateDoSlot(proximos);
-    }
-    marcarAlteracao();
+    executarComFichaAcessoRapidoCombate(() => {
+        const visiveis = filtrarConteudosAcessoRapido(conteudosDisponiveisAcessoRapido(abaAcessoRapidoCombate), abaAcessoRapidoCombate);
+        if (!visiveis.length) return;
+        const atuais = normalizarAcessoRapidoCombate();
+        const chavesAtuais = new Set(atuais.map(entrada => `${entrada.kind}:${entrada.id}`));
+        const chavesVisiveis = new Set(visiveis.map(chaveEntradaAcessoRapido));
+        const todosEscolhidos = [...chavesVisiveis].every(chave => chavesAtuais.has(chave));
+        if (todosEscolhidos) {
+            definirAcessoRapidoCombateDaFicha(atuais.filter(entrada => !chavesVisiveis.has(`${entrada.kind}:${entrada.id}`)));
+        } else {
+            const proximos = [...atuais];
+            visiveis.forEach(entrada => {
+                const id = referenciaEntradaAcessoRapido(entrada);
+                const chave = `${entrada.kind}:${id}`;
+                if (id && !chavesAtuais.has(chave)) {
+                    proximos.push({ kind: entrada.kind, id });
+                    chavesAtuais.add(chave);
+                }
+            });
+            definirAcessoRapidoCombateDaFicha(proximos);
+        }
+    });
     renderizarAcessoRapidoCombate();
 }
 
@@ -22643,13 +22803,14 @@ function alternarSeletorAcessoRapidoCombate() {
 function alternarConteudoAcessoRapido(kind, idCodificado, selecionado) {
     tocarSom('click');
     const id = decodeURIComponent(idCodificado);
-    const entradas = normalizarAcessoRapidoCombate();
-    const kindNormalizado = kind === 'item' ? 'item' : (kind === 'pericia' ? 'pericia' : 'habilidade');
-    const chave = `${kindNormalizado}:${id}`;
-    const semAtual = entradas.filter(entrada => `${entrada.kind}:${entrada.id}` !== chave);
-    if (selecionado) semAtual.push({ kind: kindNormalizado, id });
-    definirAcessoRapidoCombateDoSlot(semAtual);
-    marcarAlteracao();
+    executarComFichaAcessoRapidoCombate(() => {
+        const entradas = normalizarAcessoRapidoCombate();
+        const kindNormalizado = kind === 'item' ? 'item' : (kind === 'pericia' ? 'pericia' : 'habilidade');
+        const chave = `${kindNormalizado}:${id}`;
+        const semAtual = entradas.filter(entrada => `${entrada.kind}:${entrada.id}` !== chave);
+        if (selecionado) semAtual.push({ kind: kindNormalizado, id });
+        definirAcessoRapidoCombateDaFicha(semAtual);
+    });
     renderizarAcessoRapidoCombate();
 }
 
@@ -22714,14 +22875,18 @@ function rolarExtraItemAcessoRapidoPorIndice(indiceItem, indiceRolagem) {
 }
 
 function rolarPericiaAcessoRapido(idCodificado) {
-    const pericia = obterPericiaPorReferencia(decodeURIComponent(idCodificado));
-    if (!pericia) return;
-    realizarRolagem(pericia.a, 0, pericia.n, true, pericia.n);
+    executarComFichaAcessoRapidoCombate(() => {
+        const pericia = obterPericiaPorReferencia(decodeURIComponent(idCodificado));
+        if (!pericia) return;
+        realizarRolagem(pericia.a, 0, pericia.n, true, pericia.n);
+    });
 }
 
 function atualizarPericiaAcessoRapido(idCodificado, campo, valor) {
-    atualizarPericiaCodificada(idCodificado, campo, valor);
-    render();
+    executarComFichaAcessoRapidoCombate(() => {
+        atualizarPericiaCodificada(idCodificado, campo, valor);
+        persistirAcessoRapidoDaFichaCombate(contextoAcessoRapidoCombate(), sheet.combatQuickAccess || []);
+    });
     renderizarAcessoRapidoCombate();
 }
 
@@ -22734,9 +22899,7 @@ function cardPericiaAcessoRapido(pericia) {
     const atributo = (parseInt(sheet.atributos?.[pericia.a]) || 0) + getMods('atributo', pericia.a);
     const modCondicoes = modificadorCondicaoTesteDaFicha(sheet, pericia.a, pericia.n);
     const bonus = atributo + treino + manual + modEquipamento + modCondicoes;
-    const detalhes = detalhesDaPericia(pericia);
     const trainingClass = treino === 2 ? 'skill-trained-2' : (treino === 4 ? 'skill-trained-4' : '');
-    const favorita = periciaEstaFavorita(pericia);
     return `
         <article class="skill-item combat-quick-skill-item ${trainingClass}" role="button" tabindex="0"
             title="Rolar ${escapeCampaignHtml(pericia.n)} • bônus total ${bonus >= 0 ? '+' : ''}${bonus}"
@@ -22745,33 +22908,56 @@ function cardPericiaAcessoRapido(pericia) {
             <div class="combat-quick-skill-identity">
                 <span class="skill-name">
                     <span>${escapeCampaignHtml(pericia.n)}</span>
-                    <select aria-label="Atributo de ${escapeCampaignHtml(pericia.n)}" onclick="event.stopPropagation()" onchange="event.stopPropagation(); atualizarPericiaAcessoRapido('${idCodificado}', 'a', this.value)">
-                        <option value="FOR" ${pericia.a === 'FOR' ? 'selected' : ''}>FOR</option>
-                        <option value="AGI" ${pericia.a === 'AGI' ? 'selected' : ''}>AGI</option>
-                        <option value="INT" ${pericia.a === 'INT' ? 'selected' : ''}>INT</option>
-                        <option value="CON" ${pericia.a === 'CON' ? 'selected' : ''}>CON</option>
-                        <option value="POD" ${pericia.a === 'POD' ? 'selected' : ''}>POD</option>
-                    </select>
+                    <small>${escapeCampaignHtml(pericia.a || 'VAR')}</small>
                 </span>
                 <span class="skill-inline-tools" onclick="event.stopPropagation()">
-                    ${pericia.custom ? `<button type="button" class="skill-favorite-btn ${favorita ? 'is-favorite' : ''}" onclick="event.stopPropagation(); alternarFavoritaPericia('${idCodificado}')" title="${favorita ? 'Remover das favoritas' : 'Favoritar para usar em outras fichas'}" aria-label="${favorita ? 'Remover' : 'Favoritar'} ${escapeCampaignHtml(pericia.n)}">${favorita ? '★' : '☆'}</button>` : ''}
-                    ${detalhes ? `<button type="button" class="btn-info-skill" onclick="event.stopPropagation(); abrirInfoPericia(decodeURIComponent('${nomeCodificado}'))" title="Ver informações" aria-label="Ver informações de ${escapeCampaignHtml(pericia.n)}">❓</button>` : '<span style="width:25px;"></span>'}
                     <button type="button" class="combat-quick-skill-remove" onclick="event.stopPropagation(); removerConteudoAcessoRapido('pericia', '${idCodificado}')" title="Retirar do acesso rápido" aria-label="Retirar ${escapeCampaignHtml(pericia.n)} do acesso rápido">✕</button>
                 </span>
             </div>
             <div class="combat-quick-skill-controls" onclick="event.stopPropagation()">
-                <span>T:</span>
-                <select class="mini-stat-input" aria-label="Treinamento de ${escapeCampaignHtml(pericia.n)}" onchange="atualizarPericiaAcessoRapido('${idCodificado}', 't', this.value)">
-                    <option value="0" ${treino === 0 ? 'selected' : ''}>+0</option>
-                    <option value="2" ${treino === 2 ? 'selected' : ''}>+2</option>
-                    <option value="4" ${treino === 4 ? 'selected' : ''}>+4</option>
-                </select>
-                <span>M:</span>
+                <span>Treino ${treino >= 0 ? '+' : ''}${treino}</span>
                 ${modEquipamento ? `<span class="combat-quick-skill-mod" title="Bônus de item ou habilidade">${modEquipamento >= 0 ? '+' : ''}${modEquipamento}</span>` : ''}
                 ${modCondicoes ? `<span class="combat-quick-skill-mod condition" title="Modificador de condições">${modCondicoes >= 0 ? '+' : ''}${modCondicoes}</span>` : ''}
-                <input type="number" class="mini-stat-input" value="${manual}" aria-label="Modificador manual de ${escapeCampaignHtml(pericia.n)}" onchange="atualizarPericiaAcessoRapido('${idCodificado}', 'm', this.value)">
+                ${manual ? `<span>Manual ${manual >= 0 ? '+' : ''}${manual}</span>` : ''}
+                <strong>${bonus >= 0 ? '+' : ''}${bonus}</strong>
             </div>
         </article>`;
+}
+
+function rolarItemPrincipalAcessoRapidoCombate(indice, indiceRolagem = 0) {
+    executarComFichaAcessoRapidoCombate(() => rolarItemPrincipalPorIndice(indice, indiceRolagem));
+}
+
+function rolarExtraItemAcessoRapidoCombate(indice, indiceRolagem = 0) {
+    executarComFichaAcessoRapidoCombate(() => rolarExtraItemAcessoRapidoPorIndice(indice, indiceRolagem));
+}
+
+function rolarHabilidadeAcessoRapidoCombate(indice, indiceRolagem = 0) {
+    executarComFichaAcessoRapidoCombate(() => rolarHabilidadePorIndice(indice, indiceRolagem));
+}
+
+function rolarExtraHabilidadeAcessoRapidoCombate(indice, indiceRolagem = 0) {
+    executarComFichaAcessoRapidoCombate(() => rolarExtraHabilidadePorIndice(indice, indiceRolagem));
+}
+
+async function usarCustoAcessoRapidoCombate(kind, indice, indiceCusto = 0) {
+    const contexto = contextoAcessoRapidoCombate();
+    if (!contexto?.ficha || !contexto?.participantId || !contexto.participant) return;
+    const acao = kind === 'item' ? contexto.ficha.itens?.[indice] : contexto.ficha.habilidades?.[indice];
+    const custo = normalizarCustosAcao(acao)[indiceCusto];
+    if (!custo?.ativo) return;
+    const recurso = recursoParticipante(contexto.participant, custo.tipo);
+    const atual = Number(recurso.current);
+    if (!Number.isFinite(atual) || atual < custo.valor) {
+        await avisarAbyss(`${RECURSOS_META[custo.tipo].nome} insuficiente: “${contexto.participant.name || 'Personagem'}” possui ${Number.isFinite(atual) ? atual : 0}, mas a ação custa ${custo.valor}.`, { titulo: 'Recurso insuficiente', tom: 'aviso' });
+        return;
+    }
+    await alterarRecursoCombate(contexto.participantId, custo.tipo, atual - custo.valor);
+    spawnPopup('RECURSO GASTO', `Usar ${custo.nome || acao?.nome || 'ação'}`, `−${custo.valor}`, RECURSOS_META[custo.tipo].cor, RECURSOS_META[custo.tipo].nome.toUpperCase(), `Restante: ${atual - custo.valor}`);
+}
+
+function botoesCustoAcessoRapidoCombate(acao, kind, indice) {
+    return normalizarCustosAcao(acao).map((custo, indiceCusto) => `<button type="button" class="action-cost-use" onclick="usarCustoAcessoRapidoCombate('${kind}', ${indice}, ${indiceCusto})">✦ Usar ${escapeCampaignHtml(custo.nome)} · −${custo.valor} ${escapeCampaignHtml(RECURSOS_META[custo.tipo].nome)}</button>`).join('');
 }
 
 function cardAcessoRapidoCombate(entrada) {
@@ -22780,15 +22966,10 @@ function cardAcessoRapidoCombate(entrada) {
     const isItem = kind === 'item';
     const tipoNome = isItem ? 'ITEM' : ({ ataque: 'ATAQUE', feitico: 'FEITIÇO', habilidade: 'HABILIDADE' }[conteudo.tipo] || 'HABILIDADE');
     const imagem = String(conteudo.img || '').trim();
-    const editor = isItem
-        ? `abrirEditorItem(${indice})`
-        : (conteudo.geradoPorItem && conteudo.itemIdRef
-            ? `abrirEditorItemPorReferencia('${escapeCampaignHtml(conteudo.itemIdRef)}')`
-            : `abrirEditorHab('${escapeCampaignHtml(conteudo.tipo || 'habilidade')}', ${indice})`);
     const dadosPrincipais = isItem ? rolagensDanoItemAcessoRapido(conteudo) : normalizarRolagensPrincipais(conteudo);
-    const rolagensPrincipais = dadosPrincipais.map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll combat-quick-damage-roll" onclick="${isItem ? 'rolarItemPrincipalPorIndice' : 'rolarHabilidadePorIndice'}(${indice}, ${indiceRolagem})">⚔ ${escapeCampaignHtml(rolagem.nome || 'Dano')} · ${escapeCampaignHtml(rolagem.formula)} ${badgeAtributoDano(rolagem.atributo)}</button>`).join('');
+    const rolagensPrincipais = dadosPrincipais.map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll combat-quick-damage-roll" onclick="${isItem ? 'rolarItemPrincipalAcessoRapidoCombate' : 'rolarHabilidadeAcessoRapidoCombate'}(${indice}, ${indiceRolagem})">⚔ ${escapeCampaignHtml(rolagem.nome || 'Dano')} · ${escapeCampaignHtml(rolagem.formula)} ${badgeAtributoDano(rolagem.atributo)}</button>`).join('');
     const dadosExtras = isItem ? rolagensExtrasItemAcessoRapido(conteudo) : normalizarRolagensExtras(conteudo);
-    const rolagensExtras = dadosExtras.map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="${isItem ? 'rolarExtraItemAcessoRapidoPorIndice' : 'rolarExtraHabilidadePorIndice'}(${indice}, ${indiceRolagem})">🎲 ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)}</button>`).join('');
+    const rolagensExtras = dadosExtras.map((rolagem, indiceRolagem) => `<button type="button" class="btn-roll" onclick="${isItem ? 'rolarExtraItemAcessoRapidoCombate' : 'rolarExtraHabilidadeAcessoRapidoCombate'}(${indice}, ${indiceRolagem})">🎲 ${escapeCampaignHtml(rolagem.nome)} · ${escapeCampaignHtml(rolagem.formula)}</button>`).join('');
     return `
         <article class="combat-quick-card ${isItem ? 'is-item' : ''}">
             <header class="combat-quick-card-head">
@@ -22798,16 +22979,15 @@ function cardAcessoRapidoCombate(entrada) {
                     <h3 title="${escapeCampaignHtml(conteudo.nome || 'Sem nome')}">${escapeCampaignHtml(conteudo.nome || 'Sem nome')} ${badgeCustoAcao(conteudo)}</h3>
                 </span>
                 <span class="combat-quick-card-actions">
-                    <button type="button" onclick="${editor}" title="Editar" aria-label="Editar ${escapeCampaignHtml(conteudo.nome || tipoNome)}">✎</button>
                     <button type="button" onclick="removerConteudoAcessoRapido('${kind}', '${idCodificado}')" title="Retirar do acesso rápido" aria-label="Retirar ${escapeCampaignHtml(conteudo.nome || tipoNome)} do acesso rápido">✕</button>
                 </span>
             </header>
             ${conteudo.desc ? `<div class="combat-quick-description">${renderMarkdown(conteudo.desc)}</div>` : ''}
             <div class="combat-quick-rolls">
-                ${botaoCustoAcao(conteudo, isItem ? 'item' : 'habilidade', indice)}
+                ${botoesCustoAcessoRapidoCombate(conteudo, isItem ? 'item' : 'habilidade', indice)}
                 <span class="combat-quick-damage-group">
                     <span class="combat-quick-damage-label">ROLAGEM DE DANO</span>
-                    ${rolagensPrincipais || '<span class="combat-quick-damage-empty">Sem fórmula de dano. Use ✎ para configurar.</span>'}
+                    ${rolagensPrincipais || '<span class="combat-quick-damage-empty">Sem fórmula de dano configurada nesta ficha.</span>'}
                 </span>
                 ${rolagensExtras}
             </div>
@@ -22826,9 +23006,40 @@ function renderizarAcessoRapidoCombate() {
     const selecionarTodosAcoes = document.getElementById('combat-quick-select-all-actions');
     const selecionarTodasPericias = document.getElementById('combat-quick-select-all-skills');
     if (!painel || !picker || !grid || !toggle || !tabAcoes || !tabPericias) return;
-    const slotAtual = slotAcessoRapidoCombate();
     const rotuloSlot = document.getElementById('combat-quick-slot-label');
-    if (rotuloSlot) rotuloSlot.textContent = `${nomeDoSlot(slotAtual)} • atalhos exclusivos desta ficha.`;
+    const seletorPersonagem = document.getElementById('combat-quick-character-select');
+    const contexto = contextoAcessoRapidoCombate();
+    const controlaveis = contexto?.controlaveis || [];
+    if (seletorPersonagem) {
+        seletorPersonagem.innerHTML = controlaveis.length
+            ? controlaveis.map(([id, participant]) => `<option value="${escapeCampaignHtml(id)}" ${id === contexto?.participantId ? 'selected' : ''}>${id === contexto?.atualId ? 'TURNO • ' : ''}${escapeCampaignHtml(participant?.name || 'Combatente')}</option>`).join('')
+            : '<option value="">Nenhum personagem controlável</option>';
+        seletorPersonagem.value = contexto?.participantId || '';
+        seletorPersonagem.disabled = controlaveis.length <= 1 || campaignState.role === 'mestre';
+        seletorPersonagem.hidden = campaignState.role === 'mestre' || controlaveis.length <= 1;
+    }
+    if (rotuloSlot) {
+        rotuloSlot.textContent = !contexto?.participant
+            ? 'Nenhum personagem seu participa deste combate.'
+            : (contexto.ficha
+                ? `${contexto.participant.name || 'Personagem'} • itens e habilidades da ficha vinculada ao combate.`
+                : `${contexto.participant.name || 'NPC'} • ficha avulsa sem itens ou habilidades vinculados.`);
+    }
+    if (!contexto?.ficha) {
+        seletorAcessoRapidoCombateAberto = false;
+        picker.classList.remove('active');
+        picker.innerHTML = '';
+        grid.classList.remove('is-skills-view');
+        grid.innerHTML = `<div class="combat-quick-empty">${contexto?.participant ? 'Este combatente foi adicionado como NPC avulso e não possui uma ficha para fornecer atalhos.' : 'Adicione um personagem seu ao combate para usar o acesso rápido.'}</div>`;
+        toggle.disabled = true;
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.textContent = 'Sem ficha vinculada';
+        if (selecionarTodosAcoes) selecionarTodosAcoes.disabled = true;
+        if (selecionarTodasPericias) selecionarTodasPericias.disabled = true;
+        return;
+    }
+    toggle.disabled = false;
+    return executarComFichaAcessoRapidoCombate(() => {
 
     const selecionados = normalizarAcessoRapidoCombate();
     const selecionadosSet = new Set(selecionados.map(entrada => `${entrada.kind}:${entrada.id}`));
@@ -22872,6 +23083,7 @@ function renderizarAcessoRapidoCombate() {
     grid.innerHTML = cards.length
         ? cards.map(entrada => entrada.kind === 'pericia' ? cardPericiaAcessoRapido(entrada.conteudo) : cardAcessoRapidoCombate(entrada)).join('')
         : `<div class="combat-quick-empty">${filtroAtivo ? 'Nenhum atalho selecionado corresponde aos filtros atuais.' : (mostrandoPericias ? 'Nenhuma perícia no acesso rápido. Use “Escolher perícias” para adicionar.' : 'Nenhum item ou habilidade no acesso rápido. Use o botão acima para montar seu painel.')}</div>`;
+    }, contexto);
 }
 
 function chaveTurnoCombate(combat) {
@@ -22883,6 +23095,7 @@ function chaveTurnoCombate(combat) {
 }
 
 function personagemDoRoladorNoCombate(combat) {
+    if (combatQuickRollContext?.participantId && combat?.participants?.[combatQuickRollContext.participantId]) return combatQuickRollContext.participantId;
     if (!currentUser || !combat?.participants) return '';
     const candidatos = Object.entries(combat.participants).filter(([, participante]) => participante?.ownerUid === currentUser.uid);
     if (!candidatos.length) return '';
@@ -22923,7 +23136,7 @@ async function registrarRolagemDestaqueCombate(dadosRolagem) {
         turnKey,
         round: Number(combat.round) || 1,
         turnCharacterId: ordemCombateArray(combat.order)[Number(combat.currentIndex) || 0] || '',
-        rollerCharacterId: personagemDoRoladorNoCombate(combat),
+        rollerCharacterId: dadosRolagem?.rollerCharacterId || personagemDoRoladorNoCombate(combat),
         rollerUid: currentUser.uid,
         rollerName: String(dadosRolagem?.jogador || sheet?.nickname || 'Personagem sem nome'),
         rollerAvatar: avatar,
@@ -23590,6 +23803,14 @@ const documentDeskState = {
     campaignOptions: [],
     documents: {},
     modernDocuments: {},
+    characterDocuments: {},
+    characterPlacements: {},
+    characterDocumentSources: {},
+    memberDocuments: {},
+    memberPlacements: {},
+    memberDocumentSources: {},
+    documentSources: {},
+    fallbackCharacterId: '',
     slots: {},
     placements: {},
     allPlacements: {},
@@ -23675,6 +23896,46 @@ function caminhoLegadoMesaDocumentos(campaignId = documentDeskState.campaignId) 
     return campaignId ? `campaignDocumentDesks/${campaignId}` : '';
 }
 
+function caminhoMesaDocumentosPersonagem(characterId, campaignId = documentDeskState.campaignId) {
+    return campaignId && characterId
+        ? `campaigns/${campaignId}/characters/${characterId}/sharedDocumentDesk`
+        : '';
+}
+
+function caminhoMesaDocumentosFichaPersonagem(characterId, campaignId = documentDeskState.campaignId) {
+    return campaignId && characterId
+        ? `campaigns/${campaignId}/characters/${characterId}/sheet/sharedDocumentDesk`
+        : '';
+}
+
+function caminhoMesaDocumentosMembro(uid, campaignId = documentDeskState.campaignId) {
+    return campaignId && uid
+        ? `campaigns/${campaignId}/members/${uid}/sharedDocumentDesk`
+        : '';
+}
+
+function fonteDocumentoMesa(documentId) {
+    return documentDeskState.documentSources?.[documentId] || { kind: 'modern', characterId: '' };
+}
+
+function caminhoDocumentoMesa(documentId) {
+    const fonte = fonteDocumentoMesa(documentId);
+    if (fonte.kind === 'legacy') return `${caminhoLegadoMesaDocumentos()}/documents/${documentId}`;
+    if (fonte.kind === 'character' && fonte.characterId) return `${caminhoMesaDocumentosPersonagem(fonte.characterId)}/documents/${documentId}`;
+    if (fonte.kind === 'characterSheet' && fonte.characterId) return `${caminhoMesaDocumentosFichaPersonagem(fonte.characterId)}/documents/${documentId}`;
+    if (fonte.kind === 'member' && fonte.uid) return `${caminhoMesaDocumentosMembro(fonte.uid)}/documents/${documentId}`;
+    return `${caminhoBaseMesaDocumentos()}/documents/${documentId}`;
+}
+
+function caminhoPosicaoDocumentoMesa(documentId, slotId = documentDeskState.currentSlotId) {
+    const fonte = fonteDocumentoMesa(documentId);
+    if (fonte.kind === 'legacy') return `${caminhoLegadoMesaDocumentos()}/placements/${slotId}/${documentId}`;
+    if (fonte.kind === 'character' && fonte.characterId) return `${caminhoMesaDocumentosPersonagem(fonte.characterId)}/placements/${slotId}/${documentId}`;
+    if (fonte.kind === 'characterSheet' && fonte.characterId) return `${caminhoMesaDocumentosFichaPersonagem(fonte.characterId)}/placements/${slotId}/${documentId}`;
+    if (fonte.kind === 'member' && fonte.uid) return `${caminhoMesaDocumentosMembro(fonte.uid)}/placements/${slotId}/${documentId}`;
+    return `${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`;
+}
+
 function mesclarColecoesPorSlotMesa(legado = {}, atual = {}) {
     const resultado = {};
     Object.entries(legado || {}).forEach(([slotId, itens]) => {
@@ -23703,13 +23964,38 @@ function mesclarPosicoesMesa(legado = {}, atual = {}, removidas = {}) {
 function reconstruirDocumentosMesa() {
     const legado = { ...(documentDeskState.legacyDesk.documents || {}) };
     Object.keys(documentDeskState.legacyTombstones.documents || {}).forEach(documentId => delete legado[documentId]);
-    documentDeskState.documents = { ...legado, ...(documentDeskState.modernDocuments || {}) };
+    documentDeskState.documents = {
+        ...legado,
+        ...(documentDeskState.memberDocuments || {}),
+        ...(documentDeskState.characterDocuments || {}),
+        ...(documentDeskState.modernDocuments || {})
+    };
+    const fontes = {};
+    Object.keys(legado).forEach(documentId => { fontes[documentId] = { kind: 'legacy', characterId: '' }; });
+    Object.entries(documentDeskState.memberDocumentSources || {}).forEach(([documentId, uid]) => {
+        fontes[documentId] = { kind: 'member', uid };
+    });
+    Object.entries(documentDeskState.characterDocumentSources || {}).forEach(([documentId, origem]) => {
+        fontes[documentId] = origem && typeof origem === 'object'
+            ? origem
+            : { kind: 'character', characterId: origem };
+    });
+    Object.keys(documentDeskState.modernDocuments || {}).forEach(documentId => { fontes[documentId] = { kind: 'modern', characterId: '' }; });
+    documentDeskState.documentSources = fontes;
 }
 
 function reconstruirPosicoesMesa() {
+    const contribuicoes = mesclarColecoesPorSlotMesa(
+        documentDeskState.memberPlacements,
+        documentDeskState.characterPlacements
+    );
+    const compartilhadas = mesclarColecoesPorSlotMesa(
+        contribuicoes,
+        documentDeskState.modernPlacements
+    );
     documentDeskState.allPlacements = mesclarPosicoesMesa(
         documentDeskState.legacyDesk.placements,
-        documentDeskState.modernPlacements,
+        compartilhadas,
         documentDeskState.legacyTombstones.placements
     );
     documentDeskState.placements = documentDeskState.allPlacements[documentDeskState.currentSlotId] || {};
@@ -23987,6 +24273,13 @@ function atualizarOpcoesCampanhaMesaDocumentos() {
 function renderizarMesaDocumentosVazia(mensagem) {
     documentDeskState.documents = {};
     documentDeskState.modernDocuments = {};
+    documentDeskState.characterDocuments = {};
+    documentDeskState.characterPlacements = {};
+    documentDeskState.characterDocumentSources = {};
+    documentDeskState.memberDocuments = {};
+    documentDeskState.memberPlacements = {};
+    documentDeskState.memberDocumentSources = {};
+    documentDeskState.documentSources = {};
     documentDeskState.placements = {};
     documentDeskState.allPlacements = {};
     documentDeskState.modernPlacements = {};
@@ -24166,6 +24459,15 @@ async function conectarMesaDocumentos(campaignId) {
     documentDeskState.campaignId = campaignId;
     documentDeskState.role = null;
     documentDeskState.documents = {};
+    documentDeskState.modernDocuments = {};
+    documentDeskState.characterDocuments = {};
+    documentDeskState.characterPlacements = {};
+    documentDeskState.characterDocumentSources = {};
+    documentDeskState.memberDocuments = {};
+    documentDeskState.memberPlacements = {};
+    documentDeskState.memberDocumentSources = {};
+    documentDeskState.documentSources = {};
+    documentDeskState.fallbackCharacterId = '';
     documentDeskState.slots = {};
     documentDeskState.placements = {};
     documentDeskState.allPlacements = {};
@@ -24202,10 +24504,95 @@ async function conectarMesaDocumentos(campaignId) {
         requestAnimationFrame(aplicarZoomMesaDocumentos);
 
         const base = caminhoBaseMesaDocumentos(campaignId);
+        const legacyLiveRef = database.ref(caminhoLegadoMesaDocumentos(campaignId));
+        registrarEscutaMesa(legacyLiveRef, 'value', snapshot => {
+            const legado = snapshot.val() || {};
+            documentDeskState.legacyDesk = {
+                documents: legado.documents || {},
+                slots: legado.slots || {},
+                placements: legado.placements || {},
+                drawings: legado.drawings || {}
+            };
+            reconstruirDocumentosMesa();
+            reconstruirPosicoesMesa();
+            renderizarDocumentosNaMesa();
+            renderizarGavetaDocumentos();
+        });
         const docsRef = database.ref(`${base}/documents`);
         registrarEscutaMesa(docsRef, 'value', snapshot => {
             documentDeskState.modernDocuments = snapshot.val() || {};
             reconstruirDocumentosMesa();
+            renderizarDocumentosNaMesa();
+            renderizarGavetaDocumentos();
+        });
+
+        /*
+         * Jogadores podem publicar pelo próprio personagem quando as regras antigas
+         * da campanha reservam o arquivo central ao Mestre. Todos os clientes juntam
+         * essas contribuições à mesma gaveta, sem expor a ficha aberta em outro slot.
+         */
+        const charactersDeskRef = database.ref(`campaigns/${campaignId}/characters`);
+        registrarEscutaMesa(charactersDeskRef, 'value', snapshot => {
+            const characters = snapshot.val() || {};
+            const documentos = {};
+            const posicoes = {};
+            const fontes = {};
+            Object.entries(characters).forEach(([characterId, character]) => {
+                const contribuicoes = [
+                    { kind: 'characterSheet', dados: character?.sheet?.sharedDocumentDesk || {} },
+                    { kind: 'character', dados: character?.sharedDocumentDesk || {} }
+                ];
+                contribuicoes.forEach(({ kind, dados }) => {
+                    Object.entries(dados.documents || {}).forEach(([documentId, documento]) => {
+                        const anterior = documentos[documentId];
+                        if (!anterior || Number(documento?.updatedAt || 0) >= Number(anterior?.updatedAt || 0)) {
+                            documentos[documentId] = documento;
+                            fontes[documentId] = { kind, characterId };
+                        }
+                    });
+                    Object.entries(dados.placements || {}).forEach(([slotId, lista]) => {
+                        posicoes[slotId] = { ...(posicoes[slotId] || {}), ...(lista || {}) };
+                    });
+                });
+            });
+            documentDeskState.characterDocuments = documentos;
+            documentDeskState.characterPlacements = posicoes;
+            documentDeskState.characterDocumentSources = fontes;
+            const proprios = Object.entries(characters).filter(([, character]) => character?.ownerUid === currentUser?.uid);
+            if (!proprios.some(([id]) => id === documentDeskState.fallbackCharacterId)) {
+                const slotAtual = String(document.getElementById('save-slot')?.value || '');
+                documentDeskState.fallbackCharacterId = (proprios.find(([, character]) => String(character?.slot ?? '') === slotAtual) || proprios[0] || [])[0] || '';
+            }
+            reconstruirDocumentosMesa();
+            reconstruirPosicoesMesa();
+            renderizarDocumentosNaMesa();
+            renderizarGavetaDocumentos();
+        });
+
+        const membersDeskRef = database.ref(`campaigns/${campaignId}/members`);
+        registrarEscutaMesa(membersDeskRef, 'value', snapshot => {
+            const membros = snapshot.val() || {};
+            const documentos = {};
+            const posicoes = {};
+            const fontes = {};
+            Object.entries(membros).forEach(([uid, membro]) => {
+                const compartilhado = membro?.sharedDocumentDesk || {};
+                Object.entries(compartilhado.documents || {}).forEach(([documentId, documento]) => {
+                    const anterior = documentos[documentId];
+                    if (!anterior || Number(documento?.updatedAt || 0) >= Number(anterior?.updatedAt || 0)) {
+                        documentos[documentId] = documento;
+                        fontes[documentId] = uid;
+                    }
+                });
+                Object.entries(compartilhado.placements || {}).forEach(([slotId, lista]) => {
+                    posicoes[slotId] = { ...(posicoes[slotId] || {}), ...(lista || {}) };
+                });
+            });
+            documentDeskState.memberDocuments = documentos;
+            documentDeskState.memberPlacements = posicoes;
+            documentDeskState.memberDocumentSources = fontes;
+            reconstruirDocumentosMesa();
+            reconstruirPosicoesMesa();
             renderizarDocumentosNaMesa();
             renderizarGavetaDocumentos();
         });
@@ -25451,7 +25838,7 @@ async function desfazerUltimaAcaoMesa(reproduzirSom = true) {
         } else if (acao.type === 'placement') {
             const anterior = clonarValorMesa(acao.before);
             documentDeskState.placements[acao.documentId] = anterior;
-            await database.ref(`${caminhoBaseMesaDocumentos()}/placements/${acao.slotId}/${acao.documentId}`).update({
+            await database.ref(caminhoPosicaoDocumentoMesa(acao.documentId, acao.slotId)).update({
                 ...anterior,
                 modifiedBy: currentUser.uid,
                 modifiedAt: firebase.database.ServerValue.TIMESTAMP
@@ -25461,7 +25848,7 @@ async function desfazerUltimaAcaoMesa(reproduzirSom = true) {
             const updates = {};
             Object.entries(acao.placementsBefore || {}).forEach(([id, placement]) => {
                 documentDeskState.placements[id] = clonarValorMesa(placement);
-                updates[`${caminhoBaseMesaDocumentos()}/placements/${acao.slotId}/${id}`] = {
+                updates[caminhoPosicaoDocumentoMesa(id, acao.slotId)] = {
                     ...placement,
                     modifiedBy: currentUser.uid,
                     modifiedAt: firebase.database.ServerValue.TIMESTAMP
@@ -25931,7 +26318,7 @@ async function alternarMolduraDocumentoMesa(documentId) {
     documentDeskState.placements[documentId] = atualizado;
     renderizarDocumentosNaMesa();
     try {
-        await database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update({
+        await database.ref(caminhoPosicaoDocumentoMesa(documentId, documentDeskState.currentSlotId)).update({
             frameEnabled: proximoEstado,
             modifiedBy: currentUser.uid,
             modifiedAt: firebase.database.ServerValue.TIMESTAMP
@@ -26042,11 +26429,9 @@ async function colocarDocumentoNaMesa(documentId) {
         selecionarDocumentoMesa(documentId);
         renderizarDocumentosNaMesa();
         renderizarGavetaDocumentos();
-        const atualizacoes = {
-            [`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`]: payloadRemoto
-        };
+        const atualizacoes = { [caminhoPosicaoDocumentoMesa(documentId, slotAtual)]: payloadRemoto };
         slotsAnteriores.forEach(slotId => {
-            atualizacoes[`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`] = null;
+            atualizacoes[caminhoPosicaoDocumentoMesa(documentId, slotId)] = null;
             if (documentDeskState.legacyDesk.placements?.[slotId]?.[documentId]) {
                 atualizacoes[`${caminhoBaseMesaDocumentos()}/legacyTombstones/placements/${slotId}/${documentId}`] = true;
             }
@@ -26080,9 +26465,7 @@ async function guardarDocumentoNaGaveta(documentId) {
     renderizarDocumentosNaMesa();
     renderizarGavetaDocumentos();
     try {
-        const atualizacoes = {
-            [`${caminhoBaseMesaDocumentos()}/placements/${slotAtual}/${documentId}`]: null
-        };
+        const atualizacoes = { [caminhoPosicaoDocumentoMesa(documentId, slotAtual)]: null };
         if (documentDeskState.legacyDesk.placements?.[slotAtual]?.[documentId]) {
             atualizacoes[`${caminhoBaseMesaDocumentos()}/legacyTombstones/placements/${slotAtual}/${documentId}`] = true;
         }
@@ -26151,7 +26534,7 @@ async function grampearDocumentosMesa(origemId, destinoId) {
     const updates = {};
     ids.forEach(id => {
         documentDeskState.placements[id] = { ...documentDeskState.placements[id], stapleGroupId: grupoNovo };
-        updates[`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${id}/stapleGroupId`] = grupoNovo;
+        updates[`${caminhoPosicaoDocumentoMesa(id, documentDeskState.currentSlotId)}/stapleGroupId`] = grupoNovo;
     });
     cancelarSelecaoGrampoMesa();
     renderizarDocumentosNaMesa();
@@ -26170,14 +26553,12 @@ async function desgrampearDocumentoMesa(documentId) {
     if (!grupo) return;
     const membros = idsGrupoGrampeadoMesa(documentId);
     const restantes = membros.filter(id => id !== documentId);
-    const updates = {
-        [`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}/stapleGroupId`]: null
-    };
+    const updates = { [`${caminhoPosicaoDocumentoMesa(documentId, documentDeskState.currentSlotId)}/stapleGroupId`]: null };
     documentDeskState.placements[documentId] = { ...placement };
     delete documentDeskState.placements[documentId].stapleGroupId;
     if (restantes.length === 1) {
         const ultimo = restantes[0];
-        updates[`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${ultimo}/stapleGroupId`] = null;
+        updates[`${caminhoPosicaoDocumentoMesa(ultimo, documentDeskState.currentSlotId)}/stapleGroupId`] = null;
         documentDeskState.placements[ultimo] = { ...documentDeskState.placements[ultimo] };
         delete documentDeskState.placements[ultimo].stapleGroupId;
     }
@@ -26234,7 +26615,7 @@ function persistirMovimentoGrupoMesa(drag, imediato = false) {
     const updates = {};
     (drag.groupIds || [drag.documentId]).forEach(id => {
         const placement = documentDeskState.placements[id];
-        if (placement) updates[`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${id}`] = payloadPosicaoMesa(placement, imediato);
+        if (placement) updates[caminhoPosicaoDocumentoMesa(id, documentDeskState.currentSlotId)] = payloadPosicaoMesa(placement, imediato);
     });
     Object.keys(drag.initialDrawings || {}).forEach(id => {
         const desenho = documentDeskState.drawings[id];
@@ -26258,7 +26639,7 @@ async function trazerDocumentoFrente(documentId) {
     documentDeskState.placements[documentId] = { ...placement, z };
     const card = [...document.querySelectorAll('.desk-document')].find(item => item.dataset.documentId === documentId);
     if (card) card.style.zIndex = z;
-    await database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update({
+    await database.ref(caminhoPosicaoDocumentoMesa(documentId, documentDeskState.currentSlotId)).update({
         z,
         modifiedBy: currentUser.uid,
         modifiedAt: firebase.database.ServerValue.TIMESTAMP
@@ -26278,7 +26659,7 @@ async function girarDocumentoMesa(documentId, delta) {
         card.style.setProperty('--doc-rotation', `${rotation}deg`);
         card.style.zIndex = z;
     }
-    await database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update({
+    await database.ref(caminhoPosicaoDocumentoMesa(documentId, documentDeskState.currentSlotId)).update({
         rotation,
         z,
         modifiedBy: currentUser.uid,
@@ -26358,7 +26739,7 @@ function finalizarRotacaoDocumentoMesa(event) {
     const mudou = Math.abs(numeroMesa(giro.totalDelta, 0)) > .01 && posicaoMesaMudou(giro.before, placement);
     documentDeskState.rotationDrag = null;
     if (placement && documentDeskState.campaignId && documentDeskState.currentSlotId) {
-        database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${giro.documentId}`).update({
+        database.ref(caminhoPosicaoDocumentoMesa(giro.documentId, documentDeskState.currentSlotId)).update({
             x: Number(placement.x.toFixed(3)), y: Number(placement.y.toFixed(3)),
             w: Number(placement.w.toFixed(3)), h: Number(placement.h.toFixed(3)),
             z: placement.z, rotation: placement.rotation,
@@ -26403,7 +26784,7 @@ function destacarDocumentoMesaAoClicar(event) {
     card.style.zIndex = z;
     setTimeout(() => {
         if (!documentDeskState.campaignId) return;
-        database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update({
+        database.ref(caminhoPosicaoDocumentoMesa(documentId, documentDeskState.currentSlotId)).update({
             z,
             modifiedBy: currentUser.uid,
             modifiedAt: firebase.database.ServerValue.TIMESTAMP
@@ -26716,7 +27097,7 @@ function agendarPosicaoDocumentoMesa(documentId, placement, imediato = false) {
             modifiedAt: firebase.database.ServerValue.TIMESTAMP
         };
         if (imediato) payload.droppedAt = firebase.database.ServerValue.TIMESTAMP;
-        database.ref(`${caminhoBaseMesaDocumentos()}/placements/${documentDeskState.currentSlotId}/${documentId}`).update(payload).catch(error => console.error('Erro ao organizar documento:', error));
+        database.ref(caminhoPosicaoDocumentoMesa(documentId, documentDeskState.currentSlotId)).update(payload).catch(error => console.error('Erro ao organizar documento:', error));
     };
     if (imediato) salvar();
     else documentDeskState.positionTimers.set(documentId, setTimeout(salvar, 75));
@@ -26892,14 +27273,15 @@ function limparArquivoDocumentoMesa() {
 function erroPermissaoMesaDocumentos(error) {
     const codigo = String(error?.code || '').toLocaleLowerCase('pt-BR');
     const mensagem = String(error?.message || '').toLocaleLowerCase('pt-BR');
-    return codigo.includes('permission') || mensagem.includes('permission_denied') || mensagem.includes('permission denied');
+    return codigo.includes('permission') || codigo.includes('denied') || codigo.includes('unauthorized')
+        || mensagem.includes('permission_denied') || mensagem.includes('permission denied') || mensagem.includes('access denied');
 }
 
 function erroTransitorioMesaDocumentos(error) {
     if (erroPermissaoMesaDocumentos(error)) return false;
     const codigo = String(error?.code || '').toLocaleLowerCase('pt-BR');
     const mensagem = String(error?.message || '').toLocaleLowerCase('pt-BR');
-    return ['network', 'disconnected', 'unavailable', 'timeout'].some(chave => codigo.includes(chave) || mensagem.includes(chave));
+    return ['network', 'offline', 'disconnected', 'unavailable', 'timeout'].some(chave => codigo.includes(chave) || mensagem.includes(chave));
 }
 
 async function renovarAcessoMesaDocumentos() {
@@ -26930,6 +27312,106 @@ async function executarEscritaMesaDocumentos(acao) {
         try { await currentUser.getIdToken?.(true); } catch (_) {}
         return acao();
     }
+}
+
+async function localizarPersonagemPublicadorMesaDocumentos() {
+    if (!currentUser || !documentDeskState.campaignId) return '';
+    if (documentDeskState.fallbackCharacterId) return documentDeskState.fallbackCharacterId;
+    const campaignId = documentDeskState.campaignId;
+    const slotAtual = String(document.getElementById('save-slot')?.value || '');
+    const idsVinculados = Object.entries(campaignState.links?.[campaignId] || {})
+        .sort(([, a], [, b]) => Number(String(b?.slot || '') === slotAtual) - Number(String(a?.slot || '') === slotAtual))
+        .map(([id]) => id);
+    const ativos = Object.entries(campaignState.activeId === campaignId ? (campaignState.activeCampaign?.characters || {}) : {})
+        .filter(([, character]) => character?.ownerUid === currentUser.uid)
+        .sort(([, a], [, b]) => Number(String(b?.slot ?? '') === slotAtual) - Number(String(a?.slot ?? '') === slotAtual));
+    const candidatoAtivo = ativos[0]?.[0];
+    if (candidatoAtivo) {
+        documentDeskState.fallbackCharacterId = candidatoAtivo;
+        return candidatoAtivo;
+    }
+    for (const characterId of idsVinculados) {
+        try {
+            const snapshot = await database.ref(`campaigns/${campaignId}/characters/${characterId}`).once('value');
+            if (snapshot.val()?.ownerUid === currentUser.uid) {
+                documentDeskState.fallbackCharacterId = characterId;
+                return characterId;
+            }
+        } catch (_) {}
+    }
+    try {
+        const snapshot = await database.ref(`campaigns/${campaignId}/characters`).once('value');
+        const proprios = Object.entries(snapshot.val() || {}).filter(([, character]) => character?.ownerUid === currentUser.uid);
+        const characterId = (proprios.find(([, character]) => String(character?.slot ?? '') === slotAtual) || proprios[0] || [])[0] || '';
+        documentDeskState.fallbackCharacterId = characterId;
+        return characterId;
+    } catch (_) {
+        return '';
+    }
+}
+
+async function guardarDocumentoPeloVinculoDoJogador(documentId, payload, placement = null, slotId = 'principal') {
+    if (!currentUser || !documentDeskState.campaignId) throw new Error('Sessão da campanha indisponível.');
+    const characterId = await localizarPersonagemPublicadorMesaDocumentos();
+    const tentativas = [];
+    const baseDedicada = caminhoLegadoMesaDocumentos();
+    const updatesDedicados = { [`${baseDedicada}/documents/${documentId}`]: payload };
+    if (placement) updatesDedicados[`${baseDedicada}/placements/${slotId}/${documentId}`] = placement;
+    if (characterId) {
+        const base = caminhoMesaDocumentosPersonagem(characterId);
+        const updates = { [`${base}/documents/${documentId}`]: payload };
+        if (placement) updates[`${base}/placements/${slotId}/${documentId}`] = placement;
+        tentativas.push({ fonte: { kind: 'character', characterId }, updates });
+
+        /* Compatibilidade com regras antigas que só liberam a subárvore da ficha. */
+        const baseFicha = caminhoMesaDocumentosFichaPersonagem(characterId);
+        const updatesFicha = { [`${baseFicha}/documents/${documentId}`]: payload };
+        if (placement) updatesFicha[`${baseFicha}/placements/${slotId}/${documentId}`] = placement;
+        tentativas.push({ fonte: { kind: 'characterSheet', characterId }, updates: updatesFicha });
+    }
+    tentativas.push({ fonte: { kind: 'legacy', characterId: '' }, updates: updatesDedicados });
+    const baseMembro = caminhoMesaDocumentosMembro(currentUser.uid);
+    const updatesMembro = { [`${baseMembro}/documents/${documentId}`]: payload };
+    if (placement) updatesMembro[`${baseMembro}/placements/${slotId}/${documentId}`] = placement;
+    tentativas.push({ fonte: { kind: 'member', uid: currentUser.uid }, updates: updatesMembro });
+
+    let ultimoErro = null;
+    let fonteParcial = null;
+    for (const tentativa of tentativas) {
+        try {
+            await executarEscritaMesaDocumentos(() => database.ref().update(tentativa.updates));
+            documentDeskState.documentSources[documentId] = tentativa.fonte;
+            if (fonteParcial && tentativa.fonte.kind !== 'legacy') {
+                database.ref(`${baseDedicada}/documents/${documentId}`).remove().catch(() => {});
+                database.ref(`${baseDedicada}/placements/${slotId}/${documentId}`).remove().catch(() => {});
+            }
+            return tentativa.fonte;
+        } catch (error) {
+            ultimoErro = error;
+            if (tentativa.fonte.kind === 'legacy') {
+                try {
+                    await executarEscritaMesaDocumentos(() => database.ref(`${baseDedicada}/documents/${documentId}`).set(payload));
+                    documentDeskState.documentSources[documentId] = tentativa.fonte;
+                    let posicaoGuardada = true;
+                    if (placement) {
+                        try {
+                            await executarEscritaMesaDocumentos(() => database.ref(`${baseDedicada}/placements/${slotId}/${documentId}`).set(placement));
+                        } catch (placementError) {
+                            posicaoGuardada = false;
+                            fonteParcial = tentativa.fonte;
+                            console.warn('O documento entrou na gaveta, mas a posição inicial dedicada foi recusada.', placementError);
+                        }
+                    }
+                    if (posicaoGuardada) return tentativa.fonte;
+                } catch (documentError) {
+                    ultimoErro = documentError;
+                }
+            }
+            console.warn(`A publicação pelo vínculo ${tentativa.fonte.kind} não foi aceita.`, error);
+        }
+    }
+    if (fonteParcial) return fonteParcial;
+    throw ultimoErro || Object.assign(new Error('Nenhum vínculo gravável foi encontrado para este jogador.'), { code: 'campaign-document-path-missing' });
 }
 
 async function salvarDocumentoMesa(event) {
@@ -26987,15 +27469,22 @@ async function salvarDocumentoMesa(event) {
             modifiedAt: firebase.database.ServerValue.TIMESTAMP,
             droppedAt: firebase.database.ServerValue.TIMESTAMP
         } : null;
-        const updates = { [`${caminhoBaseMesaDocumentos()}/documents/${id}`]: payload };
-        if (novoDocumento && posicaoRemota) updates[`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${id}`] = posicaoRemota;
+        const caminhoDocumento = novoDocumento ? `${caminhoBaseMesaDocumentos()}/documents/${id}` : caminhoDocumentoMesa(id);
+        const updates = { [caminhoDocumento]: payload };
+        if (novoDocumento && posicaoRemota) updates[caminhoPosicaoDocumentoMesa(id, slotId)] = posicaoRemota;
         try {
             await executarEscritaMesaDocumentos(() => database.ref().update(updates));
         } catch (atomicError) {
-            if (!novoDocumento) throw atomicError;
-            console.warn('A criação atômica não foi aceita; guardando o documento antes de tentar posicioná-lo.', atomicError);
-            await executarEscritaMesaDocumentos(() => database.ref(`${caminhoBaseMesaDocumentos()}/documents/${id}`).set(payload));
-            colocacaoSeparadaNecessaria = true;
+            if (documentDeskState.role !== 'mestre') {
+                console.warn('O arquivo central recusou a gravação do jogador; usando o vínculo individual da campanha.', atomicError);
+                await guardarDocumentoPeloVinculoDoJogador(id, payload, novoDocumento ? posicaoRemota : null, slotId);
+                colocacaoSeparadaNecessaria = false;
+            } else {
+                if (!novoDocumento) throw atomicError;
+                console.warn('A criação atômica não foi aceita; guardando o documento antes de tentar posicioná-lo.', atomicError);
+                await executarEscritaMesaDocumentos(() => database.ref(`${caminhoBaseMesaDocumentos()}/documents/${id}`).set(payload));
+                colocacaoSeparadaNecessaria = true;
+            }
         }
         documentDeskState.documents[id] = {
             ...payload,
@@ -27023,13 +27512,14 @@ async function salvarDocumentoMesa(event) {
     } catch (error) {
         console.error('Erro ao guardar documento:', error);
         const semMembro = String(error?.code || '') === 'campaign-membership-missing';
+        const codigoErro = String(error?.code || 'erro-desconhecido').replace(/^database\//i, '').slice(0, 70);
         const mensagem = semMembro
             ? 'Sua sessão não aparece mais entre os membros desta campanha. Volte à campanha, confirme o vínculo da ficha e abra a Mesa novamente.'
             : (erroPermissaoMesaDocumentos(error)
-                ? 'A campanha reconheceu seu login, mas recusou a gravação deste jogador. Nada foi perdido no formulário; peça ao Mestre para confirmar sua participação e tente novamente.'
+                ? `A campanha reconheceu seu login, mas as regras recusaram tanto o arquivo central quanto seu vínculo de jogador. Nada foi perdido. Código: ${codigoErro}.`
                 : (arquivo?.dataUrl
-                    ? 'Não foi possível enviar este arquivo. Nada foi perdido no formulário; tente uma versão menor ou mantenha somente a descrição.'
-                    : 'Não foi possível sincronizar este documento de texto agora. Nada foi perdido no formulário; a conexão será renovada na próxima tentativa.'));
+                    ? `Não foi possível enviar este arquivo. Nada foi perdido; tente uma versão menor. Código: ${codigoErro}.`
+                    : `Não foi possível gravar este documento em nenhum caminho compartilhado. Nada foi perdido no formulário. Código: ${codigoErro}.`));
         await avisarAbyss(mensagem, { titulo: 'Documento não foi guardado', tom: 'aviso' });
     } finally {
         submit.disabled = false;
@@ -27054,9 +27544,7 @@ async function excluirDocumentoMesa(documentId) {
         tom: 'perigo'
     })) return;
     try {
-        const updatesDocumento = {
-            [`${caminhoBaseMesaDocumentos()}/documents/${documentId}`]: null
-        };
+        const updatesDocumento = { [caminhoDocumentoMesa(documentId)]: null };
         if (documentDeskState.legacyDesk.documents?.[documentId]) {
             updatesDocumento[`${caminhoBaseMesaDocumentos()}/legacyTombstones/documents/${documentId}`] = true;
         }
@@ -27072,7 +27560,7 @@ async function excluirDocumentoMesa(documentId) {
     const caminhosLimpeza = [];
     Object.entries(documentDeskState.allPlacements || {}).forEach(([slotId, lista]) => {
         if (!lista?.[documentId]) return;
-        caminhosLimpeza.push(`${caminhoBaseMesaDocumentos()}/placements/${slotId}/${documentId}`);
+        caminhosLimpeza.push(caminhoPosicaoDocumentoMesa(documentId, slotId));
         if (documentDeskState.legacyDesk.placements?.[slotId]?.[documentId]) {
             caminhosLimpeza.push(`${caminhoBaseMesaDocumentos()}/legacyTombstones/placements/${slotId}/${documentId}`);
         }
@@ -27096,6 +27584,9 @@ async function excluirDocumentoMesa(documentId) {
     }
     delete documentDeskState.documents[documentId];
     delete documentDeskState.modernDocuments[documentId];
+    delete documentDeskState.characterDocuments[documentId];
+    delete documentDeskState.memberDocuments[documentId];
+    delete documentDeskState.documentSources[documentId];
     if (documentDeskState.legacyDesk.documents?.[documentId]) {
         documentDeskState.legacyTombstones.documents[documentId] = true;
     }
@@ -28339,6 +28830,7 @@ function caminhoUndoCampanhaPermitido(campaignId, path) {
     const normalizado = String(path || '').replace(/^\/+/, '');
     return normalizado.startsWith(`campaigns/${campaignId}/combat/`)
         || normalizado.startsWith(`campaigns/${campaignId}/characters/`)
+        || (normalizado.startsWith(`campaigns/${campaignId}/members/`) && normalizado.includes('/sharedDocumentDesk/'))
         || normalizado.startsWith(`campaigns/${campaignId}/documentDesk/documents/`)
         || normalizado.startsWith(`campaigns/${campaignId}/documentDesk/placements/`)
         || normalizado.startsWith(`campaigns/${campaignId}/documentDesk/drawings/`)
@@ -28483,8 +28975,8 @@ function instalarHistoricoCompartilhado() {
         const depois = novoId ? documentDeskState.documents?.[novoId] : null;
         if (!campaignId || !novoId || !depois) return;
         let undo = null;
-        if (!antes) undo = { updates: { [`campaigns/${campaignId}/documentDesk/documents/${novoId}`]: null } };
-        else if (JSON.stringify(antes).length <= HISTORICO_CAMPANHA_UNDO_MAX) undo = { updates: { [`campaigns/${campaignId}/documentDesk/documents/${novoId}`]: antes } };
+        if (!antes) undo = { updates: { [caminhoDocumentoMesa(novoId)]: null } };
+        else if (JSON.stringify(antes).length <= HISTORICO_CAMPANHA_UNDO_MAX) undo = { updates: { [caminhoDocumentoMesa(novoId)]: antes } };
         registrarHistoricoCampanha({ campaignId, category: 'documento', title: `${antes ? 'Documento editado' : 'Documento criado'}: ${depois.title || 'Sem título'}`, ownerUid: depois.createdBy || currentUser.uid, undo });
     };
 
@@ -28492,10 +28984,11 @@ function instalarHistoricoCompartilhado() {
     excluirDocumentoMesa = async function(documentId) {
         const campaignId = documentDeskState.campaignId;
         const antes = JSON.parse(JSON.stringify(documentDeskState.documents?.[documentId] || null));
+        const caminhoAntes = caminhoDocumentoMesa(documentId);
         await originalExcluirDocumento(documentId);
         if (!campaignId || !antes || documentDeskState.documents?.[documentId]) return;
         const undo = JSON.stringify(antes).length <= HISTORICO_CAMPANHA_UNDO_MAX
-            ? { updates: { [`campaigns/${campaignId}/documentDesk/documents/${documentId}`]: antes } }
+            ? { updates: { [caminhoAntes]: antes } }
             : null;
         registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento excluído: ${antes.title || 'Sem título'}`, ownerUid: antes.createdBy || '', undo });
     };
@@ -28509,7 +29002,7 @@ function instalarHistoricoCompartilhado() {
         if (!sucesso || !campaignId || !slotId) return sucesso;
         const updates = {};
         Object.keys(documentDeskState.allPlacements || {}).forEach(idSlot => {
-            updates[`campaigns/${campaignId}/documentDesk/placements/${idSlot}/${documentId}`] = antes?.[idSlot]?.[documentId] ?? null;
+            updates[caminhoPosicaoDocumentoMesa(documentId, idSlot)] = antes?.[idSlot]?.[documentId] ?? null;
         });
         registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento colocado na mesa: ${documentDeskState.documents?.[documentId]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[documentId]?.createdBy || '', undo: { updates } });
         return sucesso;
@@ -28522,7 +29015,7 @@ function instalarHistoricoCompartilhado() {
         const anterior = JSON.parse(JSON.stringify(documentDeskState.placements?.[documentId] || null));
         const resultado = await originalGuardarDocumento(documentId);
         if (campaignId && slotId && anterior && !documentDeskState.placements?.[documentId]) {
-            registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento guardado: ${documentDeskState.documents?.[documentId]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[documentId]?.createdBy || '', undo: { updates: { [`campaigns/${campaignId}/documentDesk/placements/${slotId}/${documentId}`]: anterior } } });
+            registrarHistoricoCampanha({ campaignId, category: 'documento', title: `Documento guardado: ${documentDeskState.documents?.[documentId]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[documentId]?.createdBy || '', undo: { updates: { [caminhoPosicaoDocumentoMesa(documentId, slotId)]: anterior } } });
         }
         return resultado;
     };
@@ -28538,7 +29031,7 @@ function instalarHistoricoCompartilhado() {
         originalFinalizarMovimento(event);
         if (!mudou || !campaignId || !slotId || !ids.length) return;
         const updates = {};
-        ids.forEach(id => { updates[`campaigns/${campaignId}/documentDesk/placements/${slotId}/${id}`] = antes[id] ?? null; });
+        ids.forEach(id => { updates[caminhoPosicaoDocumentoMesa(id, slotId)] = antes[id] ?? null; });
         registrarHistoricoCampanha({ campaignId, category: 'documento', title: ids.length > 1 ? `${ids.length} documentos reorganizados` : `Documento movido: ${documentDeskState.documents?.[ids[0]]?.title || 'Sem título'}`, ownerUid: documentDeskState.documents?.[ids[0]]?.createdBy || '', undo: { updates } });
     };
 }
