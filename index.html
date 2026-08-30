@@ -11208,6 +11208,26 @@ body.theme-umbral .resource-dashboard-panel .status-box {
 body.theme-umbral .resource-dashboard-panel .status-box:hover { border-color: color-mix(in srgb, var(--resource-accent) 68%, var(--abyss-gold)); background: color-mix(in srgb, var(--abyss-surface-raised) 90%, var(--resource-accent)); }
 body.theme-umbral .resource-dashboard-panel .status-box-title { font-size: .84rem; }
 body.theme-umbral .resource-dashboard-panel .status-box-title small { color: var(--abyss-muted); font-size: .72rem; }
+
+/* Ações de participação na campanha */
+.campaign-membership-action {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+.campaign-membership-action.is-visible { display: inline-flex; }
+.campaign-membership-action.danger {
+    color: #ff9aa6;
+    border-color: rgba(255, 45, 79, .52);
+    background: rgba(114, 8, 25, .18);
+}
+.campaign-membership-action.danger:hover {
+    color: #fff;
+    border-color: #ff2d4f;
+    background: rgba(178, 12, 38, .28);
+    box-shadow: 0 0 18px rgba(255, 23, 68, .2);
+}
 body.theme-umbral .resource-dashboard-panel .status-title-icon { width: 48px; height: 48px; font-size: 1.1rem; box-shadow: 0 0 17px color-mix(in srgb, var(--resource-accent) 18%, transparent); }
 body.theme-umbral .resource-dashboard-panel .resource-control-bar { min-height: 48px; }
 body.theme-umbral .resource-dashboard-panel .resource-control-bar > button { min-width: 39px; min-height: 44px; font-size: .92rem; }
@@ -11661,7 +11681,7 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
             </div>
-            <div class="status-box-title"><span class="status-title-icon">♥</span><span>PV<small>Pontos de vida</small></span> <span id="mod-ind-pv" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
+            <div class="status-box-title"><span class="status-title-icon">♥</span><span>PV</span> <span id="mod-ind-pv" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
             <div class="status-inputs resource-control-bar">
                 <button class="resource-limit-btn" type="button" onclick="definirRecursoExtremo('pv', false)" title="Esvaziar PV">⇣</button>
                 <button class="arrow-btn" onclick="changeStat('pv', -1)">◀</button>
@@ -11679,7 +11699,7 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
         </div>
 
         <div class="status-box status-box-pa">
-            <div class="status-box-title"><span class="status-title-icon">✦</span><span>PA<small>Pontos de ação</small></span> <span id="mod-ind-pa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
+            <div class="status-box-title"><span class="status-title-icon">✦</span><span>PA</span> <span id="mod-ind-pa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
             <div class="status-inputs resource-control-bar">
                 <button class="resource-limit-btn" type="button" onclick="definirRecursoExtremo('pa', false)" title="Esvaziar PA">⇣</button>
                 <button class="arrow-btn" onclick="changeStat('pa', -1)">◀</button>
@@ -11702,7 +11722,7 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
                 <div class="turn-box" onclick="toggleTurn(this)"></div>
             </div>
-            <div class="status-box-title"><span class="status-title-icon">◈</span><span>Sanidade<small>Estabilidade mental</small></span> <span id="mod-ind-sa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
+            <div class="status-box-title"><span class="status-title-icon">◈</span><span>Sanidade</span> <span id="mod-ind-sa" style="color:#00e5ff; font-size:0.7rem; margin-left:5px;"></span></div>
             <div class="status-inputs resource-control-bar">
                 <button class="resource-limit-btn" type="button" onclick="definirRecursoExtremo('sa', false)" title="Esvaziar Sanidade">⇣</button>
                 <button class="arrow-btn" onclick="changeStat('sa', -1)">◀</button>
@@ -12151,6 +12171,8 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
                     <button id="campaign-documents-btn" class="campaign-ghost-btn" onclick="abrirMesaDocumentosCampanha()">🗃 Mesa de Documentos</button>
                     <button id="campaign-start-combat-btn" class="campaign-submit-btn" style="display:none;" onclick="abrirPreparacaoCombate()">⚔ Iniciar combate</button>
                     <button class="gm-shield-btn" onclick="abrirEscudoMestre()">🛡 Escudo do mestre</button>
+                    <button id="campaign-leave-btn" class="campaign-ghost-btn campaign-membership-action danger" onclick="sairDaCampanha()">↪ Sair da campanha</button>
+                    <button id="campaign-delete-btn" class="campaign-ghost-btn campaign-membership-action danger" onclick="excluirCampanha()">✕ Excluir campanha</button>
                 </div>
             </div>
             <section id="campaign-detail-hero" class="campaign-hero"></section>
@@ -21729,6 +21751,8 @@ function renderizarDetalheCampanha() {
     const meta = campaign.meta;
     const isMaster = campaignState.role === 'mestre';
     document.getElementById('campaign-edit-campaign-btn').style.display = isMaster ? 'inline-flex' : 'none';
+    document.getElementById('campaign-leave-btn')?.classList.toggle('is-visible', !isMaster);
+    document.getElementById('campaign-delete-btn')?.classList.toggle('is-visible', isMaster);
     const botaoAcervo = document.getElementById('campaign-content-library-btn');
     if (botaoAcervo) botaoAcervo.style.display = isMaster ? 'inline-flex' : 'none';
     atualizarAcessoAdministrativoAcervo();
@@ -21761,6 +21785,146 @@ function renderizarDetalheCampanha() {
         ? 'Como Mestre, você pode colocar quantos personagens desejar.'
         : `Você pode colocar até três personagens (${ownCharacters.length}/3 usados).`;
     document.getElementById('campaign-character-slot').value = document.getElementById('save-slot').value;
+}
+
+function idsPersonagensDoMembroCampanha(campaign, uid) {
+    return Object.entries(campaign?.characters || {})
+        .filter(([, character]) => character?.ownerUid === uid)
+        .map(([characterId]) => characterId);
+}
+
+function removerCampanhaDoEstadoLocal(campaignId) {
+    campaignState.campaigns = (campaignState.campaigns || []).filter(item => item.id !== campaignId);
+    if (campaignState.membershipRoles) delete campaignState.membershipRoles[campaignId];
+    if (campaignState.links) delete campaignState.links[campaignId];
+    if (documentDeskState?.campaignId === campaignId) fecharMesaDocumentos();
+    voltarParaListaCampanhas();
+    renderizarListaCampanhas();
+    sincronizarAcessoMesaDocumentos();
+}
+
+async function sairDaCampanha() {
+    const campaignId = campaignState.activeId;
+    const campaign = campaignState.activeCampaign;
+    if (!currentUser || !campaignId || !campaign) return;
+    if (campaignState.role === 'mestre') {
+        await avisarAbyss('O Mestre não pode sair da própria campanha. Para encerrá-la, use “Excluir campanha”.', {
+            titulo: 'Você é o Mestre',
+            tom: 'aviso'
+        });
+        return;
+    }
+    const nome = campaign.meta?.name || 'esta campanha';
+    const confirmado = await confirmarAbyss(`Sair de “${nome}”?\n\nSeus personagens serão retirados desta campanha, mas as fichas originais continuarão intactas nos seus slots.`, {
+        titulo: 'Sair da campanha',
+        sobretitulo: 'CAMPANHA',
+        tom: 'perigo',
+        rotuloConfirmar: 'Sair'
+    });
+    if (!confirmado) return;
+
+    const uid = currentUser.uid;
+    const characterIds = idsPersonagensDoMembroCampanha(campaign, uid);
+    const updates = {
+        [`campaigns/${campaignId}/members/${uid}`]: null,
+        [`userCampaigns/${uid}/${campaignId}`]: null,
+        [`users/${uid}/campaignLinks/${campaignId}`]: null,
+        [`campaignDocumentDesks/${campaignId}/presence/${uid}`]: null
+    };
+    characterIds.forEach(characterId => {
+        updates[`campaigns/${campaignId}/characters/${characterId}`] = null;
+        updates[`campaigns/${campaignId}/combat/participants/${characterId}`] = null;
+    });
+    const ordemAtual = typeof ordemCombateArray === 'function' ? ordemCombateArray(campaign.combat?.order) : [];
+    if (ordemAtual.length) {
+        const removidos = new Set(characterIds);
+        const novaOrdem = ordemAtual.filter(characterId => !removidos.has(characterId));
+        if (novaOrdem.length !== ordemAtual.length) {
+            updates[`campaigns/${campaignId}/combat/order`] = novaOrdem;
+            updates[`campaigns/${campaignId}/combat/currentIndex`] = Math.min(Number(campaign.combat?.currentIndex) || 0, Math.max(0, novaOrdem.length - 1));
+        }
+    }
+
+    pararCampanhaAtiva();
+    try {
+        await database.ref().update(updates);
+        removerCampanhaDoEstadoLocal(campaignId);
+        await avisarAbyss(`Você saiu de “${nome}”. Suas fichas originais não foram apagadas.`, {
+            titulo: 'Campanha deixada',
+            tom: 'sucesso'
+        });
+    } catch (error) {
+        console.error('Erro ao sair da campanha:', error);
+        abrirDetalheCampanha(campaignId);
+        await avisarAbyss('Não foi possível remover seu vínculo agora. Você continua na campanha.', {
+            titulo: 'Não foi possível sair',
+            tom: 'aviso'
+        });
+    }
+}
+
+async function excluirCampanha() {
+    const campaignId = campaignState.activeId;
+    const campaign = campaignState.activeCampaign;
+    if (!currentUser || !campaignId || !campaign) return;
+    if (campaignState.role !== 'mestre') {
+        await avisarAbyss('Somente o Mestre pode excluir uma campanha.', {
+            titulo: 'Ação restrita',
+            tom: 'aviso'
+        });
+        return;
+    }
+    const nome = campaign.meta?.name || 'Campanha sem nome';
+    const digitado = await pedirTextoAbyss(`Esta ação apagará “${nome}”, seu combate, histórico, acervo e Mesa de Documentos para todos.\n\nDigite exatamente o nome da campanha para confirmar.`, {
+        titulo: 'Excluir campanha',
+        sobretitulo: 'AÇÃO IRREVERSÍVEL',
+        rotuloEntrada: 'NOME DA CAMPANHA',
+        placeholder: nome,
+        rotuloConfirmar: 'Excluir definitivamente',
+        maxLength: 120
+    });
+    if (digitado == null) return;
+    if (digitado.trim() !== nome) {
+        await avisarAbyss('O nome digitado não corresponde ao nome da campanha. Nada foi apagado.', {
+            titulo: 'Confirmação incorreta',
+            tom: 'aviso'
+        });
+        return;
+    }
+
+    const memberUids = new Set(Object.keys(campaign.members || {}));
+    Object.values(campaign.characters || {}).forEach(character => {
+        if (character?.ownerUid) memberUids.add(character.ownerUid);
+    });
+    memberUids.add(currentUser.uid);
+    const updates = {
+        [`campaigns/${campaignId}`]: null,
+        [`campaignDocumentDesks/${campaignId}`]: null,
+        [`campaignCatalogs/${campaignId}`]: null
+    };
+    const code = campaign.meta?.code;
+    if (code) updates[`campaignCodes/${code}`] = null;
+    memberUids.forEach(uid => {
+        updates[`userCampaigns/${uid}/${campaignId}`] = null;
+        updates[`users/${uid}/campaignLinks/${campaignId}`] = null;
+    });
+
+    pararCampanhaAtiva();
+    try {
+        await database.ref().update(updates);
+        removerCampanhaDoEstadoLocal(campaignId);
+        await avisarAbyss(`“${nome}” foi excluída. As fichas originais dos jogadores permanecem nos slots de cada conta.`, {
+            titulo: 'Campanha excluída',
+            tom: 'sucesso'
+        });
+    } catch (error) {
+        console.error('Erro ao excluir campanha:', error);
+        abrirDetalheCampanha(campaignId);
+        await avisarAbyss('A campanha não foi excluída. Nenhuma remoção parcial foi confirmada pelo banco.', {
+            titulo: 'Não foi possível excluir',
+            tom: 'aviso'
+        });
+    }
 }
 
 function renderizarPersonagemMini(character, showOwnerControls = false, showMasterRemove = false) {
@@ -24509,26 +24673,11 @@ function baseFichaPropriaMesaDocumentos() {
 }
 
 function fontesEscritaDocumentoMesa(documentId = '') {
-    const fonteExistente = documentId ? documentDeskState.documentSources?.[documentId] : '';
     const principal = caminhoBaseMesaDocumentos();
-    const campanha = caminhoMesaDocumentosCampanha();
-    const fichaPropria = baseFichaPropriaMesaDocumentos();
-    let ordem;
-    if (documentDeskState.role === 'mestre') {
-        // O contrato histórico da Mesa usa campaignDocumentDesks. A rota
-        // dentro da campanha só existe como compatibilidade para bancos que
-        // adotaram essa estrutura antes da coleção canônica.
-        const fonteCompartilhadaExistente = fonteExistente === principal || fonteExistente === campanha
-            ? fonteExistente
-            : '';
-        ordem = [fonteCompartilhadaExistente, principal, campanha];
-    } else {
-        // A coleção compartilhada é a fonte principal também para jogadores.
-        // A própria ficha vinculada é o único fallback: ela já usa as regras
-        // de escrita do dono e continua visível aos membros da campanha.
-        ordem = [fonteExistente, principal, fichaPropria];
-    }
-    return [...new Set(ordem.filter(Boolean))];
+    // Toda gravação nova usa uma única coleção compartilhada. As fontes
+    // antigas ainda são escutadas para recuperar conteúdo legado, mas nunca
+    // recebem uma nova escrita e, assim, documento e posição não divergem.
+    return principal ? [principal] : [];
 }
 
 function codigoErroMesa(error) {
@@ -24579,38 +24728,46 @@ function atualizarCacheDocumentoMesa(base, documentId, payload) {
 async function gravarDocumentoMesaRemoto(documentId, payload) {
     try { database.goOnline?.(); } catch (_) {}
     await garantirSessaoEscritaMesa();
-    const fonteAnterior = documentDeskState.documentSources?.[documentId] || '';
+    const base = caminhoBaseMesaDocumentos();
+    if (!base) throw Object.assign(new Error('A campanha da Mesa não foi identificada.'), { code: 'desk/campaign-missing' });
     const dados = JSON.parse(JSON.stringify(payload));
-    const erros = [];
-    for (const base of fontesEscritaDocumentoMesa(documentId)) {
-        try {
-            await database.ref(`${base}/documents/${documentId}`).set(dados);
-            atualizarCacheDocumentoMesa(base, documentId, dados);
-            if (fonteAnterior && fonteAnterior !== base) {
-                database.ref(`${fonteAnterior}/documents/${documentId}`).remove().catch(() => {});
-            }
-            return base;
-        } catch (erro) {
-            registrarFalhaFonteMesa(base, erro, 'documents');
-            erros.push({ base, code: erro?.code || '', message: erro?.message || String(erro) });
-            // Falhas de conexão não serão resolvidas testando outros caminhos.
-            // Interromper aqui preserva o erro original e evita várias escritas
-            // pendentes concorrentes no cache offline do Firebase.
-            if (!/permission|denied|unauthoriz|validation|validate/.test(codigoErroMesa(erro))) break;
-        }
+    try {
+        await database.ref(`${base}/documents/${documentId}`).set(dados);
+        atualizarCacheDocumentoMesa(base, documentId, dados);
+        return base;
+    } catch (erro) {
+        registrarFalhaFonteMesa(base, erro, 'documents');
+        erro.tentativasMesa = [{ base, code: erro?.code || '', message: erro?.message || String(erro) }];
+        throw erro;
     }
-    const ultimo = erros[erros.length - 1];
-    const falha = new Error(ultimo?.message || 'A gravação do documento foi recusada.');
-    falha.code = ultimo?.code || 'document-write-failed';
-    falha.tentativasMesa = erros;
-    throw falha;
+}
+
+async function gravarDocumentoComPosicaoMesaRemoto(documentId, payloadDocumento, slotId, payloadPosicao) {
+    try { database.goOnline?.(); } catch (_) {}
+    await garantirSessaoEscritaMesa();
+    const base = caminhoBaseMesaDocumentos();
+    if (!base || !slotId) throw Object.assign(new Error('A campanha ou o slot da Mesa não foi identificado.'), { code: 'desk/target-missing' });
+    const documento = JSON.parse(JSON.stringify(payloadDocumento));
+    const posicao = JSON.parse(JSON.stringify(payloadPosicao));
+    const updates = {
+        [`${base}/documents/${documentId}`]: documento,
+        [`${base}/placements/${slotId}/${documentId}`]: posicao
+    };
+    try {
+        await database.ref().update(updates);
+        atualizarCacheDocumentoMesa(base, documentId, documento);
+        atualizarCachePosicaoMesa(base, documentId, slotId, posicao);
+        return base;
+    } catch (erro) {
+        registrarFalhaFonteMesa(base, erro, 'documents');
+        registrarFalhaFonteMesa(base, erro, 'placements');
+        erro.tentativasMesa = [{ base, code: erro?.code || '', message: erro?.message || String(erro) }];
+        throw erro;
+    }
 }
 
 function fontePosicaoDocumentoMesa(documentId, slotId = documentDeskState.currentSlotId) {
-    return documentDeskState.placementSources?.[slotId]?.[documentId]
-        || documentDeskState.documentSources?.[documentId]
-        || fontesEscritaDocumentoMesa(documentId)[0]
-        || caminhoBaseMesaDocumentos();
+    return caminhoBaseMesaDocumentos();
 }
 
 function caminhoPosicaoDocumentoMesa(documentId, slotId = documentDeskState.currentSlotId) {
@@ -24618,17 +24775,8 @@ function caminhoPosicaoDocumentoMesa(documentId, slotId = documentDeskState.curr
 }
 
 function fontesPosicaoDocumentoMesa(documentId, slotId = documentDeskState.currentSlotId) {
-    const fonteMemorizada = documentDeskState.placementSources?.[slotId]?.[documentId];
-    const baseDocumento = documentDeskState.documentSources?.[documentId];
-    const baseMemorizada = fonteMemorizada ? baseFontePosicaoMesa(fonteMemorizada) : '';
-    // Posições novas sempre usam a coleção /placements comprovada pelo banco.
-    // Formatos embutidos e documentos-proxy continuam sendo lidos para não
-    // perder dados antigos, mas deixam de receber novas gravações.
-    return [...new Set([
-        baseMemorizada,
-        baseDocumento,
-        ...fontesEscritaDocumentoMesa(documentId)
-    ].filter(Boolean))];
+    const base = caminhoBaseMesaDocumentos();
+    return base ? [base] : [];
 }
 
 function atualizarCachePosicaoMesa(fonte, documentId, slotId, payload) {
@@ -24687,24 +24835,32 @@ function atualizarCachePosicaoMesa(fonte, documentId, slotId, payload) {
 
 async function gravarPosicaoDocumentoMesaRemota(documentId, slotId, payload) {
     try { database.goOnline?.(); } catch (_) {}
+    await garantirSessaoEscritaMesa();
+    const base = caminhoBaseMesaDocumentos();
+    if (!base || !slotId) throw Object.assign(new Error('A campanha ou o slot da Mesa não foi identificado.'), { code: 'desk/target-missing' });
     const dados = JSON.parse(JSON.stringify(payload));
-    const erros = [];
-    for (const base of fontesPosicaoDocumentoMesa(documentId, slotId)) {
-        try {
-            await database.ref(`${base}/placements/${slotId}/${documentId}`).set(dados);
-            atualizarCachePosicaoMesa(base, documentId, slotId, dados);
-            return base;
-        } catch (erro) {
-            registrarFalhaFonteMesa(base, erro, 'placements');
-            erros.push({ fonte: base, code: erro?.code || '', message: erro?.message || String(erro) });
-            if (!/permission|denied|unauthoriz|validation|validate/.test(codigoErroMesa(erro))) break;
-        }
+    const updates = { [`${base}/placements/${slotId}/${documentId}`]: dados };
+    const documentoAtual = documentDeskState.documents?.[documentId];
+    const fonteDocumento = documentDeskState.documentSources?.[documentId];
+    // Ao mover um documento legado pela primeira vez, migra também seu
+    // conteúdo para a coleção canônica na mesma confirmação atômica.
+    if (documentoAtual && fonteDocumento !== base) {
+        updates[`${base}/documents/${documentId}`] = {
+            ...JSON.parse(JSON.stringify(documentoAtual)),
+            updatedBy: currentUser.uid,
+            updatedAt: Date.now()
+        };
     }
-    const ultimo = erros[erros.length - 1];
-    const falha = new Error(ultimo?.message || 'A posição do documento foi recusada.');
-    falha.code = ultimo?.code || 'placement-write-failed';
-    falha.tentativasMesa = erros;
-    throw falha;
+    try {
+        await database.ref().update(updates);
+        if (updates[`${base}/documents/${documentId}`]) atualizarCacheDocumentoMesa(base, documentId, updates[`${base}/documents/${documentId}`]);
+        atualizarCachePosicaoMesa(base, documentId, slotId, dados);
+        return base;
+    } catch (erro) {
+        registrarFalhaFonteMesa(base, erro, 'placements');
+        erro.tentativasMesa = [{ fonte: base, code: erro?.code || '', message: erro?.message || String(erro) }];
+        throw erro;
+    }
 }
 
 function fontesQueContemPosicaoMesa(documentId, slotId) {
@@ -27956,7 +28112,6 @@ async function salvarDocumentoMesa(event) {
     submit.disabled = true;
     submit.textContent = 'Guardando...';
     const id = documentDeskState.editDocumentId || database.ref().push().key;
-    let documentoSalvo = false;
     try {
         const agora = Date.now();
         const payload = {
@@ -27974,47 +28129,64 @@ async function salvarDocumentoMesa(event) {
             updatedBy: currentUser.uid,
             updatedAt: agora
         };
-        // O documento e a posição são duas operações independentes. Esse é o
-        // mesmo formato presente no banco que já funcionou em produção e evita
-        // que uma regra de /placements invalide a criação do arquivo inteiro.
-        const fonte = await gravarDocumentoMesaRemoto(id, payload);
+        const novoDocumento = !atual;
+        const slotId = documentDeskState.currentSlotId || 'principal';
+        const posicaoInicial = novoDocumento ? {
+            ...posicaoPadraoDocumentoMesa(),
+            frameEnabled: payload.frameEnabled !== false,
+            modifiedBy: currentUser.uid,
+            modifiedAt: agora,
+            droppedAt: agora
+        } : null;
+        // Na criação, conteúdo e posição são confirmados em uma única
+        // atualização. Isso impede um documento de ficar salvo na gaveta
+        // enquanto sua colocação na mesa é recusada separadamente.
+        const fonte = novoDocumento
+            ? await gravarDocumentoComPosicaoMesaRemoto(id, payload, slotId, posicaoInicial)
+            : await gravarDocumentoMesaRemoto(id, payload);
         documentDeskState.documents[id] = {
             ...payload,
             createdAt: Number(atual?.createdAt) || agora,
             updatedAt: agora
         };
         documentDeskState.documentSources[id] = fonte;
+        if (novoDocumento) {
+            documentDeskState.allPlacements = documentDeskState.allPlacements || {};
+            documentDeskState.allPlacements[slotId] = {
+                ...(documentDeskState.allPlacements[slotId] || {}),
+                [id]: posicaoInicial
+            };
+            documentDeskState.placements = documentDeskState.allPlacements[slotId];
+            documentDeskState.localDropLocks.set(id, Date.now() + 1500);
+            animarQuedaDocumentoMesa(id);
+            selecionarDocumentoMesa(id);
+        }
         renderizarGavetaDocumentos();
         renderizarDocumentosNaMesa();
         fecharSuperficieFoco('#modal-document-editor');
         documentDeskState.pendingFile = null;
         documentDeskState.removeFile = false;
         documentDeskState.editDocumentId = null;
-        documentoSalvo = true;
     } catch (error) {
         console.error('Erro ao guardar documento:', error);
         if (error?.tentativasMesa) console.error('Rotas recusadas pela Mesa:', error.tentativasMesa);
-        const semFichaVinculada = documentDeskState.role !== 'mestre' && !documentDeskState.writerCharacterIds.length;
         const codigo = codigoErroMesa(error);
         const recusado = /permission|denied|unauthoriz/.test(codigo);
         const desconectado = /network|offline|disconnect|unavailable|timeout/.test(codigo);
         const codigoVisivel = error?.tentativasMesa?.map(item => item.code).filter(Boolean).join(', ') || error?.code || '';
-        const mensagem = semFichaVinculada
-            ? 'Nenhuma ficha desta conta está vinculada à campanha. Vincule um slot e abra novamente a Mesa para publicar documentos.'
-            : recusado
-                ? 'O Firebase reconheceu sua conta, mas as regras atuais não autorizaram a gravação compartilhada. O formulário continua aberto e nada foi perdido.'
-                : desconectado
-                    ? 'A conexão com a campanha caiu antes da confirmação. O formulário continua aberto; reconecte e tente guardar novamente.'
-                    : arquivo?.dataUrl
-                        ? 'O arquivo não foi aceito pelo banco. Tente um arquivo menor; o formulário continua aberto e nada foi perdido.'
-                        : 'O banco recusou este documento antes da confirmação. O formulário continua aberto e nada foi perdido.';
+        const mensagem = recusado
+            ? 'O Firebase reconheceu sua conta, mas as regras publicadas ainda não autorizaram a Mesa compartilhada. O formulário continua aberto e nada foi perdido.'
+            : desconectado
+                ? 'A conexão com a campanha caiu antes da confirmação. O formulário continua aberto; reconecte e tente guardar novamente.'
+                : arquivo?.dataUrl
+                    ? 'O arquivo não foi aceito pelo banco. Tente um arquivo menor; o formulário continua aberto e nada foi perdido.'
+                    : 'O banco recusou o documento e sua posição antes da confirmação. O formulário continua aberto e nada foi perdido.';
         const detalhe = codigoVisivel ? `${mensagem}\n\nCódigo do Firebase: ${codigoVisivel}.` : mensagem;
         await avisarAbyss(detalhe, { titulo: 'Documento não foi guardado', tom: 'aviso' });
     } finally {
         submit.disabled = false;
         submit.textContent = 'Guardar documento';
     }
-    if (documentoSalvo && !atual) await colocarDocumentoNaMesa(id);
 }
 
 async function excluirDocumentoMesa(documentId) {
@@ -29454,7 +29626,10 @@ function instalarHistoricoCompartilhado() {
         if (!campaignId || !novoId || !depois) return;
         const fonte = documentDeskState.documentSources?.[novoId] || caminhoBaseMesaDocumentos(campaignId);
         let undo = null;
-        if (!antes) undo = { updates: { [`${fonte}/documents/${novoId}`]: null } };
+        if (!antes) undo = { updates: {
+            [`${fonte}/documents/${novoId}`]: null,
+            [`${caminhoBaseMesaDocumentos(campaignId)}/placements/${documentDeskState.currentSlotId || 'principal'}/${novoId}`]: null
+        } };
         else if (JSON.stringify(antes).length <= HISTORICO_CAMPANHA_UNDO_MAX) undo = { updates: { [`${fonte}/documents/${novoId}`]: antes } };
         registrarHistoricoCampanha({ campaignId, category: 'documento', title: `${antes ? 'Documento editado' : 'Documento criado'}: ${depois.title || 'Sem título'}`, ownerUid: depois.createdBy || currentUser.uid, undo });
     };
