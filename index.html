@@ -24758,11 +24758,34 @@ async function gravarDocumentoComPosicaoMesaRemoto(documentId, payloadDocumento,
         atualizarCacheDocumentoMesa(base, documentId, documento);
         atualizarCachePosicaoMesa(base, documentId, slotId, posicao);
         return base;
-    } catch (erro) {
-        registrarFalhaFonteMesa(base, erro, 'documents');
-        registrarFalhaFonteMesa(base, erro, 'placements');
-        erro.tentativasMesa = [{ base, code: erro?.code || '', message: erro?.message || String(erro) }];
-        throw erro;
+    } catch (erroPosicaoSeparada) {
+        registrarFalhaFonteMesa(base, erroPosicaoSeparada, 'placements');
+
+        // A gaveta e a mesa não podem depender obrigatoriamente de duas rotas
+        // de escrita diferentes. Se /placements for recusado, persiste a
+        // posição dentro do próprio documento — formato que os leitores da
+        // Mesa já entendem e que mantém conteúdo + posição atômicos.
+        const fonteEmbutida = fontePosicaoEmbutidaMesa(base);
+        const documentoEmbutido = {
+            ...documento,
+            deskPlacements: {
+                ...(documento.deskPlacements || {}),
+                [slotId]: posicao
+            }
+        };
+        try {
+            await database.ref(`${base}/documents/${documentId}`).set(documentoEmbutido);
+            atualizarCacheDocumentoMesa(base, documentId, documentoEmbutido);
+            atualizarCachePosicaoMesa(fonteEmbutida, documentId, slotId, posicao);
+            return base;
+        } catch (erroDocumento) {
+            registrarFalhaFonteMesa(base, erroDocumento, 'documents');
+            erroDocumento.tentativasMesa = [
+                { route: `${base}/placements/${slotId}/${documentId}`, code: erroPosicaoSeparada?.code || '', message: erroPosicaoSeparada?.message || String(erroPosicaoSeparada) },
+                { route: `${base}/documents/${documentId}/deskPlacements/${slotId}`, code: erroDocumento?.code || '', message: erroDocumento?.message || String(erroDocumento) }
+            ];
+            throw erroDocumento;
+        }
     }
 }
 
@@ -24856,10 +24879,59 @@ async function gravarPosicaoDocumentoMesaRemota(documentId, slotId, payload) {
         if (updates[`${base}/documents/${documentId}`]) atualizarCacheDocumentoMesa(base, documentId, updates[`${base}/documents/${documentId}`]);
         atualizarCachePosicaoMesa(base, documentId, slotId, dados);
         return base;
-    } catch (erro) {
-        registrarFalhaFonteMesa(base, erro, 'placements');
-        erro.tentativasMesa = [{ fonte: base, code: erro?.code || '', message: erro?.message || String(erro) }];
-        throw erro;
+    } catch (erroPosicaoSeparada) {
+        registrarFalhaFonteMesa(base, erroPosicaoSeparada, 'placements');
+
+        // Compatibilidade com regras/bancos em que o documento é gravável,
+        // mas a coleção paralela /placements não é. A posição embutida evita
+        // que o item fique preso na gaveta e continua sendo sincronizada em
+        // tempo real por escutarFonteMesaDocumentos().
+        const fonteEmbutida = fontePosicaoEmbutidaMesa(base);
+        const documentoBase = updates[`${base}/documents/${documentId}`]
+            || documentDeskState.sourceData?.[base]?.documents?.[documentId]
+            || documentoAtual;
+        if (!documentoBase) {
+            erroPosicaoSeparada.tentativasMesa = [{
+                route: `${base}/placements/${slotId}/${documentId}`,
+                code: erroPosicaoSeparada?.code || '',
+                message: erroPosicaoSeparada?.message || String(erroPosicaoSeparada)
+            }];
+            throw erroPosicaoSeparada;
+        }
+        const agora = Date.now();
+        const documentoEmbutido = {
+            ...JSON.parse(JSON.stringify(documentoBase)),
+            deskPlacements: {
+                ...JSON.parse(JSON.stringify(documentoBase.deskPlacements || {})),
+                [slotId]: dados
+            },
+            updatedBy: currentUser.uid,
+            updatedAt: agora
+        };
+        try {
+            // Usa a origem capturada antes da tentativa principal. Eventos
+            // locais otimistas do Firebase podem alterar documentSources
+            // temporariamente mesmo quando o servidor depois rejeita o write.
+            if (fonteDocumento === base) {
+                await database.ref(`${base}/documents/${documentId}`).update({
+                    [`deskPlacements/${slotId}`]: dados,
+                    updatedBy: currentUser.uid,
+                    updatedAt: agora
+                });
+            } else {
+                await database.ref(`${base}/documents/${documentId}`).set(documentoEmbutido);
+            }
+            atualizarCacheDocumentoMesa(base, documentId, documentoEmbutido);
+            atualizarCachePosicaoMesa(fonteEmbutida, documentId, slotId, dados);
+            return base;
+        } catch (erroDocumento) {
+            registrarFalhaFonteMesa(base, erroDocumento, 'documents');
+            erroDocumento.tentativasMesa = [
+                { route: `${base}/placements/${slotId}/${documentId}`, code: erroPosicaoSeparada?.code || '', message: erroPosicaoSeparada?.message || String(erroPosicaoSeparada) },
+                { route: `${base}/documents/${documentId}/deskPlacements/${slotId}`, code: erroDocumento?.code || '', message: erroDocumento?.message || String(erroDocumento) }
+            ];
+            throw erroDocumento;
+        }
     }
 }
 
@@ -27291,7 +27363,15 @@ async function colocarDocumentoNaMesa(documentId) {
         renderizarDocumentosNaMesa();
         renderizarGavetaDocumentos();
         console.error('Erro ao colocar documento na mesa:', error);
-        await avisarAbyss('O documento continua seguro na gaveta, mas não foi possível colocá-lo neste slot agora. Verifique sua conexão e tente novamente.', {
+        if (error?.tentativasMesa) console.error('Rotas recusadas pela Mesa:', error.tentativasMesa);
+        const codigo = codigoErroMesa(error);
+        const codigoVisivel = error?.tentativasMesa?.map(item => item.code).filter(Boolean).join(', ') || error?.code || '';
+        const mensagem = /permission|denied|unauthoriz/.test(codigo)
+            ? 'O documento continua seguro na gaveta, mas o Firebase recusou as duas rotas de posição. Confirme se as regras publicadas pertencem ao mesmo projeto deste site.'
+            : /network|offline|disconnect|unavailable|timeout/.test(codigo)
+                ? 'O documento continua seguro na gaveta, mas a conexão caiu antes da confirmação. Reconecte e tente novamente.'
+                : 'O documento continua seguro na gaveta, mas o banco recusou a posição tanto na mesa quanto no próprio documento.';
+        await avisarAbyss(codigoVisivel ? `${mensagem}\n\nCódigo do Firebase: ${codigoVisivel}.` : mensagem, {
             titulo: 'Não foi possível colocar na mesa',
             tom: 'aviso'
         });
