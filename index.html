@@ -33,7 +33,7 @@
             --font-rpg: 'Cinzel', serif; 
         }
 
-        * { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; }
         
         /* ANIMAÇÕES GERAIS E INTERATIVIDADE */
         @keyframes popIn {
@@ -10945,7 +10945,7 @@ body.campaign-readonly-view .page-area.active textarea { user-select: text; }
 /* ========================================================================== */
 
 body.theme-umbral {
-    --abyss-void: #050307;
+    --abyss-void: var(--bg-dark);
     --abyss-surface: color-mix(in srgb, var(--container-bg) 72%, #09060c);
     --abyss-surface-raised: color-mix(in srgb, var(--container-bg) 65%, #18101d);
     --abyss-purple: color-mix(in srgb, var(--primary-purple) 76%, #843ab0);
@@ -10965,7 +10965,7 @@ body.theme-umbral {
         radial-gradient(circle at 12% 43%, color-mix(in srgb, var(--abyss-purple) 22%, transparent), transparent 42rem),
         radial-gradient(circle at 70% 86%, color-mix(in srgb, var(--abyss-purple) 12%, transparent), transparent 38rem),
         repeating-linear-gradient(118deg, transparent 0 12px, rgba(255,255,255,.009) 13px 14px),
-        linear-gradient(135deg, #050307, #0b0710 46%, #070408);
+        linear-gradient(180deg, var(--bg-gradient-top), var(--bg-gradient-bottom));
 }
 
 body.theme-umbral::after {
@@ -11326,7 +11326,7 @@ body.theme-umbral .transfer-panel,
 body.theme-umbral .slot-recovery-section { padding: 24px; border: 1px solid var(--abyss-line-soft); background: var(--abyss-surface-raised); }
 
 /* Campanhas */
-body.theme-umbral #campaign-app { background: radial-gradient(circle at 13% 8%, color-mix(in srgb, var(--abyss-purple) 21%, transparent), transparent 34rem), radial-gradient(circle at 88% 72%, color-mix(in srgb, var(--abyss-gold) 7%, transparent), transparent 29rem), linear-gradient(135deg, #050307, #0b0710 55%, #070408); }
+body.theme-umbral #campaign-app { background: radial-gradient(circle at 13% 8%, color-mix(in srgb, var(--abyss-purple) 21%, transparent), transparent 34rem), radial-gradient(circle at 88% 72%, color-mix(in srgb, var(--abyss-gold) 7%, transparent), transparent 29rem), linear-gradient(180deg, var(--bg-gradient-top), var(--bg-gradient-bottom)); }
 body.theme-umbral .campaign-shell { max-width: 1740px; padding: 42px clamp(24px, 5vw, 86px) 110px; }
 body.theme-umbral .campaign-header { min-height: 92px; margin-bottom: 46px; padding: 14px 0 21px; border-bottom: 1px solid var(--abyss-line); }
 body.theme-umbral .campaign-brand h1 { color: var(--abyss-text); font-size: 1.22rem; text-shadow: 0 0 22px color-mix(in srgb, var(--abyss-purple) 32%, transparent); }
@@ -11337,8 +11337,8 @@ body.theme-umbral .campaign-panel,
 body.theme-umbral .combat-panel { padding: clamp(30px, 4vw, 58px); border: 1px solid var(--abyss-line-soft); border-radius: 8px; background: radial-gradient(circle at 100% 0, color-mix(in srgb, var(--abyss-purple) 15%, transparent), transparent 25rem), var(--abyss-surface); box-shadow: var(--abyss-shadow); }
 body.theme-umbral .campaign-section-heading { margin-bottom: 31px; padding-bottom: 20px; border-bottom-color: var(--abyss-line-soft); }
 body.theme-umbral .campaign-section-heading h2 { color: var(--abyss-text); font-size: clamp(1.45rem, 2.5vw, 2.2rem); }
-body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 30px; }
-body.theme-umbral .campaign-card { min-height: 210px; aspect-ratio: 16 / 7; border: 1px solid color-mix(in srgb, var(--abyss-purple) 54%, var(--abyss-line-soft)); border-radius: 10px; box-shadow: 0 20px 42px rgba(0,0,0,.38), 0 0 22px color-mix(in srgb, var(--abyss-purple) 11%, transparent); }
+body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 30px; }
+body.theme-umbral .campaign-card { width: 100%; min-width: 0; max-width: 100%; height: auto; min-height: 210px; aspect-ratio: 16 / 7; border: 1px solid color-mix(in srgb, var(--abyss-purple) 54%, var(--abyss-line-soft)); border-radius: 10px; box-shadow: 0 20px 42px rgba(0,0,0,.38), 0 0 22px color-mix(in srgb, var(--abyss-purple) 11%, transparent); }
 body.theme-umbral .campaign-card::after { background: linear-gradient(180deg, transparent 20%, rgba(4,2,6,.93)); }
 body.theme-umbral .campaign-card:hover { border-color: var(--abyss-gold); box-shadow: 0 26px 54px rgba(0,0,0,.48), 0 0 30px color-mix(in srgb, var(--abyss-purple-bright) 22%, transparent); transform: translateY(-6px); }
 body.theme-umbral .campaign-card-name { bottom: 26px; left: 27px; color: #fff; font-size: 1.3rem; text-shadow: 0 3px 13px #000; }
@@ -11454,7 +11454,7 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
     body.theme-umbral .resource-dashboard-panel .status-box { grid-template-columns: minmax(150px, .48fr) minmax(260px, 1.52fr); }
     body.theme-umbral .key-attribute-panel { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
     body.theme-umbral .key-attribute-heading { grid-column: 1 / -1; }
-    body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+    body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
 }
 
 @media (max-width: 1000px) {
@@ -11466,7 +11466,7 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
     body.theme-umbral :is(#area-combate,#area-inventario,#area-notas,#area-perfil) .page-chapter { grid-template-columns: 1fr; align-items: start; }
     body.theme-umbral :is(#area-combate,#area-inventario,#area-notas,#area-perfil) .page-chapter p { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 18px; text-align: left; }
     body.theme-umbral #area-combate .abilities-columns { grid-template-columns: 1fr; }
-    body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+    body.theme-umbral .campaign-card-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); }
     body.theme-umbral .content-library-workspace { grid-template-columns: minmax(330px, 43%) minmax(0, 57%); }
 }
 
@@ -11549,13 +11549,127 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
 @media (prefers-reduced-motion: reduce) {
     body.theme-umbral .page-area.active { animation: none; }
 }
+
+/* Limites de layout: a largura disponível governa cartões e painéis. */
+body.theme-umbral { --sheet-edge-gap: clamp(24px, 4.6vw, 78px); }
+body.theme-umbral .container {
+    padding-inline-start: max(var(--sheet-edge-gap), calc(var(--sidebar-collapsed-rail) + 24px));
+    padding-inline-end: var(--sheet-edge-gap);
+}
+body.theme-umbral :is(.sheet-hero, .character-profile-main, .class-selector, .header-status-container, .key-attribute-panel, .defense-layout-container, .combat-grid, .dual-grid, .abilities-columns, .item-grid-container, .notes-grid, .profile-page-grid, .campaign-card-grid, .campaign-detail-grid, .content-library-workspace) > * { min-width: 0; }
+body.theme-umbral :is(.character-identity, .campaign-field, .profile-fields) :is(input, select, textarea) { min-width: 0; max-width: 100%; }
+body.theme-umbral .character-profile-main { grid-template-columns: minmax(0, 1fr) 116px; }
+body.theme-umbral :is(.sheet-hero .title, .page-chapter h1, .section-title, .campaign-hero-content h2, .campaign-hero-content p, .campaign-character-mini strong) { overflow-wrap: anywhere; }
+body.theme-umbral .sheet-hero .title { white-space: normal; }
+body.theme-umbral :is(.campaign-section-heading, .campaign-detail-top, .campaign-code) { flex-wrap: wrap; }
+body.theme-umbral .campaign-detail-top > div { min-width: 0; max-width: 100%; }
+body.theme-umbral .campaign-character-mini > div { min-width: 0; }
+body.theme-umbral :is(.campaign-card, .campaign-hero, .content-library-campaign) { isolation: isolate; }
+body.theme-umbral .campaign-card { display: flex; flex-direction: column; justify-content: flex-end; }
+body.theme-umbral .campaign-card-name {
+    position: relative;
+    inset: auto;
+    display: block;
+    margin: 64px 24px 24px;
+    overflow-wrap: anywhere;
+}
+body.theme-umbral :is(.campaign-card-banner, .campaign-hero-image) { display: block; border-radius: inherit; }
+body.theme-umbral .combat-select-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); }
+
+/* Os controles não podem ocupar colunas menores que seus próprios botões. */
+body.theme-umbral .resource-dashboard-panel .header-status-container { grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); }
+body.theme-umbral .resource-dashboard-panel .status-box { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto 10px minmax(18px, auto); }
+body.theme-umbral .resource-dashboard-panel .status-box-title { grid-column: 1; grid-row: 1; }
+body.theme-umbral .resource-dashboard-panel .resource-control-bar {
+    grid-column: 1;
+    grid-row: 2;
+    grid-template-columns: repeat(2, 39px) minmax(0, 1fr) repeat(2, 39px) 54px;
+    gap: 6px;
+    min-width: 0;
+}
+body.theme-umbral .resource-dashboard-panel .resource-control-bar > button { width: 39px; min-width: 0; max-width: 100%; height: 44px; }
+body.theme-umbral .resource-dashboard-panel :is(.resource-value-group, .resource-control-bar input) { min-width: 0; max-width: 100%; }
+body.theme-umbral .resource-dashboard-panel .resource-control-bar > input.calc-input { grid-column: auto; width: 100%; }
+body.theme-umbral .resource-dashboard-panel .status-bar-wrapper { grid-column: 1; grid-row: 3; }
+body.theme-umbral .resource-dashboard-panel .status-condition-text { grid-column: 1; grid-row: 4; }
+
+/* Colunas fracionárias evitam somar uma largura mínima a 100% do acervo. */
+body.theme-umbral .content-library-workspace { grid-template-columns: minmax(0, .4fr) minmax(0, .6fr); grid-template-areas: 'browser detail'; }
+body.theme-umbral .content-library-filterbar { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+body.theme-umbral .content-library-search-wrap { grid-template-columns: 24px minmax(0, 1fr); }
+body.theme-umbral .content-library-search-wrap input { min-width: 0; }
+body.theme-umbral .content-library-detail-image { max-width: 100%; }
+
+/* Puxadores consistentes, sem depender de glifos da fonte instalada. */
+body.theme-umbral :is(.topbar-collapse-toggle, .sidebar-collapse-toggle) {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    color: var(--abyss-gold);
+    border: 1px solid color-mix(in srgb, var(--abyss-purple-bright) 58%, var(--abyss-gold));
+    border-radius: 12px;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--abyss-purple) 32%, #160d1c), #0b070e);
+    box-shadow: inset 0 1px rgba(255,255,255,.12), 0 6px 18px rgba(0,0,0,.4);
+    cursor: pointer;
+    touch-action: manipulation;
+    transform: none !important;
+    transition: background .18s ease, border-color .18s ease, box-shadow .18s ease !important;
+}
+body.theme-umbral .topbar-collapse-toggle { right: 24px; bottom: -18px; width: 64px; height: 36px; border-radius: 18px; }
+body.theme-umbral .sidebar-collapse-toggle,
+body.theme-umbral .sidebar.is-collapsed .sidebar-collapse-toggle { top: calc(var(--topbar-height) + 18px); right: -12px; width: 36px; height: 60px; }
+body.theme-umbral.topbar-collapsed .sidebar .sidebar-collapse-toggle { top: 38px; }
+body.theme-umbral :is(.topbar-collapse-toggle, .sidebar-collapse-toggle):hover {
+    color: #fff;
+    border-color: var(--abyss-gold);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--abyss-purple) 56%, #160d1c), #140b1b);
+    box-shadow: inset 0 1px rgba(255,255,255,.16), 0 0 18px color-mix(in srgb, var(--abyss-purple-bright) 28%, transparent);
+}
+body.theme-umbral :is(.topbar-collapse-toggle, .sidebar-collapse-toggle):focus-visible { outline: 2px solid var(--abyss-gold); outline-offset: 3px; }
+body.theme-umbral :is(.topbar-collapse-toggle, .sidebar-collapse-toggle):active { box-shadow: inset 0 2px 8px rgba(0,0,0,.5); }
+.nav-toggle-icon { display: block; width: 20px; height: 20px; pointer-events: none; transition: transform .2s ease; }
+[aria-expanded="false"] > .nav-toggle-icon { transform: rotate(180deg); }
+
+@media (max-width: 780px) {
+    body.theme-umbral .content-library-modal.ui-focus-surface { overflow-y: auto !important; }
+    body.theme-umbral .content-library-workspace { flex: none; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; grid-template-areas: 'browser' 'detail'; overflow: visible; }
+    body.theme-umbral .content-library-browser { height: clamp(220px, 36dvh, 360px); min-height: 0; }
+    body.theme-umbral .content-library-detail { min-height: 260px; overflow: visible; }
+    body.theme-umbral .content-library-tabs { flex-wrap: wrap; }
+}
+@media (max-width: 760px) {
+    body.theme-umbral { --sheet-edge-gap: 14px; --sidebar-collapsed-rail: 24px; }
+    body.theme-umbral .character-profile-main { grid-template-columns: minmax(0, 1fr) 94px; }
+    body.theme-umbral .campaign-card-name { margin: 56px 18px 18px; }
+    body.theme-umbral .topbar-content { padding-inline: 12px; }
+    body.theme-umbral .resource-dashboard-panel .status-box { padding-inline: 14px; }
+    body.theme-umbral .resource-dashboard-panel .resource-control-bar { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    body.theme-umbral .resource-dashboard-panel .resource-value-group { grid-column: 1 / -1; grid-row: 1; }
+    body.theme-umbral .resource-dashboard-panel .resource-control-bar > button { grid-row: 2; width: 100%; }
+    body.theme-umbral .resource-dashboard-panel .resource-control-bar > input.calc-input { grid-column: 1 / -1; grid-row: 3; }
+}
+@media (max-width: 520px) {
+    body.theme-umbral .content-library-detail-hero { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+    body.theme-umbral .content-library-detail-image { width: 88px; height: 88px; grid-row: 1; }
+}
+@media (max-width: 470px) {
+    body.theme-umbral .character-profile-main { grid-template-columns: minmax(0, 1fr); }
+    body.theme-umbral .key-attribute-field:last-child { grid-column: auto; }
+    body.theme-umbral .mini-stats-overlay { grid-template-columns: minmax(0, 1fr); }
+    body.theme-umbral .campaign-header { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    body.theme-umbral .campaign-brand { text-align: left; }
+    body.theme-umbral .profile-avatar-preview { max-width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .nav-toggle-icon { transition: none; }
+}
 </style>
 </head>
 <body class="theme-umbral">
 <div id="ui-focus-backdrop" aria-hidden="true"></div>
 
 <header class="top-utility-bar" id="top-utility-bar" aria-label="Ações da conta e da ficha">
-    <div class="topbar-content">
+    <div class="topbar-content" id="topbar-content">
         <div class="topbar-heading" aria-hidden="true">
             <span class="topbar-kicker">ARQUIVO DOS REENCARNADOS</span>
             <strong>Abyss RPG</strong>
@@ -11591,11 +11705,15 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
             </div>
         </nav>
     </div>
-    <button class="topbar-collapse-toggle" id="topbar-collapse-toggle" type="button" onclick="alternarBarraSuperior()" aria-expanded="true" aria-controls="top-utility-bar" title="Recolher barra superior">⌃</button>
+    <button class="topbar-collapse-toggle" id="topbar-collapse-toggle" type="button" onclick="alternarBarraSuperior()" aria-expanded="true" aria-controls="topbar-content" aria-label="Recolher barra superior" title="Recolher barra superior">
+        <svg class="nav-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 14 6-6 6 6"/></svg>
+    </button>
 </header>
 
 <aside class="sidebar" id="main-sidebar" aria-label="Navegação principal">
-    <button class="sidebar-collapse-toggle" id="sidebar-collapse-toggle" type="button" onclick="alternarBarraLateral()" aria-expanded="true" aria-controls="sidebar-nav-items" title="Recolher barra lateral">‹</button>
+    <button class="sidebar-collapse-toggle" id="sidebar-collapse-toggle" type="button" onclick="alternarBarraLateral()" aria-expanded="true" aria-controls="sidebar-nav-items" aria-label="Recolher barra lateral" title="Recolher barra lateral">
+        <svg class="nav-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6"/></svg>
+    </button>
     <div class="sidebar-nav-items" id="sidebar-nav-items">
         <button class="sidebar-btn" id="btn-login" onclick="toggleLogin()" title="Login Google">👤</button>
         <button class="sidebar-btn" id="btn-log" onclick="toggleLog()" title="Log do Servidor">🌍</button>
@@ -12608,11 +12726,11 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
 <div id="theme-panel">
     <div style="text-align:center; color:var(--text-gold); font-weight:bold; margin-bottom:10px; font-size:0.9rem;">Paleta de Cores</div>
     <div class="theme-row">
-        <span>Fundo (Topo):</span>
+        <label for="picker-bg-top">Fundo (Topo):</label>
         <input type="color" id="picker-bg-top" oninput="mudarCor('--bg-gradient-top', this.value); mudarCor('--bg-dark', this.value);">
     </div>
     <div class="theme-row">
-        <span>Fundo (Rodapé):</span>
+        <label for="picker-bg-bottom">Fundo (Rodapé):</label>
         <input type="color" id="picker-bg-bottom" oninput="mudarCor('--bg-gradient-bottom', this.value)">
     </div>
     <div class="theme-row">
@@ -13003,7 +13121,7 @@ body.theme-umbral .viewer-section h3 { padding-bottom: 11px; color: var(--abyss-
         </section>
     </div>
     <div class="content-library-footer">
-        <span class="content-library-status">Conteúdos vinculados recebem revisões futuras automaticamente.</span>
+        <span class="content-library-status">Conteúdos vinculados recebem atualizações automaticamente.</span>
         <div class="content-library-footer-actions">
             <div class="content-library-create-compact">
                 <button id="content-library-create-button" type="button" class="settings-primary" onclick="alternarMenuCriacaoAcervo(event)" hidden>＋ Criar algo no acervo</button>
@@ -17490,7 +17608,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
                 <div>
                     <div class="content-library-detail-kicker"><span class="content-library-badge">${nomeTipoConteudoAcervo(entrada.type)}</span>${badgesEntidades}</div>
                     <h4>${escapeCampaignHtml(entrada.name)}</h4>
-                    <div class="content-library-detail-meta">REVISÃO ${entrada.revision}${jaAdicionado ? ' • JÁ VINCULADO À FICHA' : ''}</div>
+                    ${jaAdicionado ? '<div class="content-library-detail-meta">JÁ VINCULADO À FICHA</div>' : ''}
                 </div>
                 ${imagem}
             </div>
@@ -17899,7 +18017,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             document.getElementById(tipoEditor === 'item' ? 'modal-item' : 'modal-hab')?.classList.remove('catalog-editor-mode');
             fecharSuperficieFoco(tipoEditor === 'item' ? '#modal-item' : '#modal-hab');
             setTimeout(() => abrirAcervoConteudos(retorno.type, retorno.mode, retorno.scope, retorno.campaignId), UI_SURFACE_TRANSITION_MS + 30);
-            spawnPopup('ACERVO', nome, `R${payload.revision}`, '#d4af37', anterior ? 'CONTEÚDO ATUALIZADO' : 'CONTEÚDO PUBLICADO', anterior ? 'As fichas vinculadas receberão esta revisão em tempo real.' : 'Já está disponível para ser adicionado às fichas autorizadas.');
+            spawnPopup('ACERVO', nome, '✓', '#d4af37', anterior ? 'CONTEÚDO ATUALIZADO' : 'CONTEÚDO PUBLICADO', anterior ? 'As fichas vinculadas receberão esta atualização em tempo real.' : 'Já está disponível para ser adicionado às fichas autorizadas.');
         } catch (erro) {
             console.error('Erro ao publicar conteúdo no acervo:', erro);
             alert('Não foi possível publicar. Verifique as regras de acesso do Firebase e tente novamente.');
@@ -17985,7 +18103,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         }
         marcarAlteracao();
         renderizarAcervoConteudos();
-        spawnPopup('ACERVO', entrada.name, '✓', '#00c875', 'ADICIONADO À FICHA', `Vinculado à revisão ${entrada.revision}; futuras alterações serão recebidas automaticamente.`);
+        spawnPopup('ACERVO', entrada.name, '✓', '#00c875', 'ADICIONADO À FICHA', 'Vinculado ao acervo; futuras alterações serão recebidas automaticamente.');
     }
 
     function sincronizarConteudosVinculadosDaFicha() {
@@ -18015,7 +18133,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         renderAbilities();
         contentCatalogState.applyingLinkedUpdate = false;
         marcarAlteracao();
-        spawnPopup('ACERVO', 'Balanceamento recebido', 'SYNC', '#38d9ff', 'CONTEÚDOS ATUALIZADOS', 'A ficha recebeu as revisões mais recentes dos acervos vinculados.');
+        spawnPopup('ACERVO', 'Balanceamento recebido', 'SYNC', '#38d9ff', 'CONTEÚDOS ATUALIZADOS', 'A ficha recebeu as atualizações mais recentes dos acervos vinculados.');
     }
 
     firebase.auth().onAuthStateChanged((user) => {
@@ -19922,7 +20040,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
 
             card.innerHTML = `
                 <div class="adaptive-card-header">
-                    <h3 class="adaptive-card-title" style="font-family:Cinzel; color:var(--text-gold);">${escapeCampaignHtml(h.nome || 'Sem nome')} ${badgeCustoAcao(h)} ${h.catalogRef ? `<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO R${Number(h.catalogRef.revision) || 1}</span>` : ''}</h3>
+                    <h3 class="adaptive-card-title" style="font-family:Cinzel; color:var(--text-gold);">${escapeCampaignHtml(h.nome || 'Sem nome')} ${badgeCustoAcao(h)} ${h.catalogRef ? `<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO</span>` : ''}</h3>
                     <div class="adaptive-card-actions">${htmlControles}</div>
                 </div>
                 <div class="collapsible-card-body" ${recolhido ? 'hidden' : ''}>
@@ -20177,7 +20295,7 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
             card.className = `item-card ${item.equipado ? 'equipped' : ''} ${recolhido ? 'is-collapsed' : ''}`;
             card.innerHTML = `
                 <div class="adaptive-card-header">
-                    <h4 class="adaptive-card-title" style="font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${escapeCampaignHtml(item.nome || 'Item sem nome')} ${badgeCustoAcao(item)} ${item.catalogRef ? `<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO R${Number(item.catalogRef.revision) || 1}</span>` : ''}</h4>
+                    <h4 class="adaptive-card-title" style="font-family:Cinzel; color:${item.equipado ? 'var(--text-gold)' : '#fff'}">${escapeCampaignHtml(item.nome || 'Item sem nome')} ${badgeCustoAcao(item)} ${item.catalogRef ? `<span class="catalog-linked-badge" title="Vinculado ao acervo e atualizado automaticamente">ACERVO</span>` : ''}</h4>
                     <div class="adaptive-card-actions">
                         <span class="inventory-order-actions"><button onclick="moverItemInventario(${i}, -1)" title="Mover para cima">↑</button><button onclick="moverItemInventario(${i}, 1)" title="Mover para baixo">↓</button></span>
                         <button class="card-collapse-toggle" onclick="alternarCartaoItem(${i})" title="${recolhido ? 'Abrir conteúdo' : 'Recolher conteúdo'}" aria-expanded="${!recolhido}">${recolhido ? '▸' : '▾'}</button>
@@ -20559,9 +20677,14 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const estaRecolhida = Boolean(recolhida);
         barra.classList.toggle('is-collapsed', estaRecolhida);
         document.body.classList.toggle('topbar-collapsed', estaRecolhida);
-        botao.textContent = estaRecolhida ? '⌄' : '⌃';
         botao.setAttribute('aria-expanded', String(!estaRecolhida));
         botao.title = estaRecolhida ? 'Expandir barra superior' : 'Recolher barra superior';
+        botao.setAttribute('aria-label', botao.title);
+        const conteudo = document.getElementById('topbar-content');
+        if (conteudo) {
+            conteudo.inert = estaRecolhida;
+            conteudo.setAttribute('aria-hidden', String(estaRecolhida));
+        }
         if (persistir) {
             try { localStorage.setItem(NAV_TOPBAR_STORAGE_KEY, estaRecolhida ? '1' : '0'); } catch (_) {}
         }
@@ -20575,10 +20698,13 @@ function avaliarRolagem(valorNaturalD20, valorTotal, zonaDificuldade) {
         const estaRecolhida = Boolean(recolhida);
         barra.classList.toggle('is-collapsed', estaRecolhida);
         document.body.classList.toggle('sidebar-collapsed', estaRecolhida);
-        botao.textContent = estaRecolhida ? '›' : '‹';
         botao.setAttribute('aria-expanded', String(!estaRecolhida));
         botao.title = estaRecolhida ? 'Expandir barra lateral' : 'Recolher barra lateral';
-        if (itens) itens.setAttribute('aria-hidden', String(estaRecolhida));
+        botao.setAttribute('aria-label', botao.title);
+        if (itens) {
+            itens.inert = estaRecolhida;
+            itens.setAttribute('aria-hidden', String(estaRecolhida));
+        }
         if (persistir) {
             try { localStorage.setItem(NAV_SIDEBAR_STORAGE_KEY, estaRecolhida ? '1' : '0'); } catch (_) {}
         }
